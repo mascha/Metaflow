@@ -1,0 +1,12 @@
+<div id="diagram-canvas"
+     (window:resize)="onResize()"
+     (mousedown)="onMouseDown($event)"
+     (mousemove)="onMouseMove($event)"
+     (window:mouseup)="onMouseUp($event)"
+     (mouseup)="onMouseUp($event)"
+     (wheel)="onScroll($event)"
+     (dblclick)="onClick($event)">
+  <grid-layer class="layer"></grid-layer>
+  <node-layer class="layer" #nodeLayer></node-layer>
+  <border-layer class="layer"></border-layer>
+</div>
