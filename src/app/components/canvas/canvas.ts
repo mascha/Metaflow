@@ -523,10 +523,10 @@ class Behavior {
             let wY = this.camera.worldY;
             let cS = this.camera.scale;
             let rS = cS / parent.scale;
-            let relX = (current.left + wX) * cS;
-            let relY = (current.top + wY) * cS;
+            let rX = (wX + current.left) * cS;
+            let rY = (wY + current.top) * cS;
             this.loadLevel(parent);
-            this.camera.zoomAndMoveTo(relX, relY, rS);
+            this.camera.zoomAndMoveTo(rX, rY, rS);
         }
     }
 
@@ -542,12 +542,12 @@ class Behavior {
             let wX = this.camera.worldX;
             let wY = this.camera.worldY;
             let cS = this.camera.scale;
-            let relX = (wX - target.left * current.scale) * cS;
-            let relY = (wY - target.top * current.scale) * cS;
-            let relS = (cS * current.scale);
+            let rX = (wX - target.left * current.scale) * cS;
+            let rY = (wY - target.top * current.scale) * cS;
+            let rS = (cS * current.scale);
 
             this.loadLevel(target);
-            this.camera.zoomAndMoveTo(relX, relY, relS);
+            this.camera.zoomAndMoveTo(rX, rY, rS);
         }
     }
 
@@ -665,12 +665,24 @@ class Behavior {
     }
 
     private static createDebugModel(): ViewGroup {
+        /*
         let root = new ViewGroup('ROOT', 0, 0, 1000, 1000, .1);
         let first = new ViewGroup('FIRST', 5000, 5000, 5000, 5000, .1);
         let item = new ViewItem('ITEM1', 25000, 25000, 2500, 2500);
+        */
 
-        root.addContent(first);
-        first.addContent(item);
+        let i = 40;
+        let o : ViewGroup = null;
+        let root: ViewGroup = null;
+        while (i--) {
+            let item = new ViewGroup(i.toFixed(1), 2000, 2000, 2000, 2000, 0.1);
+            if (o) {
+                o.addContent(item);
+            } else {
+                root = item;
+            }
+            o = item;
+        }
 
         return root;
     }
