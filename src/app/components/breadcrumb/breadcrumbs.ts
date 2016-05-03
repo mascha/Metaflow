@@ -9,5 +9,18 @@ import {Component} from "angular2/core";
     template: require('./breadcrumbs.html')
 })
 export default class Breadcrumb {
-    segments: Array<string> = ['root', 'first', 'third']
+
+    segments: Array<string>;
+
+    setPath(path: string) {
+        this.segments = path.split('/');
+    }
+    
+    getFullPath(): string {
+        return this.segments.join('/');
+    }
+
+    constructor(path: string) {
+        this.setPath(path);
+    }
 }
