@@ -3,6 +3,7 @@ import {ROUTER_DIRECTIVES} from 'angular2/router';
 import {FORM_PROVIDERS} from 'angular2/common';
 import {Canvas} from './components/canvas/canvas.ts';
 import '../style/app.scss';
+import Breadcrumbs from "./components/breadcrumb/breadcrumbs";
 
 /**
  * Metalogic Web Application
@@ -10,7 +11,7 @@ import '../style/app.scss';
 @Component({
   selector: 'app',
   providers: [...FORM_PROVIDERS],
-  directives: [...ROUTER_DIRECTIVES, Canvas],
+  directives: [...ROUTER_DIRECTIVES, Canvas, Breadcrumbs],
   pipes: [],
   styles: [require('./app.scss')],
   template: require('./app.html')

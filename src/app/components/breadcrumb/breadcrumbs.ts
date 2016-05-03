@@ -1,14 +1,16 @@
-import {Component} from "angular2/core";
+import {Component, Input} from "angular2/core";
+
 /**
+ * A breadcrumb navigation bar.
  * @author Martin Schade
  * @since 1.0.0
  */
 @Component({
     selector: 'breadcrumbs',
-    styles: [require('./breadcrumb.scss')],
+    styles: [require('./breadcrumbs.scss')],
     template: require('./breadcrumbs.html')
 })
-export default class Breadcrumb {
+export default class Breadcrumbs {
 
     segments: Array<string>;
 
@@ -21,6 +23,8 @@ export default class Breadcrumb {
     }
 
     constructor(path: string) {
-        this.setPath(path);
+        path = 'root/first/last';
+        if (path) this.setPath(path);
+        console.log(this.segments.toJSON());
     }
 }
