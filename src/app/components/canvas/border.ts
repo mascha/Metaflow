@@ -27,9 +27,7 @@ import {ICameraObserver, Camera} from './camera';
 export default class Border implements ICameraObserver {
     private camera: Camera;
     private region: HTMLCanvasElement;
-    private region2D: CanvasRenderingContext2D;
-    private pointX = 0.0;
-    private pointY = 0.0;
+    private brush: CanvasRenderingContext2D;
     private width  = -1.0;
     private height = -1.0;
     private halfH  = -1.0;
@@ -37,7 +35,7 @@ export default class Border implements ICameraObserver {
     private maxW   = 0.0;
     private maxH   = 0.0;
     private border = 16.0;
-    private middle = 8.0;
+    private middle = this.border / 2;
     private active = true;
     private proxies: Array<Proxy>;
 
@@ -74,7 +72,7 @@ export default class Border implements ICameraObserver {
      * Draw the interactive border region.
      */
     private drawBorder(alpha: number) {
-        const brush = this.region2D;
+        const brush = this.brush;
         const w = this.camera.visualWidth;
         const h = this.camera.visualHeight;
         const b = this.border;
@@ -82,37 +80,6 @@ export default class Border implements ICameraObserver {
         brush.fillStyle = 'black';
         brush.fillRect(0, 0, w, h);
         brush.clearRect(b, b, w - b * 2.0, h - b * 2.0);
-    }
-
-    /**
-     * Project the point (left,top) onto a (-a, -b, a, b) rectangle.
-     * @param x
-     * @param y
-     * @param a
-     * @param b
-     */
-    private project(x: number, y: number, a: number, b: number) {
-        let A = a*y; let B = b*x;
-        let pX = 0; let pY = 0;
-        if (Math.abs(A) <= Math.abs(B)) {
-            if (x < 0) {
-                pX = -a;
-                pY = -A/x;
-            } else if (x > 0) {
-                pX = a;
-                pY = A/x;
-            }
-        } else {
-            if (y < 0) {
-                pX = -B/y;
-                pY = -b;
-            } else if (y > 0) {
-                pX = B/y;
-                pY = b;
-            }
-        }
-        this.pointX = pX;
-        this.pointY = pY;
     }
 
     /**
@@ -128,7 +95,7 @@ export default class Border implements ICameraObserver {
         const maxY = minY + cam.projectedHeight;
         const a = this.halfW - this.middle;
         const b = this.halfH - this.middle;
-        const c = this.region2D;
+        const c = this.brush;
         
         c.fillStyle = 'mediumseagreen';
         c.strokeStyle = 'lightgrey';
@@ -136,6 +103,7 @@ export default class Border implements ICameraObserver {
 
         let proxies = this.proxies;
         let len = proxies.length;
+
         for (let j = 0; j < len; j++) {
             let proxy = proxies[j];
             let x = proxy.x;
@@ -149,8 +117,7 @@ export default class Border implements ICameraObserver {
             const A = a*y;
             const B = b*x;
             
-            let pX = 0;
-            let pY = 0;
+            let pX = 0, pY = 0;
             if (Math.abs(A) <= Math.abs(B)) {
                 if (x < 0) {
                     pX = -a;
@@ -172,7 +139,7 @@ export default class Border implements ICameraObserver {
             c.fillRect(
                 this.halfW + pX - 3.0,
                 this.halfH + pY - 3.0,
-                6.0, 6.0
+                6, 6
             );
         }
     }
@@ -181,21 +148,19 @@ export default class Border implements ICameraObserver {
      * Clears the proxies layer.
      */
     private clearProxies() {
-        this.region2D.clearRect(
+        this.brush.clearRect(
             0.0, 0.0,
             this.region.width,
             this.region.height
         );
     }
 
-    /*
-     * Cache common metrics.
-     */
     private updateCache() {
         this.width  = this.camera.visualWidth;
         this.height = this.camera.visualHeight;
         this.halfW  = this.width / 2.0;
         this.halfH  = this.height / 2.0;
+        this.middle = this.border / 2.0;
         this.maxW   = this.width - this.middle;
         this.maxH   = this.height - this.middle;
         this.region.width = this.width;
@@ -204,7 +169,7 @@ export default class Border implements ICameraObserver {
 
     constructor(camera: Camera, region: HTMLCanvasElement) {
         this.region = region;
-        this.region2D = region.getContext('2d');
+        this.brush = region.getContext('2d');
         this.camera = camera;
         this.proxies = new Array(250);
 
