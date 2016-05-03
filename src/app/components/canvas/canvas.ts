@@ -9,7 +9,7 @@ import {ViewGroup} from "./viewmodel";
 import {IViewModelRenderer} from "./renderer";
 import Grid from './grid';
 import Border from './border';
-import NavigationBar from "../breadcrumb/breadcrumbs";
+import NavigationBar from "../breadcrumb/navigationbar";
 
 /**
  * Grid layer component.
