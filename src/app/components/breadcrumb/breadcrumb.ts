@@ -1,3 +1,13 @@
+import {Component} from "angular2/core";
 /**
- * Created by Martin Schade on 03.05.2016.
+ * @author Martin Schade
+ * @since 1.0.0
  */
+@Component({
+    selector: 'breadcrumbs',
+    styles: [require('./breadcrumb.scss')],
+    template: `<div class="breadcrumbs"></div>`
+})
+export default class Breadcrumb {
+    
+}
