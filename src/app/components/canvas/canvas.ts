@@ -5,7 +5,7 @@
 import {Component, ElementRef, ViewChild, AfterViewInit} from 'angular2/core';
 import {ICameraObserver, Camera} from './camera';
 import {KonvaRenderer, KonvaCamera} from "../platform/konva";
-import {ViewGroup} from "./viewmodel";
+import {ViewGroup, ViewItem} from "./viewmodel";
 import {IViewModelRenderer} from "./renderer";
 import Grid from './grid';
 import Border from './border';
@@ -584,13 +584,13 @@ class CanvasBehavior {
                     item.contents.forEach(it => {
                         if (it instanceof ViewGroup) {
                             this.renderer.renderGroup(it, false);
-                        } else {
+                        } else if (it instanceof ViewItem){
                             this.renderer.renderItem(it);
                         }
                         this.renderer.attach(it, item);
                     })
                 }
-            } else {
+            } else if (item instanceof ViewItem) {
                 this.renderer.renderItem(item);
             }
             renderer.attach(item, level);
