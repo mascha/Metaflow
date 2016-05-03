@@ -5,10 +5,11 @@
 import {Component, ElementRef, ViewChild, AfterViewInit} from 'angular2/core';
 import {ICameraObserver, Camera} from './camera';
 import {KonvaRenderer, KonvaCamera} from "../platform/konva";
-import {ViewGroup, ViewItem} from "./viewmodel";
+import {ViewGroup} from "./viewmodel";
 import {IViewModelRenderer} from "./renderer";
 import Grid from './grid';
 import Border from './border';
+import Breadcrumbs from "../breadcrumb/breadcrumbs";
 
 /**
  * Grid layer component.
@@ -130,7 +131,7 @@ class NodeLayer implements ICameraObserver {
  */
 @Component({
     selector: 'canvas-view',
-    directives: [GridLayer, BorderLayer, NodeLayer],
+    directives: [GridLayer, BorderLayer, NodeLayer, Breadcrumbs],
     template: require('./canvas.html'),
     styles: [require('./canvas.scss')]
 })
