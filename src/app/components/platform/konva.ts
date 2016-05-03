@@ -5,6 +5,7 @@
 import {IViewModelRenderer, IVisualRenderer} from '../canvas/renderer'
 import {ViewItem, ViewGroup} from "../canvas/viewmodel";
 import {Camera} from "../canvas/camera";
+import {Provider} from "angular2/core";
 
 /**
  * Implements a scale-pan surface for konva.

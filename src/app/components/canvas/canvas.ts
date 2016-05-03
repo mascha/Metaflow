@@ -180,7 +180,7 @@ export class Canvas implements AfterViewInit {
 
     private _element: ElementRef;
     private _camera: Camera;
-    private _behavior: Behavior;
+    private _behavior: CanvasBehavior;
     private _inertiaDecay: number = 0.05;
     private _zoomPan: number = 2.33;
     private _velocity: number = 1.4;
@@ -246,7 +246,8 @@ export class Canvas implements AfterViewInit {
     ngAfterViewInit() {
         this._layers = document.getElementById('diagram-canvas');
         this._camera = this._nodeLayer.retrievePlatformCamera();
-        this._behavior = new Behavior(this, this._camera);
+        this._behavior = new CanvasBehavior(this, this._camera);
+        this._behavior.pushTo(this._navigation);
         this._borderLayer.observe(this._camera);
         this._gridLayer.observe(this._camera);
         this._nodeLayer.observe(this._camera);
@@ -272,7 +273,7 @@ export class Canvas implements AfterViewInit {
  * @author Martin Schade
  * @since 1.0.0
  */
-class Behavior {
+class CanvasBehavior {
     private kinetics: Kinetics;
     private anchorX = 0.0;
     private anchorY = 0.0;
@@ -298,6 +299,7 @@ class Behavior {
     private current: ViewGroup;
     private groups: Array<ViewGroup> = [];
     private renderer: IViewModelRenderer<any,any>;
+    private _navi: NavigationBar;
 
     /**
      * Handle the scroll event.
@@ -402,6 +404,10 @@ class Behavior {
         }
 
         this.panning = false;
+    }
+
+    pushTo(crumbs: NavigationBar) {
+        this._navi = crumbs;
     }
 
     /*
@@ -554,9 +560,14 @@ class Behavior {
     /**
      * TODO rendering
      * TODO proxies
+     * TODO caching
+     * TODO accelerate
+     * TODO event emitting
      * @param level
      */
     private loadLevel(level: ViewGroup) {
+        if (this._navi) this._navi.setPath(level);
+
         let renderer = this.renderer;
         renderer.renderGroup(level, true);
 
@@ -675,7 +686,7 @@ class Behavior {
         let o : ViewGroup = null;
         let root: ViewGroup = null;
         while (i--) {
-            let item = new ViewGroup(i.toFixed(1), 2000, 2000, 2000, 2000, 0.1);
+            let item = new ViewGroup(`Level ${40 - i}`, 2000, 2000, 2000, 2000, 0.1);
             if (o) {
                 o.addContent(item);
             } else {
@@ -787,7 +798,7 @@ class Behavior {
     constructor(private canvas: Canvas, private camera: Camera) {
         this.kinetics = new Kinetics();
         this.renderer = new KonvaRenderer();
-        this.loadLevel(Behavior.createDebugModel())
+        this.loadLevel(CanvasBehavior.createDebugModel())
     }
 }
 

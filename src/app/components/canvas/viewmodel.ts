@@ -255,7 +255,16 @@ export abstract class ViewVertex {
  * @since 1.0.0
  */
 export class ViewItem extends ViewVertex {
+    style: Style;
+}
 
+/**
+ * A proxy node is an unresolved item. 
+ */
+export class Proxy extends ViewVertex {
+    request: string;
+    level: number;
+    path: string;
 }
 
 /**
