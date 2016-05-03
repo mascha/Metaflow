@@ -3,7 +3,7 @@ import {NgFor} from 'angular2/common';
 import {ViewGroup} from "../canvas/viewmodel";
 
 /**
- * A breadcrumb navigation bar.
+ * A navigation navigation bar.
  * @author Martin Schade
  * @since 1.0.0
  */
