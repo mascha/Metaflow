@@ -15,12 +15,12 @@ import {ViewGroup} from "../canvas/viewmodel";
 })
 export default class Breadcrumbs {
 
-    segments: Array<string>;
+    segments: Array<ViewGroup>;
 
     setPath(group: ViewGroup) {
         this.segments = [];
         while (group) {
-            this.segments.push(group.label);
+            this.segments.push(group);
             group = group.parent;
         }
     }
