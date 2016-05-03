@@ -1,7 +1,18 @@
 .breadcrumbs {
-
+  display: inline-block;
+  overflow: hidden;
 }
 
 .breadcrumb {
+  display: block;
+  text-decoration: none;
+  float: left;
+}
+
+.breadcrumb .first {
+
+}
+
+.breadcrumb .last {
 
 }

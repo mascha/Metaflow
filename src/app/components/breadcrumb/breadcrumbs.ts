@@ -6,8 +6,8 @@ import {Component} from "angular2/core";
 @Component({
     selector: 'breadcrumbs',
     styles: [require('./breadcrumb.scss')],
-    template: require('./breadcrumb.html')
+    template: require('./breadcrumbs.html')
 })
 export default class Breadcrumb {
-    
+    segments: Array<string> = ['root', 'first', 'third']
 }
