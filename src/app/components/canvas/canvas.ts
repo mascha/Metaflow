@@ -253,7 +253,6 @@ export class Canvas implements AfterViewInit {
 
     private getOffset(event: MouseEvent): any {
         let offset = HTML.elementPosition(this._layers);
-
         return {
             x: event.pageX - offset.x,
             y: event.pageY - offset.y
@@ -289,7 +288,7 @@ class Behavior {
     private offBottom = false;
     private offTop = false;
     private frames = 60;
-    private maxZoom = 2.6E8;
+    private maxZoom = 10;
     private animation: Interpolator;
     private doKinetics = false;
     private doBanding = false;
@@ -310,21 +309,20 @@ class Behavior {
         let factor = Math.pow(1.002, units);
         let target = factor * zoom;
 
-        if (this.doLimits) {
-            if (target>= this.maxZoom) {
-                target = this.maxZoom;
-            } else {
-                const w = this.camera.visualWidth;
-                const h = this.camera.visualHeight;
-                const l = this.rightLimit - this.leftLimit;
-                const d = this.botLimit - this.topLimit;
-                const limit = (w > h) ? w / l : h / d;
-                target = (target <= limit) ? limit : target;
-            } 
-        }
-
-        // TODO if bottom group, scaling does not work!
         if (!this.detectAndDoSwitch()) {
+            if (this.doLimits) {
+                if (target>= this.maxZoom) {
+                    target = this.maxZoom;
+                } else {
+                    const w = this.camera.visualWidth;
+                    const h = this.camera.visualHeight;
+                    const l = this.rightLimit - this.leftLimit;
+                    const d = this.botLimit - this.topLimit;
+                    const limit = (w > h) ? w / l : h / d;
+                    target = (target <= limit) ? limit : target;
+                }
+            }
+
             this.camera.zoomToAbout(target,
                 this.camera.castRayX(x),
                 this.camera.castRayY(y)
