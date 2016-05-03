@@ -6,7 +6,7 @@ import {Component} from "angular2/core";
 @Component({
     selector: 'breadcrumbs',
     styles: [require('./breadcrumb.scss')],
-    template: `<div class="breadcrumbs"></div>`
+    template: require('./breadcrumb.html')
 })
 export default class Breadcrumb {
     
