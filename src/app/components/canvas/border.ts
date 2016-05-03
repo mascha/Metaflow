@@ -190,13 +190,5 @@ export default class Border implements ICameraObserver {
  * @since 1.0.0
  */
 class Proxy {
-    x: number;
-    y: number;
-    a: number;
-    o: any;
-
-    constructor(x: number, y: number) {
-        this.x = x;
-        this.y = y;
-    }
+    constructor(public x: number, public y: number) {}
 } 
