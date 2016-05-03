@@ -2,8 +2,9 @@ import {Component} from 'angular2/core';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
 import {FORM_PROVIDERS} from 'angular2/common';
 import {Canvas} from './components/canvas/canvas.ts';
-import '../style/app.scss';
 import Breadcrumbs from "./components/breadcrumb/breadcrumbs";
+
+import '../style/app.scss';
 
 /**
  * Metalogic Web Application

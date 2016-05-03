@@ -1,3 +1,7 @@
-<ol class="breadcrumbs" *ngFor="#segment of segments; #f = first; #l = last">
-  <li *ngIf="first" class="breadcrumb first">{{segment}}></li>
+<ol class="breadcrumbs">
+  <li *ngFor="#segment of segments">
+    <a href="#">
+      {{segment}}
+    </a>
+  </li>
 </ol>

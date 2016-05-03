@@ -1,4 +1,6 @@
-import {Component, Input} from "angular2/core";
+import {Component} from 'angular2/core';
+import {NgFor} from 'angular2/common';
+import {ViewGroup} from "../canvas/viewmodel";
 
 /**
  * A breadcrumb navigation bar.
@@ -8,23 +10,27 @@ import {Component, Input} from "angular2/core";
 @Component({
     selector: 'breadcrumbs',
     styles: [require('./breadcrumbs.scss')],
-    template: require('./breadcrumbs.html')
+    template: require('./breadcrumbs.html'),
+    directives: [NgFor]
 })
 export default class Breadcrumbs {
 
     segments: Array<string>;
 
-    setPath(path: string) {
-        this.segments = path.split('/');
-    }
-    
-    getFullPath(): string {
-        return this.segments.join('/');
+    setPath(group: ViewGroup) {
+        this.segments = [];
+        while (group) {
+            this.segments.push(group.label);
+            group = group.parent;
+        }
     }
 
-    constructor(path: string) {
-        path = 'root/first/last';
-        if (path) this.setPath(path);
-        console.log(this.segments.toJSON());
+    constructor() {
+        let root = new ViewGroup('root', 0,0,0,0,0);
+        let first = new ViewGroup('first', 0,0,0,0,0);
+        let sec = new ViewGroup('second', 0,0,0,0,0);
+        root.addContent(first);
+        first.addContent(sec);
+        this.setPath(sec)
     }
 }
