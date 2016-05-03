@@ -9,7 +9,7 @@ import {ViewGroup} from "./viewmodel";
 import {IViewModelRenderer} from "./renderer";
 import Grid from './grid';
 import Border from './border';
-import Breadcrumbs from "../breadcrumb/breadcrumbs";
+import NavigationBar from "../breadcrumb/breadcrumbs";
 
 /**
  * Grid layer component.
@@ -131,7 +131,7 @@ class NodeLayer implements ICameraObserver {
  */
 @Component({
     selector: 'canvas-view',
-    directives: [GridLayer, BorderLayer, NodeLayer, Breadcrumbs],
+    directives: [GridLayer, BorderLayer, NodeLayer, NavigationBar],
     template: require('./canvas.html'),
     styles: [require('./canvas.scss')]
 })
@@ -176,6 +176,7 @@ export class Canvas implements AfterViewInit {
     @ViewChild(BorderLayer) private _borderLayer: BorderLayer;
     @ViewChild(GridLayer) private _gridLayer: GridLayer;
     @ViewChild(NodeLayer) private _nodeLayer: NodeLayer;
+    @ViewChild(NavigationBar) private _navigation: NavigationBar;
 
     private _element: ElementRef;
     private _camera: Camera;
