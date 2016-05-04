@@ -72,6 +72,8 @@ class TripleSplit {
         event.preventDefault();
         if (this.isDragging) {
             let left = Math.round(event.pageX / window.innerWidth * 100);
+            console.log(left);
+
             this.readjust(left, 80);
         }
     }
@@ -86,6 +88,7 @@ class TripleSplit {
 
     onMouseUp(event: MouseEvent) {
         this.isDragging = false;
+
     }
 
     /**
