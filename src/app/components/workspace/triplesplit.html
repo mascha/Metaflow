@@ -1,11 +1,28 @@
 <div class="splitpane">
-  <div #leftContent class="splitpane-content" style="width: 20%">
+  <div #leftContent
+       class="splitpane-content"
+       style="width: 20%">
   </div>
-  <div #leftDivider class="splitpane-divider" style="margin-left: -5px; width: 5px; left: 20%"></div> -->
-  <div #centerContent class="splitpane-content" style="left:20%; width: 60%">
-    <canvas-view></canvas-view>
+  <div #leftDivider
+       class="splitpane-divider"
+       style="margin-left: -5px; width: 5px; left: 20%"
+       (mousedown)="onMouseDown($event)"
+       (mousemove)="onMouseMove($event)"
+       (mouseup)="onMouseUp($event)">
   </div>
-  <div #rightDivider class="splitpane-divider" style="margin-left: -1px; width: 5px; left: 80%"></div>
+  <div #centerContent
+       class="splitpane-content"
+       style="left:20%; width: 60%">
+    <canvas-view>
+
+    </canvas-view>
+  </div>
+  <div #rightDivider
+       class="splitpane-divider"
+       style="margin-left: -1px; width: 5px; left: 80%"
+       (mousedown)="onMouseDown"
+       (mousemove)="onMouseMove"
+       (mouseup)="onMouseUp"></div>
   <div #rightContent class="splitpane-content" style="left: 80%;width: 20%">
   </div>
 </div>

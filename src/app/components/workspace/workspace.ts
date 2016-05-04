@@ -13,13 +13,21 @@ class DoubleSplit {
     @ViewChild('leftContent') left: ElementRef;
     @ViewChild('divider') divider: ElementRef;
     @ViewChild('rightContent') right: ElementRef;
+
+    private isDragging = false;
     
     onMouseDown(event: MouseEvent) {
-        // pageX to %
-        this.adjust(20);
+        this.isDragging = true;
     }
     
-    onMouse
+    onMouseMove(event: MouseEvent) {
+        if (this.isDragging) 
+            this.adjust(event.pageX / window.innerWidth);
+    }
+    
+    onMouseUp(event: MouseEvent) {
+        this.isDragging = false;
+    }
 
     /**
      *
@@ -55,6 +63,19 @@ class TripleSplit {
     @ViewChild('centerContent') center: ElementRef;
     
     private centerMin = 20;
+    private isDragging = false;
+
+    onMouseDown() {
+        this.isDragging = true;
+    }
+
+    onMouseMove() {
+
+    }
+
+    onMouseUp() {
+        this.isDragging = false;
+    }
 
     /**
      *
