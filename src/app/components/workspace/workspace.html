@@ -1,3 +1,16 @@
 <div #workspaceRoot>
+  <div *ngIf="slim==true">
+    <triple-split>
+      left
+      <double-split>
+        upper
+        lower
+      </double-split>
+      right
+    </triple-split>
 
+  </div>
+  <div *ngIf="slim==false">
+
+  </div>
 </div>
