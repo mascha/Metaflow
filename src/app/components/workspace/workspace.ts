@@ -65,15 +65,23 @@ class TripleSplit {
     private centerMin = 20;
     private isDragging = false;
 
-    onMouseDown() {
+    onMouseDown(event: MouseEvent) {
         this.isDragging = true;
     }
 
-    onMouseMove() {
-
+    onMouseMoveLeft(event: MouseEvent) {
+        if (this.isDragging) {
+            this.readjust(20, event.pageX / window.innerWidth);
+        }
     }
+    
+    onMouseMoveRight(event: MouseEvent) {
+        if (this.isDragging) {
+            this.readjust(event.pageX / window.innerWidth, 80);
+        }
+    } 
 
-    onMouseUp() {
+    onMouseUp(event: MouseEvent) {
         this.isDragging = false;
     }
 
@@ -84,8 +92,8 @@ class TripleSplit {
      */
     readjust(left: number, right: number) {
         const renderer = this.renderer;
-        left = (left < 0)? 0 : (left > 100) ? 100 : 0;
-        right = (right < 0)? 0 : (right > 100) ? 100 : 0;
+        left = (left < 0)? 0 : (left > 100) ? 100 : left;
+        right = (right < 0)? 0 : (right > 100) ? 100 : right;
         let adjLeft = Math.min(left, right - this.centerMin);
         let adjRight = Math.max(left + this.centerMin, right);
         let leftStyle = `${adjLeft}%`;

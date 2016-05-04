@@ -7,7 +7,7 @@
        class="splitpane-divider"
        style="margin-left: -5px; width: 5px; left: 20%"
        (mousedown)="onMouseDown($event)"
-       (mousemove)="onMouseMove($event)"
+       (mousemove)="onMouseMoveLeft($event)"
        (mouseup)="onMouseUp($event)">
   </div>
   <div #centerContent
@@ -21,8 +21,11 @@
        class="splitpane-divider"
        style="margin-left: -1px; width: 5px; left: 80%"
        (mousedown)="onMouseDown"
-       (mousemove)="onMouseMove"
-       (mouseup)="onMouseUp"></div>
-  <div #rightContent class="splitpane-content" style="left: 80%;width: 20%">
+       (mousemove)="onMouseMoveRight"
+       (mouseup)="onMouseUp">
+  </div>
+  <div #rightContent
+       class="splitpane-content"
+       style="left: 80%;width: 20%">
   </div>
 </div>

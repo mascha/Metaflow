@@ -1,8 +1,8 @@
 <div id="diagram-canvas"
      (window:resize)="onResize()"
+     (window:mouseup)="onMouseUp($event)"
      (mousedown)="onMouseDown($event)"
      (mousemove)="onMouseMove($event)"
-     (window:mouseup)="onMouseUp($event)"
      (mouseup)="onMouseUp($event)"
      (wheel)="onScroll($event)"
      (dblclick)="onClick($event)">
