@@ -6,7 +6,8 @@ import {Component} from "@angular/core";
 @Component({
     selector: 'workspace',
     template: require('./workspace.html'),
-    styles: [require('./workspace.scss)')]
+    styles: [require('./workspace.scss)')],
+    directives: [DoubleSplit, TripleSplit],
 })
 export default class Workspace {
     slim: boolean = true;
@@ -15,7 +16,8 @@ export default class Workspace {
     
 @Component({
     selector: 'double-split',
-    template: require('./doublesplit.html')
+    template: require('./doublesplit.html'),
+    styles: [require('./splitpane.scss')]
 })
 class DoubleSplit {
     
