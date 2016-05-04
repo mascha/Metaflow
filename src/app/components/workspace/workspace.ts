@@ -1,4 +1,5 @@
 import {Component, ElementRef, ViewChild, Renderer, Inject} from "@angular/core";
+import {Canvas} from "../canvas/canvas";
 
 /**
  * Simple split pane.
@@ -133,7 +134,7 @@ class TripleSplit {
 @Component({
     selector: 'workspace',
     template: require('./workspace.html'),
-    directives: [DoubleSplit, TripleSplit],
+    directives: [DoubleSplit, TripleSplit, Canvas],
 })
 export default class Workspace {
     slim: boolean = true;

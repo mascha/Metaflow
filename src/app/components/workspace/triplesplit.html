@@ -2,6 +2,7 @@
   <div #leftContent
        class="splitpane-content"
        style="width: 20%">
+    <ng-content select="[left]"></ng-content>
   </div>
   <div #leftDivider
        class="splitpane-divider"
@@ -11,9 +12,7 @@
   <div #centerContent
        class="splitpane-content"
        style="left:20%; width: 60%">
-    <canvas-view>
-
-    </canvas-view>
+    <ng-content select="[center]"></ng-content>
   </div>
   <div #rightDivider
        class="splitpane-divider"
@@ -23,5 +22,6 @@
   <div #rightContent
        class="splitpane-content"
        style="left: 80%;width: 20%">
+    <ng-content select="[right]"></ng-content>
   </div>
 </div>
