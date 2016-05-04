@@ -46,7 +46,7 @@ module.exports = function makeWebpackConfig() {
    * Reference: http://webpack.github.io/docs/configuration.html#entry
    */
   config.entry = isTest ? {} : {
-    'polyfills': ['es6-shim/es6-shim.js'/*,'angular2/bundles/angular2-polyfills'*/],
+    'polyfills': ['es6-shim/es6-shim.js', 'rxjs/Rx.js', 'zone.js/dist/zone.js', 'reflect-metadata/Reflect.js'],
     'vendor': './src/vendor.ts',
     'app': './src/bootstrap.ts' // our angular app
   };
@@ -266,7 +266,6 @@ function rootNode(args) {
 }
 
 function packageSort(packages) {
-  // packages = ['polyfills', 'vendor', 'app']
   var len = packages.length - 1;
   var first = packages[0];
   var last = packages[len];
