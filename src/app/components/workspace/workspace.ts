@@ -9,9 +9,17 @@ import {Component, ElementRef, ViewChild, Renderer, Inject} from "@angular/core"
     styles: [require('./splitpane.scss')]
 })
 class DoubleSplit {
-    @ViewChild('leftContent') leftContent: ElementRef;
+    
+    @ViewChild('leftContent') left: ElementRef;
     @ViewChild('divider') divider: ElementRef;
-    @ViewChild('rightContent') rightContent: ElementRef;
+    @ViewChild('rightContent') right: ElementRef;
+    
+    onMouseDown(event: MouseEvent) {
+        // pageX to %
+        this.adjust(20);
+    }
+    
+    onMouse
 
     /**
      *
@@ -21,10 +29,10 @@ class DoubleSplit {
         let left = (divider < 0)? 0 : (divider > 100)? 100 : divider;
         let renderer = this.renderer;
         let style = `${left}%`;
-        renderer.setElementStyle(this.leftContent, 'width', style);
+        renderer.setElementStyle(this.left, 'width', style);
         renderer.setElementStyle(this.divider, 'left', style);
-        renderer.setElementStyle(this.rightContent, 'left', style);
-        renderer.setElementStyle(this.rightContent, 'width', `${100 - left}%`);
+        renderer.setElementStyle(this.right, 'left', style);
+        renderer.setElementStyle(this.right, 'width', `${100 - left}%`);
     }
 
     constructor(@Inject(Renderer) private renderer: Renderer) {}
