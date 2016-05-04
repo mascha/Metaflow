@@ -1,6 +1,6 @@
 <ol class="navigation">
   <li *ngFor="#segment of segments">
-    <a href="#">
+    <a href="#" *ngIf="last==false">
       {{segment.label}}
     </a>
   </li>

@@ -176,7 +176,7 @@ export abstract class Camera {
             this.moveBy(dZ * worldX, dZ * worldY);
 
             /* notify and release */
-            this.updateWorldCoordinates();
+            this.updateCache();
 
             for (let i = 0; i < this.obs.length; i++)
                 this.obs[i].onZoomChanged(zoomLevel);
@@ -209,7 +209,7 @@ export abstract class Camera {
         );
 
         if (!this.isZooming) {
-            this.updateWorldCoordinates();
+            this.updateCache();
             for (let i = 0; i < this.obs.length; i++)
                 this.obs[i].onPanChanged(positionX, positionY);
         }
@@ -223,7 +223,6 @@ export abstract class Camera {
      * @param positionX
      * @param positionY
      * @param zoom Must not be negative or zero.
-     * @param scaleFirst
      */
     zoomAndMoveTo(positionX:number, positionY:number, zoom:number) {
         if (zoom <= 0) return;
@@ -234,7 +233,7 @@ export abstract class Camera {
 
         this.scaleWorldTo(zoom);
         this.translateWorldTo(this.camX, this.camY);
-        this.updateWorldCoordinates();
+        this.updateCache();
 
         let obs = this.obs;
         let len = obs.length;
@@ -250,21 +249,17 @@ export abstract class Camera {
         this.viewY = viewY;
         this.viewW = viewW;
         this.viewH = viewH;
-        this.updateWorldCoordinates();
+        this.updateCache();
         for (let i = 0; i < this.obs.length; i++) {
             this.obs[i].onViewResized();
         }
-    }
-
-    toString(): string {
-        return 'cam: ('+ this.camX.toFixed(1)+','+this.camY.toFixed(1)+','+this._scale.toFixed(6)+') ~ '+this.adjX.toFixed(1)+','+this.adjY.toFixed(1)
     }
 
     protected abstract translateWorldTo(tX:number, tY:number):void
 
     protected abstract scaleWorldTo(zoom:number):void
 
-    private updateWorldCoordinates() {
+    private updateCache() {
         const zoom = this._scale;
         this.adjX = (this.viewX - this.camX) / zoom;
         this.adjY = (this.viewY - this.camY) / zoom;
@@ -273,7 +268,7 @@ export abstract class Camera {
     }
 
     constructor() {
-        this.updateWorldCoordinates();
+        this.updateCache();
     }
 }
 
@@ -321,16 +316,16 @@ export class ViewFrame {
  * @author Martin Schade
  * @since 1.0.0
  */
-export class CameraHistory {
+export class History<T> {
 
-    private future:Array<ViewFrame>;
-    private past:Array<ViewFrame>;
-    private current:ViewFrame;
+    private future: Array<T>;
+    private past: Array<T>;
+    private current: T;
 
     /**
      * Returns the next camera view;
      */
-    nextFrame():ViewFrame {
+    next(): T {
         this.past.push(this.current);
         this.current = this.future.pop();
         return this.current;
@@ -339,7 +334,7 @@ export class CameraHistory {
     /**
      * Returns the last camera view.
      */
-    lastFrame():ViewFrame {
+    previous(): T {
         this.future.push(this.current);
         this.current = this.past.pop();
         return this.current;
@@ -350,28 +345,16 @@ export class CameraHistory {
      * frame to the given one.
      * @param frame
      */
-    addViewFrame(frame:ViewFrame) {
-        if (frame) {
+    add(t: T) {
+        if (t) {
             this.future = [];
             this.past.push(this.current);
-            this.current = frame;
+            this.current = t;
         }
     }
 
-    /**
-     * Clears all future frames, remembers the current frame and sets the current
-     * frame to the given one.
-     * @param camera
-     */
-    public addCameraFrame(camera:Camera) {
-        if (camera) {
-            const frame = ViewFrame.fromCamera(camera);
-            this.addViewFrame(frame);
-        }
-    }
-
-    constructor(initialFrame:ViewFrame) {
-        this.current = initialFrame;
+    constructor(initial: T) {
+        this.current = initial;
     }
 }
 

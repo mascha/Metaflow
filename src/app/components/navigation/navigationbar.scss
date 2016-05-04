@@ -3,16 +3,23 @@
   overflow: hidden;
   z-index: 1000;
   list-style: none;
+  top: 6px;
+  height: 19px;
+  left: 19px;
+  width: 260px;
 
+  background-color: #eeeeee;
   border-radius: 6px;
 
   li {
     text-decoration: none;
     text-align: left;
     display: inline;
+    margin-top: 6px;
 
     a {
       text-decoration: none;
+      color: #4a4a4a;
       font-weight: bold;
       font-family: sans-serif;
     }

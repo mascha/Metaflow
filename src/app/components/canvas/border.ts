@@ -84,6 +84,8 @@ export default class Border implements ICameraObserver {
 
     /**
      * Draw all proxy items.
+     * TODO draw labels
+     *
      */
     private drawProxies() {
         const cam = this.camera;
