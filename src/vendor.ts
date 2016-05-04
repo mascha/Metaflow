@@ -5,8 +5,5 @@ import '@angular/core';
 import '@angular/router';
 import '@angular/http';
 
-// RxJS
-import 'rxjs';
-
 // Other
 import 'konva';

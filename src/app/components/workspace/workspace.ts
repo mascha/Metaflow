@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 
 /**
- * 
+ * Workspace component.
  */
 @Component({
     selector: 'workspace',
