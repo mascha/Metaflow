@@ -64,31 +64,25 @@ class TripleSplit {
     
     private isDragging = false;
 
-    onMouseDown(event: MouseEvent) {
-        this.isDragging = true;
-    }
-
-    onMouseMoveLeft(event: MouseEvent) {
+    private moveHandler = (event: MouseEvent) => {
         event.preventDefault();
-        if (this.isDragging) {
-            let left = Math.round(event.pageX / window.innerWidth * 100);
-            console.log(left);
+        console.log('moving...');
+    };
 
-            this.readjust(left, 80);
-        }
-    }
-    
-    onMouseMoveRight(event: MouseEvent) {
+    private upHandler = (event: MouseEvent) => {
         event.preventDefault();
-        if (this.isDragging) {
-            let right = Math.round(event.pageX / window.innerWidth * 100);
-            this.readjust(20, right);
-        }
-    } 
-
-    onMouseUp(event: MouseEvent) {
+        document.removeEventListener('mousemove', this.moveHandler);
+        document.removeEventListener('mouseup', this.upHandler);
+        console.log('stop');
         this.isDragging = false;
+    };
 
+    onMouseDown(event: MouseEvent) {
+        event.preventDefault();
+        this.isDragging = true;
+        console.log('start');
+        document.addEventListener('mousemove', this.moveHandler);
+        document.addEventListener('mouseup', this.upHandler)
     }
 
     /**
