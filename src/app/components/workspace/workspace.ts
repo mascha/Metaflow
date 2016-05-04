@@ -14,19 +14,20 @@ class DoubleSplit {
     @ViewChild('divider') divider: ElementRef;
     @ViewChild('rightContent') right: ElementRef;
 
-    private isDragging = false;
-    
+    private moveHandler = (event: MouseEvent) => {
+        event.preventDefault();
+    };
+
+    private upHandler = (event: MouseEvent) => {
+        event.preventDefault();
+        document.removeEventListener('mousemove', this.moveHandler);
+        document.removeEventListener('mouseup', this.upHandler);
+    };
+
     onMouseDown(event: MouseEvent) {
-        this.isDragging = true;
-    }
-    
-    onMouseMove(event: MouseEvent) {
-        if (this.isDragging) 
-            this.adjust(event.pageX / window.innerWidth);
-    }
-    
-    onMouseUp(event: MouseEvent) {
-        this.isDragging = false;
+        event.preventDefault();
+        document.addEventListener('mousemove', this.moveHandler);
+        document.addEventListener('mouseup', this.upHandler)
     }
 
     /**
@@ -61,26 +62,30 @@ class TripleSplit {
     @ViewChild('rightDivider') rightDiv: ElementRef;
     @ViewChild('rightContent') rightContent: ElementRef;
     @ViewChild('centerContent') center: ElementRef;
-    
-    private isDragging = false;
 
+    private lastLeft = 20;
+    private lastRight = 80;
+    private left: boolean;
+    
     private moveHandler = (event: MouseEvent) => {
         event.preventDefault();
-        console.log('moving...');
+        let adjusted = Math.round(event.pageX/window.innerWidth*100);
+        if (this.left) {
+            this.readjust(adjusted, this.lastRight);
+        } else {
+            this.readjust(this.lastLeft, adjusted)
+        }
     };
 
     private upHandler = (event: MouseEvent) => {
         event.preventDefault();
         document.removeEventListener('mousemove', this.moveHandler);
         document.removeEventListener('mouseup', this.upHandler);
-        console.log('stop');
-        this.isDragging = false;
     };
 
-    onMouseDown(event: MouseEvent) {
+    onMouseDown(event: MouseEvent, left: boolean) {
+        this.left = left;
         event.preventDefault();
-        this.isDragging = true;
-        console.log('start');
         document.addEventListener('mousemove', this.moveHandler);
         document.addEventListener('mouseup', this.upHandler)
     }
@@ -96,16 +101,25 @@ class TripleSplit {
         let right = (r < 0)? 0 : (r > 100) ? 100 : r;
         let adjLeft = Math.min(left, right);
         let adjRight = Math.max(left, right);
-        let leftStyle = `${adjLeft}%`;
-        let cenStyle = `${100 - adjLeft - adjRight}%`;
-        let rightStyle = `${adjRight}%`;
-        renderer.setElementStyle(this.leftContent.nativeElement, 'width', leftStyle);
-        renderer.setElementStyle(this.leftDiv.nativeElement,'left', leftStyle);
-        renderer.setElementStyle(this.center.nativeElement, 'left', leftStyle);
-        renderer.setElementStyle(this.center.nativeElement, 'width', cenStyle);
-        renderer.setElementStyle(this.rightDiv.nativeElement, 'left', rightStyle);
-        renderer.setElementStyle(this.rightContent.nativeElement, 'left', rightStyle);
-        renderer.setElementStyle(this.rightContent.nativeElement, 'width', `${100 - adjRight}%`)
+        let adjCent = Math.max(0, adjRight- adjLeft);
+
+        if (Math.abs(this.lastLeft - adjLeft) >= 1) {
+            let leftStyle = `${adjLeft}%`;
+            let cenStyle = `${adjCent}%`;
+            renderer.setElementStyle(this.leftContent.nativeElement, 'width', leftStyle);
+            renderer.setElementStyle(this.leftDiv.nativeElement,'left', leftStyle);
+            renderer.setElementStyle(this.center.nativeElement, 'left', leftStyle);
+            renderer.setElementStyle(this.center.nativeElement, 'width', cenStyle);
+            this.lastLeft = adjLeft;
+        }
+
+        if (Math.abs(this.lastRight - adjRight) >= 1) {
+            let rightStyle = `${adjRight}%`;
+            renderer.setElementStyle(this.rightDiv.nativeElement, 'left', rightStyle);
+            renderer.setElementStyle(this.rightContent.nativeElement, 'left', rightStyle);
+            renderer.setElementStyle(this.rightContent.nativeElement, 'width', `${100 - adjRight}%`)
+            this.lastRight = adjRight;
+        }
     }
 
     constructor(@Inject(Renderer) private renderer: Renderer) {}
