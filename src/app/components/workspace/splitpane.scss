@@ -1,0 +1,26 @@
+.splitpane-content, .splitpane {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.splitpane-divider {
+  background-color: #ddd;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  box-sizing: border-box;
+  transition: background .133s ease-out;
+  z-index: 100;
+}
+
+.splitpane-divider:hover {
+  background-color: #999;
+  cursor: col-resize;
+}
+
+.splitpane-divider.vertical:hover {
+  cursor: row-resize;
+}

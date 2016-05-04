@@ -11,3 +11,20 @@ import {Component} from "angular2/core";
 export default class Workspace {
     
 }
+
+@Component({
+    selector: 'double-split',
+    template: require('./doublesplit.html')
+})
+class DoubleSplit {
+    
+}
+
+@Component({
+    selector: 'triple-split',
+    template: require('./triplesplit.html'),
+    styles: [require('./splitpane.scss')]
+})
+class TripleSplit {
+    
+}
