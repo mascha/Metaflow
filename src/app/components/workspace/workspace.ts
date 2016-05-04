@@ -115,9 +115,11 @@ class TripleSplit {
 
         if (Math.abs(this.lastRight - adjRight) >= 1) {
             let rightStyle = `${adjRight}%`;
+            let cenStyle = `${adjCent}%`;
             renderer.setElementStyle(this.rightDiv.nativeElement, 'left', rightStyle);
             renderer.setElementStyle(this.rightContent.nativeElement, 'left', rightStyle);
-            renderer.setElementStyle(this.rightContent.nativeElement, 'width', `${100 - adjRight}%`)
+            renderer.setElementStyle(this.rightContent.nativeElement, 'width', `${100 - adjRight}%`);
+            renderer.setElementStyle(this.center.nativeElement, 'width', cenStyle);
             this.lastRight = adjRight;
         }
     }
