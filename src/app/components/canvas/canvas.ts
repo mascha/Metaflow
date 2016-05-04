@@ -512,7 +512,7 @@ class CanvasBehavior {
         const dy = (this.offTop) ? wY - this.topLimit: (this.offBottom) ? wH - this.botLimit: 0;
         const tX = wX + pW / 2 - dx;
         const tY = wY + pH / 2 - dy;
-        this.camera.moveTo(tX, tY);
+        ca.moveTo(tX, tY);
     }
 
     /**
@@ -667,8 +667,9 @@ class CanvasBehavior {
 
     private isOutsideParent(): boolean {
         let parent = this.getParent();
-        let driftW = parent.width * 0.6;
-        let driftH = parent.height * 0.6;
+        let adjust = 0.6;
+        let driftW = parent.width * adjust;
+        let driftH = parent.height * adjust;
         return (this.camera.worldX < parent.left - driftW &&
                 this.camera.worldY < parent.top - driftH &&
                 this.camera.projectedWidth > parent.width + driftW &&
