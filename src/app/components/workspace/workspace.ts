@@ -62,7 +62,6 @@ class TripleSplit {
     @ViewChild('rightContent') rightContent: ElementRef;
     @ViewChild('centerContent') center: ElementRef;
     
-    private centerMin = 20;
     private isDragging = false;
 
     onMouseDown(event: MouseEvent) {
@@ -70,14 +69,18 @@ class TripleSplit {
     }
 
     onMouseMoveLeft(event: MouseEvent) {
+        event.preventDefault();
         if (this.isDragging) {
-            this.readjust(20, event.pageX / window.innerWidth);
+            let left = Math.round(event.pageX / window.innerWidth * 100);
+            this.readjust(left, 80);
         }
     }
     
     onMouseMoveRight(event: MouseEvent) {
+        event.preventDefault();
         if (this.isDragging) {
-            this.readjust(event.pageX / window.innerWidth, 80);
+            let right = Math.round(event.pageX / window.innerWidth * 100);
+            this.readjust(20, right);
         }
     } 
 
@@ -87,25 +90,25 @@ class TripleSplit {
 
     /**
      *
-     * @param left
-     * @param right
+     * @param l
+     * @param r
      */
-    readjust(left: number, right: number) {
+    readjust(l: number, r: number) {
         const renderer = this.renderer;
-        left = (left < 0)? 0 : (left > 100) ? 100 : left;
-        right = (right < 0)? 0 : (right > 100) ? 100 : right;
-        let adjLeft = Math.min(left, right - this.centerMin);
-        let adjRight = Math.max(left + this.centerMin, right);
+        let left = (l < 0)? 0 : (l > 100) ? 100 : l;
+        let right = (r < 0)? 0 : (r > 100) ? 100 : r;
+        let adjLeft = Math.min(left, right);
+        let adjRight = Math.max(left, right);
         let leftStyle = `${adjLeft}%`;
         let cenStyle = `${100 - adjLeft - adjRight}%`;
         let rightStyle = `${adjRight}%`;
-        renderer.setElementStyle(this.leftContent, 'width', leftStyle);
-        renderer.setElementStyle(this.leftDiv,'left', leftStyle);
-        renderer.setElementStyle(this.center, 'left', leftStyle);
-        renderer.setElementStyle(this.center, 'width', cenStyle);
-        renderer.setElementStyle(this.rightDiv, 'left', rightStyle);
-        renderer.setElementStyle(this.rightContent, 'left', rightStyle);
-        renderer.setElementStyle(this.rightContent, 'width', `${100 - adjRight}%`)
+        renderer.setElementStyle(this.leftContent.nativeElement, 'width', leftStyle);
+        renderer.setElementStyle(this.leftDiv.nativeElement,'left', leftStyle);
+        renderer.setElementStyle(this.center.nativeElement, 'left', leftStyle);
+        renderer.setElementStyle(this.center.nativeElement, 'width', cenStyle);
+        renderer.setElementStyle(this.rightDiv.nativeElement, 'left', rightStyle);
+        renderer.setElementStyle(this.rightContent.nativeElement, 'left', rightStyle);
+        renderer.setElementStyle(this.rightContent.nativeElement, 'width', `${100 - adjRight}%`)
     }
 
     constructor(@Inject(Renderer) private renderer: Renderer) {}
