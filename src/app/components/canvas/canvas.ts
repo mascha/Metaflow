@@ -2,13 +2,13 @@
  * Copyright (C) Martin Schade, 2015-2016. All rights reserved.
  */
 
-import {Component, ElementRef, ViewChild, AfterViewInit} from 'angular2/core';
-import {ICameraObserver, Camera} from './camera';
+import {Component, ElementRef, ViewChild, AfterViewInit} from '@angular/core';
+import {ICameraObserver, Camera} from "../../common/camera";
 import {KonvaRenderer, KonvaCamera} from "../platform/konva";
-import {ViewGroup, ViewItem} from "./viewmodel";
-import {IViewModelRenderer} from "./renderer";
-import Grid from './grid';
-import Border from './border';
+import {ViewGroup, ViewItem} from "../../common/viewmodel";
+import {IViewModelRenderer} from "../../common/renderer";
+import Grid from '../../common/grid';
+import Border from '../../common/border';
 import NavigationBar from "../navigation/navigationbar";
 
 /**

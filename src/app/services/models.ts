@@ -1,7 +1,7 @@
-import {ViewGroup} from "../components/canvas/viewmodel";
+import {ViewGroup} from "../common/viewmodel";
 
 /**
- * 
+ * A asynchronous viewmodel provider service.
  */
 export default class ModelService {
     

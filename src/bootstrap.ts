@@ -1,7 +1,8 @@
-import {enableProdMode} from "angular2/core";
-import {bootstrap, ELEMENT_PROBE_PROVIDERS} from 'angular2/platform/browser';
-import {ROUTER_PROVIDERS} from 'angular2/router';
-import {HTTP_PROVIDERS} from 'angular2/http';
+import {enableProdMode} from '@angular/core';
+import {ELEMENT_PROBE_PROVIDERS} from '@angular/platform-browser';
+import {bootstrap} from '@angular/platform-browser-dynamic';
+import {ROUTER_PROVIDERS} from '@angular/router';
+import {HTTP_PROVIDERS} from '@angular/http';
 
 const ENV_PROVIDERS = [];
 if (process.env.ENV === 'build') {
@@ -17,6 +18,5 @@ document.addEventListener('DOMContentLoaded', function main() {
     ...HTTP_PROVIDERS,
     ...ROUTER_PROVIDERS,
     ...ENV_PROVIDERS
-  ])
-  .catch(err => console.error(err));
+  ]).catch(err => console.error(err));
 });

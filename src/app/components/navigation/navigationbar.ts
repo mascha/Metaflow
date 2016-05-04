@@ -1,6 +1,6 @@
-import {Component} from 'angular2/core';
-import {NgFor} from 'angular2/common';
-import {ViewGroup} from "../canvas/viewmodel";
+import {Component} from '@angular/core';
+import {NgFor} from '@angular/common';
+import {ViewGroup} from "../../common/viewmodel";
 
 /**
  * A navigation navigation bar.

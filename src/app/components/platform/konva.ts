@@ -2,10 +2,9 @@
  * Created by Martin Schade on 24.04.2016.
  */
 
-import {IViewModelRenderer, IVisualRenderer} from '../canvas/renderer'
-import {ViewItem, ViewGroup} from "../canvas/viewmodel";
-import {Camera} from "../canvas/camera";
-import {Provider} from "angular2/core";
+import {IViewModelRenderer, IVisualRenderer} from '../../common/renderer'
+import {ViewItem, ViewGroup} from "../../common/viewmodel";
+import {Camera} from "../../common/camera";
 
 /**
  * Implements a scale-pan surface for konva.

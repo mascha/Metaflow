@@ -1,6 +1,6 @@
-import {Component} from 'angular2/core';
-import {ROUTER_DIRECTIVES} from 'angular2/router';
-import {FORM_PROVIDERS} from 'angular2/common';
+import {Component} from '@angular/core';
+import {ROUTER_DIRECTIVES} from '@angular/router';
+import {FORM_PROVIDERS} from '@angular/common';
 import {Canvas} from './components/canvas/canvas.ts';
 
 import '../style/app.scss';
@@ -16,6 +16,4 @@ import '../style/app.scss';
   styles: [require('./app.scss')],
   template: require('./app.html')
 })
-export class App {
-  constructor() {}
-}
+export class App {}
