@@ -9,7 +9,25 @@ import {Component, ElementRef, ViewChild, Renderer, Inject} from "@angular/core"
     styles: [require('./splitpane.scss')]
 })
 class DoubleSplit {
-    @ViewChild('divider') middle: ElementRef;
+    @ViewChild('leftContent') leftContent: ElementRef;
+    @ViewChild('divider') divider: ElementRef;
+    @ViewChild('rightContent') rightContent: ElementRef;
+
+    /**
+     *
+     * @param divider
+     */
+    adjust(divider: number) {
+        let left = (divider < 0)? 0 : (divider > 100)? 100 : divider;
+        let renderer = this.renderer;
+        let style = `${left}%`;
+        renderer.setElementStyle(this.leftContent, 'width', style);
+        renderer.setElementStyle(this.divider, 'left', style);
+        renderer.setElementStyle(this.rightContent, 'left', style);
+        renderer.setElementStyle(this.rightContent, 'width', `${100 - left}%`);
+    }
+
+    constructor(@Inject(Renderer) private renderer: Renderer) {}
 }
 
 /**
