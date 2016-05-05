@@ -1,10 +1,25 @@
-.splitpane-content, .splitpane {
+.splitpane-content {
   position: absolute;
+  top: 0;
+  bottom: 0;
+  background-color: #eeeeee;
+
+  &.right {
+    right: 0;
+  }
+
+  &.left {
+    left: 0;
+  }
+}
+
+.splitpane {
+  position: absolute;
+  overflow: hidden;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: #eeeeee
 }
 
 .splitpane-divider {
@@ -15,6 +30,17 @@
   box-sizing: border-box;
   transition: background .133s ease-out;
   z-index: 100;
+
+  &.left {
+    margin-left: -5px;
+    width: 5px;
+  }
+
+  &.right {
+    margin-left: -1px;
+    width: 5px;
+  }
+;
 
   &:before {
     content: '• • •';

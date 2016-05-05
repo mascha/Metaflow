@@ -103,26 +103,32 @@ class TripleSplit {
         let right = (r < 0)? 0 : (r > 100) ? 100 : r;
         let adjLeft = Math.min(left, right);
         let adjRight = Math.max(left, right);
-        let adjCent = Math.max(0, adjRight- adjLeft);
 
-        if (Math.abs(this.lastLeft - adjLeft) >= 1) {
+        console.log(`${left} ${adjLeft} - ${adjRight} ${right}`);
+
+        let doLeft = Math.abs(this.lastLeft - adjLeft) >= 1;
+        let doRight = Math.abs(this.lastRight - adjRight) >= 1;
+
+        if (doLeft) {
             let leftStyle = `${adjLeft}%`;
-            let cenStyle = `${adjCent}%`;
             renderer.setElementStyle(this.leftContent.nativeElement, 'width', leftStyle);
             renderer.setElementStyle(this.leftDiv.nativeElement,'left', leftStyle);
             renderer.setElementStyle(this.center.nativeElement, 'left', leftStyle);
-            renderer.setElementStyle(this.center.nativeElement, 'width', cenStyle);
             this.lastLeft = adjLeft;
         }
 
-        if (Math.abs(this.lastRight - adjRight) >= 1) {
+        if (doRight) {
             let rightStyle = `${adjRight}%`;
-            let cenStyle = `${adjCent}%`;
             renderer.setElementStyle(this.rightDiv.nativeElement, 'left', rightStyle);
             renderer.setElementStyle(this.rightContent.nativeElement, 'left', rightStyle);
-            renderer.setElementStyle(this.rightContent.nativeElement, 'width', `${100 - adjRight}%`);
-            renderer.setElementStyle(this.center.nativeElement, 'width', cenStyle);
+            //renderer.setElementStyle(this.rightContent.nativeElement, 'width', `${100 - adjRight}%`);
             this.lastRight = adjRight;
+        }
+
+        if (doRight || doLeft) {
+            let adjCent = Math.max(0, adjRight-adjLeft);
+            let cenStyle = `${adjCent}%`;
+            renderer.setElementStyle(this.center.nativeElement, 'width', cenStyle);
         }
     }
 
