@@ -63,7 +63,7 @@ export default class Border implements ICameraObserver {
 
     private draw() {
         if (this.active) {
-            this.drawBorder(0.2);
+            this.drawBorder(0.1);
             this.drawProxies();
         }
     }
@@ -106,7 +106,7 @@ export default class Border implements ICameraObserver {
         let proxies = this.proxies;
         let len = proxies.length;
 
-        for (let j = 0; j < len; j++) {
+        for (let j = 0; j < len; j += 2) {
             let proxy = proxies[j];
             let x = proxy.x;
             let y = proxy.y;
@@ -116,6 +116,7 @@ export default class Border implements ICameraObserver {
 
             x -= cenX;
             y -= cenY;
+
             const A = a*y;
             const B = b*x;
             
@@ -178,8 +179,8 @@ export default class Border implements ICameraObserver {
         let proxies = this.proxies;
         let len = proxies.length;
         for (var i = 0; i < len; i++) {
-            const x = (1 - Math.random()) * 2000;
-            const y = (1 - Math.random()) * 2000;
+            const x = (0.5 - Math.random()) * 2000;
+            const y = (0.5 - Math.random()) * 2000;
             proxies[i] = new Proxy(x, y);
         }
     }
