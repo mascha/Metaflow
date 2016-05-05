@@ -55,8 +55,7 @@ class DoubleSplit {
 @Component({
     selector: 'triple-split',
     template: require('./triplesplit.html'),
-    styles: [require('./splitpane.scss')],
-    events: ['resized']
+    styles: [require('./splitpane.scss')]
 })
 class TripleSplit {
 
@@ -69,7 +68,6 @@ class TripleSplit {
     private lastLeft = 20;
     private lastRight = 80;
     private left: boolean;
-    private resized: EventEmitter<any>;
     
     private moveHandler = (event: MouseEvent) => {
         HTML.block(event);
@@ -127,13 +125,10 @@ class TripleSplit {
             let adjCent = Math.max(0, adjRight-adjLeft);
             let cenStyle = `${adjCent}%`;
             renderer.setElementStyle(this.center.nativeElement, 'width', cenStyle);
-            this.resized.emit(null);
         }
     }
 
-    constructor(@Inject(Renderer) private renderer: Renderer) {
-        this.resized = new EventEmitter(true);
-    }
+    constructor(@Inject(Renderer) private renderer: Renderer) {}
 }
 
 /**
