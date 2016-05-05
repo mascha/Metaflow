@@ -2,14 +2,18 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  background-color: #eeeeee;
 
   &.right {
     right: 0;
+    background-color: #eeeeee;
   }
 
   &.left {
     left: 0;
+    background-color: #eeeeee;
+  }
+
+  &.center {
   }
 }
 
@@ -23,7 +27,7 @@
 }
 
 .splitpane-divider {
-  background-color: #ddd;
+  background-color: #cccccc;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -43,7 +47,7 @@
 
   &:before {
     content: '• • •';
-    color: #aaa;
+    color: #aaaaaa;
     width: 10px;
     position: absolute;
     top: 50%;
@@ -64,7 +68,7 @@
     }
 
     &:before {
-      color: white;
+      color: #eeeeee;
     }
   }
 }
