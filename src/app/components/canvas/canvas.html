@@ -5,7 +5,8 @@
      (mousemove)="onMouseMove($event)"
      (mouseup)="onMouseUp($event)"
      (wheel)="onScroll($event)"
-     (dblclick)="onClick($event)">
+     (dblclick)="onClick($event)"
+     (resized)="onResize()">
   <grid-layer class="layer"></grid-layer>
   <node-layer class="layer" #nodeLayer></node-layer>
   <border-layer class="layer"></border-layer>

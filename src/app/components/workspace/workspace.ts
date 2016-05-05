@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild, Renderer, Inject} from "@angular/core";
+import {Component, ElementRef, ViewChild, Renderer, Inject, EventEmitter} from "@angular/core";
 import {Canvas} from "../canvas/canvas";
 import HTML from "../../common/html";
 
@@ -55,7 +55,8 @@ class DoubleSplit {
 @Component({
     selector: 'triple-split',
     template: require('./triplesplit.html'),
-    styles: [require('./splitpane.scss')]
+    styles: [require('./splitpane.scss')],
+    events: ['resized']
 })
 class TripleSplit {
 
@@ -68,6 +69,7 @@ class TripleSplit {
     private lastLeft = 20;
     private lastRight = 80;
     private left: boolean;
+    private resized: EventEmitter<any>;
     
     private moveHandler = (event: MouseEvent) => {
         HTML.block(event);
@@ -125,10 +127,13 @@ class TripleSplit {
             let adjCent = Math.max(0, adjRight-adjLeft);
             let cenStyle = `${adjCent}%`;
             renderer.setElementStyle(this.center.nativeElement, 'width', cenStyle);
+            this.resized.emit(null);
         }
     }
 
-    constructor(@Inject(Renderer) private renderer: Renderer) {}
+    constructor(@Inject(Renderer) private renderer: Renderer) {
+        this.resized = new EventEmitter(true);
+    }
 }
 
 /**
