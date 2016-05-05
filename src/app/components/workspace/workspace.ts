@@ -125,6 +125,9 @@ class TripleSplit {
             let adjCent = Math.max(0, adjRight-adjLeft);
             let cenStyle = `${adjCent}%`;
             renderer.setElementStyle(this.center.nativeElement, 'width', cenStyle);
+
+            // todo solve this more elegantly
+            window.dispatchEvent(new Event('resize'));
         }
     }
 
