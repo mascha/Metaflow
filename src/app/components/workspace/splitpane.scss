@@ -15,6 +15,20 @@
   box-sizing: border-box;
   transition: background .133s ease-out;
   z-index: 100;
+
+  &:before {
+    content: '• • •';
+    color: #aaa;
+    width: 10px;
+    position: absolute;
+    top: 50%;
+    left: -2.5px;
+    font-weight: 300;
+    line-height: 6px;
+    font-size: 11px;
+    text-align: center;
+    margin-top: -15px;
+  }
 }
 
 .splitpane-divider:hover {
