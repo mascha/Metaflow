@@ -40,7 +40,6 @@
     margin-left: -1px;
     width: 5px;
   }
-;
 
   &:before {
     content: '• • •';
@@ -55,13 +54,17 @@
     text-align: center;
     margin-top: -15px;
   }
-}
 
-.splitpane-divider:hover {
-  background-color: #999;
-  cursor: col-resize;
-}
+  &:hover {
+    background-color: #999;
+    cursor: col-resize;
 
-.splitpane-divider.vertical:hover {
-  cursor: row-resize;
+    &.vertical {
+      cursor: row-resize;
+    }
+
+    &:before {
+      color: white;
+    }
+  }
 }
