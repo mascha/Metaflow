@@ -254,6 +254,7 @@ export class Canvas implements AfterViewInit {
         if (this._gridLayer) this._gridLayer.observe(this._camera);
         if (this._nodeLayer) this._nodeLayer.observe(this._camera);
         this.onResize();
+        this.camera.zoomAndMoveTo(-250, -150, 0.2);
     }
 
     private getOffset(event: MouseEvent): any {
