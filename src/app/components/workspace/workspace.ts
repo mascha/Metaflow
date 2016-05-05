@@ -127,7 +127,9 @@ class TripleSplit {
             renderer.setElementStyle(this.center.nativeElement, 'width', cenStyle);
 
             // todo solve this more elegantly
-            window.dispatchEvent(new Event('resize'));
+            let evt = document.createEvent('UIEvents');
+            evt.initUIEvent('resize', true, false, window, 0);
+            window.dispatchEvent(evt);
         }
     }
 
