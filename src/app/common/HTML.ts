@@ -1,7 +1,4 @@
 /**
- * Created by Martin Schade on 04.05.2016.
- */
-/**
  * Helper class for handling html elements.
  * @author Martin Schade.
  * @since 1.0.0
