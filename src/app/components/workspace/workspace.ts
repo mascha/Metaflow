@@ -81,15 +81,15 @@ class TripleSplit {
 
     private upHandler = (event: MouseEvent) => {
         HTML.block(event);
-        document.removeEventListener('mousemove', this.moveHandler);
-        document.removeEventListener('mouseup', this.upHandler);
+        document.removeEventListener('mousemove', this.moveHandler, true);
+        document.removeEventListener('mouseup', this.upHandler, true);
     };
 
     onMouseDown(event: MouseEvent, left: boolean) {
         this.left = left;
         HTML.block(event);
-        document.addEventListener('mousemove', this.moveHandler);
-        document.addEventListener('mouseup', this.upHandler)
+        document.addEventListener('mousemove', this.moveHandler, true);
+        document.addEventListener('mouseup', this.upHandler, true);
     }
 
     /**
@@ -103,11 +103,8 @@ class TripleSplit {
         let right = (r < 0)? 0 : (r > 100) ? 100 : r;
         let adjLeft = Math.min(left, right);
         let adjRight = Math.max(left, right);
-
-        console.log(`${left} ${adjLeft} - ${adjRight} ${right}`);
-
-        let doLeft = Math.abs(this.lastLeft - adjLeft) >= 1;
-        let doRight = Math.abs(this.lastRight - adjRight) >= 1;
+        let doLeft = Math.abs(this.lastLeft - adjLeft) > 0;
+        let doRight = Math.abs(this.lastRight - adjRight) > 0;
 
         if (doLeft) {
             let leftStyle = `${adjLeft}%`;
@@ -121,7 +118,6 @@ class TripleSplit {
             let rightStyle = `${adjRight}%`;
             renderer.setElementStyle(this.rightDiv.nativeElement, 'left', rightStyle);
             renderer.setElementStyle(this.rightContent.nativeElement, 'left', rightStyle);
-            //renderer.setElementStyle(this.rightContent.nativeElement, 'width', `${100 - adjRight}%`);
             this.lastRight = adjRight;
         }
 

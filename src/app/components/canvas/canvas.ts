@@ -248,11 +248,11 @@ export class Canvas implements AfterViewInit {
     ngAfterViewInit() {
         this._layers = document.getElementById('diagram-canvas');
         this._camera = this._nodeLayer.retrievePlatformCamera();
-        this._behavior = new CanvasBehavior(this, this._camera);
-        this._behavior.pushTo(this._navigation);
-        this._borderLayer.observe(this._camera);
-        this._gridLayer.observe(this._camera);
-        this._nodeLayer.observe(this._camera);
+        if (this._camera) this._behavior = new CanvasBehavior(this, this._camera);
+        if (this._navigation) this._behavior.pushTo(this._navigation);
+        if (this._borderLayer) this._borderLayer.observe(this._camera);
+        if (this._gridLayer) this._gridLayer.observe(this._camera);
+        if (this._nodeLayer) this._nodeLayer.observe(this._camera);
         this.onResize();
     }
 
