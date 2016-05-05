@@ -1,5 +1,6 @@
 import {Component, ElementRef, ViewChild, Renderer, Inject} from "@angular/core";
 import {Canvas} from "../canvas/canvas";
+import HTML from "../../common/html";
 
 /**
  * Simple split pane.
@@ -16,17 +17,17 @@ class DoubleSplit {
     @ViewChild('rightContent') right: ElementRef;
 
     private moveHandler = (event: MouseEvent) => {
-        event.preventDefault();
+        HTML.block(event);
     };
 
     private upHandler = (event: MouseEvent) => {
-        event.preventDefault();
+        HTML.block(event);
         document.removeEventListener('mousemove', this.moveHandler);
         document.removeEventListener('mouseup', this.upHandler);
     };
 
     onMouseDown(event: MouseEvent) {
-        event.preventDefault();
+        HTML.block(event);
         document.addEventListener('mousemove', this.moveHandler);
         document.addEventListener('mouseup', this.upHandler)
     }
@@ -69,7 +70,7 @@ class TripleSplit {
     private left: boolean;
     
     private moveHandler = (event: MouseEvent) => {
-        event.preventDefault();
+        HTML.block(event);
         let adjusted = Math.round(event.pageX/window.innerWidth*100);
         if (this.left) {
             this.readjust(adjusted, this.lastRight);
@@ -79,14 +80,14 @@ class TripleSplit {
     };
 
     private upHandler = (event: MouseEvent) => {
-        event.preventDefault();
+        HTML.block(event);
         document.removeEventListener('mousemove', this.moveHandler);
         document.removeEventListener('mouseup', this.upHandler);
     };
 
     onMouseDown(event: MouseEvent, left: boolean) {
         this.left = left;
-        event.preventDefault();
+        HTML.block(event);
         document.addEventListener('mousemove', this.moveHandler);
         document.addEventListener('mouseup', this.upHandler)
     }
