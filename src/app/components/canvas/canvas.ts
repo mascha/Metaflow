@@ -534,6 +534,7 @@ class CanvasBehavior {
             let rS = cS / parent.scale;
             let rX = (wX + current.left) * cS;
             let rY = (wY + current.top) * cS;
+
             this.loadLevel(parent);
             this.camera.zoomAndMoveTo(rX, rY, rS);
         }
@@ -554,18 +555,21 @@ class CanvasBehavior {
             let rX = (wX - target.left * current.scale) * cS;
             let rY = (wY - target.top * current.scale) * cS;
             let rS = (cS * current.scale);
-
+            
             this.loadLevel(target);
             this.camera.zoomAndMoveTo(rX, rY, rS);
         }
     }
 
     /**
+     * Render the given viewmodel.
      * TODO rendering
      * TODO proxies
-     * TODO caching
+     * TODO caching, reuse previous elements
      * TODO accelerate
      * TODO event emitting
+     * TODO move level rendering away from UI
+     * TODO dynamic descent based on LOD-area
      * @param level
      */
     private loadLevel(level: ViewGroup) {
@@ -583,6 +587,7 @@ class CanvasBehavior {
                 this.renderer.renderGroup(item, false);
 
                 // second level
+                // todo make dynamic!
                 if (item.contents) {
                     item.contents.forEach(it => {
                         if (it instanceof ViewGroup) {
@@ -690,13 +695,21 @@ class CanvasBehavior {
         let o : ViewGroup = null;
         let root: ViewGroup = null;
         while (i--) {
-            let item = new ViewGroup(`Level ${40 - i}`, 2000, 2000, 2000, 2000, 0.1);
-            if (o) {
-                o.addContent(item);
-            } else {
-                root = item;
+            let group = new ViewGroup(`Level ${40 - i}`, 2000, 2000, 2000, 2000, 0.1);
+            let j = 120;
+            while (j) {
+                let x = Math.random() * 18000;
+                let y = Math.random() * 18000;
+                let item = new ViewItem('Item', x, y, 192, 108)
+                group.addContent(item);
+                j--;
             }
-            o = item;
+            if (o) {
+                o.addContent(group);
+            } else {
+                root = group;
+            }
+            o = group;
         }
 
         return root;

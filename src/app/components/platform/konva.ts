@@ -3,7 +3,7 @@
  */
 
 import {IViewModelRenderer, IVisualRenderer} from '../../common/renderer'
-import {ViewItem, ViewGroup} from "../../common/viewmodel";
+import {ViewItem, ViewGroup, COLORS} from "../../common/viewmodel";
 import {Camera} from "../../common/camera";
 
 /**
@@ -102,7 +102,8 @@ export class KonvaRenderer implements
     renderItem(i:ViewItem): Konva.Node {
         let _r = this.rectangle(i.left, i.top, i.width, i.height);
         let _l = this.text(i.label);
-        this.stroke(_r, 'darkblue', 2);
+
+        this.stroke(_r, 'royalblue', 2);
         this.fill(_r, 'cornflowerblue');
         i.visual = _r;
         return _r;
