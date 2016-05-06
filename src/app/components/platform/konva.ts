@@ -3,7 +3,7 @@
  */
 
 import {IViewModelRenderer, IVisualRenderer, IPlatformLayer} from '../../common/renderer'
-import {ViewItem, ViewGroup, COLORS} from "../../common/viewmodel";
+import {ViewItem, ViewGroup} from "../../common/viewmodel";
 import {Camera} from "../../common/camera";
 
 /**
