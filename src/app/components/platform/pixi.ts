@@ -1,3 +1,15 @@
-/**
- * Created by Martin Schade on 06.05.2016.
+/*
+ * Copyright (C) Martin Schade, 2015-2016. All rights reserved.
  */
+
+import {Camera} from "../../common/camera";
+
+class PixiCamera extends Camera {
+
+    protected translateWorldTo(tX:number, tY:number):void {
+    }
+
+    protected scaleWorldTo(zoom:number):void {
+    }
+
+}
