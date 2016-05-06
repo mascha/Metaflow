@@ -100,6 +100,8 @@ export interface IVisualRenderer<E, G> {
  * @since 1.0.0
  */
 export interface IPlatformLayer extends ICameraObserver {
+    cachedGroups: Array<ViewGroup>;
     getCamera(): Camera;
     setModel(model: ViewGroup)
 }
+

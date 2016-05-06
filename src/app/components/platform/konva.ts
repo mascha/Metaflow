@@ -38,17 +38,49 @@ export class KonvaCamera extends Camera {
 export class KonvaLayer implements IPlatformLayer {
     
     private camera: Camera;
-    private render: IViewModelRenderer<any, any>;
+    private renderer: IViewModelRenderer<any, any>;
     private stage: Konva.Stage;
     private nodes: Konva.Layer;
+    private groups: Array<ViewGroup>;
     
     getCamera(): Camera {
         return this.camera;
     }
 
-    setModel(group: ViewGroup) {
+    setModel(level: ViewGroup) {
         this.nodes.removeChildren();
-        this.nodes.add(group.visual);
+
+        // first level
+        let renderer = this.renderer;
+        renderer.renderGroup(level, true);
+
+        // second levels
+        this.groups = [];
+        for (let i = 0, contents = level.contents, len = contents.length; i < len; i++) {
+            let item = contents[i];
+            if (item instanceof ViewGroup) {
+                this.groups.push(item);
+                this.renderer.renderGroup(item, false);
+
+                // third levels
+                // todo make dynamic!
+                if (item.contents) {
+                    item.contents.forEach(it => {
+                        if (it instanceof ViewGroup) {
+                            this.renderer.renderGroup(it, false);
+                        } else if (it instanceof ViewItem){
+                            this.renderer.renderItem(it);
+                        }
+                        this.renderer.attach(it, item);
+                    })
+                }
+            } else if (item instanceof ViewItem) {
+                this.renderer.renderItem(item);
+            }
+            renderer.attach(item, level);
+        }
+        
+        this.nodes.add(level.visual);
     }
 
     onViewResized() {
@@ -87,7 +119,7 @@ export class KonvaLayer implements IPlatformLayer {
         this.nodes.disableHitGraph();
         this.stage.add(this.nodes);
         this.camera = new KonvaCamera(this.stage);
-        this.render = new KonvaRenderer();
+        this.renderer = new KonvaRenderer();
     }
 }
 

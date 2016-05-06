@@ -3,8 +3,7 @@
  */
 
 import {Component, ElementRef, ViewChild, AfterViewInit} from '@angular/core';
-import {ICameraObserver, Camera} from "../../common/camera";
-import {KonvaRenderer, KonvaCamera} from "../platform/konva";
+import {Camera} from "../../common/camera";
 import {ViewGroup, ViewItem} from "../../common/viewmodel";
 import {IViewModelRenderer, IPlatformLayer} from "../../common/renderer";
 import Grid from '../../common/grid';
@@ -12,6 +11,7 @@ import Border from '../../common/border';
 import NavigationBar from "../navigation/navigationbar";
 import HTML from "../../common/html";
 import Kinetics from "../../common/kinetic";
+import {PlatformService} from "../../services/platforms";
 
 /**
  * Grid layer component.
@@ -66,21 +66,18 @@ class BorderLayer {
 })
 class NodeLayer {
     
+    get platform() { return this._platform };
+
+    private _platform: IPlatformLayer;
+
     observe(camera: Camera) {
-        camera.attachObserver(this.platform);
+        let element = this.element.nativeElement;
+        this._platform = this.service.getPlatform(element);
+        camera.attachObserver(this._platform);
     }
     
-    getCamera() {
-        return this.platform.getCamera();
-    }
-
-    setModel(group: ViewGroup) {
-        this.platform.setModel(group);
-    }
-
-    constructor(private platform: IPlatformLayer) {
-        
-    }
+    constructor(private service: PlatformService,
+                private element: ElementRef) {}
 }
 
 /**
@@ -122,7 +119,7 @@ export class Canvas implements AfterViewInit {
     }
 
     model(group: ViewGroup) {
-        this.nodeLayer.setModel(group);
+        this.nodeLayer.platform.setModel(group);
     }
 
     /**
@@ -205,7 +202,7 @@ export class Canvas implements AfterViewInit {
 
     ngAfterViewInit() {
         this._layers = document.getElementById('diagram-canvas');
-        this._camera = this.nodeLayer.getCamera();
+        this._camera = this.nodeLayer.platform.getCamera();
         if (this._camera) this._behavior = new CanvasBehavior(this, this._camera);
         if (this._navigation) this._behavior.pushTo(this._navigation);
         if (this._borderLayer) this._borderLayer.observe(this._camera);
@@ -258,8 +255,7 @@ class CanvasBehavior {
     private doBanding = false;
     private doLimits = false;
     private current: ViewGroup;
-    private groups: Array<ViewGroup> = [];
-    private renderer: IViewModelRenderer<any,any>;
+    private platform: IPlatformLayer;
     private _navi: NavigationBar;
 
     /**
@@ -532,39 +528,8 @@ class CanvasBehavior {
      */
     private loadLevel(level: ViewGroup) {
         if (this._navi) this._navi.setPath(level);
-
-        // first level
-        let renderer = this.renderer;
-        renderer.renderGroup(level, true);
-
-        // second levels
-        this.groups = [];
-        for (let i = 0, contents = level.contents, len = contents.length; i < len; i++) {
-            let item = contents[i];
-            if (item instanceof ViewGroup) {
-                this.groups.push(item);
-                this.renderer.renderGroup(item, false);
-
-                // third levels
-                // todo make dynamic!
-                if (item.contents) {
-                    item.contents.forEach(it => {
-                        if (it instanceof ViewGroup) {
-                            this.renderer.renderGroup(it, false);
-                        } else if (it instanceof ViewItem){
-                            this.renderer.renderItem(it);
-                        }
-                        this.renderer.attach(it, item);
-                    })
-                }
-            } else if (item instanceof ViewItem) {
-                this.renderer.renderItem(item);
-            }
-            renderer.attach(item, level);
-        }
-
+        this.platform.setModel(level);
         this.current = level;
-        this.canvas.model(level);
         this.adjustLimits(level);
     }
 
@@ -593,11 +558,12 @@ class CanvasBehavior {
             }
         }
 
+        let groups = this.platform.cachedGroups;
         // check each child group
-        if (!this.groups) return false;
-        let len = this.groups.length;
+        if (!groups) return false;
+        let len = groups.length;
         for (let i = 0; i < len; i++) {
-            let group = this.groups[i];
+            let group = groups[i];
             if (this.isWithinChildGroup(group)) {
                 this.descendInto(group);
                 return true;
@@ -773,7 +739,6 @@ class CanvasBehavior {
     
     constructor(private canvas: Canvas, private camera: Camera) {
         this.kinetics = new Kinetics();
-        this.renderer = new KonvaRenderer();
         this.loadLevel(CanvasBehavior.createDebugModel())
     }
 }
