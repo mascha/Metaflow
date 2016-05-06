@@ -1,5 +1,5 @@
 /*
- * Created by Martin Schade on 24.04.2016.
+ * Copyright (C) Martin Schade, 2015-2016. All rights reserved.
  */
 
 import {IViewModelRenderer, IVisualRenderer} from '../../common/renderer'
