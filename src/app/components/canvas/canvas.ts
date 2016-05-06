@@ -56,32 +56,6 @@ class BorderLayer {
 }
 
 /**
- * Node layer component.
- * @author Martin Schade
- * @since 1.0.0
- */
-@Component({
-    selector: 'node-layer',
-    template: '',
-    
-})
-class NodeLayer {
-    
-    get platform() { return this._platform };
-    
-    private _platform: IPlatformLayer;
-    
-    observe(camera: Camera) {
-        let element = this.element.nativeElement;
-        this._platform = this.service.getPlatform(element);
-        camera.attachObserver(this._platform);
-    }
-    
-    constructor(@Inject(PlatformService) private service: PlatformService, 
-                @Inject(ElementRef) private element: ElementRef) {}
-}
-
-/**
  * The canvas component.
  *
  * @author Martin Schade
@@ -89,11 +63,13 @@ class NodeLayer {
  */
 @Component({
     selector: 'canvas-view',
-    directives: [GridLayer, BorderLayer, NodeLayer, NavigationBar],
+    directives: [GridLayer, BorderLayer, NavigationBar],
     template: require('./canvas.html'),
     styles: [require('./canvas.scss')]
 })
 export class Canvas implements AfterViewInit {
+    private _platformProvider: PlatformService;
+    private _platform: IPlatformLayer;
 
     get camera(): Camera {
         return this._camera;
@@ -120,7 +96,7 @@ export class Canvas implements AfterViewInit {
     }
 
     model(group: ViewGroup) {
-        this.nodeLayer.platform.setModel(group);
+        if (this._platform) this._platform.setModel(group);
     }
 
     /**
@@ -133,7 +109,7 @@ export class Canvas implements AfterViewInit {
 
     @ViewChild(BorderLayer) private _borderLayer: BorderLayer;
     @ViewChild(GridLayer) private _gridLayer: GridLayer;
-    @ViewChild(NodeLayer) private nodeLayer: NodeLayer;
+    @ViewChild('nodeLayer') private _nodeLayer: ElementRef;
     @ViewChild(NavigationBar) private _navigation: NavigationBar;
 
     private _element: ElementRef;
@@ -142,7 +118,7 @@ export class Canvas implements AfterViewInit {
     private _inertiaDecay: number = 0.05;
     private _zoomPan: number = 2.33;
     private _velocity: number = 1.4;
-    private _layers: HTMLElement;
+    private _diagram: HTMLElement;
 
     /**
      * On click event handler.
@@ -169,7 +145,7 @@ export class Canvas implements AfterViewInit {
      * Handle resize events.
      */
     onResize() {
-        const rect = this._layers.getBoundingClientRect();
+        const rect = this._diagram.getBoundingClientRect();
         this._camera.updateVisual(0, 0, rect.width, rect.height);
     }
 
@@ -201,28 +177,40 @@ export class Canvas implements AfterViewInit {
         HTML.block(event);
     }
 
+    /**
+     * Assemble all canvas layers.
+     */
     ngAfterViewInit() {
-        this._layers = document.getElementById('diagram-canvas');
-        this._camera = this.nodeLayer.platform.getCamera();
+        /* get html elements */
+        this._diagram = document.getElementById('diagram-canvas');
+        this._platform = this._platformProvider.getPlatform(this._nodeLayer.nativeElement);
+
+        /* link behavior state machine*/
+        this._camera = this._platform.getCamera();
         if (this._camera) this._behavior = new CanvasBehavior(this, this._camera);
+
+        /* attach all layers */
         if (this._navigation) this._behavior.pushTo(this._navigation);
         if (this._borderLayer) this._borderLayer.observe(this._camera);
         if (this._gridLayer) this._gridLayer.observe(this._camera);
-        if (this.nodeLayer) this.nodeLayer.observe(this._camera);
+        if (this._nodeLayer) this._camera.attachObserver(this._platform);
+        
         this.onResize();
         this.camera.zoomAndMoveTo(-250, -150, 0.2);
     }
 
     private getOffset(event: MouseEvent): any {
-        let offset = HTML.elementPosition(this._layers);
+        let offset = HTML.elementPosition(this._diagram);
         return {
             x: event.pageX - offset.x,
             y: event.pageY - offset.y
         };
     }
 
-    constructor(element:ElementRef) {
+    constructor(@Inject(PlatformService) service: PlatformService,
+                @Inject(ElementRef) private element:ElementRef) {
         this._element = element;
+        this._platformProvider = service;
     }
 }
 
