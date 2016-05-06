@@ -41,7 +41,8 @@ export class KonvaLayer implements IPlatformLayer {
     private renderer: IViewModelRenderer<any, any>;
     private stage: Konva.Stage;
     private nodes: Konva.Layer;
-    private groups: Array<ViewGroup>;
+    
+    cachedGroups: Array<ViewGroup>;
     
     getCamera(): Camera {
         return this.camera;
@@ -55,11 +56,11 @@ export class KonvaLayer implements IPlatformLayer {
         renderer.renderGroup(level, true);
 
         // second levels
-        this.groups = [];
+        this.cachedGroups = [];
         for (let i = 0, contents = level.contents, len = contents.length; i < len; i++) {
             let item = contents[i];
             if (item instanceof ViewGroup) {
-                this.groups.push(item);
+                this.cachedGroups.push(item);
                 this.renderer.renderGroup(item, false);
 
                 // third levels

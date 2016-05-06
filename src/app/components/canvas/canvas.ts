@@ -2,16 +2,16 @@
  * Copyright (C) Martin Schade, 2015-2016. All rights reserved.
  */
 
-import {Component, ElementRef, ViewChild, AfterViewInit} from '@angular/core';
+import {Component, ElementRef, ViewChild, AfterViewInit, Inject} from '@angular/core';
 import {Camera} from "../../common/camera";
+import {PlatformService} from "../../services/platforms";
 import {ViewGroup, ViewItem} from "../../common/viewmodel";
-import {IViewModelRenderer, IPlatformLayer} from "../../common/renderer";
+import {IPlatformLayer} from "../../common/renderer";
 import Grid from '../../common/grid';
 import Border from '../../common/border';
 import NavigationBar from "../navigation/navigationbar";
 import HTML from "../../common/html";
 import Kinetics from "../../common/kinetic";
-import {PlatformService} from "../../services/platforms";
 
 /**
  * Grid layer component.
@@ -62,22 +62,23 @@ class BorderLayer {
  */
 @Component({
     selector: 'node-layer',
-    template: ''
+    template: '',
+    
 })
 class NodeLayer {
     
     get platform() { return this._platform };
-
+    
     private _platform: IPlatformLayer;
-
+    
     observe(camera: Camera) {
         let element = this.element.nativeElement;
         this._platform = this.service.getPlatform(element);
         camera.attachObserver(this._platform);
     }
     
-    constructor(private service: PlatformService,
-                private element: ElementRef) {}
+    constructor(@Inject(PlatformService) private service: PlatformService, 
+                @Inject(ElementRef) private element: ElementRef) {}
 }
 
 /**

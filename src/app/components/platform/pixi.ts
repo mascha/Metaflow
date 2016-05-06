@@ -38,6 +38,7 @@ export class PixiCamera extends Camera {
  * @since 1.0.0
  */
 export class PixiLayer implements IPlatformLayer {
+
     private camera: PixiCamera;
     private graphics: PIXI.Graphics;
     private stage: PIXI.Container;
@@ -46,6 +47,12 @@ export class PixiLayer implements IPlatformLayer {
 
     retrieveCamera(): Camera {
         return this.camera;
+    }
+
+    cachedGroups:Array<ViewGroup>;
+
+    getCamera():Camera {
+        return undefined;
     }
 
     setModel(model: ViewGroup) {

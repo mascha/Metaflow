@@ -12,9 +12,11 @@ if (process.env.ENV === 'build') {
 }
 
 import {App} from './app/app';
+import {PlatformService} from "./app/services/platforms";
 
 document.addEventListener('DOMContentLoaded', function main() {
   return bootstrap(App, [
+      [PlatformService],
     ...HTTP_PROVIDERS,
     ...ROUTER_PROVIDERS,
     ...ENV_PROVIDERS
