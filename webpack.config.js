@@ -136,7 +136,7 @@ module.exports = function makeWebpackConfig() {
       {test: /\.html$/, loader: 'raw'}
     ],
     postLoaders: [],
-    noParse: [/.+zone\.js\/dist\/.+/, /.+angular2\/bundles\/.+/, /angular2-polyfills\.js/]
+    noParse: [/.+zone\.js\/dist\/.+/, /.+angular2\/bundles\/.+/, /angular2-polyfills\.js/, /.*(pixi\.js).*/]
   };
 
   if (isTest) {
