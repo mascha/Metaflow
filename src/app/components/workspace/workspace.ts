@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild, Renderer, Inject, EventEmitter} from "@angular/core";
+import {Component, ElementRef, ViewChild, Renderer, Inject} from "@angular/core";
 import {Canvas} from "../canvas/canvas";
 import HTML from "../../common/html";
 
