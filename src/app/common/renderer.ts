@@ -3,6 +3,7 @@
  */
 
 import {ViewGroup, ViewItem, ViewVertex} from "./viewmodel";
+import {ICameraObserver, Camera} from "./camera";
 
 /**
  * A view model renderer.
@@ -62,24 +63,24 @@ export interface IVisualRenderer<E, G> {
     circle(x: number, y: number, r: number): E;
 
     /**
-     *
+     * Create a low-level grouping object.
      */
     group(): G;
 
     /**
-     * 
+     * Translate a primitive.
      */
-    translate(obj: E, x: number, y: number)
+    translate(obj: E, x: number, y: number);
 
     /**
-     *
+     * Scale a primitive.
      */
-    scale(obj: E, scale: number)
+    scale(obj: E, scale: number);
 
     /**
-     * 
+     * Rotate a primitive.
      */
-    rotate(obj: E, angle: number)
+    rotate(obj: E, angle: number);
 
     /**
      * 
@@ -90,4 +91,15 @@ export interface IVisualRenderer<E, G> {
      *
      */
     stroke(obj: E, stroke: string, width: number);
+}
+
+/**
+ * Is responsible for handling the platform dependent methods.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+export interface IPlatformLayer extends ICameraObserver {
+    getCamera(): Camera;
+    setModel(model: ViewGroup)
 }

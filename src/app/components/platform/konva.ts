@@ -2,7 +2,7 @@
  * Copyright (C) Martin Schade, 2015-2016. All rights reserved.
  */
 
-import {IViewModelRenderer, IVisualRenderer} from '../../common/renderer'
+import {IViewModelRenderer, IVisualRenderer, IPlatformLayer} from '../../common/renderer'
 import {ViewItem, ViewGroup, COLORS} from "../../common/viewmodel";
 import {Camera} from "../../common/camera";
 
@@ -26,6 +26,68 @@ export class KonvaCamera extends Camera {
 
     constructor(private stage: Konva.Stage) {
         super();
+    }
+}
+
+/**
+ * Manages the platform dependent node layer structure.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+export class KonvaLayer implements IPlatformLayer {
+    
+    private camera: Camera;
+    private render: IViewModelRenderer<any, any>;
+    private stage: Konva.Stage;
+    private nodes: Konva.Layer;
+    
+    getCamera(): Camera {
+        return this.camera;
+    }
+
+    setModel(group: ViewGroup) {
+        this.nodes.removeChildren();
+        this.nodes.add(group.visual);
+    }
+
+    onViewResized() {
+        this.stage.width(this.camera.visualWidth);
+        this.stage.height(this.camera.visualHeight);
+        this.draw();
+    }
+
+    onPanChanged(panX: number, panY: number) {
+        this.draw();
+    }
+
+    onZoomChanged(zoom: number) {
+        this.draw();
+    }
+
+    private draw() {
+        this.stage.batchDraw();
+    }
+
+    /**
+     * Set up a performance oriented konva layer system.
+     * @param element angular2 html5 element reference.
+     */
+    constructor(element: HTMLElement) {
+        this.stage = new Konva.Stage({
+            container: element,
+            width: 500,
+            height: 500
+        });
+        this.nodes = new Konva.Layer({
+            clearBeforeDraw: true,
+            name: 'nodes'
+        });
+        // high scale leads to performance problems!
+        this.nodes.disableHitGraph();
+        this.stage.add(this.nodes);
+        this.camera = new KonvaCamera(this.stage);
+        this.render = new KonvaRenderer();
     }
 }
 

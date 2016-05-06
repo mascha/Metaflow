@@ -6,7 +6,7 @@ import {Component, ElementRef, ViewChild, AfterViewInit} from '@angular/core';
 import {ICameraObserver, Camera} from "../../common/camera";
 import {KonvaRenderer, KonvaCamera} from "../platform/konva";
 import {ViewGroup, ViewItem} from "../../common/viewmodel";
-import {IViewModelRenderer} from "../../common/renderer";
+import {IViewModelRenderer, IPlatformLayer} from "../../common/renderer";
 import Grid from '../../common/grid';
 import Border from '../../common/border';
 import NavigationBar from "../navigation/navigationbar";
@@ -64,64 +64,22 @@ class BorderLayer {
     selector: 'node-layer',
     template: ''
 })
-class NodeLayer implements ICameraObserver {
-    private camera: Camera;
-    private render: IViewModelRenderer<any, any>;
-    private stage: Konva.Stage;
-    private nodes: Konva.Layer;
-
+class NodeLayer {
+    
     observe(camera: Camera) {
-        camera.attachObserver(this);
+        camera.attachObserver(this.platform);
     }
-
-    retrievePlatformCamera(): Camera {
-        return this.camera;
+    
+    getCamera() {
+        return this.platform.getCamera();
     }
 
     setModel(group: ViewGroup) {
-        this.nodes.removeChildren();
-        this.nodes.add(group.visual);
+        this.platform.setModel(group);
     }
 
-    onViewResized() {
-        let width = this.camera.visualWidth;
-        let height = this.camera.visualHeight;
-        this.stage.width(width);
-        this.stage.height(height);
-        this.draw();
-    }
-
-    onPanChanged(panX: number, panY: number) {
-        this.draw();
-    }
-
-    onZoomChanged(zoom: number) {
-        this.draw();
-    }
-
-    private draw() {
-        this.stage.batchDraw();
-    }
-
-    /**
-     * Set up a performance oriented konva layer system.
-     * @param element angular2 html5 element reference.
-     */
-    constructor(element: ElementRef) {
-        this.stage = new Konva.Stage({
-            container: element.nativeElement,
-            width: 500,
-            height: 500
-        });
-        this.nodes = new Konva.Layer({
-            clearBeforeDraw: true,
-            name: 'nodes'
-        });
-        // high scale leads to performance problems!
-        this.nodes.disableHitGraph();
-        this.stage.add(this.nodes);
-        this.camera = new KonvaCamera(this.stage);
-        this.render = new KonvaRenderer();
+    constructor(private platform: IPlatformLayer) {
+        
     }
 }
 
@@ -164,7 +122,7 @@ export class Canvas implements AfterViewInit {
     }
 
     model(group: ViewGroup) {
-        this._nodeLayer.setModel(group);
+        this.nodeLayer.setModel(group);
     }
 
     /**
@@ -177,7 +135,7 @@ export class Canvas implements AfterViewInit {
 
     @ViewChild(BorderLayer) private _borderLayer: BorderLayer;
     @ViewChild(GridLayer) private _gridLayer: GridLayer;
-    @ViewChild(NodeLayer) private _nodeLayer: NodeLayer;
+    @ViewChild(NodeLayer) private nodeLayer: NodeLayer;
     @ViewChild(NavigationBar) private _navigation: NavigationBar;
 
     private _element: ElementRef;
@@ -247,12 +205,12 @@ export class Canvas implements AfterViewInit {
 
     ngAfterViewInit() {
         this._layers = document.getElementById('diagram-canvas');
-        this._camera = this._nodeLayer.retrievePlatformCamera();
+        this._camera = this.nodeLayer.getCamera();
         if (this._camera) this._behavior = new CanvasBehavior(this, this._camera);
         if (this._navigation) this._behavior.pushTo(this._navigation);
         if (this._borderLayer) this._borderLayer.observe(this._camera);
         if (this._gridLayer) this._gridLayer.observe(this._camera);
-        if (this._nodeLayer) this._nodeLayer.observe(this._camera);
+        if (this.nodeLayer) this.nodeLayer.observe(this._camera);
         this.onResize();
         this.camera.zoomAndMoveTo(-250, -150, 0.2);
     }
