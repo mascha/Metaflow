@@ -575,10 +575,11 @@ class CanvasBehavior {
     private loadLevel(level: ViewGroup) {
         if (this._navi) this._navi.setPath(level);
 
+        // first level
         let renderer = this.renderer;
         renderer.renderGroup(level, true);
 
-        // first level
+        // second levels
         this.groups = [];
         for (let i = 0, contents = level.contents, len = contents.length; i < len; i++) {
             let item = contents[i];
@@ -586,7 +587,7 @@ class CanvasBehavior {
                 this.groups.push(item);
                 this.renderer.renderGroup(item, false);
 
-                // second level
+                // third levels
                 // todo make dynamic!
                 if (item.contents) {
                     item.contents.forEach(it => {

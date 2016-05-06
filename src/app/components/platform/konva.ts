@@ -99,34 +99,39 @@ export class KonvaRenderer implements
         vScale.add(node.visual);
     }
 
-    renderItem(i:ViewItem): Konva.Node {
-        let _r = this.rectangle(i.left, i.top, i.width, i.height);
-        let _l = this.text(i.label);
+    renderItem(item:ViewItem): Konva.Node {
+        if (item.visual) return item.visual;
+
+        let _r = this.rectangle(item.left, item.top, item.width, item.height);
+        // let _l = this.text(item.label);
 
         this.stroke(_r, 'royalblue', 2);
         this.fill(_r, 'cornflowerblue');
-        i.visual = _r;
+        item.visual = _r;
         return _r;
     }
 
-    renderGroup(g:ViewGroup, topLevel: boolean): Konva.Group {
+    renderGroup(group:ViewGroup, topLevel: boolean): Konva.Group {
         let _g = this.group();
         
         if (!topLevel)
-            this.translate(_g, g.left, g.top);
+            this.translate(_g, group.left, group.top);
 
-        let _s = this.rounded(0, 0, g.width, g.height, 12);
+        let _s = this.rounded(0, 0, group.width, group.height, 12);
 
         this.stroke(_s, 'darkgray', 32);
 
-        let _l = this.text(g.label);
+        let _l = this.text(group.label);
+        _l.scaleX(4);
+        _l.scaleY(4);
+        
         let _c = this.group();
-        this.scale(_c, g.scale);
+        this.scale(_c, group.scale);
 
         _g.add(_s);
         _g.add(_c);
         _g.add(_l);
-        g.visual = _g;
+        group.visual = _g;
         return _g;
     }
 }
