@@ -135,8 +135,27 @@ module.exports = function makeWebpackConfig() {
       // todo: change the loader to something that adds a hash to images
       {test: /\.html$/, loader: 'raw'}
     ],
-    postLoaders: [],
-    noParse: [/.+zone\.js\/dist\/.+/, /.+angular2\/bundles\/.+/, /angular2-polyfills\.js/, /.*(pixi\.js).*/]
+
+    // Here, webpack is telling us it doesn't recognize the "fs" module. pixi.js
+    // is using node's fs module to read files from the file system and they're
+    // expecting people to use Browserify/brfs in order to make this work in
+    // browsers. They could be much better about this, and we could go and bother
+    // them to write more portable code. But then we'd have to wait for them to
+    // cut a new release before we can use their stuff. Isn't there anything we
+    // can do in the meantime? Can we somehow use the brfs transform?
+    //
+    // Webpack lets us use postLoaders to specify a module loader that runs after
+    // all other module loaders. In this case, we can use Browserify's brfs
+    // transform as a final build step. Here, we restrict this loader to files in
+    // the node_modules/pixi.js directory so it won't slow us down too much.
+    postLoaders: [
+      {
+        test: /\.js$/,
+        include: path.resolve(__dirname, 'node_modules/pixi.js'),
+        loader: 'transform/cacheable?brfs'
+      }
+    ],
+    noParse: [/.+zone\.js\/dist\/.+/, /.+angular2\/bundles\/.+/, /angular2-polyfills\.js/]
   };
 
   if (isTest) {
