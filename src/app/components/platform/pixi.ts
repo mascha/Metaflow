@@ -3,6 +3,7 @@
  */
 
 import {Camera, ICameraObserver} from "../../common/camera";
+import {ViewGroup} from "../../common/viewmodel";
 
 /**
  * Provides a pan-zoom surface for Pixi.js.
