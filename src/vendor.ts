@@ -7,3 +7,4 @@ import '@angular/http';
 
 // Other
 import 'konva';
+import 'pixijs/pixi.js'
