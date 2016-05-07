@@ -123,7 +123,8 @@ export class PixiLayer implements IPlatformLayer {
         let options = {
             antialiasing: true,
             transparent: true,
-            view: element
+            view: element,
+            resolution: 1
         };
         
         this.pixi = PIXI.autoDetectRenderer(500, 500, options);
@@ -141,7 +142,7 @@ export class PixiRenderer implements IViewModelRenderer<any, any> {
 
     renderItem(item:ViewItem) : any {
         let shape = new PIXI.Graphics()
-            .lineStyle(4, 0xFF3300, 1)
+            .lineStyle(4, 0x3367D6, 1)
             .beginFill(0x66CCFF)
             .drawRect(item.left, item.top, item.width, item.height)
             .endFill();
