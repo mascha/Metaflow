@@ -39,10 +39,8 @@ export class PixiCamera extends Camera {
 export class PixiLayer implements IPlatformLayer {
 
     private camera: PixiCamera;
-    private graphics: PIXI.Graphics;
     private stage: PIXI.Container;
     private renderer: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
-    private render: any;
 
     cachedGroups:Array<ViewGroup>;
 
@@ -58,10 +56,11 @@ export class PixiLayer implements IPlatformLayer {
      * Simply issue drawing commands.
      */
     onViewResized() {
+        let renderer = this.renderer;
         let width = this.camera.visualWidth;
         let height = this.camera.visualHeight;
-        this.renderer.resize(width, height);
-        this.render(this.stage);
+        renderer.resize(width, height);
+        renderer.render(this.stage);
     }
 
     /**
@@ -70,7 +69,8 @@ export class PixiLayer implements IPlatformLayer {
      * @param posY
      */
     onPanChanged(posX: number, posY: number) {
-        this.render(this.stage);
+        // this.stage.updateTransform();
+        this.renderer.render(this.stage);
     }
 
     /**
@@ -78,14 +78,17 @@ export class PixiLayer implements IPlatformLayer {
      * @param zoom
      */
     onZoomChanged(zoom: number) {
-        this.render(this.stage);
+        // this.stage.updateTransform();
+        this.renderer.render(this.stage);
     }
 
     constructor(element: HTMLElement) {
         this.stage = new PIXI.Container();
         this.camera = new PixiCamera(this.stage);
-        this.renderer = PIXI.autoDetectRenderer(500,500);
-        this.render = this.renderer.render;
+
+        let options = { antialiasing: true, transparent: true};
+        this.renderer = PIXI.autoDetectRenderer(500, 500, options);
+        this.renderer.backgroundColor = 0xffffff;
         element.appendChild(this.renderer.view)
     }
 }

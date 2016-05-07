@@ -1,8 +1,9 @@
 import {ViewGroup, ViewItem} from "../common/viewmodel";
-
+import {Injectable} from '@angular/core';
 /**
  * Model provider service.
  */
+@Injectable()
 export default class ModelService {
     
     private model: ViewGroup;
