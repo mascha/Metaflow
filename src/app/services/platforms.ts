@@ -5,7 +5,7 @@ import {PixiLayer} from "../common/platform/pixi";
 
 @Injectable()
 export class PlatformService {
-    getPlatform(element: HTMLElement): IPlatformLayer {
+    getPlatform(element: HTMLCanvasElement): IPlatformLayer {
         return new PixiLayer(element);
     }
 }

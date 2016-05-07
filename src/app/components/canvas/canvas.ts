@@ -56,6 +56,25 @@ class BorderLayer {
     }
 }
 
+
+/**
+ * Grid layer component.
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+@Component({
+    selector: 'node-layer',
+    template: '<canvas #nodeLayer class="layer"></canvas>'
+})
+class NodeLayer {
+    @ViewChild('nodeLayer')
+    private _element: ElementRef;
+
+    getElement(): HTMLCanvasElement {
+        return this._element.nativeElement;
+    }
+}
+
 /**
  * The canvas component.
  *
@@ -64,7 +83,7 @@ class BorderLayer {
  */
 @Component({
     selector: 'diagram',
-    directives: [GridLayer, BorderLayer, NavigationBar],
+    directives: [GridLayer, NodeLayer, BorderLayer, NavigationBar],
     template: require('./canvas.html'),
     styles: [require('./canvas.scss')]
 })
@@ -112,7 +131,7 @@ export class Diagram implements AfterViewInit {
 
     @ViewChild(BorderLayer) private _borderLayer: BorderLayer;
     @ViewChild(GridLayer) private _gridLayer: GridLayer;
-    @ViewChild('nodeLayer') private _nodeLayer: ElementRef;
+    @ViewChild(NodeLayer) private _nodeLayer: NodeLayer;
     @ViewChild(NavigationBar) private _navigation: NavigationBar;
 
     private _element: ElementRef;
@@ -189,7 +208,10 @@ export class Diagram implements AfterViewInit {
     ngAfterViewInit() {
         /* get html elements */
         this._diagram = document.getElementById('diagram-canvas');
-        this._platform = this._platformProvider.getPlatform(this._nodeLayer.nativeElement);
+        let surface = this._nodeLayer.getElement();
+
+        /* retrieve rendering platform */
+        this._platform = this._platformProvider.getPlatform(surface);
 
         /* link behavior state machine*/
         if (this._platform) this._camera = this._platform.getCamera();

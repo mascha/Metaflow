@@ -82,14 +82,17 @@ export class PixiLayer implements IPlatformLayer {
         this.renderer.render(this.stage);
     }
 
-    constructor(element: HTMLElement) {
+    constructor(element: HTMLCanvasElement) {
         this.stage = new PIXI.Container();
         this.camera = new PixiCamera(this.stage);
 
-        let options = { antialiasing: true, transparent: true};
+        let options = {
+            antialiasing: true,
+            transparent: true,
+            view: element
+        };
+        
         this.renderer = PIXI.autoDetectRenderer(500, 500, options);
-        this.renderer.backgroundColor = 0xffffff;
-        element.appendChild(this.renderer.view)
     }
 }
 
