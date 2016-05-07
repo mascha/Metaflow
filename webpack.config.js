@@ -135,15 +135,7 @@ module.exports = function makeWebpackConfig() {
       // todo: change the loader to something that adds a hash to images
       {test: /\.html$/, loader: 'raw'}
     ],
-
-    // Here, webpack is telling us it doesn't recognize the "fs" module. pixi.js
-    // is using node's fs module to read files from the file system and they're
-    // expecting people to use Browserify/brfs in order to make this work in
-    // browsers. They could be much better about this, and we could go and bother
-    // them to write more portable code. But then we'd have to wait for them to
-    // cut a new release before we can use their stuff. Isn't there anything we
-    // can do in the meantime? Can we somehow use the brfs transform?
-    //
+    
     // Webpack lets us use postLoaders to specify a module loader that runs after
     // all other module loaders. In this case, we can use Browserify's brfs
     // transform as a final build step. Here, we restrict this loader to files in
