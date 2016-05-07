@@ -125,7 +125,7 @@ export class Canvas implements AfterViewInit {
      * @param event
      */
     onClick(event: MouseEvent) {
-        let off = this.getOffset(event);
+        let off = HTML.getOffset(this._diagram, event);
         this._behavior.handleClick(off.x, off.y);
         HTML.block(event);
     }
@@ -135,7 +135,7 @@ export class Canvas implements AfterViewInit {
      * @param event
      */
     onScroll(event: MouseWheelEvent) {
-        let off = this.getOffset(event);
+        let off = HTML.getOffset(this._diagram, event);
         let sca = HTML.normalizeWheel(event);
         this._behavior.handleZoom(off.x, off.y, -sca.spinY*20);
         HTML.block(event);
@@ -154,7 +154,7 @@ export class Canvas implements AfterViewInit {
      * @param event
      */
     onMouseDown(event: MouseEvent) {
-        const pos = this.getOffset(event);
+        const pos = HTML.getOffset(this._diagram, event);
         this._behavior.startDrag(pos.x, pos.y);
         HTML.block(event);
     }
@@ -164,7 +164,7 @@ export class Canvas implements AfterViewInit {
      * @param event
      */
     onMouseMove(event: MouseEvent) {
-        const pos = this.getOffset(event);
+        const pos = HTML.getOffset(this._diagram, event);
         this._behavior.handleDrag(pos.x,pos.y);
         HTML.block(event);
     }
@@ -200,15 +200,7 @@ export class Canvas implements AfterViewInit {
         this.onResize();
         this.camera.zoomAndMoveTo(-250, -150, 0.2);
     }
-
-    private getOffset(event: MouseEvent): any {
-        let offset = HTML.elementPosition(this._diagram);
-        return {
-            x: event.pageX - offset.x,
-            y: event.pageY - offset.y
-        };
-    }
-
+    
     constructor(@Inject(PlatformService) service: PlatformService,
                 @Inject(ElementRef) private element:ElementRef) {
         this._element = element;
