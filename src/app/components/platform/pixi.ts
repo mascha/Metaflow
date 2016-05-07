@@ -2,7 +2,7 @@
  * Copyright (C) Martin Schade, 2015-2016. All rights reserved.
  */
 
-import {Camera, ICameraObserver} from "../../common/camera";
+import {Camera} from "../../common/camera";
 import {ViewGroup} from "../../common/viewmodel";
 import {IPlatformLayer} from "../../common/renderer";
 
