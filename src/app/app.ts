@@ -3,7 +3,7 @@ import {ROUTER_DIRECTIVES} from '@angular/router';
 import {FORM_PROVIDERS} from '@angular/common';
 
 import Workspace from "./components/workspace/workspace";
-import Headerbar from "components/navigation/navigation";
+import Navigation from "./components/navigation/navigation";
 
 import '../style/app.scss';
 
@@ -15,7 +15,7 @@ import '../style/app.scss';
 @Component({
   selector: 'app',
   providers: [...FORM_PROVIDERS],
-  directives: [...ROUTER_DIRECTIVES, Workspace, Headerbar],
+  directives: [...ROUTER_DIRECTIVES, Workspace, Navigation],
   pipes: [],
   styles: [require('./app.scss')],
   template: require('./app.html')

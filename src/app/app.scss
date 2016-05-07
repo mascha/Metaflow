@@ -1,16 +1,18 @@
+$navigation-height: 48px;
+
 .header {
   position: absolute;
   overflow: hidden;
   top:0;
   right:0;
   left:0;
-  height: 32px;
+  height: $navigation-height;
 }
 
 .main {
   position: absolute;
   overflow: hidden;
-  top:32px;
+  top:$navigation-height;
   right:0;
   left:0;
   bottom: 0;

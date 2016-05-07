@@ -1,6 +1,14 @@
-$navigation-color: royalblue;
+$navigation-color: #eeeeee;
+$navigation-border: darkblue;
 
-.top-navigation {
+.navigation-container {
+  position: absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  border-color: $navigation-border;
+  border-bottom: 1px solid;
   background-color: $navigation-color;
 }
 
