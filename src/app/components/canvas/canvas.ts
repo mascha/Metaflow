@@ -9,7 +9,7 @@ import {ViewGroup} from "../../common/viewmodel";
 import {IPlatformLayer} from "../../common/platform";
 import Grid from '../../common/grid';
 import Border from '../../common/border';
-import NavigationBar from "../navigation/navigationbar";
+import NavigationBar from "../breadcrumbs/breadcrumbs";
 import HTML from "../../common/html";
 import Kinetics from "../../common/kinetic";
 import ModelService from "../../services/models";

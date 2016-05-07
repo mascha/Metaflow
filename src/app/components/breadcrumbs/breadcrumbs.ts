@@ -3,14 +3,14 @@ import {NgFor} from '@angular/common';
 import {ViewGroup} from "../../common/viewmodel";
 
 /**
- * A navigation navigation bar.
+ * A breadcrumbs breadcrumbs bar.
  * @author Martin Schade
  * @since 1.0.0
  */
 @Component({
-    selector: 'navigation-bar',
-    styles: [require('./navigationbar.scss')],
-    template: require('./navigationbar.html'),
+    selector: 'breadcrumbs',
+    styles: [require('./breadcrumbs.scss')],
+    template: require('./breadcrumbs.html'),
     directives: [NgFor]
 })
 export default class Breadcrumbs {

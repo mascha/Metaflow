@@ -19,7 +19,7 @@ export interface ICameraObserver {
  * Camera class.
  *
  * A camera provides a viewport onto a layered scene canvas. It is used to
- * specify scale levels and provide navigation and view state undo/redo functionality.
+ * specify scale levels and provide breadcrumbs and view state undo/redo functionality.
  *
  * There are two main coordinate systems which determine the way the camera operates:
  *  1) The camera, viewport, visual or viewport coordinate system, which represents the
