@@ -1,10 +1,21 @@
+$sidebar-header: #4285FA;
+$sidebar-main:  #3367D6;
+$sidebar-divider: transparent;//#97BCF9; //#d6dadc;
+
 .sidebar-container {
   position: absolute;
   overflow: hidden;
+  /*
   left: 12px;
   right: 12px;
   top: 6px;
   bottom: 6px;
+  */
+  left:0;
+  right:0;
+  bottom:0;
+  top:0;
+  background-color: $sidebar-main;
 }
 
 .sidebar-header {
@@ -16,21 +27,23 @@
   overflow: hidden;
   min-height: 18px;
 
+  background-color: $sidebar-header;
+
   h2 {
-    margin-top: -4px;
+    margin-top: -2px;
     text-decoration: none;
     font-size: 16px;
     line-height: 1.2em;
     font-weight: bold;
     text-align: center;
-    color: #4d4d4d;
+    color: white; //#4d4d4d;
   }
 }
 
 .sidebar-divider {
-  background-color: #d6dadc;
+  background-color: $sidebar-divider;
   border: 0;
-  color: #d6dadc;
+  color: $sidebar-divider;
   height: 1px;
   margin: 0;
   width: 100%;
