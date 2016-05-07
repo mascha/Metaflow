@@ -3,7 +3,7 @@ import {ROUTER_DIRECTIVES} from '@angular/router';
 import {FORM_PROVIDERS} from '@angular/common';
 
 import Workspace from "./components/workspace/workspace";
-import Headerbar from "./components/headerbar/headerbar";
+import Headerbar from "components/navigation/navigation";
 
 import '../style/app.scss';
 
