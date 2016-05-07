@@ -1,6 +1,7 @@
 import {Component, ElementRef, ViewChild, Renderer, Inject} from "@angular/core";
 import {Canvas} from "../canvas/canvas";
 import HTML from "../../common/html";
+import Sidebar from "../sidebar/sidebar";
 
 /**
  * Simple split pane.
@@ -8,7 +9,8 @@ import HTML from "../../common/html";
 @Component({
     selector: 'double-split',
     template: require('./doublesplit.html'),
-    styles: [require('./splitpane.scss')]
+    styles: [require('./splitpane.scss')],
+    directives: [Sidebar]
 })
 class DoubleSplit {
     

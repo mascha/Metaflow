@@ -137,7 +137,7 @@ export class Canvas implements AfterViewInit {
     onScroll(event: MouseWheelEvent) {
         let off = HTML.getOffset(this._diagram, event);
         let sca = HTML.normalizeWheel(event);
-        this._behavior.handleZoom(off.x, off.y, -sca.spinY*20);
+        this._behavior.handleZoom(off.x, off.y, -sca*20);
         HTML.block(event);
     }
 
