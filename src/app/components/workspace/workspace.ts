@@ -1,5 +1,5 @@
 import {Component, ElementRef, ViewChild, Renderer, Inject} from "@angular/core";
-import {Canvas} from "../canvas/canvas";
+import {Diagram} from "../canvas/canvas";
 import HTML from "../../common/html";
 import Sidebar from "../sidebar/sidebar";
 
@@ -143,7 +143,7 @@ class TripleSplit {
 @Component({
     selector: 'workspace',
     template: require('./workspace.html'),
-    directives: [DoubleSplit, TripleSplit, Canvas, Sidebar],
+    directives: [DoubleSplit, TripleSplit, Diagram, Sidebar],
 })
 export default class Workspace {
     slim: boolean = true;

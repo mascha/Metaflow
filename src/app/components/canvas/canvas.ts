@@ -62,12 +62,12 @@ class BorderLayer {
  * @since 1.0.0
  */
 @Component({
-    selector: 'canvas-view',
+    selector: 'diagram',
     directives: [GridLayer, BorderLayer, NavigationBar],
     template: require('./canvas.html'),
     styles: [require('./canvas.scss')]
 })
-export class Canvas implements AfterViewInit {
+export class Diagram implements AfterViewInit {
     private _platformProvider: PlatformService;
     private _platform: IPlatformLayer;
 
@@ -195,7 +195,7 @@ export class Canvas implements AfterViewInit {
             if (this._borderLayer) this._borderLayer.observe(this._camera);
             if (this._gridLayer) this._gridLayer.observe(this._camera);
             if (this._nodeLayer) this._camera.attachObserver(this._platform);
-        } else throw new Error('Could not create behavior class for canvas');
+        } else throw new Error('Could not create behavior class for diagram');
         
         this.onResize();
         this.camera.zoomAndMoveTo(-250, -150, 0.2);
@@ -209,7 +209,7 @@ export class Canvas implements AfterViewInit {
 }
 
 /**
- * Canvas behavior specification.
+ * Diagram behavior specification.
  *
  * @author Martin Schade
  * @since 1.0.0
@@ -719,7 +719,7 @@ class CanvasBehavior {
         this.animating = false;
     }
     
-    constructor(private canvas: Canvas, private camera: Camera, private platform: IPlatformLayer) {
+    constructor(private canvas: Diagram, private camera: Camera, private platform: IPlatformLayer) {
         this.kinetics = new Kinetics();
         this.loadLevel(CanvasBehavior.createDebugModel())
     }
