@@ -72,13 +72,13 @@ export default class Grid implements ICameraObserver {
             context.beginPath();
 
             for (let x = starX; x <= stopX; x++) {
-                const projX = Grid.snap(cx + cZ * (x * period));
+                const projX = Math.round(cx + cZ * (x * period)) + 0.5;
                 context.moveTo(projX, 0);
                 context.lineTo(projX, vH);
             }
 
             for (let y = starY; y <= stopY; y++) {
-                const projY = Grid.snap(cy + cZ * (y * period));
+                const projY = Math.round(cy + cZ * (y * period)) + 0.5;
                 context.moveTo(0.0, projY);
                 context.lineTo(vW, projY);
             }
@@ -87,17 +87,10 @@ export default class Grid implements ICameraObserver {
         }
     }
 
-    /**
-     * Snap to integer lines.
-     */
-    private static snap(x: number): number {
-        return Math.round(x) + 0.5;
-    }
-
     private redraw() {
         if (!this._active) return;
         this.clearGrid();
-        this._context.strokeStyle = 'white';
+        this._context.strokeStyle = 'lightgray';
         this._context.lineWidth = 1.0;
         const x = this._camera.worldX;
         const y = this._camera.worldY;
