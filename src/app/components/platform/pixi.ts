@@ -14,19 +14,18 @@ import {IPlatformLayer} from "../../common/renderer";
  */
 export class PixiCamera extends Camera {
 
+    private s = this.stage.scale;
+    private p = this.stage.position;
+
     protected translateWorldTo(tX:number, tY:number) {
-        const position = this.graphics.position;
-        position.x = tX;
-        position.y = tY;
+        this.p.set(tX, tY);
     }
 
     protected scaleWorldTo(zoom:number) {
-        let scale = this.graphics.scale;
-        scale.x = zoom;
-        scale.y = zoom;
+        this.s.set(zoom, zoom);
     }
 
-    constructor(private graphics: PIXI.Graphics) {
+    constructor(private stage: PIXI.Container) {
         super();
     }
 }
@@ -45,14 +44,10 @@ export class PixiLayer implements IPlatformLayer {
     private renderer: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
     private render: any;
 
-    retrieveCamera(): Camera {
-        return this.camera;
-    }
-
     cachedGroups:Array<ViewGroup>;
 
     getCamera():Camera {
-        return undefined;
+        return this.camera;
     }
 
     setModel(model: ViewGroup) {
@@ -87,10 +82,10 @@ export class PixiLayer implements IPlatformLayer {
     }
 
     constructor(element: HTMLElement) {
-        this.graphics = new PIXI.Graphics();
-        this.camera = new PixiCamera(this.graphics);
         this.stage = new PIXI.Container();
-        this.renderer = new PIXI.WebGLRenderer();
+        this.camera = new PixiCamera(this.stage);
+        this.renderer = PIXI.autoDetectRenderer(500,500);
         this.render = this.renderer.render;
+        element.appendChild(this.renderer.view)
     }
 }
