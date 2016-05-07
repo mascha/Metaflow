@@ -149,7 +149,7 @@ export class PixiRenderer implements IViewModelRenderer<any, any> {
 
     renderItem(item:ViewItem) : any {
         let shape = new PIXI.Graphics()
-            .lineStyle(4, 0x3367D6, 1)
+            //.lineStyle(4, 0x3367D6, 1)
             .beginFill(0x66CCFF)
             .drawRect(item.left, item.top, item.width, item.height)
             .endFill();
