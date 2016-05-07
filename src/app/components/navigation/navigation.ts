@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 
 @Component({
-    selector: 'header-bar',
+    selector: 'navigation',
     styles: [require('./navigation.scss')],
     template: require('./navigation.html')
 })
