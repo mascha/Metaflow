@@ -5,13 +5,14 @@
 import {Component, ElementRef, ViewChild, AfterViewInit, Inject} from '@angular/core';
 import {Camera} from "../../common/camera";
 import {PlatformService} from "../../services/platforms";
-import {ViewGroup, ViewItem} from "../../common/viewmodel";
+import {ViewGroup} from "../../common/viewmodel";
 import {IPlatformLayer} from "../../common/renderer";
 import Grid from '../../common/grid';
 import Border from '../../common/border';
 import NavigationBar from "../navigation/navigationbar";
 import HTML from "../../common/html";
 import Kinetics from "../../common/kinetic";
+import ModelService from "../../services/models";
 
 /**
  * Grid layer component.
@@ -95,14 +96,16 @@ export class Diagram implements AfterViewInit {
         return this._velocity;
     }
 
-    model(group: ViewGroup) {
-        if (this._platform) this._platform.setModel(group);
+    set model(group: ViewGroup) {
+        this._model = group;
+        if (this._platform)
+            this._platform.setModel(group);
     }
 
-    /**
-     * Set the navigation velocity.
-     * @param value A value between 0.01 and 3.0
-     */
+    get model(): ViewGroup {
+        return this._model;
+    }
+
     set navigationVelocity(value: number) {
         this._velocity = (value < 0) ? 0.01 : (value > 3.0) ? 3.0 : value;
     }
@@ -114,11 +117,12 @@ export class Diagram implements AfterViewInit {
 
     private _element: ElementRef;
     private _camera: Camera;
-    private _behavior: CanvasBehavior;
+    private _behavior: DiagramBehavior;
     private _inertiaDecay: number = 0.05;
     private _zoomPan: number = 2.33;
     private _velocity: number = 1.4;
     private _diagram: HTMLElement;
+    private _model: ViewGroup;
 
     /**
      * On click event handler.
@@ -179,6 +183,8 @@ export class Diagram implements AfterViewInit {
 
     /**
      * Assemble all canvas layers.
+     *
+     * TODO refactor so assembly is easier to understand!
      */
     ngAfterViewInit() {
         /* get html elements */
@@ -187,7 +193,7 @@ export class Diagram implements AfterViewInit {
 
         /* link behavior state machine*/
         if (this._platform) this._camera = this._platform.getCamera();
-        if (this._camera) this._behavior = new CanvasBehavior(this, this._camera, this._platform);
+        if (this._camera) this._behavior = new DiagramBehavior(this, this._camera, this._platform);
 
         if (this._behavior) {
             /* attach all layers */
@@ -202,7 +208,9 @@ export class Diagram implements AfterViewInit {
     }
     
     constructor(@Inject(PlatformService) service: PlatformService,
+                @Inject(ModelService) models: ModelService,
                 @Inject(ElementRef) private element:ElementRef) {
+        this._model = models.getModel();
         this._element = element;
         this._platformProvider = service;
     }
@@ -214,7 +222,7 @@ export class Diagram implements AfterViewInit {
  * @author Martin Schade
  * @since 1.0.0
  */
-class CanvasBehavior {
+class DiagramBehavior {
     private kinetics: Kinetics;
     private anchorX = 0.0;
     private anchorY = 0.0;
@@ -591,37 +599,6 @@ class CanvasBehavior {
                 this.camera.projectedHeight > parent.height + driftH);
     }
 
-    private static createDebugModel(): ViewGroup {
-        /*
-        let root = new ViewGroup('ROOT', 0, 0, 1000, 1000, .1);
-        let first = new ViewGroup('FIRST', 5000, 5000, 5000, 5000, .1);
-        let item = new ViewItem('ITEM1', 25000, 25000, 2500, 2500);
-        */
-
-        let i = 40;
-        let o : ViewGroup = null;
-        let root: ViewGroup = null;
-        while (i--) {
-            let group = new ViewGroup(`Level ${40 - i}`, 2000, 2000, 2000, 2000, 0.1);
-            let j = 120;
-            while (j) {
-                let x = Math.random() * 18000;
-                let y = Math.random() * 18000;
-                let item = new ViewItem('Item', x, y, 192, 108)
-                group.addContent(item);
-                j--;
-            }
-            if (o) {
-                o.addContent(group);
-            } else {
-                root = group;
-            }
-            o = group;
-        }
-
-        return root;
-    }
-
     private throwCamera(speed: number, angle: number, decay: number) {
         const cam = this.camera;
         const time = -(1000.0 / this.frames) / Math.log(1.0 - decay);
@@ -719,9 +696,12 @@ class CanvasBehavior {
         this.animating = false;
     }
     
-    constructor(private canvas: Diagram, private camera: Camera, private platform: IPlatformLayer) {
+    constructor(
+        private canvas: Diagram,
+        private camera: Camera,
+        private platform: IPlatformLayer) {
         this.kinetics = new Kinetics();
-        this.loadLevel(CanvasBehavior.createDebugModel())
+        this.loadLevel(canvas.model);
     }
 }
 
