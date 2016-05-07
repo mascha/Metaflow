@@ -1,3 +1,6 @@
+$grid-lines: lightgray;
+$grid-color: #e5e5e5; // #4285FA;//darkblue;//rgb(38, 42, 50);
+
 #diagram-canvas {
   position: absolute;
   overflow: hidden;
@@ -22,3 +25,11 @@
   bottom: 0;
 }
 
+.grid {
+  color: $grid-lines;
+  background-color: $grid-color;
+}
+
+.border {
+
+}

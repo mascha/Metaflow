@@ -97,7 +97,7 @@ export default class Grid implements ICameraObserver {
     private redraw() {
         if (!this._active) return;
         this.clearGrid();
-        this._context.strokeStyle = 'lightgray'; // 'rgb(38, 42, 50)';
+        this._context.strokeStyle = 'white';
         this._context.lineWidth = 1.0;
         const x = this._camera.worldX;
         const y = this._camera.worldY;
