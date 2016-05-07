@@ -9,8 +9,7 @@ import Sidebar from "../sidebar/sidebar";
 @Component({
     selector: 'double-split',
     template: require('./doublesplit.html'),
-    styles: [require('./splitpane.scss')],
-    directives: [Sidebar]
+    styles: [require('./splitpane.scss')]
 })
 class DoubleSplit {
     
@@ -144,7 +143,7 @@ class TripleSplit {
 @Component({
     selector: 'workspace',
     template: require('./workspace.html'),
-    directives: [DoubleSplit, TripleSplit, Canvas],
+    directives: [DoubleSplit, TripleSplit, Canvas, Sidebar],
 })
 export default class Workspace {
     slim: boolean = true;

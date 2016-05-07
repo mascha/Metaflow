@@ -208,13 +208,16 @@ export class KonvaRenderer implements
 
     renderGroup(group:ViewGroup, topLevel: boolean): Konva.Group {
         let _g = this.group();
-        
-        if (!topLevel)
+
+        if (!topLevel) {
             this.translate(_g, group.left, group.top);
+        }
 
         let _s = this.rounded(0, 0, group.width, group.height, 12);
 
-        this.stroke(_s, 'darkgray', 32);
+        if (!topLevel) {
+            this.stroke(_s, 'darkgray', 32);
+        }
 
         let _l = this.text(group.label);
         _l.scaleX(4);
