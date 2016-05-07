@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {IPlatformLayer} from "../common/renderer";
-import {KonvaLayer} from "../components/platform/konva";
+import {KonvaLayer} from "../common/platform/konva";
 
 @Injectable()
 export class PlatformService {

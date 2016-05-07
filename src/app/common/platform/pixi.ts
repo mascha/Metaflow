@@ -2,9 +2,9 @@
  * Copyright (C) Martin Schade, 2015-2016. All rights reserved.
  */
 
-import {Camera} from "../../common/camera";
-import {ViewGroup} from "../../common/viewmodel";
-import {IPlatformLayer} from "../../common/renderer";
+import {Camera} from "../camera";
+import {ViewGroup} from "../viewmodel";
+import {IPlatformLayer} from "../renderer";
 
 /**
  * Provides a pan-zoom surface for pixi.js.

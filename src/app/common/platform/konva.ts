@@ -3,8 +3,8 @@
  */
 
 import {IViewModelRenderer, IVisualRenderer, IPlatformLayer} from '../../common/renderer'
-import {ViewItem, ViewGroup} from "../../common/viewmodel";
-import {Camera} from "../../common/camera";
+import {ViewItem, ViewGroup} from "../viewmodel";
+import {Camera} from "../camera";
 
 /**
  * Implements a scale-pan surface for konva.
