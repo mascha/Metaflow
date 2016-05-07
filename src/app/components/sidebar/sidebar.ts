@@ -1,3 +1,9 @@
-/**
- * Created by Martin Schade on 07.05.2016.
- */
+import {Component} from '@angular/core';
+
+@Component({
+    selector: 'sidebar',
+    template: require('./sidebar.html'),
+    styles: [require('./sidebar.css')]
+})
+export default class Sidebar {
+}

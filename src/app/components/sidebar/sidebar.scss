@@ -1,0 +1,45 @@
+.sidebar-container {
+  position: absolute;
+  overflow: hidden;
+  left: 6px;
+  right: 6px;
+  top: 6px;
+  bottom: 6px;
+}
+
+.sidebar-header {
+  box-sizing: border-box;
+  height: 46px;
+  padding: 8px 10px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  min-height: 18px;
+
+  &.is-showing-menu {
+    padding-right: 34px;
+  }
+
+  h2 {
+    font-size: 18px;
+    margin-bottom: 9px;
+    line-height: 1.2em;
+    font-weight: bold;
+    color: #4d4d4d;
+  }
+}
+
+.sidebar-divider {
+  background-color: #d6dadc;
+  border: 0;
+  color: #d6dadc;
+  height: 1px;
+  margin: 0;
+  width: 100%;
+}
+
+.sidebar-extras {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+}
