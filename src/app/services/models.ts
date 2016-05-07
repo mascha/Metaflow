@@ -26,6 +26,6 @@ class Request {
 
 class DebugModelServive {
     getDebugModel(): ViewGroup {
-        
+        return null;
     }
 }
