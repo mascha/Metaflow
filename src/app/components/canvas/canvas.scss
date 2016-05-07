@@ -33,3 +33,35 @@ $grid-color: #e5e5e5; // #4285FA;//darkblue;//rgb(38, 42, 50);
 .border {
 
 }
+
+.controls {
+  position: absolute;
+
+  &.top-left {
+    margin-top: 16px;
+    margin-left: 16px;
+    top:0;
+    left:0;
+  }
+
+  &.top-right {
+    margin-top: 16px;
+    margin-right: 16px;
+    top:0;
+    right:0;
+  }
+
+  &.bottom-right {
+    margin-bottom: 16px;
+    margin-right: 16px;
+    bottom:0;
+    right:0;
+  }
+
+  &.bottom-left {
+    margin-bottom: 16px;
+    margin-left: 16px;
+    bottom:0;
+    left:0;
+  }
+}

@@ -5,9 +5,14 @@
 import {Camera} from "../camera";
 import {ViewGroup, ViewItem, ViewVertex} from "../viewmodel";
 import {IPlatformLayer, IViewModelRenderer} from "../platform";
+import WebGLRenderer = PIXI.WebGLRenderer;
 
 /**
- * Provides a pan-zoom surface for pixi.js.
+ * Provides a pan-zoom surface for
+ *
+ * TODO: Implement a LOD vs Text sclaing loop
+ * TODO: Combine with group caching etc.
+ * TODO: Split into node-, label & edge layer
  *
  * @author Martin Schade
  * @since 1.0.0
@@ -42,6 +47,7 @@ export class PixiLayer implements IPlatformLayer {
     private stage: PIXI.Container;
     private pixi: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
     private renderer: PixiRenderer;
+    private webgl: boolean;
 
     cachedGroups:Array<ViewGroup>;
 
@@ -128,6 +134,7 @@ export class PixiLayer implements IPlatformLayer {
         };
         
         this.pixi = PIXI.autoDetectRenderer(500, 500, options);
+        this.webgl = (this.pixi instanceof WebGLRenderer)? true : false;
     }
 }
 
@@ -161,15 +168,15 @@ export class PixiRenderer implements IViewModelRenderer<any, any> {
         let label = new PIXI.Text(group.label);
 
         let shape = new PIXI.Graphics();
-        shape.lineStyle(4, 0xFF3300, 1);
-        shape.drawRect(0, 0, root.width, root.height);
+        shape.lineStyle(16, 0xeeeeee);
+        shape.drawRoundedRect(0, 0, group.width, group.height, 12);
 
         let content = new PIXI.Container();
         let inner = group.scale;
         content.scale.set(inner, inner);
 
-        root.addChild(label);
         root.addChild(shape);
+        root.addChild(label);
         root.addChild(content);
 
         group.visual = root;
@@ -186,7 +193,7 @@ export class PixiRenderer implements IViewModelRenderer<any, any> {
         let root = group.visual as PIXI.Container;
         if (!root) throw new Error('Could not find renderer visual of the given group');
 
-        let content = root.children[1] as PIXI.Container;
+        let content = root.children[2] as PIXI.Container;
         if (!content) throw new Error('Could not find low level content container');
 
         content.addChild(child);

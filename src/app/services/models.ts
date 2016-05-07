@@ -24,7 +24,7 @@ export default class ModelService {
         let root: ViewGroup = null;
         while (i--) {
             let group = new ViewGroup(`Level ${40 - i}`, 2000, 2000, 2000, 2000, 0.1);
-            let j = 120;
+            let j = 4200;
             while (j) {
                 let x = Math.random() * 18000;
                 let y = Math.random() * 18000;
