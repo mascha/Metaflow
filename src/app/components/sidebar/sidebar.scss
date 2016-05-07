@@ -1,5 +1,5 @@
-$sidebar-header: #3367D6;
-$sidebar-main:  #4285FA;
+$sidebar-header: #4285FA;//#3367D6;
+$sidebar-main:  #dddddd; //#4285FA;
 $sidebar-divider: transparent;//#97BCF9; //#d6dadc;
 
 .sidebar-container {
@@ -10,6 +10,7 @@ $sidebar-divider: transparent;//#97BCF9; //#d6dadc;
   right:0;
   bottom:0;
   top:0;
+  //border-radius: 3px;
   background-color: $sidebar-main;
 }
 
