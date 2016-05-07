@@ -12,9 +12,9 @@ export default class HTML {
     /**
      * Normalize wheel values across browsers.
      */
-    static normalizeWheel(event: any): any {
+    static normalizeWheel(event: any): number {
 
-        let sX = 0, sY = 0;    // pixelX, pixelY
+        let sX = 0, sY = 0;
 
         if ('detail' in event) {
             sY = event.detail;
@@ -54,14 +54,11 @@ export default class HTML {
             }
         }
 
-        if (pX && !sX) {
-            sX = (pX < 1) ? -1 : 1;
-        }
         if (pY && !sY) {
             sY = (pY < 1) ? -1 : 1;
         }
 
-        return { spinX: sX, spinY: sY, pixelX: pX, pixelY: pY };
+        return sY;
     }
 
     /**
@@ -94,6 +91,19 @@ export default class HTML {
         };
     }
 
+    /**
+     * Retrieves the relative offset for the given html element.
+     * @param element
+     * @param event
+     * @returns {{x: number, y: number}}
+     */
+    static getOffset(element: HTMLElement, event: MouseEvent): any {
+        let offset = HTML.elementPosition(element);
+        return {
+            x: event.pageX - offset.x,
+            y: event.pageY - offset.y
+        };
+    }
 
     /**
      * Parses a numeric style property.
