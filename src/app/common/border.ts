@@ -99,8 +99,8 @@ export default class Border implements ICameraObserver {
         const b = this.halfH - this.middle;
         const c = this.brush;
         
-        c.fillStyle = 'mediumseagreen';
-        c.strokeStyle = 'lightgrey';
+        c.fillStyle = 'cornflowerblue';
+        //c.strokeStyle = 'lightgrey';
         c.globalAlpha = 1.0;
 
         let proxies = this.proxies;
@@ -179,8 +179,8 @@ export default class Border implements ICameraObserver {
         let proxies = this.proxies;
         let len = proxies.length;
         for (var i = 0; i < len; i++) {
-            const x = (0.5 - Math.random()) * 2000;
-            const y = (0.5 - Math.random()) * 2000;
+            const x = (1 - Math.random()) * 2000;
+            const y = (1 - Math.random()) * 2000;
             proxies[i] = new Proxy(x, y);
         }
     }
