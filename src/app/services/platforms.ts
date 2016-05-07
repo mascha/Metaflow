@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
-import {IPlatformLayer} from "../common/renderer";
-import {KonvaLayer} from "../common/platform/konva";
+import {IPlatformLayer} from "../common/platform";
 import {PixiLayer} from "../common/platform/pixi";
 
 @Injectable()

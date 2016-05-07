@@ -6,7 +6,7 @@ import {Component, ElementRef, ViewChild, AfterViewInit, Inject} from '@angular/
 import {Camera} from "../../common/camera";
 import {PlatformService} from "../../services/platforms";
 import {ViewGroup} from "../../common/viewmodel";
-import {IPlatformLayer} from "../../common/renderer";
+import {IPlatformLayer} from "../../common/platform";
 import Grid from '../../common/grid';
 import Border from '../../common/border';
 import NavigationBar from "../navigation/navigationbar";

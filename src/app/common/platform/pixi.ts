@@ -4,7 +4,7 @@
 
 import {Camera} from "../camera";
 import {ViewGroup, ViewItem, ViewVertex} from "../viewmodel";
-import {IPlatformLayer, IViewModelRenderer} from "../renderer";
+import {IPlatformLayer, IViewModelRenderer} from "../platform";
 
 /**
  * Provides a pan-zoom surface for pixi.js.
@@ -40,7 +40,8 @@ export class PixiLayer implements IPlatformLayer {
 
     private camera: PixiCamera;
     private stage: PIXI.Container;
-    private renderer: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
+    private pixi: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
+    private renderer: PixiRenderer;
 
     cachedGroups:Array<ViewGroup>;
 
@@ -48,15 +49,47 @@ export class PixiLayer implements IPlatformLayer {
         return this.camera;
     }
 
-    setModel(model: ViewGroup) {
+    setModel(level: ViewGroup) {
+        this.stage.removeChildren();
 
+        // first level
+        let renderer = this.renderer;
+        renderer.renderGroup(level, true);
+
+        // second levels
+        this.cachedGroups = [];
+        for (let i = 0, contents = level.contents, len = contents.length; i < len; i++) {
+            let item = contents[i];
+            if (item instanceof ViewGroup) {
+                this.cachedGroups.push(item);
+                renderer.renderGroup(item, false);
+
+                // third levels
+                // todo make dynamic!
+                if (item.contents) {
+                    item.contents.forEach(it => {
+                        if (it instanceof ViewGroup) {
+                            renderer.renderGroup(it, false);
+                        } else if (it instanceof ViewItem){
+                            renderer.renderItem(it);
+                        }
+                        renderer.attach(it, item);
+                    })
+                }
+            } else if (item instanceof ViewItem) {
+                renderer.renderItem(item);
+            }
+            renderer.attach(item, level);
+        }
+
+        this.stage.addChild(level.visual);
     }
 
     /**
      * Simply issue drawing commands.
      */
     onViewResized() {
-        let renderer = this.renderer;
+        let renderer = this.pixi;
         let width = this.camera.visualWidth;
         let height = this.camera.visualHeight;
         renderer.resize(width, height);
@@ -70,7 +103,7 @@ export class PixiLayer implements IPlatformLayer {
      */
     onPanChanged(posX: number, posY: number) {
         // this.stage.updateTransform();
-        this.renderer.render(this.stage);
+        this.pixi.render(this.stage);
     }
 
     /**
@@ -79,12 +112,13 @@ export class PixiLayer implements IPlatformLayer {
      */
     onZoomChanged(zoom: number) {
         // this.stage.updateTransform();
-        this.renderer.render(this.stage);
+        this.pixi.render(this.stage);
     }
 
     constructor(element: HTMLCanvasElement) {
         this.stage = new PIXI.Container();
         this.camera = new PixiCamera(this.stage);
+        this.renderer = new PixiRenderer();
 
         let options = {
             antialiasing: true,
@@ -92,7 +126,7 @@ export class PixiLayer implements IPlatformLayer {
             view: element
         };
         
-        this.renderer = PIXI.autoDetectRenderer(500, 500, options);
+        this.pixi = PIXI.autoDetectRenderer(500, 500, options);
     }
 }
 
@@ -105,15 +139,16 @@ export class PixiLayer implements IPlatformLayer {
  */
 export class PixiRenderer implements IViewModelRenderer<any, any> {
 
-    renderItem(item:ViewItem):any {
-        return new PIXI.Graphics()
+    renderItem(item:ViewItem) : any {
+        let shape = new PIXI.Graphics()
             .lineStyle(4, 0xFF3300, 1)
             .beginFill(0x66CCFF)
             .drawRect(item.left, item.top, item.width, item.height)
             .endFill();
+        item.visual = shape;
     }
 
-    renderGroup(group:ViewGroup, topLevel:boolean):any {
+    renderGroup(group: ViewGroup, topLevel: boolean):any {
         let root = new PIXI.Container();
         root.width = group.width;
         root.height = group.height;
@@ -135,6 +170,8 @@ export class PixiRenderer implements IViewModelRenderer<any, any> {
         root.addChild(label);
         root.addChild(shape);
         root.addChild(content);
+
+        group.visual = root;
     }
 
     renderTree(group:ViewGroup):any {

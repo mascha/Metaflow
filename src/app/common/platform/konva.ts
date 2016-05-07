@@ -2,7 +2,7 @@
  * Copyright (C) Martin Schade, 2015-2016. All rights reserved.
  */
 
-import {IViewModelRenderer, IVisualRenderer, IPlatformLayer} from '../../common/renderer'
+import {IViewModelRenderer, IVisualRenderer, IPlatformLayer} from '../platform'
 import {ViewItem, ViewGroup} from "../viewmodel";
 import {Camera} from "../camera";
 
