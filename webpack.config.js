@@ -116,12 +116,12 @@ module.exports = function makeWebpackConfig() {
 
       {
         test: /\.woff(2)?(\?[a-z0-9=\.]+)?$/,
-        loader: "url-loader?limit=10000&mimetype=application/font-woff&name=fonts/[name].[hash].[ext]"
+        loader: "url-loader?limit=10000&mimetype=application/font-woff"
       },
 
       {
         test: /\.(ttf|eot|svg)(\?[a-z0-9=\.]+)?$/,
-        loader: "file-loader?limit=10000&name=fonts/[name].[hash].[ext]"
+        loader: "file-loader?limit=10000"
       },
 
       // Support for *.json files.

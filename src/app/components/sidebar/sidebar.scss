@@ -1,7 +1,11 @@
+@import "../../../style/icons";
+
 $sidebar-header: #dddddd;//#3367D6;//#3367D6;
 $sidebar-header-title: #4d4d4d;
 $sidebar-main: white; // #4285FA;
 $sidebar-divider: transparent;//#97BCF9; //#d6dadc;
+$icon-hover: #111111;
+
 
 .sidebar-container {
   position: absolute;
@@ -17,7 +21,7 @@ $sidebar-divider: transparent;//#97BCF9; //#d6dadc;
 
 .sidebar-header {
   box-sizing: border-box;
-  height: 32px;
+  height: 30px;
   padding: 8px 12px;
   width: 100%;
   position: relative;
@@ -53,6 +57,14 @@ $sidebar-divider: transparent;//#97BCF9; //#d6dadc;
 
 .sidebar-extras {
   position: absolute;
-  right: 4px;
-  top: 4px;
+  right: 8px;
+  top: 6px;
+
+  a {
+    @include icon(before, close);
+
+    :before:hover {
+      color: $icon-hover !important;
+    }
+  }
 }
