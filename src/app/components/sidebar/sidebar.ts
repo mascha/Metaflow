@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
     selector: 'sidebar',
@@ -6,5 +6,5 @@ import {Component} from '@angular/core';
     styles: [require('./sidebar.scss')]
 })
 export default class Sidebar {
-    headerTitle: string = "Header";
+    @Input() title: string = "Header";
 }
