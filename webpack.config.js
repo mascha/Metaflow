@@ -116,7 +116,7 @@ module.exports = function makeWebpackConfig() {
 
       {
         test: /\.woff(2)?(\?[a-z0-9=\.]+)?$/,
-        loader: "url-loader?limit=10000&mimetype=application/font-woff"
+        loader: "url-loader?limit=10000&mimetype=application/font-woff&name=fonts/[name].[hash].[ext]"
       },
 
       {
