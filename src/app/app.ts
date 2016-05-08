@@ -5,7 +5,7 @@ import {FORM_PROVIDERS} from '@angular/common';
 import Workspace from "./components/workspace/workspace";
 import Navigation from "./components/navigation/navigation";
 
-import '../style/app.scss';
+import '../style/globals.scss';
 
 /**
  * Metalogic Web Application.
@@ -20,4 +20,10 @@ import '../style/app.scss';
   styles: [require('./app.scss')],
   template: require('./app.html')
 })
-export class App {}
+export class App {
+  NAME = "Metaflow ~/bass/model.sd";
+
+  constructor() {
+    document.title = this.NAME;
+  }
+}

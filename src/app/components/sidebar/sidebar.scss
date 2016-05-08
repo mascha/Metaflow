@@ -1,5 +1,6 @@
-$sidebar-header: #4285FA;//#3367D6;
-$sidebar-main:  #dddddd; //#4285FA;
+$sidebar-header: #dddddd;//#3367D6;//#3367D6;
+$sidebar-header-title: #4d4d4d;
+$sidebar-main: white; // #4285FA;
 $sidebar-divider: transparent;//#97BCF9; //#d6dadc;
 
 .sidebar-container {
@@ -32,7 +33,7 @@ $sidebar-divider: transparent;//#97BCF9; //#d6dadc;
     line-height: 1.2em;
     font-weight: bold;
     text-align: center;
-    color: white; //#4d4d4d;
+    color: $sidebar-header-title;
   }
 }
 
