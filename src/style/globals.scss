@@ -1,3 +1,25 @@
+$mdi-font-path: '~mdi/fonts/';
+@import "~mdi/scss/materialdesignicons.scss";
+
+@mixin icon($position: before, $icon: false, $styles: true) {
+  @if $position == both {
+    $position: 'before, &:after';
+  }
+
+  &:#{$position} {
+    @if $icon {
+      content: mdi($icon);
+    }
+    @if $styles {
+      speak: none;
+      font-style: normal;
+      font-weight: normal;
+      font-family: 'Material Design Icons';
+    }
+    // Include any extra rules supplied for the pseudo-element
+    @content;
+  }
+}
 
 html {
   // background:url('../public/img/pattern.png') no-repeat center center;
