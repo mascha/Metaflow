@@ -1,19 +1,11 @@
 @import "../../../style/icons";
-
-$sidebar-header: #dddddd;//#3367D6;//#3367D6;
-$sidebar-header-title: #4d4d4d;
-$sidebar-main: white; // #4285FA;
-$sidebar-divider: transparent;//#97BCF9; //#d6dadc;
+@import "../../../style/theme";
 
 .sidebar-container {
   position: absolute;
   overflow: hidden;
-  /* left: 12px; right: 12px; top: 6px; bottom: 6px; */
-  left:0;
-  right:0;
-  bottom:0;
-  top:0;
-  //border-radius: 3px;
+  left: 8px; right: 8px; top: 6px; bottom: 6px;
+  border-radius: 3px;
   background-color: $sidebar-main;
 }
 
