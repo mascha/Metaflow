@@ -1,11 +1,11 @@
 <div #root class="splitpane">
-  <div #left class="splitpane-content left">
+  <div #left class="splitpane-content {{orientation == 'horizontal'? 'top': 'left'}}">
     <ng-content select="[left]"></ng-content>
   </div>
   <div #divider class="splitpane-divider {{orientation == 'horizontal'? 'horizontal': 'vertical'}}"
        (mousedown)="onMouseDown($event)">
   </div>
-  <div #right class="splitpane-content right">
+  <div #right class="splitpane-content {{orientation == 'horizontal'? 'bottom': 'right'}}">
     <ng-content select="[right]"></ng-content>
   </div>
 </div>

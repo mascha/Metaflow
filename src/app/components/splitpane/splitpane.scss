@@ -4,16 +4,35 @@
   position: absolute;
   overflow: hidden;
   background-color: $splitpane-content;
+
   top: 0;
   bottom: 0;
 
-  &.left {
+  &.top {
+    top: 0;
+    right: 0;
     left: 0;
+    width: 100%;
+  }
+
+  &.bottom {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width:100%;
+  }
+
+  &.left {
+    top: 0;
+    left: 0;
+    bottom: 0;
     padding-right: 0;
   }
 
   &.right {
     right: 0;
+    top: 0;
+    bottom: 0;
     padding-left: $splitpane-divider-width;
   }
 }
@@ -38,12 +57,23 @@
     top: 0;
     bottom: 0;
     width: 5px;
+
+    &:before {
+      width: 10px;
+      top: 50%;
+      left: -2.3px;
+      margin-top: -15px;
+    }
   }
 
   &.horizontal {
     left: 0;
     right: 0;
     height: 5px;
+
+    &:before {
+      left: 50%;
+    }
   }
 
   &.left {
@@ -57,15 +87,11 @@
   &:before {
     content: '• • •';
     color: $splitpane-divider-handle;
-    width: 10px;
     position: absolute;
-    top: 50%;
-    left: -2.3px;
     font-weight: 300;
     line-height: 6px;
     font-size: 11px;
     text-align: center;
-    margin-top: -15px;
   }
 
   &:hover {

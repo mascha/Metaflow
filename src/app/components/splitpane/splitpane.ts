@@ -20,7 +20,7 @@ export class DoubleSplit {
     private vertical = true;
 
     ngAfterViewInit() {
-        this.vertical = (orientation !== 'horizontal');
+        this.vertical = (this.orientation !== 'horizontal');
         this.readjust(50);
     }
 
@@ -33,7 +33,6 @@ export class DoubleSplit {
         let page = this.vertical ? offs.x : offs.y;
         let upper = this.vertical ? elem.offsetWidth : elem.offsetHeight;
         if (!upper) return;
-
         page = ((page < 0)?  0 : ((page > upper) ? upper : page));
         let adjusted = Math.round(page/upper * 99);
         this.readjust(adjusted);
@@ -67,8 +66,9 @@ export class DoubleSplit {
             renderer.setElementStyle(this.left.nativeElement, styleW, pos);
             renderer.setElementStyle(this.div.nativeElement, styleL, pos);
             renderer.setElementStyle(this.right.nativeElement, styleL, pos);
-            renderer.setElementStyle(this.right.nativeElement, styleW, dia);
+            //renderer.setElementStyle(this.right.nativeElement, styleW, dia);
             this.last = left;
+            HTML.dispatchResizeEvent();
         }
     }
     
