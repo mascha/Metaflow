@@ -19,7 +19,9 @@ export class DoubleSplit {
 
     private moveHandler = (event: MouseEvent) => {
         HTML.block(event);
-        let adjusted = Math.round(event.pageX/window.innerWidth*100);
+        let host = this.element.nativeElement.getBoundingClientRect();
+        let left = Math.max(host.x, Math.min(event.pageX, host.x + host.width));
+        let adjusted = Math.round(left/host.width);
         this.readjust(adjusted);
     };
 
@@ -36,9 +38,8 @@ export class DoubleSplit {
     }
 
     /**
-     *
+     * Readjust splitpane positions.
      * @param l
-     * @param r
      */
     readjust(l: number) {
         const renderer = this.renderer;
@@ -48,14 +49,17 @@ export class DoubleSplit {
 
         if (doLeft) {
             let leftStyle = `${adjLeft}%`;
+            let widthStyle = `${100 - adjLeft}%`;
             renderer.setElementStyle(this.leftContent.nativeElement, 'width', leftStyle);
             renderer.setElementStyle(this.left.nativeElement,'left', leftStyle);
             renderer.setElementStyle(this.rightContent.nativeElement, 'left', leftStyle);
+            renderer.setElementStyle(this.rightContent.nativeElement, 'width', widthStyle);
             this.lastLeft = adjLeft;
         }
     }
     
-    constructor(@Inject(Renderer) private renderer: Renderer) {}
+    constructor(@Inject(Renderer) private renderer: Renderer,
+                @Inject(ElementRef) private element: ElementRef) {}
 }
 
 /**

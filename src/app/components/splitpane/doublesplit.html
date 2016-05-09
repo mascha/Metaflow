@@ -2,14 +2,16 @@
   <div #leftContent
        class="splitpane-content left"
        style="width: 50%">
+    <ng-content select="[left]"></ng-content>
   </div>
   <div #divider
        class="splitpane-divider"
        style="left: 50%"
-       (mouseup)="onMouseUp($event)">
+       (mousedown)="onMouseDown($event)">
   </div>
   <div #rightContent
        class="splitpane-content right"
        style="left:50%; width: 50%">
+    <ng-content select="[right]"></ng-content>
   </div>
 </div>
