@@ -1,17 +1,15 @@
 <div class="splitpane">
   <div #leftContent
-       class="splitpane-content"
-       style="width: 20%">
+       class="splitpane-content left"
+       style="width: 50%">
   </div>
   <div #divider
        class="splitpane-divider"
-       style="margin-left: -5px; width: 5px; left: 20%"
-       (mousedown)="onMouseDown($event)"
-       (mousemove)="onMouseMove($event)"
+       style="left: 50%"
        (mouseup)="onMouseUp($event)">
   </div>
   <div #rightContent
-       class="splitpane-content"
-       style="left:20%; width: 80%">
+       class="splitpane-content right"
+       style="left:50%; width: 50%">
   </div>
 </div>
