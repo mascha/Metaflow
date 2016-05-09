@@ -21,10 +21,10 @@ export class DoubleSplit {
 
     ngAfterViewInit() {
         this.vertical = (this.orientation !== 'horizontal');
-        this.readjust(50);
+        this.readjust(66);
     }
 
-    private last = 50;
+    private last: number;
 
     private moveHandler = (event: MouseEvent) => {
         HTML.block(event);
@@ -58,15 +58,13 @@ export class DoubleSplit {
         let left = (l < 0)? 0 : (l > 100) ? 100 : l;
         let doLeft = Math.abs(this.last - left) > 0;
 
-        if (doLeft) {
+        if (doLeft || !this.last) {
             let styleL = this.vertical? 'left' : 'top';
             let styleW = this.vertical? 'width' : 'height';
             let pos = `${left}%`;
-            let dia = `${100 - left}%`;
             renderer.setElementStyle(this.left.nativeElement, styleW, pos);
             renderer.setElementStyle(this.div.nativeElement, styleL, pos);
             renderer.setElementStyle(this.right.nativeElement, styleL, pos);
-            //renderer.setElementStyle(this.right.nativeElement, styleW, dia);
             this.last = left;
             HTML.dispatchResizeEvent();
         }
