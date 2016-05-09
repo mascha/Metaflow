@@ -1,19 +1,22 @@
-<div class="splitpane">
+<div #root class="splitpane">
   <div #leftContent class="splitpane-content left"
        style="width: 20%">
     <ng-content select="[left]"></ng-content>
   </div>
-  <div #leftDivider class="splitpane-divider left" style="left: 20%"
+  <div #leftDivider class="splitpane-divider left vertical"
+       style="left: 20%"
        (mousedown)="onMouseDown($event, true)">
   </div>
   <div #centerContent
        class="splitpane-content center" style="left:20%; width: 60%">
     <ng-content select="[center]"></ng-content>
   </div>
-  <div #rightDivider class="splitpane-divider right" style="left: 80%"
+  <div #rightDivider class="splitpane-divider right vertical"
+       style="left: 80%"
        (mousedown)="onMouseDown($event, false)">
   </div>
-  <div #rightContent class="splitpane-content right" style="left: 80%">
+  <div #rightContent class="splitpane-content right"
+       style="left: 80%">
     <ng-content select="[right]"></ng-content>
   </div>
 </div>

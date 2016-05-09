@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild, Renderer, Inject} from "@angular/core";
+import {Component, ElementRef, ViewChild, Renderer, Inject, Input} from "@angular/core";
 import HTML from "../../common/html";
 
 /**
@@ -11,17 +11,31 @@ import HTML from "../../common/html";
 })
 export class DoubleSplit {
 
-    @ViewChild('leftContent') leftContent: ElementRef;
-    @ViewChild('divider') left: ElementRef;
-    @ViewChild('rightContent') rightContent: ElementRef;
+    @ViewChild('root') root: ElementRef;
+    @ViewChild('left') left: ElementRef;
+    @ViewChild('divider') div: ElementRef;
+    @ViewChild('right') right: ElementRef;
+    @Input() orientation: string;
     
-    private lastLeft = 50;
+    private vertical = true;
+
+    ngAfterViewInit() {
+        this.vertical = (orientation !== 'horizontal');
+        this.readjust(50);
+    }
+
+    private last = 50;
 
     private moveHandler = (event: MouseEvent) => {
         HTML.block(event);
-        let host = this.element.nativeElement.getBoundingClientRect();
-        let left = Math.max(host.x, Math.min(event.pageX, host.x + host.width));
-        let adjusted = Math.round(left/host.width);
+        let elem = this.root.nativeElement;
+        let offs = HTML.getOffset(elem, event);
+        let page = this.vertical ? offs.x : offs.y;
+        let upper = this.vertical ? elem.offsetWidth : elem.offsetHeight;
+        if (!upper) return;
+
+        page = ((page < 0)?  0 : ((page > upper) ? upper : page));
+        let adjusted = Math.round(page/upper * 99);
         this.readjust(adjusted);
     };
 
@@ -32,7 +46,6 @@ export class DoubleSplit {
     };
 
     onMouseDown(event: MouseEvent) {
-        HTML.block(event);
         document.addEventListener('mousemove', this.moveHandler, true);
         document.addEventListener('mouseup', this.upHandler, true);
     }
@@ -44,22 +57,22 @@ export class DoubleSplit {
     readjust(l: number) {
         const renderer = this.renderer;
         let left = (l < 0)? 0 : (l > 100) ? 100 : l;
-        let adjLeft = Math.min(left, 100);
-        let doLeft = Math.abs(this.lastLeft - adjLeft) > 0;
+        let doLeft = Math.abs(this.last - left) > 0;
 
         if (doLeft) {
-            let leftStyle = `${adjLeft}%`;
-            let widthStyle = `${100 - adjLeft}%`;
-            renderer.setElementStyle(this.leftContent.nativeElement, 'width', leftStyle);
-            renderer.setElementStyle(this.left.nativeElement,'left', leftStyle);
-            renderer.setElementStyle(this.rightContent.nativeElement, 'left', leftStyle);
-            renderer.setElementStyle(this.rightContent.nativeElement, 'width', widthStyle);
-            this.lastLeft = adjLeft;
+            let styleL = this.vertical? 'left' : 'top';
+            let styleW = this.vertical? 'width' : 'height';
+            let pos = `${left}%`;
+            let dia = `${100 - left}%`;
+            renderer.setElementStyle(this.left.nativeElement, styleW, pos);
+            renderer.setElementStyle(this.div.nativeElement, styleL, pos);
+            renderer.setElementStyle(this.right.nativeElement, styleL, pos);
+            renderer.setElementStyle(this.right.nativeElement, styleW, dia);
+            this.last = left;
         }
     }
     
-    constructor(@Inject(Renderer) private renderer: Renderer,
-                @Inject(ElementRef) private element: ElementRef) {}
+    constructor(@Inject(Renderer) private renderer: Renderer) {}
 }
 
 /**
@@ -72,12 +85,15 @@ export class DoubleSplit {
 })
 export class TripleSplit {
 
+    @ViewChild('root') root: ElementRef;
     @ViewChild('leftContent') leftContent: ElementRef;
     @ViewChild('leftDivider') leftDiv: ElementRef;
     @ViewChild('rightDivider') rightDiv: ElementRef;
     @ViewChild('rightContent') rightContent: ElementRef;
     @ViewChild('centerContent') center: ElementRef;
 
+    @Input('vertical') vertical: boolean;
+    
     private lastLeft = 20;
     private lastRight = 80;
     private left: boolean;
@@ -100,7 +116,6 @@ export class TripleSplit {
 
     onMouseDown(event: MouseEvent, left: boolean) {
         this.left = left;
-        HTML.block(event);
         document.addEventListener('mousemove', this.moveHandler, true);
         document.addEventListener('mouseup', this.upHandler, true);
     }

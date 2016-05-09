@@ -3,10 +3,9 @@
 .splitpane-content {
   position: absolute;
   overflow: hidden;
+  background-color: $splitpane-content;
   top: 0;
   bottom: 0;
-
-  background-color: $splitpane-content;
 
   &.left {
     left: 0;
@@ -31,19 +30,28 @@
 .splitpane-divider {
   background-color: $splitpane-divider;
   position: absolute;
-  top: 0;
-  bottom: 0;
   box-sizing: border-box;
   transition: background .133s ease-out;
   z-index: 100;
-  width: 5px;
+
+  &.vertical {
+    top: 0;
+    bottom: 0;
+    width: 5px;
+  }
+
+  &.horizontal {
+    left: 0;
+    right: 0;
+    height: 5px;
+  }
 
   &.left {
-   margin-left: -5px;
+    margin-left: -5px;
   }
 
   &.right {
-    margin-left: -1px;
+     margin-left: -1px;
   }
 
   &:before {
@@ -62,9 +70,12 @@
 
   &:hover {
     background-color: $splitpane-divider-hover;
-    cursor: col-resize;
 
     &.vertical {
+      cursor: col-resize;
+    }
+
+    &.horizontal {
       cursor: row-resize;
     }
 
