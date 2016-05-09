@@ -1,11 +1,18 @@
+/* Tool sidebar design */
 $sidebar-header: #dddddd !default;//#3367D6;//#3367D6;
 $sidebar-header-title: #4d4d4d !default;
 $sidebar-main: white !default; // #4285FA;
 $sidebar-divider: transparent !default;//#97BCF9; //#d6dadc;
 
+/* Splitpane design */
 $splitpane-divider-width: 5px;
-$splitpane-divider-color: #cccccc !default;
-$splitpane-divider-color-hover: #999 !default;
+$splitpane-divider-color: transparent !default;
+$splitpane-divider-color-hover: #999999 !default;
 $splitpane-content-color: #eeeeee !default;
 $splitpane-divider-handle: #aaaaaa !default;
 $splitpane-divider-handle-hover: #eeeeee !default;
+
+/* Navigation pane */
+$navigation-color: #1B1C1D !default;
+$navigation-border: darkblue !default;
+$show-navigation-border: false !default;

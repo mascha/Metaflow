@@ -39,10 +39,12 @@
   width: 5px;
 
   &.left {
-    margin-left: -5px;
+   margin-left: -5px;
   }
 
-  &.right {  }
+  &.right {
+    margin-left: -1px;
+  }
 
   &:before {
     content: '• • •';

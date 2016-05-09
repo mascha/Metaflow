@@ -232,6 +232,18 @@ export const enum ModelChange {
     SHAPE    = 5,
 }
 
+
+/**
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+export class Label {
+    text: string;
+    lower: number;
+    upper: number;
+    priority: number;
+}
+
 /**
  * Base viewmodel class. Supports decorations, styling positioning.
  * 

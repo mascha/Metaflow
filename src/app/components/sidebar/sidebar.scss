@@ -4,9 +4,16 @@
 .sidebar-container {
   position: absolute;
   overflow: hidden;
-  left: 8px; right: 8px; top: 6px; bottom: 6px;
   border-radius: 3px;
   background-color: $sidebar-main;
+
+  &.left {
+    left: 5px; right: 5px; top: 6px; bottom: 6px;
+  }
+
+  &.right {
+    left: 5px; right: 5px; top: 6px; bottom: 6px;
+  }
 }
 
 .sidebar-header {
@@ -28,6 +35,7 @@
     line-height: 1.2em;
     font-weight: bold;
     text-align: center;
+    text-overflow-ellipsis: ellipsis;
     color: $sidebar-header-title;
   }
 }

@@ -1,6 +1,4 @@
-$navigation-color: #1B1C1D;
-$navigation-border: darkblue;
-$show-border: false;
+@import "../../../style/theme";
 
 .navigation-container {
   position: absolute;
@@ -8,10 +6,11 @@ $show-border: false;
   left:0;
   right:0;
   bottom:0;
-  /*
-  border-color: $navigation-border;
-  border-bottom: 1px solid;
-  */
+
+  @if $show-navigation-border {
+    border-color: $navigation-border;
+    border-bottom: 1px solid;
+  }
   background-color: $navigation-color;
 }
 

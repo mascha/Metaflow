@@ -120,4 +120,13 @@ export default class HTML {
         event.stopPropagation();
         event.preventDefault();
     }
+
+    /**
+     * Force the document window to dispatch a resize event.
+     */
+    static dispatchResizeEvent() {
+        let evt = document.createEvent('UIEvents');
+        evt.initUIEvent('resize', true, false, window, 0);
+        window.dispatchEvent(evt);
+    }
 }
