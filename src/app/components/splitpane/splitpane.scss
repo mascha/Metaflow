@@ -6,7 +6,7 @@
   top: 0;
   bottom: 0;
 
-  background-color: $splitpane-content-color;
+  background-color: $splitpane-content;
 
   &.left {
     left: 0;
@@ -29,7 +29,7 @@
 }
 
 .splitpane-divider {
-  background-color: $splitpane-divider-color;
+  background-color: $splitpane-divider;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -61,7 +61,7 @@
   }
 
   &:hover {
-    background-color: $splitpane-divider-color-hover;
+    background-color: $splitpane-divider-hover;
     cursor: col-resize;
 
     &.vertical {
