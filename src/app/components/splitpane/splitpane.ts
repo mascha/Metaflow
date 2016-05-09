@@ -3,6 +3,8 @@ import HTML from "../../common/html";
 
 /**
  * Simple split pane.
+ * @author Martin Schade
+ * @since 1.0.0
  */
 @Component({
     selector: 'double-split',
@@ -21,7 +23,7 @@ export class DoubleSplit {
 
     ngAfterViewInit() {
         this.vertical = (this.orientation !== 'horizontal');
-        this.readjust(66);
+        this.readjust(69);
     }
 
     private last: number;
@@ -33,7 +35,7 @@ export class DoubleSplit {
         let page = this.vertical ? offs.x : offs.y;
         let upper = this.vertical ? elem.offsetWidth : elem.offsetHeight;
         if (!upper) return;
-        page = ((page < 0)?  0 : ((page > upper) ? upper : page));
+        page = ((page < 0)? 0 : ((page > upper) ? upper : page));
         let adjusted = Math.round(page/upper * 99);
         this.readjust(adjusted);
     };
@@ -75,6 +77,8 @@ export class DoubleSplit {
 
 /**
  * Three column split pane.
+ * @author Martin Schade
+ * @since 1.0.0
  */
 @Component({
     selector: 'triple-split',
@@ -92,8 +96,8 @@ export class TripleSplit {
 
     @Input('vertical') vertical: boolean;
     
-    private lastLeft = 20;
-    private lastRight = 80;
+    private lastLeft = 16;
+    private lastRight = 84;
     private left: boolean;
 
     private moveHandler = (event: MouseEvent) => {
@@ -111,6 +115,10 @@ export class TripleSplit {
         document.removeEventListener('mousemove', this.moveHandler, true);
         document.removeEventListener('mouseup', this.upHandler, true);
     };
+    
+    ngAfterViewInit() {
+        this.readjust(15, 85);
+    }
 
     onMouseDown(event: MouseEvent, left: boolean) {
         this.left = left;

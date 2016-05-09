@@ -3,15 +3,13 @@ $navigation-color: royalblue;
 .navigation {
   position: absolute;
   overflow: hidden;
-  z-index: 1000;
   list-style: none;
-  top: 6px;
-  height: 19px;
-  left: 19px;
-  width: 260px;
+  top: 0;
+  height: 21px;
+  left: 0;
 
   background-color: $navigation-color;
-  border-radius: 6px;
+  border-radius: 3px;
 
   li {
     text-decoration: none;

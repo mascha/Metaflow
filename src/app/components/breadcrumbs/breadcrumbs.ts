@@ -25,4 +25,8 @@ export default class Breadcrumbs {
         }
         this.segments.reverse();
     }
+
+    constructor() {
+        this.segments = [new ViewGroup('Model',0,0,0,0,0)]
+    }
 }

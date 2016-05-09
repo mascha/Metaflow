@@ -1,13 +1,8 @@
-$grid-lines: lightgray;
-$grid-color: white;//#e5e5e5; // #4285FA;//darkblue;//rgb(38, 42, 50);
+@import '../../../style/theme';
 
 #diagram-canvas {
   position: absolute;
   overflow: hidden;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  border: 0;
   top: 0;
   left: 0;
   right: 0;
@@ -17,8 +12,6 @@ $grid-color: white;//#e5e5e5; // #4285FA;//darkblue;//rgb(38, 42, 50);
 .layer {
   position: absolute;
   overflow: hidden;
-  height: 100%;
-  width: 100%;
   left: 0;
   top: 0;
   right: 0;
@@ -27,7 +20,7 @@ $grid-color: white;//#e5e5e5; // #4285FA;//darkblue;//rgb(38, 42, 50);
 
 .grid {
   color: $grid-lines;
-  background-color: $grid-color;
+  background-color: $grid-fill;
 }
 
 .border {
