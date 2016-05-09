@@ -1,7 +1,5 @@
 @import "globals";
-
-$icon-hover: #111111;
-$icon-color: #999999;
+@import "theme";
 
 @mixin icon($position: before, $icon: false, $styles: true) {
   @if $position == both {

@@ -24,7 +24,6 @@
   position: relative;
   overflow: hidden;
   min-height: 18px;
-
   background-color: $sidebar-header;
 
   .sidebar-header-title {
@@ -34,7 +33,7 @@
     font-size: 16px;
     line-height: 1.2em;
     font-weight: bold;
-    text-align: center;
+    text-align: left;
     text-overflow-ellipsis: ellipsis;
     color: $sidebar-header-title;
   }
