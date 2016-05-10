@@ -3,13 +3,9 @@ $sidebar-header: #dddddd !default;//#3367D6;//#3367D6;
 $sidebar-header-title: #4d4d4d !default;
 $sidebar-main: white !default; // #4285FA;
 $sidebar-divider: transparent !default;//#97BCF9; //#d6dadc;
-$sidebar-cards: false;
-
-$leftbar-width: 44px;
-$leftbar-fill: #151515;
+$sidebar-cards: false !default;
 
 /* Splitpane design */
-$splitpane-divider-width: 5px;
 $splitpane-divider: #dddddd !default;
 $splitpane-divider-hover: #999999 !default;
 $splitpane-content: #eeeeee !default;
@@ -19,12 +15,15 @@ $splitpane-divider-handle-hover: #eeeeee !default;
 /* Navigation bar */
 $navigation-container: #5f88ff !default;
 $navigation-border: darkblue !default;
-$navigation-height: 44px !default;
 $show-navigation-border: false !default;
 
+/* Left bar */
+$leftbar-fill: #1d1d1d !default;
+$leftbar-logo: mix($leftbar-fill, $navigation-container);
+
 /* Icons and glyphs */
-$icon-hover: #111111;
-$icon-color: #999999;
+$icon-hover: #111111 !default;
+$icon-color: #999999 !default;
 
 /* Grid fill and lines */
 $grid-lines: lightgray !default;

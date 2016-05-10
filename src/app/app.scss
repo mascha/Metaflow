@@ -1,5 +1,10 @@
 @import "../style/theme";
 
+/* Application structure */
+$leftbar-width: 44px !default;
+$navigation-height: 44px !default;
+$splitpane-divider-width: 5px !default;
+
 .header {
   position: absolute;
   overflow: hidden;
@@ -25,7 +30,6 @@
   top:0;
   width: $leftbar-width;
   bottom: 0;
-  background-color: $leftbar-fill;
 }
 
 .surface {

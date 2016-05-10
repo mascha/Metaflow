@@ -1,71 +1,24 @@
 @import "../../../style/icons";
 @import "../../../style/theme";
+@import "../../app";
 
-.sidebar-container {
+.leftbar-container {
   position: absolute;
   overflow: hidden;
-  border-radius: 3px;
-  background-color: $sidebar-main;
+  top:0;
+  bottom: 0;
+  left:0;
+  right:0;
 
-  @if $sidebar-cards {
-    &.left {
-      left: 5px; right: 5px; top: 5px; bottom: 5px;
-    }
+  background-color: $leftbar-fill;
 
-    &.right {
-      left: 5px; right: 5px; top: 5px; bottom: 5px;
-    }
-  } @else {
-     left: 0; right: 0; top: 0; bottom: 0;
+  .logo {
+    height: $navigation-height;
+    width: 100%;
+    background-color: $leftbar-logo;
   }
-}
 
-.sidebar-header {
-  box-sizing: border-box;
-  height: 30px;
-  padding: 8px 12px;
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-  min-height: 18px;
-  background-color: $sidebar-header;
+  .menu {
 
-  .sidebar-header-title {
-    margin-top: -2px;
-    margin-bottom: 0;
-    text-decoration: none;
-    font-size: 16px;
-    line-height: 1.2em;
-    font-weight: bold;
-    text-align: left;
-    text-overflow-ellipsis: ellipsis;
-    color: $sidebar-header-title;
-  }
-}
-
-.sidebar-divider {
-  background-color: $sidebar-divider;
-  border: 0;
-  color: $sidebar-divider;
-  height: 1px;
-  margin: 0;
-  width: 100%;
-}
-
-.sidebar-content {
-  width: 100%;
-  height:100%;
-}
-
-.sidebar-extras {
-
-  .sidebar-close-icon {
-    position: absolute;
-    right: 8px;
-    top: 6px;
-
-    @include icon(before, close) {
-      color: $icon-color;
-    }
   }
 }
