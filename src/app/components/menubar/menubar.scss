@@ -6,6 +6,13 @@
   font: $menu-font;
   height: 29px;
   outline: none;
-  position: relative;
   white-space: nowrap;
 }
+
+.menu-item {
+  padding: 0 12px 5px 0;
+  color: white;
+  text-align: left;
+  display: inline-block;
+}
+

@@ -9,4 +9,9 @@ import {MenuBar} from "../menubar/menubar";
 })
 export default class Headerbar {
     
+    projectName: string = "Diffusion Model";
+    
+    constructor() {
+        
+    }
 }
