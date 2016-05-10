@@ -1,8 +1,8 @@
 /* Tool sidebar design */
-$sidebar-header: #dddddd !default;//#3367D6;//#3367D6;
+$sidebar-header: #dddddd !default;
 $sidebar-header-title: #4d4d4d !default;
-$sidebar-main: white !default; // #4285FA;
-$sidebar-divider: transparent !default;//#97BCF9; //#d6dadc;
+$sidebar-main: white !default;
+$sidebar-divider: transparent !default;
 $sidebar-cards: false !default;
 
 /* Splitpane design */
@@ -13,13 +13,13 @@ $splitpane-divider-handle: #aaaaaa !default;
 $splitpane-divider-handle-hover: #eeeeee !default;
 
 /* Navigation bar */
-$navigation-container: #5f88ff !default;
+$navigation-fill: #3165AE !default;
 $navigation-border: darkblue !default;
 $show-navigation-border: false !default;
 
 /* Left bar */
-$leftbar-fill: #1d1d1d !default;
-$leftbar-logo: mix($leftbar-fill, $navigation-container);
+$leftbar-fill: #0d0e1b !default;
+$leftbar-logo: #212637 !default;
 
 /* Icons and glyphs */
 $icon-hover: #111111 !default;
