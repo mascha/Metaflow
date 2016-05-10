@@ -3,25 +3,31 @@ $sidebar-header: #dddddd !default;//#3367D6;//#3367D6;
 $sidebar-header-title: #4d4d4d !default;
 $sidebar-main: white !default; // #4285FA;
 $sidebar-divider: transparent !default;//#97BCF9; //#d6dadc;
+$sidebar-cards: false;
+
+$leftbar-width: 44px;
+$leftbar-fill: #151515;
 
 /* Splitpane design */
 $splitpane-divider-width: 5px;
-$splitpane-divider: transparent !default;
+$splitpane-divider: #dddddd !default;
 $splitpane-divider-hover: #999999 !default;
 $splitpane-content: #eeeeee !default;
 $splitpane-divider-handle: #aaaaaa !default;
 $splitpane-divider-handle-hover: #eeeeee !default;
 
-/* Navigation pane */
+/* Navigation bar */
 $navigation-container: #5f88ff !default;
 $navigation-border: darkblue !default;
-$navigation-height: 48px !default;
+$navigation-height: 44px !default;
 $show-navigation-border: false !default;
 
-/* Icons */
+/* Icons and glyphs */
 $icon-hover: #111111;
 $icon-color: #999999;
 
-/* Grid */
+/* Grid fill and lines */
 $grid-lines: lightgray !default;
 $grid-fill: white !default;
+
+/* Interactive border */

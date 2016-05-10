@@ -17,3 +17,22 @@
   left:0;
   bottom: 0;
 }
+
+.leftbar {
+  position: absolute;
+  overflow: hidden;
+  left:0;
+  top:0;
+  width: $leftbar-width;
+  bottom: 0;
+  background-color: $leftbar-fill;
+}
+
+.surface {
+  position: absolute;
+  overflow: hidden;
+  left:$leftbar-width;
+  top:0;
+  right:0;
+  bottom:0;
+}
