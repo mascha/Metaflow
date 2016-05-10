@@ -1,4 +1,5 @@
 @import "../../../style/theme";
+@import "../../app";
 
 .navigation-container {
   position: absolute;
@@ -7,6 +8,33 @@
   right:0;
   bottom:0;
 
+  .navigation-upper {
+    position: absolute;
+    top:0;
+    bottom: 66%;
+    left:0;
+    right:0;
+    margin-left: 12px;
+    margin-top: 2px;
+
+    .navigation-title {
+      margin-top: 8px;
+      margin-bottom: 0;
+      font-weight: normal;
+      color: $navigation-title;
+      line-height: 22px;
+    }
+  }
+
+  .navigation-lower {
+    position: absolute;
+    top: 66%;
+    bottom: 0;
+    left:0;
+    right:0;
+    margin-left: 12px;
+  }
+
   @if $show-navigation-border {
     border-color: $navigation-border;
     border-bottom: 1px solid;
@@ -14,3 +42,9 @@
   background-color: $navigation-fill;
 }
 
+
+.toolbar {
+  button {
+    background-color: $toolbar-button-fill;
+  }
+}
