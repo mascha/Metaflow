@@ -1,0 +1,11 @@
+@import "../../../style/theme";
+
+.menu-bar {
+  cursor: default;
+  display: inline-block;
+  font: $menu-font;
+  height: 29px;
+  outline: none;
+  position: relative;
+  white-space: nowrap;
+}

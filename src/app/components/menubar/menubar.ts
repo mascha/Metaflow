@@ -1,3 +1,10 @@
-/**
- * Created by Martin Schade on 10.05.2016.
- */
+import {Component} from '@angular/core';
+
+@Component({
+    selector: 'menu',
+    template: require('./menubar.html'),
+    styles: [require('./menubar.scss')]
+})
+export class MenuBar {
+    
+}

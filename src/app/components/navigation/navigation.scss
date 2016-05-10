@@ -21,8 +21,13 @@
       margin-top: 8px;
       margin-bottom: 0;
       font-weight: normal;
+      font-size: 18px;
       color: $navigation-title;
       line-height: 22px;
+      max-width: 200px;
+      text-overflow: ellipsis;
+      z-index: 1;
+      position: absolute;
     }
   }
 
