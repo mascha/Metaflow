@@ -7,9 +7,9 @@ import PaletteRegistry from "../../../services/palettes";
     styles: [require('./palette.scss')]
 })
 export default class Palette {
-    catgeories: Array<string>;
+    categories: Array<string>;
     
     constructor(@Inject(PaletteRegistry) registry: PaletteRegistry) {
-        this.catgeories = registry.getPalettes();
+        this.categories = registry.getPalettes();
     }
 }

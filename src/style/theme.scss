@@ -17,6 +17,7 @@ $menu-font: 13px Arial,sans-serif !default;
 
 /* Toolbar */
 $toolbar-button-fill: #0C2C53 !default;
+$toolbar-fill: #efefef !default;
 
 /* Branding */
 $branding-fill: #212637 !default;
@@ -25,7 +26,9 @@ $branding-fill: #212637 !default;
 $navigation-fill: #3165AE !default;
 $navigation-border: darkblue !default;
 $navigation-title: white !default;
-$show-navigation-border: false !default;
+$show-navigation-border: true !default;
+
+$instruments-pause: lightgray !default;
 
 /* Left bar */
 $leftbar-fill: #3165AE !default;

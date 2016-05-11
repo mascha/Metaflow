@@ -4,6 +4,7 @@
 $leftbar-width: 48px !default;
 $navigation-height: 60px !default;
 $splitpane-divider-width: 5px !default;
+$toolbar-height: 32px;
 
 .header {
   position: absolute;
@@ -17,7 +18,7 @@ $splitpane-divider-width: 5px !default;
 .main {
   position: absolute;
   overflow: hidden;
-  top:$navigation-height;
+  top: ($navigation-height + $toolbar-height + 1);
   right:0;
   left:0;
   bottom: 0;
@@ -39,4 +40,17 @@ $splitpane-divider-width: 5px !default;
   top:0;
   right:0;
   bottom:0;
+}
+
+.toolbar {
+  position: absolute;
+  overflow: hidden;
+  top:$navigation-height;
+  left:0;
+  right:0;
+  height: $toolbar-height;
+  min-height: $toolbar-height;
+  border-bottom: solid 1px darken($toolbar-fill, 12);
+  background: $toolbar-fill;
+  padding: 0 44px 0 44px;
 }
