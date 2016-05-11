@@ -4,10 +4,11 @@
 .sidebar-container {
   position: absolute;
   overflow: hidden;
-  border-radius: 3px;
   background-color: $sidebar-main;
 
   @if $sidebar-cards {
+    border-radius: 3px;
+
     &.left {
       left: 5px; right: 5px; top: 5px; bottom: 5px;
     }

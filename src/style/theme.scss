@@ -12,20 +12,23 @@ $splitpane-content: #eeeeee !default;
 $splitpane-divider-handle: #aaaaaa !default;
 $splitpane-divider-handle-hover: #eeeeee !default;
 
+/* Menu bar */
+$menu-font: 13px Arial,sans-serif !default;
+
+/* Toolbar */
+$toolbar-button-fill: #0C2C53 !default;
+
+/* Branding */
+$branding-fill: #212637 !default;
+
 /* Navigation bar */
 $navigation-fill: #3165AE !default;
 $navigation-border: darkblue !default;
 $navigation-title: white !default;
 $show-navigation-border: false !default;
 
-/* Menu bar */
-$menu-font: 13px Arial,sans-serif;
-
-/* Toolbar */
-$toolbar-button-fill: #0C2C53 !default;
-
 /* Left bar */
-$leftbar-fill: #0d0e1b !default;
+$leftbar-fill: #3165AE !default;
 $leftbar-logo: #212637 !default;
 
 /* Icons and glyphs */

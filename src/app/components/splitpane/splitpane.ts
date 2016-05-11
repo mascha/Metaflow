@@ -20,12 +20,7 @@ export class DoubleSplit {
     @Input() orientation: string;
     
     private vertical = true;
-
-    ngAfterViewInit() {
-        this.vertical = (this.orientation !== 'horizontal');
-        this.readjust(69);
-    }
-
+    private visible = false;
     private last: number;
 
     private moveHandler = (event: MouseEvent) => {
@@ -46,6 +41,17 @@ export class DoubleSplit {
         document.removeEventListener('mouseup', this.upHandler, true);
     };
 
+    ngAfterViewInit() {
+        this.vertical = (this.orientation !== 'horizontal');
+        this.readjust(this.visible ? 69: 100);
+    }
+
+    toggleVisibility() {
+        this.visible = !this.visible;
+        document.removeEventListener('mousemove', this.moveHandler, true);
+        document.removeEventListener('mouseup', this.upHandler, true);
+    }
+
     onMouseDown(event: MouseEvent) {
         document.addEventListener('mousemove', this.moveHandler, true);
         document.addEventListener('mouseup', this.upHandler, true);
@@ -55,18 +61,21 @@ export class DoubleSplit {
      * Readjust splitpane positions.
      * @param l
      */
-    readjust(l: number) {
+    private readjust(l: number) {
         const renderer = this.renderer;
         let left = (l < 0)? 0 : (l > 100) ? 100 : l;
         let doLeft = Math.abs(this.last - left) > 0;
 
         if (doLeft || !this.last) {
-            let styleL = this.vertical? 'left' : 'top';
-            let styleW = this.vertical? 'width' : 'height';
+            let position = this.vertical? 'left' : 'top';
+            let expanse = this.vertical? 'width' : 'height';
             let pos = `${left}%`;
-            renderer.setElementStyle(this.left.nativeElement, styleW, pos);
-            renderer.setElementStyle(this.div.nativeElement, styleL, pos);
-            renderer.setElementStyle(this.right.nativeElement, styleL, pos);
+
+            renderer.setElementStyle(this.left.nativeElement, expanse, pos);
+            if (this.visible) {
+                renderer.setElementStyle(this.div.nativeElement, position, pos);
+                renderer.setElementStyle(this.right.nativeElement, position, pos);
+            }
             this.last = left;
             HTML.dispatchResizeEvent();
         }

@@ -35,7 +35,7 @@ $splitpane-divider-width: 5px !default;
 .surface {
   position: absolute;
   overflow: hidden;
-  left:$leftbar-width;
+  left: 0;// $leftbar-width;
   top:0;
   right:0;
   bottom:0;

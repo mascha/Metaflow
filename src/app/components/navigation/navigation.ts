@@ -7,9 +7,15 @@ import {MenuBar} from "../menubar/menubar";
     template: require('./navigation.html'),
     directives: [MenuBar]
 })
-export default class Headerbar {
+export default class Navigation {
     
     projectName: string = "Diffusion Model";
+    favorite: boolean = false;
+    showBranding: boolean = true;
+
+    onFavoriteClick() {
+        this.favorite = !this.favorite;
+    }
     
     constructor() {
         

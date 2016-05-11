@@ -159,8 +159,8 @@ export default class Border implements ICameraObserver {
     }
 
     private updateCache() {
-        this.width  = this.camera.visualWidth;
-        this.height = this.camera.visualHeight;
+        this.width  = Math.ceil(this.camera.visualWidth);
+        this.height = Math.ceil(this.camera.visualHeight);
         this.halfW  = this.width / 2.0;
         this.halfH  = this.height / 2.0;
         this.middle = this.border / 2.0;
