@@ -21,7 +21,7 @@ import '../style/globals.scss';
   template: require('./app.html')
 })
 export class App {
-  NAME = "Metaflow ~/bass/model.sd";
+  NAME = "Metaflow";
 
   constructor() {
     document.title = this.NAME;

@@ -1,0 +1,20 @@
+@mixin icon($position: before, $icon: false, $styles: true) {
+  @if $position == both {
+    $position: 'before, &:after';
+  }
+
+  &:#{$position} {
+    @if $icon {
+      content: $icon;
+    }
+    @if $styles {
+      display: inline-block;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-align: center;
+      text-decoration: none;
+      font: normal normal normal 18px/1 "Material Design Icons";
+    }
+    @content;
+  }
+}

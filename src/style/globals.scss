@@ -5,14 +5,8 @@
 $mdi-font-path: '~mdi/fonts';
 @import "~mdi/scss/materialdesignicons.scss";
 
-html {
-  background:url('../public/img/pattern.png') no-repeat center center;
-  min-height:100%;
-  background-size:cover;
-}
-
 body {
   color: #4d4d4d;
-  font: 14px "Helvetica Neue", Arial,Helvetica,sans-serif;
+  font: 14px "Helvetica Neue",Arial,Helvetica,sans-serif;
   line-height: 18px;
 }

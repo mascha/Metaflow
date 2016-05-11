@@ -1,4 +1,5 @@
 @import "../../../style/theme";
+@import "../../../style/mixins";
 
 .sidebar-container {
   position: absolute;
@@ -64,7 +65,7 @@
     right: 8px;
     top: 6px;
 
-    @include icon(before, close) {
+    @include icon(before, '\f156') {
       color: $icon-color;
     }
   }

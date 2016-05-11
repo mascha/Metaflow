@@ -1,10 +1,7 @@
 @import "../style/theme";
-
-/* Application structure */
-$leftbar-width: 48px !default;
-$navigation-height: 60px !default;
-$splitpane-divider-width: 5px !default;
-$toolbar-height: 32px;
+@import "../style/variables";
+@import "../style/mixins";
+@import "../style/globals";
 
 .header {
   position: absolute;
@@ -48,42 +45,45 @@ $toolbar-height: 32px;
   top: $navigation-height;
   left:0;
   right:0;
-  height: $toolbar-height;
-  min-height: $toolbar-height;
+  height: $toolbar-height - 6px;
   border-bottom: solid 1px darken($toolbar-fill, 12);
   background-color: $toolbar-fill;
-  padding: 8px 44px 0 44px;
+  padding-top: 6px;
+  padding-left: ($leftbar-width + $navigation-branding-inset);
   white-space: nowrap;
 }
 
 .toolbar-button {
   border-radius: 2px;
-  background: 0;
   border: 1px solid transparent;
   height: 24px;
-  padding: 0 6px;
+  padding-right: 12px;
   line-height: 24px;
   list-style: none;
   text-decoration: none;
   vertical-align: middle;
   cursor: default;
   display: inline;
+
+  &.before {
+    color: $toolbar-button-fill;
+  }
+
+  &:hover {
+    &:before {
+      color: $toolbar-button-hover;
+    }
+  }
 }
 
 .undo {
-  @include icon(before, undo) {
-    color: $toolbar-button-fill;
-  }
+  @include icon(before, '\F54C')
 }
 
 .redo {
-  @include icon(before, redo) {
-    color: $toolbar-button-fill;
-  }
+  @include icon(before, '\F44E')
 }
 
 .layers {
-  @include icon(before, layers) {
-    color: $toolbar-button-fill;
-  }
+  @include icon(before, '\F328')
 }

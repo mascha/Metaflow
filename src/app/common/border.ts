@@ -100,7 +100,6 @@ export default class Border implements ICameraObserver {
         const c = this.brush;
         
         c.fillStyle = 'cornflowerblue';
-        //c.strokeStyle = 'lightgrey';
         c.globalAlpha = 1.0;
 
         let proxies = this.proxies;

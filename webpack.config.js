@@ -1,4 +1,3 @@
-// Helper: root(), and rootDir() are defined at the bottom
 var path = require('path');
 var webpack = require('webpack');
 
@@ -31,7 +30,7 @@ module.exports = function makeWebpackConfig() {
    * Type of sourcemap to use per build type
    */
   if (isTest) {
-    config.devtool = 'inline-source-map';
+    config.devtool = 'inline-eval-cheap-source-map';
   } else if (isProd) {
     config.devtool = 'source-map';
   } else {

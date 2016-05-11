@@ -1,5 +1,6 @@
 @import "../../../style/theme";
-@import "../../app";
+@import "../../../style/variables";
+@import "../../../style/mixins";
 
 .navigation-container {
   position: absolute;
@@ -24,7 +25,7 @@
     left: $leftbar-width;
     // right: 0;
     width: 33%;
-    margin-left: 12px;
+    margin-left: $navigation-branding-inset;
     margin-top: 2px;
 
     .navigation-title {
@@ -40,13 +41,13 @@
       position: absolute;
       cursor: pointer;
 
-      @include icon(after, star-outline) {
+      @include icon(after, '\f4D2') {
         color: white;
         margin-left: 10px;
       }
 
       &.starred {
-        @include icon(after, star) {
+        @include icon(after, '\f4CE') {
           color: goldenrod;
           margin-left: 10px ;
         }
@@ -60,7 +61,7 @@
     bottom: 0;
     left: $leftbar-width;
     right:0;
-    margin-left: 12px;
+    margin-left: $navigation-branding-inset;
 
     // same line layout
     white-space: nowrap;
@@ -85,7 +86,7 @@
     }
 
     a {
-      @include icon(before, backburger) {
+      @include icon(before,'\f06D') {
         color: $navigation-fill;
         width: 100%;
         font-size: 32px;
