@@ -27,6 +27,6 @@ export default class Breadcrumbs {
     }
 
     constructor() {
-        this.segments = [new ViewGroup('Model',0,0,0,0,0)]
+        this.segments = [new ViewGroup('Model',0,0,0,0,0)];
     }
 }

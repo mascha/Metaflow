@@ -1,5 +1,4 @@
 @import "../style/theme";
-@import "../style/icons";
 
 /* Application structure */
 $leftbar-width: 48px !default;
@@ -52,7 +51,7 @@ $toolbar-height: 32px;
   height: $toolbar-height;
   min-height: $toolbar-height;
   border-bottom: solid 1px darken($toolbar-fill, 12);
-  background: $toolbar-fill;
+  background-color: $toolbar-fill;
   padding: 8px 44px 0 44px;
   white-space: nowrap;
 }
@@ -73,18 +72,18 @@ $toolbar-height: 32px;
 
 .undo {
   @include icon(before, undo) {
-    color: black;
+    color: $toolbar-button-fill;
   }
 }
 
 .redo {
   @include icon(before, redo) {
-    color: black;
+    color: $toolbar-button-fill;
   }
 }
 
-.layer {
+.layers {
   @include icon(before, layers) {
-
+    color: $toolbar-button-fill;
   }
 }

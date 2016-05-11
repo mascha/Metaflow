@@ -4,7 +4,6 @@ import {FORM_PROVIDERS} from '@angular/common';
 
 import Workspace from "./components/workspace/workspace";
 import Navigation from "./components/navigation/navigation";
-import Leftbar from "./components/leftbar/leftbar";
 
 import '../style/globals.scss';
 
@@ -16,7 +15,7 @@ import '../style/globals.scss';
 @Component({
   selector: 'app',
   providers: [...FORM_PROVIDERS],
-  directives: [...ROUTER_DIRECTIVES, Workspace, Leftbar, Navigation],
+  directives: [...ROUTER_DIRECTIVES, Workspace, Navigation],
   pipes: [],
   styles: [require('./app.scss')],
   template: require('./app.html')
