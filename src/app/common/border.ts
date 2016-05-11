@@ -111,8 +111,9 @@ export default class Border implements ICameraObserver {
             let x = proxy.x;
             let y = proxy.y;
 
-            if (x > minX && x < maxX && y > minY && y < maxY)
+            if (x > minX && x < maxX && y > minY && y < maxY) {
                 continue;
+            }
 
             x -= cenX;
             y -= cenY;
