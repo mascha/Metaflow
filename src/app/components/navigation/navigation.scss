@@ -23,9 +23,8 @@
     top:0;
     height: 60%;
     left: $leftbar-width;
-    // right: 0;
     width: 33%;
-    margin-left: $navigation-branding-inset;
+    margin-left: $navigation-inset;
     margin-top: 2px;
 
     .navigation-title {
@@ -42,16 +41,48 @@
       cursor: pointer;
 
       @include icon(after, '\f4D2') {
-        color: white;
+        color: $navigation-title;
         margin-left: 10px;
       }
 
       &.starred {
         @include icon(after, '\f4CE') {
-          color: goldenrod;
+          color: gold;
           margin-left: 10px ;
         }
       }
+    }
+  }
+
+  .navigation-account {
+    position: absolute;
+    right: 0;
+    top:0;
+    bottom:0;
+    width: 33%;
+    white-space: nowrap;
+    display: block;
+
+    .account-avatar {
+      position: absolute;
+      top:50%;
+      transform: translate(0%, -50%);
+    }
+
+    img {
+      max-width: 80%;
+      max-height: 80%;
+    }
+
+    h3 {
+      top: 50%;
+      right: $navigation-inset;
+      margin: 0;
+      color: $navigation-title;
+      position: absolute;
+      transform: translate(0%, -50%);
+      font-weight: normal;
+      @include icon(after, '\f140')
     }
   }
 
@@ -60,10 +91,8 @@
     top: 60%;
     bottom: 0;
     left: $leftbar-width;
-    right:0;
-    margin-left: $navigation-branding-inset;
-
-    // same line layout
+    width:33%;
+    margin-left: $navigation-inset;
     white-space: nowrap;
   }
 

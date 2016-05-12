@@ -9,9 +9,10 @@ import {MenuBar} from "../menubar/menubar";
 })
 export default class Navigation {
     
-    projectName: string = "Diffusion Model";
-    favorite: boolean = false;
-    showBranding: boolean = true;
+    projectName = "Diffusion Model";
+    favorite = false;
+    showBranding = true;
+    userName = 'Martin Schade';
 
     onFavoriteClick() {
         this.favorite = !this.favorite;
