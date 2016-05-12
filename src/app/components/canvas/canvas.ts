@@ -604,21 +604,21 @@ class DiagramBehavior {
         let gY = group.top * scale;
         let gW = group.width * scale;
         let gH = group.height * scale;
-        return (wX >= gX &&
-                wY >= gY &&
+        return (wX >= gX && wY >= gY &&
                 wX + pW <= gX + gW &&
                 wY + pH <= gH + gY);
     }
 
     private isOutsideParent(): boolean {
         let parent = this.getParent();
+        let cam = this.camera;
         let adjust = 0.6;
-        let driftW = parent.width * adjust;
-        let driftH = parent.height * adjust;
-        return (this.camera.worldX < parent.left - driftW &&
-                this.camera.worldY < parent.top - driftH &&
-                this.camera.projectedWidth > parent.width + driftW &&
-                this.camera.projectedHeight > parent.height + driftH);
+        let driftH = parent.width * adjust;
+        let driftV = parent.height * adjust;
+        return (cam.worldX < parent.left - driftH &&
+                cam.worldY < parent.top - driftV &&
+                cam.projectedWidth > parent.width + driftH &&
+                cam.projectedHeight > parent.height + driftV);
     }
 
     private throwCamera(speed: number, angle: number, decay: number) {
