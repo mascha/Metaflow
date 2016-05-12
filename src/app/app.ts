@@ -1,4 +1,4 @@
-import {Component, ViewEncapsulation} from '@angular/core';
+import {Component} from '@angular/core';
 import {ROUTER_DIRECTIVES} from '@angular/router';
 import {FORM_PROVIDERS} from '@angular/common';
 
@@ -17,8 +17,7 @@ require('../style/globals.scss');
   providers: [...FORM_PROVIDERS],
   directives: [...ROUTER_DIRECTIVES, Workspace, Navigation],
   styles: [require('./app.scss')],
-  template: require('./app.html'),
-  encapsulation: ViewEncapsulation.None
+  template: require('./app.html')
 })
 export class App {
   NAME = "Metaflow";

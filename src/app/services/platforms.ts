@@ -4,7 +4,8 @@ import {PixiLayer} from "../common/platform/pixi";
 
 /**
  * Service, which provides the underlying rendering platform.
- * @author Martin Schsfr
+ * @author Martin Schade
+ * @since 1.0.0
  */
 @Injectable()
 export class PlatformService {
