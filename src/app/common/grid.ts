@@ -21,7 +21,7 @@ export default class Grid implements ICameraObserver {
     private _canvas: HTMLCanvasElement;
     private _camera: Camera;
 
-    onViewResized(dX: number, dY: number): void {
+    onViewResized() {
         const newWidth = this._camera.visualWidth;
         const newHeight = this._camera.visualHeight;
         this._canvas.width = newWidth;
@@ -29,11 +29,11 @@ export default class Grid implements ICameraObserver {
         this.redraw();
     }
 
-    onPanChanged(posX: number, posY: number): void {
+    onPanChanged(posX: number, posY: number){
         this.redraw();
     }
 
-    onZoomChanged(zoom: number): void {
+    onZoomChanged(zoom: number) {
         this.redraw();
     }
 

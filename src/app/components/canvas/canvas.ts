@@ -54,6 +54,12 @@ class BorderLayer {
         this._border = new Border(camera, canvas);
         camera.attachObserver(this._border);
     }
+
+    update(group:ViewGroup) {
+        if (this._border) {
+            this._border.updateProxies(group);
+        }
+    }
 }
 
 
@@ -117,8 +123,12 @@ export class Diagram implements AfterViewInit {
 
     set model(group: ViewGroup) {
         this._model = group;
-        if (this._platform)
+        if (this._platform) {
             this._platform.setModel(group);
+        }
+        if (this._borderLayer) {
+            this._borderLayer.update(group);
+        }
     }
 
     get model(): ViewGroup {
@@ -540,8 +550,8 @@ class DiagramBehavior {
      */
     private loadLevel(level: ViewGroup) {
         if (this._navi) this._navi.setPath(level);
-        this.platform.setModel(level);
         this.current = level;
+        this.canvas.model = level;
         this.adjustLimits(level);
     }
 
