@@ -20,7 +20,7 @@ export class DoubleSplit {
     @Input() orientation: string;
     
     private vertical = true;
-    private visible = false;
+    private visible = true;
     private last: number;
 
     private moveHandler = (event: MouseEvent) => {

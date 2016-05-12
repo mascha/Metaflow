@@ -10,9 +10,9 @@
  * @author Martin Schade
  */
 export interface ICameraObserver {
-    onViewResized(): void;
-    onPanChanged(posX: number, posY: number): void;
-    onZoomChanged(zoom: number): void;
+    onViewResized();
+    onPanChanged(posX: number, posY: number);
+    onZoomChanged(zoom: number);
 }
 
 /**
@@ -64,11 +64,11 @@ export abstract class Camera {
         return this.adjY;
     }
 
-    get projectedWidth():number {
+    get projWidth():number {
         return this.adjW;
     }
 
-    get projectedHeight():number {
+    get projHeight():number {
         return this.adjH;
     }
 
@@ -92,11 +92,11 @@ export abstract class Camera {
         return this.viewX + this.viewW / 2;
     }
 
-    get visualCenterY():number {
+    get visualCenterY(): number {
         return this.viewY + this.viewH / 2;
     }
 
-    get scale():number {
+    get scale(): number {
         return this._scale;
     }
 
@@ -169,7 +169,7 @@ export abstract class Camera {
             this._scale = zoomLevel;
 
             /* platform scaling */
-            this.scaleWorldTo(this._scale);
+            this.scaleWorldTo(zoomLevel);
 
             /* correct for scale difference */
             const dZ = zoomLevel - oldZoom;
@@ -178,8 +178,10 @@ export abstract class Camera {
             /* notify and release */
             this.updateCache();
 
-            for (let i = 0; i < this.obs.length; i++)
+            let length = this.obs.length;
+            for (let i = 0; i < length; i++) {
                 this.obs[i].onZoomChanged(zoomLevel);
+            }
         } finally {
             this.isZooming = false;
         }
@@ -210,8 +212,10 @@ export abstract class Camera {
 
         if (!this.isZooming) {
             this.updateCache();
-            for (let i = 0; i < this.obs.length; i++)
-                this.obs[i].onPanChanged(positionX, positionY);
+            let length = this.obs.length;
+            for (let i = 0; i < length; i++) {
+                this.obs[i].onPanChanged(positionX, positionY);   
+            }
         }
     }
 
@@ -237,8 +241,9 @@ export abstract class Camera {
 
         let obs = this.obs;
         let len = obs.length;
-        for (let i = 0; i < len; i++)
+        for (let i = 0; i < len; i++) {
             obs[i].onPanChanged(positionX, positionY);
+        }
     }
 
     /**
@@ -250,7 +255,8 @@ export abstract class Camera {
         this.viewW = viewW;
         this.viewH = viewH;
         this.updateCache();
-        for (let i = 0; i < this.obs.length; i++) {
+        let len = this.obs.length;
+        for (let i = 0; i < len; i++) {
             this.obs[i].onViewResized();
         }
     }
@@ -343,7 +349,7 @@ export class History<T> {
     /**
      * Clears all future frames, remembers the current frame and sets the current
      * frame to the given one.
-     * @param frame
+     * @param t
      */
     add(t: T) {
         if (t) {
@@ -356,14 +362,4 @@ export class History<T> {
     constructor(initial: T) {
         this.current = initial;
     }
-}
-
-/**
- * A camera which does nothing. Useful for debug purposes.
- */
-export class NOPCamera extends Camera {
-
-    protected translateWorldTo(translateX: number, translateY: number) {}
-
-    protected scaleWorldTo(zoom: number) {}
 }

@@ -64,7 +64,9 @@ export class PixiLayer implements IPlatformLayer {
 
         // second levels
         this.cachedGroups = [];
-        for (let i = 0, contents = level.contents, len = contents.length; i < len; i++) {
+        let contents = level.contents;
+        let length = contents.length;
+        for (let i = 0;i < length; i++) {
             let item = contents[i];
             if (item instanceof ViewGroup) {
                 this.cachedGroups.push(item);
@@ -108,7 +110,6 @@ export class PixiLayer implements IPlatformLayer {
      * @param posY
      */
     onPanChanged(posX: number, posY: number) {
-        // this.stage.updateTransform();
         this.pixi.render(this.stage);
     }
 
@@ -117,7 +118,6 @@ export class PixiLayer implements IPlatformLayer {
      * @param zoom
      */
     onZoomChanged(zoom: number) {
-        // this.stage.updateTransform();
         this.pixi.render(this.stage);
     }
 

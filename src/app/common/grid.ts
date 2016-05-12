@@ -21,7 +21,7 @@ export default class Grid implements ICameraObserver {
     private _canvas: HTMLCanvasElement;
     private _camera: Camera;
 
-    onViewResized(): void {
+    onViewResized(dX: number, dY: number): void {
         const newWidth = this._camera.visualWidth;
         const newHeight = this._camera.visualHeight;
         this._canvas.width = newWidth;
@@ -88,14 +88,16 @@ export default class Grid implements ICameraObserver {
     }
 
     private redraw() {
-        if (!this._active) return;
+        if (!this._active) {
+            return;
+        }
         this.clearGrid();
         this._context.strokeStyle = 'lightgray';
         this._context.lineWidth = 1.0;
         const x = this._camera.worldX;
         const y = this._camera.worldY;
-        const w = this._camera.projectedWidth;
-        const h = this._camera.projectedHeight;
+        const w = this._camera.projWidth;
+        const h = this._camera.projHeight;
         this.drawGrid(x, y, w, h);
     }
 

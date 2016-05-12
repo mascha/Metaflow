@@ -93,8 +93,8 @@ export default class Border implements ICameraObserver {
         const cenY = cam.centerY;
         const minX = cam.worldX;
         const minY = cam.worldY;
-        const maxX = minX + cam.projectedWidth;
-        const maxY = minY + cam.projectedHeight;
+        const maxX = minX + cam.projWidth;
+        const maxY = minY + cam.projHeight;
         const a = this.halfW - this.middle;
         const b = this.halfH - this.middle;
         const c = this.brush;

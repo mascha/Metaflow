@@ -67,8 +67,12 @@ export default class Kinetics {
      * @returns {boolean}
      */
     hasEnoughMomentum(): boolean {
-        if (!this._lastT) return false;
-        if (this._speed <= 0) return false;
+        if (!this._lastT) {
+            return false;
+        }
+        if (this._speed <= 0) {
+            return false;
+        }
         const minLimit = Date.now() - this.minimumDelay;
         return this._lastT >= minLimit;
     }

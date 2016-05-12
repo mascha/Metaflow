@@ -384,7 +384,7 @@ class DiagramBehavior {
      */
     private handleHorizontalConstraints(dragX: number): number {
         const cameraMin = this.camera.worldX;
-        const cameraWid = this.camera.projectedWidth;
+        const cameraWid = this.camera.projWidth;
         const cameraZoom = this.camera.scale;
         const cameraMax = cameraMin + cameraWid;
 
@@ -424,7 +424,7 @@ class DiagramBehavior {
      */
     private handleVerticalConstraints(dragY: number): number {
         const cM = this.camera.worldY;
-        const cH = this.camera.projectedHeight;
+        const cH = this.camera.projHeight;
         const cZ = this.camera.scale;
         const cMax = cM + cH;
 
@@ -473,8 +473,8 @@ class DiagramBehavior {
         const ca = this.camera;
         const wX = ca.worldX;
         const wY = ca.worldY;
-        const pW = ca.projectedWidth;
-        const pH = ca.projectedHeight;
+        const pW = ca.projWidth;
+        const pH = ca.projHeight;
         const wW = wX + pW;
         const wH = wY + pH;
         const dx = (this.offLeft) ? wX - this.leftLimit: (this.offRight) ? wW - this.rightLimit: 0;
@@ -596,8 +596,8 @@ class DiagramBehavior {
     private isWithinChildGroup(group: ViewGroup): boolean {
         let scale = this.current.scale;
         let cam = this.camera;
-        let pW = cam.projectedWidth;
-        let pH = cam.projectedHeight;
+        let pW = cam.projWidth;
+        let pH = cam.projHeight;
         let wX = cam.worldX;
         let wY = cam.worldY;
         let gX = group.left * scale;
@@ -617,8 +617,8 @@ class DiagramBehavior {
         let driftV = parent.height * adjust;
         return (cam.worldX < parent.left - driftH &&
                 cam.worldY < parent.top - driftV &&
-                cam.projectedWidth > parent.width + driftH &&
-                cam.projectedHeight > parent.height + driftV);
+                cam.projWidth > parent.width + driftH &&
+                cam.projHeight > parent.height + driftV);
     }
 
     private throwCamera(speed: number, angle: number, decay: number) {
@@ -643,7 +643,7 @@ class DiagramBehavior {
         const z = this.canvas.zoomPanPreference;
         const v = this.canvas.navigationVelocity;
         const camera = this.camera;
-        const aW = camera.projectedWidth;
+        const aW = camera.projWidth;
         const aX = camera.centerX;
         const aY = camera.centerY;
         const eW = targetWidth;
