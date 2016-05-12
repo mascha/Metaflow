@@ -1,11 +1,11 @@
-import {Component} from '@angular/core';
+import {Component, ViewEncapsulation} from '@angular/core';
 import {ROUTER_DIRECTIVES} from '@angular/router';
 import {FORM_PROVIDERS} from '@angular/common';
 
 import Workspace from "./components/workspace/workspace";
 import Navigation from "./components/navigation/navigation";
 
-import '../style/globals.scss';
+require('../style/globals.scss');
 
 /**
  * Metalogic Web Application.
@@ -16,9 +16,9 @@ import '../style/globals.scss';
   selector: 'app',
   providers: [...FORM_PROVIDERS],
   directives: [...ROUTER_DIRECTIVES, Workspace, Navigation],
-  pipes: [],
   styles: [require('./app.scss')],
-  template: require('./app.html')
+  template: require('./app.html'),
+  encapsulation: ViewEncapsulation.None
 })
 export class App {
   NAME = "Metaflow";

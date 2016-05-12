@@ -128,8 +128,6 @@ module.exports = function makeWebpackConfig() {
         test: /\.json$/,
         loader: 'json'
       },
-      // Support for CSS as raw text
-      // use 'null' loader in test mode (https://github.com/webpack/null-loader)
       // all css in src/style will be bundled in an external css file
       {
         test: /\.css$/,
@@ -278,7 +276,7 @@ module.exports = function makeWebpackConfig() {
   config.devServer = {
     contentBase: './src/public',
     historyApiFallback: true,
-    stats: 'minimal' // none (or false), errors-only, minimal, normal (or true) and verbose
+    stats: 'normal' // none (or false), errors-only, minimal, normal (or true) and verbose
   };
 
   return config;

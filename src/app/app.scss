@@ -1,8 +1,7 @@
 @import "../style/theme";
 @import "../style/variables";
 @import "../style/mixins";
-
-@import "~mdi/scss/materialdesignicons.scss";
+@import "../style/globals";
 
 .header {
   position: absolute;
