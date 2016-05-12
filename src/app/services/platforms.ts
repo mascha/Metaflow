@@ -3,7 +3,7 @@ import {IPlatformLayer} from "../common/platform";
 import {PixiLayer} from "../common/platform/pixi";
 
 /**
- * Service, which provides the underlying rendering platform.
+ * Service which provides the underlying rendering platform.
  * @author Martin Schade
  * @since 1.0.0
  */
