@@ -1,5 +1,6 @@
 import {ViewGroup, ViewItem} from "../common/viewmodel";
 import {Injectable} from '@angular/core';
+
 /**
  * Model provider service.
  */
@@ -12,13 +13,7 @@ export default class ModelService {
         return this.model;
     }
 
-    private createDebugModel(): ViewGroup {
-        /*
-         let root = new ViewGroup('ROOT', 0, 0, 1000, 1000, .1);
-         let first = new ViewGroup('FIRST', 5000, 5000, 5000, 5000, .1);
-         let item = new ViewItem('ITEM1', 25000, 25000, 2500, 2500);
-         */
-
+    private static createDebugModel(): ViewGroup {
         let i = 40;
         let o : ViewGroup = null;
         let root: ViewGroup = null;
@@ -44,6 +39,6 @@ export default class ModelService {
     }
 
     constructor() {
-        this.model = this.createDebugModel();
+        this.model = ModelService.createDebugModel();
     }
 }

@@ -35,33 +35,28 @@ export default class Border implements ICameraObserver {
     private halfW  = -1;
     private maxW   = 0;
     private maxH   = 0;
-    private border = 32;
+    private border = 23;
     private middle = this.border * 0.5;
     private active = true;
     private proxies: Array<ViewVertex>;
+    private scale = 1;
 
     onViewResized(): void {
         this.updateCache();
         this.draw();
     }
 
-    /*
-     * Only redraw proxies.
-     */
     onPanChanged(posX: number, posY: number): void {
         this.draw();
     }
 
-    /*
-     * Only redraw proxies.
-     */
     onZoomChanged(zoom: number): void {
         this.draw();
     }
 
     updateProxies(group: ViewGroup) {
         this.proxies = group.contents;
-        console.log('new proxies!');
+        this.scale = group.scale;
     }
 
     private draw() {
@@ -94,41 +89,44 @@ export default class Border implements ICameraObserver {
      */
     private drawProxies() {
         const cam = this.camera;
-        const fact = 0.6;
-        const adjH = cam.projWidth;
-        const adjV = cam.projHeight;
+        const scale = this.scale;
+        const fact = 0.25;
         const cenX = cam.centerX;
         const cenY = cam.centerY;
         const minX = cam.worldX;
         const minY = cam.worldY;
-        const maxX = minX + adjH;
-        const maxY = minY + adjV;
+        const maxX = minX + cam.projWidth;
+        const maxY = minY + cam.projHeight;
 
-        const left = minX - fact * adjH;
-        const top  = minY - fact * adjV;
-        const right= maxX + fact * adjH;
-        const bottom = maxY + fact * adjV;
-
+        /*
+        const adjW = (fact * cam.visualWidth) / scale;
+        const adjH = (fact * cam.visualHeight) / scale;
+        const left = minX - adjW;
+        const top  = minY - adjH;
+        const right = maxX + adjW;
+        const bottom = maxY + adjH;
+        */
         const a = this.halfW - this.middle;
         const b = this.halfH - this.middle;
         const c = this.brush;
-        
+
         c.fillStyle = 'cornflowerblue';
         c.strokeStyle = 'royalblue';
         c.globalAlpha = 1.0;
 
         let proxies = this.proxies;
         let len = proxies.length;
-        for (let j = 0; j < len; j += 2) {
-
+        for (let j = 0; j < len; j++) {
             let proxy = proxies[j];
-            let x = proxy.left + proxy.width * .5;
-            let y = proxy.top + proxy.height * .5;
+            let x = (proxy.left + proxy.width * .5) * scale;
+            let y = (proxy.top + proxy.height * .5) * scale;
 
             /*
             // Ignore item outside area of interest
             if (x < left || x > right || y < top && y > bottom) {
-                continue;
+                c.fillStyle = 'red'
+            } else {
+                c.fillStyle = 'mediumseagreen'
             }
             */
 
@@ -139,6 +137,10 @@ export default class Border implements ICameraObserver {
 
             x -= cenX;
             y -= cenY;
+
+            if (Math.hypot(x,y) > 1000) {
+                continue;
+            }
 
             const A = a*y;
             const B = b*x;
@@ -163,11 +165,6 @@ export default class Border implements ICameraObserver {
             }
 
             c.fillRect(
-                this.halfW + pX - 8.0,
-                this.halfH + pY - 8.0,
-                16, 16
-            );
-            c.strokeRect(
                 this.halfW + pX - 8.0,
                 this.halfH + pY - 8.0,
                 16, 16
