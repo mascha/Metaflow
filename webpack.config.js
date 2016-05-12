@@ -1,7 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
 
-// Webpack Plugins
 var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 var autoprefixer = require('autoprefixer');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -87,7 +86,8 @@ module.exports = function makeWebpackConfig() {
     preLoaders: isTest ? [] : [
       {
         test: /\.ts$/,
-        loader: 'tslint'}
+        loader: 'tslint'
+      }
     ],
 
     loaders: [
@@ -115,12 +115,12 @@ module.exports = function makeWebpackConfig() {
 
       {
         test: /\.woff(2)?(\?[a-z0-9=\.]+)?$/,
-        loader: "url-loader?limit=10000&mimetype=application/font-woff"
+        loader: "url-loader?limit=10000&mimetype=application/font-woff&name=fonts/[name].[ext]"
       },
 
       {
         test: /\.(ttf|eot|svg)(\?[a-z0-9=\.]+)?$/,
-        loader: "file-loader?limit=10000"
+        loader: "file-loader?limit=10000&name=fonts/[name].[ext]"
       },
 
       // Support for *.json files.
@@ -144,14 +144,13 @@ module.exports = function makeWebpackConfig() {
         loader: 'raw!postcss'
       },
 
-      // support for .scss files
-      // use 'null' loader in test mode (https://github.com/webpack/null-loader)
       // all css in src/style will be bundled in an external css file
       {
         test: /\.scss$/,
         exclude: root('src', 'app'),
         loader: isTest ? 'null' : ExtractTextPlugin.extract('style', 'css?sourceMap!postcss!sass')
       },
+
       // all css required in src/app files will be merged in js files
       {
         test: /\.scss$/,
@@ -160,7 +159,6 @@ module.exports = function makeWebpackConfig() {
       },
 
       // support for .html as raw text
-      // todo: change the loader to something that adds a hash to images
       {
         test: /\.html$/,
         loader: 'raw'
@@ -178,7 +176,12 @@ module.exports = function makeWebpackConfig() {
         loader: 'transform/cacheable?brfs'
       }
     ],
-    noParse: [/.+zone\.js\/dist\/.+/, /.+angular2\/bundles\/.+/, /angular2-polyfills\.js/]
+    
+    noParse: [
+      /.+zone\.js\/dist\/.+/, 
+      /.+angular2\/bundles\/.+/, 
+      /angular2-polyfills\.js/
+    ]
   };
 
   if (isTest) {
@@ -231,25 +234,10 @@ module.exports = function makeWebpackConfig() {
   // Add build specific plugins
   if (isProd) {
     config.plugins.push(
-      // Reference: http://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
-      // Only emit files when there are no errors
       new webpack.NoErrorsPlugin(),
-
-      // Reference: http://webpack.github.io/docs/list-of-plugins.html#dedupeplugin
-      // Dedupe modules in the output
       new webpack.optimize.DedupePlugin(),
-
-      // Reference: http://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
-      // Minify all javascript, switch loaders to minimizing mode
-      new webpack.optimize.UglifyJsPlugin({
-        mangle: true
-      }),
-
-      // Copy assets from the public folder
-      // Reference: https://github.com/kevlened/copy-webpack-plugin
-      new CopyWebpackPlugin([{
-        from: root('src/public')
-      }])
+      new webpack.optimize.UglifyJsPlugin({mangle: true}),
+      new CopyWebpackPlugin([{from: root('src/public')}])
     );
   }
 

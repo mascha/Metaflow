@@ -1,12 +1,4 @@
-/*
- * Global scss styles. Needs to be imported in the mail app.ts file.
- */
-
-$mdi-font-path: '~mdi/fonts';
-@import "~mdi/scss/materialdesignicons.scss";
-
 body {
-  color: #4d4d4d;
   font: 14px "Helvetica Neue",Arial,Helvetica,sans-serif;
   line-height: 18px;
 }

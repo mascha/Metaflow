@@ -38,12 +38,10 @@
     "zone.js": "0.6.12"
   },
   "devDependencies": {
-    "transform-loader": "^0.2.3",
-    "angular-cli": "0.0.*",
     "autoprefixer": "^6.3.2",
+    "brfs": "^1.4.3",
     "copy-webpack-plugin": "^2.1.1",
     "css-loader": "^0.23.0",
-    "brfs": "^1.4.3",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
     "html-loader": "^0.4.0",
@@ -68,6 +66,7 @@
     "rimraf": "^2.5.1",
     "sass-loader": "^3.1.2",
     "style-loader": "^0.13.0",
+    "transform-loader": "^0.2.3",
     "ts-loader": "^0.8.1",
     "tslint": "^3.4.0",
     "tslint-loader": "^2.1.0",

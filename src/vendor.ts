@@ -6,5 +6,5 @@ import '@angular/router';
 import '@angular/http';
 
 // Other
-import 'konva';
+// import 'konva';
 import 'pixi.js';
