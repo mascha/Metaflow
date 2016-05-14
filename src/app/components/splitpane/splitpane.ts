@@ -108,8 +108,6 @@ export class TripleSplit {
     @ViewChild('rightDivider') rightDiv: ElementRef;
     @ViewChild('rightContent') rightContent: ElementRef;
     @ViewChild('centerContent') center: ElementRef;
-
-    @Input('vertical') vertical: boolean;
     
     private lastLeft = TripleSplit.BASE + 1;
     private lastRight = TripleSplit.BASE - 1;
@@ -145,6 +143,10 @@ export class TripleSplit {
     }
 
     togglePrimary(event: any) {
+
+    }
+
+    toggleSeconary(event: any) {
 
     }
 
