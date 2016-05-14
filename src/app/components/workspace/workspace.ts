@@ -18,11 +18,11 @@ export default class Workspace {
     @ViewChild(DoubleSplit) double: DoubleSplit;
     
     togglePrimary(event: any) {
-        // NOP
+        this.triple.togglePrimary(event);
     }
 
     toggleSecondary(event: any) {
-        // NOP
+        this.triple.toggleSecondary(event);
     }
 
     toggleTernary(event: any) {

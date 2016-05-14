@@ -14,7 +14,7 @@ import Sidebar from "../sidebar/sidebar";
     directives: [Sidebar]
 })
 export class DoubleSplit {
-
+    
     @ViewChild('root') root: ElementRef;
     @ViewChild('left') left: ElementRef;
     @ViewChild('divider') div: ElementRef;
@@ -26,7 +26,6 @@ export class DoubleSplit {
     private last: number;
 
     private moveHandler = (event: MouseEvent) => {
-        HTML.block(event);
         let elem = this.root.nativeElement;
         let offs = HTML.getOffset(elem, event);
         let page = this.vertical ? offs.x : offs.y;
@@ -35,6 +34,7 @@ export class DoubleSplit {
         page = ((page < 0)? 0 : ((page > upper) ? upper : page));
         let adjusted = Math.round(page/upper * 99);
         this.readjust(adjusted);
+        HTML.block(event);
     };
 
     private upHandler = (event: MouseEvent) => {
@@ -49,7 +49,6 @@ export class DoubleSplit {
     }
 
     toggleVisibility(event: any) {
-        console.log('splitpane heard');
         document.removeEventListener('mousemove', this.moveHandler, true);
         document.removeEventListener('mouseup', this.upHandler, true);
         this.visible = !this.visible;
@@ -67,7 +66,7 @@ export class DoubleSplit {
      */
     private readjust(l: number) {
         const renderer = this.renderer;
-        let left = (l < 0)? 0 : (l > 100) ? 100 : l;
+        let left = (l < 0) ? 0 : (l > 100) ? 100 : l;
         let doLeft = Math.abs(this.last - left) > 0;
 
         if (doLeft || !this.last) {
@@ -100,6 +99,9 @@ export class DoubleSplit {
 })
 export class TripleSplit {
 
+    private static BASE = 15;
+    private static MAX = 100;
+
     @ViewChild('root') root: ElementRef;
     @ViewChild('leftContent') leftContent: ElementRef;
     @ViewChild('leftDivider') leftDiv: ElementRef;
@@ -109,18 +111,21 @@ export class TripleSplit {
 
     @Input('vertical') vertical: boolean;
     
-    private lastLeft = 16;
-    private lastRight = 84;
+    private lastLeft = TripleSplit.BASE + 1;
+    private lastRight = TripleSplit.BASE - 1;
     private left: boolean;
 
     private moveHandler = (event: MouseEvent) => {
-        HTML.block(event);
-        let adjusted = Math.round(event.pageX/window.innerWidth*100);
+        let element = this.root.nativeElement;
+        let offsetX = HTML.getOffset(element, event).x;
+        let relatiX = offsetX / element.offsetWidth * TripleSplit.MAX;
+        let adjusted = Math.round(relatiX);
         if (this.left) {
             this.readjust(adjusted, this.lastRight);
         } else {
             this.readjust(this.lastLeft, adjusted)
         }
+        HTML.block(event);
     };
 
     private upHandler = (event: MouseEvent) => {
@@ -130,13 +135,21 @@ export class TripleSplit {
     };
     
     ngAfterViewInit() {
-        this.readjust(15, 85);
+        this.readjust(TripleSplit.BASE, TripleSplit.MAX-TripleSplit.BASE);
     }
 
     onMouseDown(event: MouseEvent, left: boolean) {
         this.left = left;
         document.addEventListener('mousemove', this.moveHandler, true);
         document.addEventListener('mouseup', this.upHandler, true);
+    }
+
+    togglePrimary(event: any) {
+
+    }
+
+    toggleSecondary(event: any) {
+
     }
 
     /**
