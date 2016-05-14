@@ -129,9 +129,9 @@ export class TripleSplit {
     };
 
     private upHandler = (event: MouseEvent) => {
-        HTML.block(event);
         document.removeEventListener('mousemove', this.moveHandler, true);
         document.removeEventListener('mouseup', this.upHandler, true);
+        HTML.block(event);
     };
     
     ngAfterViewInit() {
@@ -148,14 +148,10 @@ export class TripleSplit {
 
     }
 
-    toggleSecondary(event: any) {
-
-    }
-
     /**
      *
-     * @param l
-     * @param r
+     * @param l value between 0 and 100.
+     * @param r value between 0 and 100.
      */
     readjust(l: number, r: number) {
         const renderer = this.renderer;
