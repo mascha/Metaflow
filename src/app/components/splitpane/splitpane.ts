@@ -187,5 +187,7 @@ export class TripleSplit {
         }
     }
 
-    constructor(@Inject(Renderer) private renderer: Renderer) {}
+    constructor(@Inject(Renderer) private renderer: Renderer) {
+
+    }
 }
