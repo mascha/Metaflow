@@ -21,6 +21,7 @@ export default class DoubleSplit {
 
     private vertical = true;
     private visible = true;
+    private saved: number;
     private last: number;
 
     private moveHandler = (event: MouseEvent) => {
@@ -50,7 +51,12 @@ export default class DoubleSplit {
         document.removeEventListener('mousemove', this.moveHandler, true);
         document.removeEventListener('mouseup', this.upHandler, true);
         this.visible = !this.visible;
-        this.readjust(100);
+        if (this.visible) {
+            this.readjust(this.saved || 69);
+        } else {
+            this.saved = this.last;
+            this.readjust(100);
+        }
     }
 
     onMouseDown(event: MouseEvent) {

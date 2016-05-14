@@ -12,23 +12,24 @@ import HTML from "../../common/html";
     styles: [require('./splitpane.scss')]
 })
 export default class TripleSplit {
-    @ViewChild('root') root: ElementRef;
-    @ViewChild('leftC') leftC: ElementRef;
+    @ViewChild('rootContent') root: ElementRef;
+    @ViewChild('leftContent') leftC: ElementRef;
     @ViewChild('leftDivider') leftDiv: ElementRef;
     @ViewChild('rightDivider') rightDiv: ElementRef;
-    @ViewChild('rightC') rightC: ElementRef;
+    @ViewChild('rightContent') rightC: ElementRef;
     @ViewChild('centerContent') center: ElementRef;
 
     private lastLeft = 15 + 1;
     private lastRight = 85 - 1;
+    private leftVisible = true;
+    private rightVisible = true;
     private primaryDrag: boolean;
 
     private moveHandler = (event: MouseEvent) => {
         let element = this.root.nativeElement;
         let offsetX = HTML.getOffset(element, event).x;
         let relatiX = offsetX / element.offsetWidth * 100;
-        let adjusted = Math.round(relatiX);
-        this.handleAdjust(adjusted);
+        this.handleAdjust(Math.round(relatiX));
         HTML.block(event);
     };
 
@@ -62,8 +63,8 @@ export default class TripleSplit {
     }
 
     private adjustBoth(l: number, r: number) {
-        let left = (l < 0)? 0 : (l > 100) ? 100 : l;
-        let right = (r < 0)? 0 : (r > 100) ? 100 : r;
+        let left = (l < 0) ? 0 : (l > 100) ? 100 : l;
+        let right = (r < 0) ? 0 : (r > 100) ? 100 : r;
         let adjLeft = Math.min(left, right);
         let adjRight = Math.max(left, right);
 
@@ -72,7 +73,10 @@ export default class TripleSplit {
 
         if (doLeft) { this.setLeft(adjLeft); }
         if (doRight) { this.setRight(adjRight);}
-        if (doRight || doLeft) { this.setMiddle(Math.max(0, adjRight-adjLeft)); }
+        if (doRight || doLeft) {
+            let diff = Math.max(0, adjRight-adjLeft);
+            this.setMiddle(diff);
+        }
         HTML.dispatchResizeEvent();
     }
 
