@@ -13,25 +13,20 @@ import HTML from "../../common/html";
 })
 export default class TripleSplit {
     @ViewChild('root') root: ElementRef;
-    @ViewChild('leftContent') leftContent: ElementRef;
+    @ViewChild('leftC') leftC: ElementRef;
     @ViewChild('leftDivider') leftDiv: ElementRef;
     @ViewChild('rightDivider') rightDiv: ElementRef;
-    @ViewChild('rightContent') rightContent: ElementRef;
+    @ViewChild('rightC') rightC: ElementRef;
     @ViewChild('centerContent') center: ElementRef;
 
-    private static BASE = 15;
-    private static MAX = 100;
-
-    private lastLeft = TripleSplit.BASE + 1;
-    private lastRight = TripleSplit.BASE - 1;
-    private leftVisible = true;
-    private rightVisible = true;
+    private lastLeft = 15 + 1;
+    private lastRight = 85 - 1;
     private primaryDrag: boolean;
 
     private moveHandler = (event: MouseEvent) => {
         let element = this.root.nativeElement;
         let offsetX = HTML.getOffset(element, event).x;
-        let relatiX = offsetX / element.offsetWidth * TripleSplit.MAX;
+        let relatiX = offsetX / element.offsetWidth * 100;
         let adjusted = Math.round(relatiX);
         this.handleAdjust(adjusted);
         HTML.block(event);
@@ -44,10 +39,7 @@ export default class TripleSplit {
     };
 
     ngAfterViewInit() {
-        this.adjustBoth(
-            TripleSplit.BASE,
-            TripleSplit.MAX - TripleSplit.BASE
-        );
+        this.adjustBoth(15, 85);
     }
 
     onMouseDown(event: MouseEvent, primaryDrag: boolean) {
@@ -58,11 +50,7 @@ export default class TripleSplit {
     }
 
     toggleVisibility(event: any, primary: boolean) {
-        if (primary) {
-            this.leftVisible = !this.leftVisible;
-        } else {
-            this.rightVisible = !this.rightVisible;
-        }
+
     }
 
     private handleAdjust(adjusted: number) {
@@ -74,7 +62,6 @@ export default class TripleSplit {
     }
 
     private adjustBoth(l: number, r: number) {
-        const renderer = this.renderer;
         let left = (l < 0)? 0 : (l > 100) ? 100 : l;
         let right = (r < 0)? 0 : (r > 100) ? 100 : r;
         let adjLeft = Math.min(left, right);
@@ -83,49 +70,29 @@ export default class TripleSplit {
         let doLeft = Math.abs(this.lastLeft - adjLeft) > 0;
         let doRight = Math.abs(this.lastRight - adjRight) > 0;
 
-        if (doLeft) {
-            let leftStyle = `${adjLeft}%`;
-            renderer.setElementStyle(this.leftContent.nativeElement, 'width', leftStyle);
-            renderer.setElementStyle(this.leftDiv.nativeElement,'left', leftStyle);
-            renderer.setElementStyle(this.center.nativeElement, 'left', leftStyle);
-            this.lastLeft = adjLeft;
-        }
-
-        if (doRight) {
-            let rightStyle = `${adjRight}%`;
-            renderer.setElementStyle(this.rightDiv.nativeElement, 'left', rightStyle);
-            renderer.setElementStyle(this.rightContent.nativeElement, 'left', rightStyle);
-            this.lastRight = adjRight;
-        }
-
-        if (doRight || doLeft) {
-            let adjCent = Math.max(0, adjRight-adjLeft);
-            let cenStyle = `${adjCent}%`;
-            renderer.setElementStyle(this.center.nativeElement, 'width', cenStyle);
-            HTML.dispatchResizeEvent();
-        }
+        if (doLeft) { this.setLeft(adjLeft); }
+        if (doRight) { this.setRight(adjRight);}
+        if (doRight || doLeft) { this.setMiddle(Math.max(0, adjRight-adjLeft)); }
+        HTML.dispatchResizeEvent();
     }
 
-    private adjustLeft(l: number) {
-        const renderer = this.renderer;
-        let left = (l < 0)? 0 : (l > 100) ? 100 : l;
+    private setRight(right: number) {
+        let rightStyle = `${right}%`;
+        this.renderer.setElementStyle(this.rightDiv.nativeElement, 'left', rightStyle);
+        this.renderer.setElementStyle(this.rightC.nativeElement, 'left', rightStyle);
+        this.lastRight = right;
+    }
+
+    private setLeft(left: number) {
         let leftStyle = `${left}%`;
-        renderer.setElementStyle(this.leftContent.nativeElement, 'width', leftStyle);
-        renderer.setElementStyle(this.leftDiv.nativeElement,'left', leftStyle);
-        renderer.setElementStyle(this.center.nativeElement, 'left', leftStyle);
-        renderer.setElementStyle(this.center.nativeElement, 'width', `${100-left}%`);
+        this.renderer.setElementStyle(this.leftC.nativeElement, 'width', leftStyle);
+        this.renderer.setElementStyle(this.leftDiv.nativeElement,'left', leftStyle);
+        this.renderer.setElementStyle(this.center.nativeElement, 'left', leftStyle);
         this.lastLeft = left;
     }
 
-    private adjustRight(r: number) {
-        const renderer = this.renderer;
-        let right = (r < 0)? 0 : (r > 100) ? 100 : r;
-        let rightStyle = `${right}%`;
-        renderer.setElementStyle(this.rightDiv.nativeElement, 'left', rightStyle);
-        renderer.setElementStyle(this.rightContent.nativeElement, 'left', rightStyle);
-        renderer.setElementStyle(this.center.nativeElement, 'left', `0%`);
-        renderer.setElementStyle(this.center.nativeElement, 'width', rightStyle);
-        this.lastRight = right;
+    private setMiddle(width: number) {
+        this.renderer.setElementStyle(this.center.nativeElement, 'width', `${width}%`);
     }
 
     constructor(@Inject(Renderer) private renderer: Renderer) {}
