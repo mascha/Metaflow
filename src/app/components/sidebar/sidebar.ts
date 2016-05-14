@@ -1,11 +1,27 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, EventEmitter, Output} from '@angular/core';
 
 @Component({
     selector: 'sidebar',
     template: require('./sidebar.html'),
-    styles: [require('./sidebar.scss')]
+    styles: [require('./sidebar.scss')],
 })
 export default class Sidebar {
     @Input() title: string = "Header";
     @Input() side: string;
+    
+    @Input() visible: boolean = true;
+    @Output() visibility: EventEmitter<any>;
+    
+    toggle() {
+        this.visible = !this.visible;
+        this.visibility.emit({
+            pane: this,
+            visible: this.visible
+        });
+        console.log(`emitting ${this.visible}`);
+    }
+
+    constructor() {
+        this.visibility = new EventEmitter();
+    }
 }

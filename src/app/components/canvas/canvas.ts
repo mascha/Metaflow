@@ -224,16 +224,30 @@ export class Diagram implements AfterViewInit {
         this._platform = this._platformProvider.getPlatform(surface);
 
         /* link behavior state machine*/
-        if (this._platform) this._camera = this._platform.getCamera();
-        if (this._camera) this._behavior = new DiagramBehavior(this, this._camera, this._platform);
+        if (this._platform) {
+            this._camera = this._platform.getCamera();
+        }
+        if (this._camera) {
+            this._behavior = new DiagramBehavior(this, this._camera, this._platform);
+        }
 
+        /* attach all layers */
         if (this._behavior) {
-            /* attach all layers */
-            if (this._navigation) this._behavior.pushTo(this._navigation);
-            if (this._borderLayer) this._borderLayer.observe(this._camera);
-            if (this._gridLayer) this._gridLayer.observe(this._camera);
-            if (this._nodeLayer) this._camera.attachObserver(this._platform);
-        } else throw new Error('Could not create behavior class for diagram');
+            if (this._navigation) {
+                this._behavior.pushTo(this._navigation);
+            }
+            if (this._borderLayer) {
+                this._borderLayer.observe(this._camera);
+            }
+            if (this._gridLayer) {
+                this._gridLayer.observe(this._camera);
+            }
+            if (this._nodeLayer) {
+                this._camera.attachObserver(this._platform);
+            }
+        } else {
+            throw new Error('Could not create behavior class for diagram');
+        }
         
         this.onResize();
         this.camera.zoomAndMoveTo(-250, -150, 0.2);

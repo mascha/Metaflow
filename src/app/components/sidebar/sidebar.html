@@ -1,9 +1,10 @@
-<div class="sidebar-container {{side == 'left'? 'left': 'right'}}">
+<div class="sidebar-container {{side == 'left'? 'left': 'right'}}"
+  (visibility)="onVisibilityChanged($event)">
   <div class="sidebar-header">
     <h3 class="sidebar-header-title">{{title}}</h3>
   </div>
   <div class="sidebar-extras">
-    <a href="#" title="Close the sidebar" class="sidebar-close-icon"></a>
+    <div class="sidebar-close-icon" (click)="toggle()"></div>
   </div>
   <hr class="sidebar-divider">
   <ng-content class="sidebar-content"></ng-content>

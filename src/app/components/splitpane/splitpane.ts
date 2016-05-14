@@ -1,5 +1,6 @@
 import {Component, ElementRef, ViewChild, Renderer, Inject, Input} from "@angular/core";
 import HTML from "../../common/html";
+import Sidebar from "../sidebar/sidebar";
 
 /**
  * Simple split pane.
@@ -9,7 +10,8 @@ import HTML from "../../common/html";
 @Component({
     selector: 'double-split',
     template: require('./doublesplit.html'),
-    styles: [require('./splitpane.scss')]
+    styles: [require('./splitpane.scss')],
+    directives: [Sidebar]
 })
 export class DoubleSplit {
 
@@ -43,18 +45,25 @@ export class DoubleSplit {
 
     ngAfterViewInit() {
         this.vertical = (this.orientation !== 'horizontal');
-        this.readjust(this.visible ? 69: 100);
+        this.readjust(this.visible ? 69 : 100);
     }
 
     toggleVisibility() {
-        this.visible = !this.visible;
         document.removeEventListener('mousemove', this.moveHandler, true);
         document.removeEventListener('mouseup', this.upHandler, true);
+        this.visible = !this.visible;
     }
 
     onMouseDown(event: MouseEvent) {
         document.addEventListener('mousemove', this.moveHandler, true);
         document.addEventListener('mouseup', this.upHandler, true);
+    }
+
+    onVisibilityChange(event: any) {
+        console.log(event);
+        if (event.visible !== this.visible) {
+            this.toggleVisibility();
+        }
     }
 
     /**
