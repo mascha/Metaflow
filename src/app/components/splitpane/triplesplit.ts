@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild, Renderer, Inject, Input} from "@angular/core";
+import {Component, ElementRef, ViewChild, Renderer, Inject} from "@angular/core";
 import HTML from "../../common/html";
 
 /**
@@ -67,12 +67,10 @@ export default class TripleSplit {
         let right = (r < 0) ? 0 : (r > 100) ? 100 : r;
         let adjLeft = Math.min(left, right);
         let adjRight = Math.max(left, right);
-
         let doLeft = Math.abs(this.lastLeft - adjLeft) > 0;
         let doRight = Math.abs(this.lastRight - adjRight) > 0;
-
         if (doLeft) { this.setLeft(adjLeft); }
-        if (doRight) { this.setRight(adjRight);}
+        if (doRight) { this.setRight(adjRight); }
         if (doRight || doLeft) {
             let diff = Math.max(0, adjRight-adjLeft);
             this.setMiddle(diff);
@@ -82,21 +80,25 @@ export default class TripleSplit {
 
     private setRight(right: number) {
         let rightStyle = `${right}%`;
-        this.renderer.setElementStyle(this.rightDiv.nativeElement, 'left', rightStyle);
-        this.renderer.setElementStyle(this.rightC.nativeElement, 'left', rightStyle);
+        this.render(this.rightDiv, 'left', rightStyle);
+        this.render(this.rightC, 'left', rightStyle);
         this.lastRight = right;
     }
 
     private setLeft(left: number) {
         let leftStyle = `${left}%`;
-        this.renderer.setElementStyle(this.leftC.nativeElement, 'width', leftStyle);
-        this.renderer.setElementStyle(this.leftDiv.nativeElement,'left', leftStyle);
-        this.renderer.setElementStyle(this.center.nativeElement, 'left', leftStyle);
+        this.render(this.leftC, 'width', leftStyle);
+        this.render(this.leftDiv,'left', leftStyle);
+        this.render(this.center, 'left', leftStyle);
         this.lastLeft = left;
     }
 
     private setMiddle(width: number) {
-        this.renderer.setElementStyle(this.center.nativeElement, 'width', `${width}%`);
+        this.render(this.center, 'width', `${width}%`);
+    }
+
+    private render(e:ElementRef, p:string, s:string) {
+        this.renderer.setElementStyle(e.nativeElement, p, s);
     }
 
     constructor(@Inject(Renderer) private renderer: Renderer) {}
