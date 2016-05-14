@@ -9,9 +9,9 @@ export default class Sidebar {
     @Input() title: string = "Header";
     @Input() side: string;
     @Input() titleVisible: boolean = true;
-    
     @Input() visible: boolean = true;
-    @Output() visibility: EventEmitter<any>;
+
+    @Output('visibility') visibility: EventEmitter<any>;
     
     toggle() {
         this.visible = !this.visible;

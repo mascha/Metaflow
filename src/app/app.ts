@@ -21,7 +21,7 @@ require('../style/globals.scss');
 })
 export class App {
   NAME = "Metaflow";
-
+  
   constructor() {
     document.title = this.NAME;
   }

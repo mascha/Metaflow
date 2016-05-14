@@ -48,7 +48,8 @@ export class DoubleSplit {
         this.readjust(this.visible ? 69 : 100);
     }
 
-    toggleVisibility() {
+    toggleVisibility(event: any) {
+        console.log('splitpane heard');
         document.removeEventListener('mousemove', this.moveHandler, true);
         document.removeEventListener('mouseup', this.upHandler, true);
         this.visible = !this.visible;
@@ -57,13 +58,6 @@ export class DoubleSplit {
     onMouseDown(event: MouseEvent) {
         document.addEventListener('mousemove', this.moveHandler, true);
         document.addEventListener('mouseup', this.upHandler, true);
-    }
-
-    onVisibilityChange(event: any) {
-        console.log(event);
-        if (event.visible !== this.visible) {
-            this.toggleVisibility();
-        }
     }
 
     /**
