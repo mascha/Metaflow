@@ -1,18 +1,18 @@
 <div #root class="splitpane">
-  <div #leftContent class="splitpane-content left">
+  <div #leftContent class="splitpane-content left" *ngIf="leftVisible == true">
     <ng-content select="[left]"></ng-content>
   </div>
   <div #leftDivider class="splitpane-divider left vertical"
-       (mousedown)="onMouseDown($event, true)">
+       (mousedown)="onMouseDown($event, true)" *ngIf="leftVisible == true">
   </div>
   <div #centerContent
        class="splitpane-content center">
     <ng-content select="[center]"></ng-content>
   </div>
   <div #rightDivider class="splitpane-divider right vertical"
-       (mousedown)="onMouseDown($event, false)">
+       (mousedown)="onMouseDown($event, false)" *ngIf="rightVisible == true">
   </div>
-  <div #rightContent class="splitpane-content right">
+  <div #rightContent class="splitpane-content right" *ngIf="rightVisible == true">
     <ng-content select="[right]"></ng-content>
   </div>
 </div>

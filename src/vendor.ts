@@ -6,5 +6,4 @@ import '@angular/router';
 import '@angular/http';
 
 // Other
-import 'lodash'
 import 'pixi.js';

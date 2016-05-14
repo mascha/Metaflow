@@ -19,6 +19,15 @@ export default class Sidebar {
             pane: this,
             visible: this.visible
         });
+
+        setTimeout(() => {
+            console.log('reset!');
+            this.visible = !this.visible;
+            this.visibility.emit({
+                pane: this,
+                visible: this.visible
+            });
+        }, 2000)
     }
 
     constructor() {
