@@ -2,10 +2,9 @@
   (visibility)="onVisibilityChanged($event)">
   <div class="sidebar-header">
     <h3 class="sidebar-header-title">{{title}}</h3>
+    <div class="sidebar-extras">
+      <div class="sidebar-close-icon" (click)="toggle()"></div>
+    </div>
   </div>
-  <div class="sidebar-extras">
-    <div class="sidebar-close-icon" (click)="toggle()"></div>
-  </div>
-  <hr class="sidebar-divider">
   <ng-content class="sidebar-content"></ng-content>
 </div>

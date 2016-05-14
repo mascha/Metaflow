@@ -90,7 +90,6 @@ export default class Border implements ICameraObserver {
     private drawProxies() {
         const cam = this.camera;
         const scale = this.scale;
-        const fact = 0.25;
         const cenX = cam.centerX;
         const cenY = cam.centerY;
         const minX = cam.worldX;
@@ -99,6 +98,7 @@ export default class Border implements ICameraObserver {
         const maxY = minY + cam.projHeight;
 
         /*
+        const fact = 0.25;
         const adjW = (fact * cam.visualWidth) / scale;
         const adjH = (fact * cam.visualHeight) / scale;
         const left = minX - adjW;
@@ -111,7 +111,6 @@ export default class Border implements ICameraObserver {
         const c = this.brush;
 
         c.fillStyle = 'cornflowerblue';
-        c.strokeStyle = 'royalblue';
         c.globalAlpha = 1.0;
 
         let proxies = this.proxies;
@@ -164,11 +163,9 @@ export default class Border implements ICameraObserver {
                 }
             }
 
-            c.fillRect(
-                this.halfW + pX - 8.0,
-                this.halfH + pY - 8.0,
-                16, 16
-            );
+            let drawX = Math.round(this.halfW + pX - 8.0);
+            let drawY = Math.round(this.halfH + pY - 8.0);
+            c.fillRect(drawX, drawY, 16, 16);
         }
     }
 

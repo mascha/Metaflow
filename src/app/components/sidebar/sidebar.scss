@@ -44,15 +44,6 @@
   }
 }
 
-.sidebar-divider {
-  background-color: $sidebar-divider;
-  border: 0;
-  color: $sidebar-divider;
-  height: 1px;
-  margin: 0;
-  width: 100%;
-}
-
 .sidebar-content {
   width:100%;
   height:100%;
@@ -67,7 +58,7 @@
     cursor: pointer;
 
     &:hover {
-      @include icon(before, '\f159') {
+      @include icon(before, '\f156') {
         color: $icon-hover;
       }
     }
