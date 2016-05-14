@@ -1,6 +1,6 @@
 <div class="sidebar-container {{side == 'left'? 'left': 'right'}}"
   (visibility)="onVisibilityChanged($event)">
-  <div class="sidebar-header">
+  <div class="sidebar-header" *ngIf="titleVisible == true">
     <h3 class="sidebar-header-title">{{title}}</h3>
     <div class="sidebar-extras">
       <div class="sidebar-close-icon" (click)="toggle()"></div>
