@@ -1,4 +1,4 @@
-import {Component, ViewChild} from "@angular/core";
+import {Component, ViewChild, Input} from "@angular/core";
 import {DoubleSplit, TripleSplit} from "../splitpane/splitpane";
 import {Diagram} from "../canvas/canvas";
 import Sidebar from "../sidebar/sidebar";
@@ -12,20 +12,20 @@ import Sidebar from "../sidebar/sidebar";
     directives: [DoubleSplit, TripleSplit, Diagram, Sidebar],
 })
 export default class Workspace {
-    slim: boolean = true;
+    @Input() slim: boolean = true;
     
     @ViewChild(TripleSplit) triple: TripleSplit;
     @ViewChild(DoubleSplit) double: DoubleSplit;
     
     togglePrimary(event: any) {
-        console.log('workspace primary!');
+        // NOP
     }
 
     toggleSecondary(event: any) {
-        console.log('workspace secondary!');
+        // NOP
     }
 
     toggleTernary(event: any) {
-        console.log('workspace ternary!');
+        this.double.toggleVisibility(event);
     }
 }

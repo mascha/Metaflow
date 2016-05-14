@@ -53,6 +53,7 @@ export class DoubleSplit {
         document.removeEventListener('mousemove', this.moveHandler, true);
         document.removeEventListener('mouseup', this.upHandler, true);
         this.visible = !this.visible;
+        this.readjust(100);
     }
 
     onMouseDown(event: MouseEvent) {

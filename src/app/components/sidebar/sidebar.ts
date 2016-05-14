@@ -19,7 +19,6 @@ export default class Sidebar {
             pane: this,
             visible: this.visible
         });
-        console.log(`emitting ${this.visible}`);
     }
 
     constructor() {
