@@ -2,7 +2,7 @@
  * Copyright (C) Martin Schade, 2015-2016. All rights reserved.
  */
 
-import {Component, ElementRef, ViewChild, AfterViewInit, Inject} from '@angular/core';
+import {Component, ElementRef, ViewChild, AfterViewInit, Inject, HostListener} from '@angular/core';
 import {Camera} from "../../common/camera";
 import {PlatformService} from "../../services/platforms";
 import {ViewGroup} from "../../common/viewmodel";
@@ -83,7 +83,6 @@ class NodeLayer {
 
 /**
  * The canvas component.
- *
  * @author Martin Schade
  * @since 1.0.0
  */
@@ -138,7 +137,7 @@ export class Diagram implements AfterViewInit {
     set navigationVelocity(value: number) {
         this._velocity = (value < 0) ? 0.01 : (value > 3.0) ? 3.0 : value;
     }
-
+    
     @ViewChild(BorderLayer) private _borderLayer: BorderLayer;
     @ViewChild(GridLayer) private _gridLayer: GridLayer;
     @ViewChild(NodeLayer) private _nodeLayer: NodeLayer;
@@ -157,6 +156,7 @@ export class Diagram implements AfterViewInit {
      * On click event handler.
      * @param event
      */
+    @HostListener('dblclick', ['$event'])
     onClick(event: MouseEvent) {
         let off = HTML.getOffset(this._diagram, event);
         this._behavior.handleClick(off.x, off.y);
@@ -167,7 +167,8 @@ export class Diagram implements AfterViewInit {
      * Handle mouse wheel event.
      * @param event
      */
-    onScroll(event: MouseWheelEvent) {
+    @HostListener('wheel', ['$event'])
+    onScroll(event: MouseEvent) {
         let off = HTML.getOffset(this._diagram, event);
         let sca = HTML.normalizeWheel(event);
         this._behavior.handleZoom(off.x, off.y, -sca*20);
@@ -177,6 +178,7 @@ export class Diagram implements AfterViewInit {
     /**
      * Handle resize events.
      */
+    @HostListener('window:resize')
     onResize() {
         const rect = this._diagram.getBoundingClientRect();
         this._camera.updateVisual(0, 0, rect.width, rect.height);
@@ -186,6 +188,7 @@ export class Diagram implements AfterViewInit {
      *
      * @param event
      */
+    @HostListener('mousedown', ['$event'])
     onMouseDown(event: MouseEvent) {
         const pos = HTML.getOffset(this._diagram, event);
         this._behavior.startDrag(pos.x, pos.y);
@@ -196,6 +199,7 @@ export class Diagram implements AfterViewInit {
      * Mouse movement.
      * @param event
      */
+    @HostListener('mousemove', ['$event'])
     onMouseMove(event: MouseEvent) {
         const pos = HTML.getOffset(this._diagram, event);
         this._behavior.handleDrag(pos.x,pos.y);
@@ -205,6 +209,8 @@ export class Diagram implements AfterViewInit {
     /**
      * Mouse upFrom event.
      */
+    @HostListener('mouseup', ['$event'])
+    @HostListener('window:mouseup', ['$event'])
     onMouseUp(event: MouseEvent) {
         this._behavior.stopDrag();
         HTML.block(event);
