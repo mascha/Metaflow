@@ -2,7 +2,7 @@
 @import "../../../style/variables";
 @import "../../../style/mixins";
 
-.navigation-container {
+:host {
   position: absolute;
   overflow: hidden;
 

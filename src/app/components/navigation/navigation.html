@@ -1,15 +1,13 @@
-<div class="navigation-container">
-  <div class="branding">
-    <a href="#" title="Go back to projects"></a>
-  </div>
-  <div class="navigation-upper" (click)="onFavoriteClick()">
-    <h2 class="navigation-title" [class.starred]="favorite">{{projectName}}</h2>
-  </div>
-  <div class="navigation-lower">
-    <menu-bar>
-    </menu-bar>
-  </div>
-  <div class="navigation-account">
-    <h3 class="account-title">{{userName}}</h3>
-  </div>
+<div class="branding">
+  <a href="#" title="Go back to projects"></a>
+</div>
+<div class="navigation-upper" (click)="onFavoriteClick()">
+  <h2 class="navigation-title" [class.starred]="favorite">{{projectName}}</h2>
+</div>
+<div class="navigation-lower">
+  <menu-bar>
+  </menu-bar>
+</div>
+<div class="navigation-account">
+  <h3 class="account-title">{{userName}}</h3>
 </div>
