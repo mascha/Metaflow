@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild, Renderer, Inject, Input} from "@angular/core";
+import {Component, ElementRef, ViewChild, Renderer, Inject, Input, HostListener} from "@angular/core";
 import HTML from "../../common/html";
 
 /**
@@ -12,8 +12,6 @@ import HTML from "../../common/html";
     styles: [require('./splitpane.scss')],
 })
 export default class DoubleSplit {
-
-    @ViewChild('root') root: ElementRef;
     @ViewChild('left') left: ElementRef;
     @ViewChild('divider') div: ElementRef;
     @ViewChild('right') right: ElementRef;
@@ -47,6 +45,7 @@ export default class DoubleSplit {
         this.readjust(this.visible ? 69 : 100);
     }
 
+    @HostListener('visibility', ['$event'])
     toggleVisibility(event: any) {
         document.removeEventListener('mousemove', this.moveHandler, true);
         document.removeEventListener('mouseup', this.upHandler, true);
@@ -88,5 +87,6 @@ export default class DoubleSplit {
         }
     }
 
-    constructor(@Inject(Renderer) private renderer: Renderer) {}
+    constructor(@Inject(Renderer) private renderer: Renderer,
+                @Inject(ElementRef) private root: ElementRef) {}
 }

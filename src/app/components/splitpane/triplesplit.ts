@@ -12,7 +12,6 @@ import HTML from "../../common/html";
     styles: [require('./splitpane.scss')]
 })
 export default class TripleSplit {
-    @ViewChild('rootContent') root: ElementRef;
     @ViewChild('leftContent') leftC: ElementRef;
     @ViewChild('leftDivider') leftDiv: ElementRef;
     @ViewChild('rightDivider') rightDiv: ElementRef;
@@ -101,5 +100,6 @@ export default class TripleSplit {
         this.renderer.setElementStyle(e.nativeElement, p, s);
     }
 
-    constructor(@Inject(Renderer) private renderer: Renderer) {}
+    constructor(@Inject(Renderer) private renderer: Renderer,
+                @Inject(ElementRef) private root: ElementRef) {}
 }
