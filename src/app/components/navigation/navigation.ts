@@ -17,8 +17,4 @@ export default class Navigation {
     onFavoriteClick() {
         this.favorite = !this.favorite;
     }
-    
-    constructor() {
-        
-    }
 }
