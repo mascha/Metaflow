@@ -1,9 +1,7 @@
-<div class="sidebar-container {{side == 'left'? 'left': 'right'}}">
-  <div class="sidebar-header" *ngIf="titleVisible == true">
+<div class="sidebar-header" *ngIf="titleVisible == true">
     <h3 class="sidebar-header-title">{{title}}</h3>
     <div class="sidebar-extras">
       <div class="sidebar-close-icon" (click)="toggle()"></div>
     </div>
-  </div>
-  <ng-content class="sidebar-content"></ng-content>
 </div>
+<ng-content class="sidebar-content"></ng-content>

@@ -1,24 +1,11 @@
 @import "../../../style/theme";
 @import "../../../style/mixins";
 
-.sidebar-container {
+:host {
   position: absolute;
   overflow: hidden;
   background-color: $sidebar-main;
-
-  @if $sidebar-cards {
-    border-radius: 3px;
-
-    &.left {
-      left: 5px; right: 5px; top: 5px; bottom: 5px;
-    }
-
-    &.right {
-      left: 5px; right: 5px; top: 5px; bottom: 5px;
-    }
-  } @else {
-     left: 0; right: 0; top: 0; bottom: 0;
-  }
+  left: 0; right: 0; top: 0; bottom: 0;
 }
 
 .sidebar-header {
