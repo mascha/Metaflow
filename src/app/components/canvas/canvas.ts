@@ -223,7 +223,7 @@ export class Diagram implements AfterViewInit {
      */
     ngAfterViewInit() {
         /* get html elements */
-        this._diagram = document.getElementById('diagram-canvas');
+        this._diagram = this._element.nativeElement; //document.getElementById('diagram-canvas');
         let surface = this._nodeLayer.getElement();
 
         /* retrieve rendering platform */
@@ -261,7 +261,7 @@ export class Diagram implements AfterViewInit {
     
     constructor(@Inject(PlatformService) service: PlatformService,
                 @Inject(ModelService) models: ModelService,
-                @Inject(ElementRef) private element:ElementRef) {
+                @Inject(ElementRef) element:ElementRef) {
         this._model = models.getModel();
         this._element = element;
         this._platformProvider = service;
