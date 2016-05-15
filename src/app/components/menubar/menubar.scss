@@ -1,6 +1,6 @@
 @import "../../../style/theme";
 
-.menu-bar {
+:host {
   cursor: default;
   display: inline-block;
   font: $menu-font;
