@@ -2,14 +2,18 @@
 @import "../../../../style/theme";
 @import "../../../../style/mixins";
 
-$palette-component: #3F4652;
-$palette-icons: #272C33;
+$palette-component: $sidebar-main;
+$palette-icons: darken($sidebar-main, 16);
+$palette-icons-glyph: #4b5176;
 $palette-icons-span-adjust: 4px;
+$palette-component-entry-hover: #dddddd;
+$palette-component-entry: #eeeeee;
 
 :host {
   position: absolute;
   width: 100%;
   height: 100%;
+  background-color: $palette-icons;
 }
 
 .palette-icons {
@@ -19,14 +23,27 @@ $palette-icons-span-adjust: 4px;
   right:0;
   bottom:0;
   width: $icon-bar-width;
-  background-color: $palette-icons;
+  background-color: transparent;
+  z-index: 11;
 }
 
 .palette-icon {
-  width: 32px;
-  height: 32px;
+  width: $icon-bar-width;
+  height: $icon-bar-height;
   position: relative;
   cursor: pointer;
+}
+
+.circle {
+  @include icon(before, '\f12f') {
+    color: $palette-icons-glyph;
+    left: 50%;
+    top: 50%;
+    height: 100%;
+    position: absolute;
+    margin-left: -9px;
+    margin-top: -9px;
+  }
 }
 
 .palette-selected {
@@ -37,6 +54,7 @@ $palette-icons-span-adjust: 4px;
   width: $icon-bar-width;
   height: $icon-bar-height;
   background-color: $palette-component;
+  z-index: 0;
 
   // optimized for right sided display
   span {
@@ -67,18 +85,6 @@ $palette-icons-span-adjust: 4px;
         top: 0;
       }
     }
-  }
-}
-
-.circle {
-  @include icon(before, '\f12f') {
-    color: white;
-    left: 50%;
-    top: 50%;
-    height: 100%;
-    position: absolute;
-    margin-left: -9px;
-    margin-top: -9px;
   }
 }
 
@@ -117,7 +123,7 @@ $palette-icons-span-adjust: 4px;
 }
 
 .palette-component {
-  background-color: white;
+  background-color: $palette-component-entry;
   display: inline-block;
   width: 70px;
   height: 70px;
@@ -126,8 +132,12 @@ $palette-icons-span-adjust: 4px;
   line-height: 70px;
   border-radius: 3px;
 
+  // transform-origin: 0 150%;
+  transition: all .15s linear;
+
   &:hover {
-    background-color: lightgray;
+    background-color: $palette-component-entry-hover;
+    transform: scale(1.1);
   }
 }
 
