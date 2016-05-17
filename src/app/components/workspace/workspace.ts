@@ -7,6 +7,8 @@ import Palette from "../toolwindows/palette/palette";
 
 /**
  * Workspace component.
+ * @author Martin Schade
+ * @since 1.0.0
  */
 @Component({
     selector: 'workspace',
