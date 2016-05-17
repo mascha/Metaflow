@@ -11,7 +11,7 @@
   bottom:0;
 }
 
-.header {
+.navigation {
   position: absolute;
   overflow: hidden;
   top:0;
@@ -20,15 +20,16 @@
   height: $navigation-height;
 }
 
-.main {
+.workspace {
   position: absolute;
   overflow: hidden;
-  top: ($navigation-height + $toolbar-height + 1);
+  top: ($navigation-height /* + $toolbar-height */ + 1);
   right:0;
   left:0;
   bottom: 0;
 }
 
+/*
 .leftbar {
   position: absolute;
   overflow: hidden;
@@ -86,3 +87,5 @@
 .layers {
   @include icon(before, '\F328')
 }
+
+*/
