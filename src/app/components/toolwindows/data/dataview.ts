@@ -1,4 +1,4 @@
-import {Component, Inject, ElementRef} from '@angular/core';
+import {Component, Inject, ElementRef, HostListener} from '@angular/core';
 
 let Plotly = require('plotly.js');
 
@@ -10,30 +10,34 @@ let Plotly = require('plotly.js');
 @Component({
     selector: 'dataview',
     styles: [require('./dataview.scss')],
-    template: ``
+    template: `<div id="plot" class="plot"></div>`
 })
 export default class Dataview {
+
+    static linspace(a,b,n) {
+        if(typeof n === "undefined") n = Math.max(Math.round(b-a)+1,1);
+        if(n<2) { return n===1?[a]:[]; }
+        var i,ret = Array(n);
+        n--;
+        for(i=n;i>=0;i--) { ret[i] = (i*b+(n-i)*a)/n; }
+        return ret;
+    }
 
     static getRandomArbitrary(min: number, max: number) {
         return Math.random() * (max - min) + min;
     }
 
     ngAfterViewInit() {
-        this.element.nativeElement.setId('plot');
         let boxNumber = 30;
         let boxColor = [];
-        let allColors = numeric.linspace(0, 360, boxNumber);
+        let allColors = Dataview.linspace(0, 360, boxNumber);
         let data = [];
         let yValues = [];
-
-//Colors
 
         for( var i = 0; i < boxNumber;  i++ ){
             var result = 'hsl('+ allColors[i] +',50%'+',50%)';
             boxColor.push(result);
         }
-        
-//Create Y Values
 
         for( var i = 0; i < boxNumber;  i++ ){
             var ySingleArray = [];
@@ -45,8 +49,6 @@ export default class Dataview {
             yValues.push(ySingleArray);
         }
 
-//Create Traces
-
         for(let i = 0; i < boxNumber; i++ ) {
             let result = {
                 y: yValues[i],
@@ -57,8 +59,6 @@ export default class Dataview {
             };
             data.push(result);
         }
-
-//Format the layout
 
         var layout = {
             xaxis: {
@@ -73,11 +73,22 @@ export default class Dataview {
             },
             paper_bgcolor: 'rgb(233,233,233)',
             plot_bgcolor: 'rgb(233,233,233)',
-            showlegend:false
+            showlegend:false,
+            margin: {
+                l: 0,
+                b: 0,
+                r: 0,
+                t: 0
+            }
         };
 
 
-        Plotly.newPlot('plot', data, layout);
+        Plotly.newPlot('plot', data, layout, {displayModeBar: false});
+    }
+
+    @HostListener('window:resize')
+    onResize() {
+        Plotly.Plots.resize(this.element.nativeElement.children[0]);
     }
     
     constructor(@Inject(ElementRef) private element: ElementRef) {

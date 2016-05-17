@@ -4,6 +4,7 @@ import Sidebar from "../sidebar/sidebar";
 import DoubleSplit from "../splitpane/doublesplit";
 import TripleSplit from "../splitpane/triplesplit";
 import Palette from "../toolwindows/palette/palette";
+import Dataview from "../toolwindows/data/dataview";
 
 /**
  * Workspace component.
@@ -12,7 +13,7 @@ import Palette from "../toolwindows/palette/palette";
     selector: 'workspace',
     template: require('./workspace.html'),
     styles: [require('./workspace.scss')],
-    directives: [DoubleSplit, TripleSplit, Diagram, Sidebar, Palette],
+    directives: [DoubleSplit, TripleSplit, Diagram, Sidebar, Palette, Dataview],
 })
 export default class Workspace {
     @ViewChild(TripleSplit) triple: TripleSplit;
