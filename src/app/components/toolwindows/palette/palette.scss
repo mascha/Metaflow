@@ -95,7 +95,13 @@ $palette-component-entry: #eeeeee;
   right: $icon-bar-width;
   left:0;
   bottom: 0;
-  background-color: rgba(0,0,0,0.7);
+  transition: background .33s ease-out;
+  z-index: -1;
+
+  &.dimmed {
+    background-color: rgba(0,0,0,0.7);
+    z-index: 9;
+  }
 }
 
 .palette-label {
@@ -105,10 +111,6 @@ $palette-component-entry: #eeeeee;
   text-align: right;
   margin-right: 6px;
   color: white;
-
-  &:hover {
-    background-color: #00b0e8;
-  }
 }
 
 .palette-components {

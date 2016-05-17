@@ -10,7 +10,7 @@
 <div class="palette-icons">
   <div *ngFor="let c of categories" class="palette-icon circle"></div>
 </div>
-<div class="palette-labels">
+<div class="palette-labels" [class.dimmed]="dimmed == true">
   <div *ngFor="let c of categories" class="palette-label">
     <span>{{c}}</span>
   </div>

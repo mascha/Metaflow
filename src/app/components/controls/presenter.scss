@@ -1,0 +1,59 @@
+@import "../../../style/mixins";
+
+$presenter-body: #222222;
+$presenter-icon-hover: white;
+$presenter-icon: #cecece;
+
+:host {
+  bottom: 10px;
+  left: 50px;
+  position: absolute;
+  height: 32px;
+}
+
+.presenter {
+  position: relative;
+  opacity: 0;
+  transition: opacity 500ms linear;
+  border-radius: 4px;
+  background-color: $presenter-body;
+  direction: ltr;
+  padding: 0 5px;
+  display: block;
+  font-size: 13px;
+  white-space: nowrap;
+  z-index: 11;
+
+  &.active {
+    opacity: 1;
+  }
+
+  .flat-button {
+    display: inline-block;
+    font-weight: bold;
+    line-height: 14px;
+    margin: 0;
+    padding: 6px 5px;
+    vertical-align: middle;
+
+    &:before {
+      color: $presenter-icon;
+    }
+
+    &:hover:before {
+      color: $presenter-icon-hover;
+    }
+  }
+}
+
+.presenter-play {
+  @include icon(before, '\f40A')
+}
+
+.presenter-next {
+  @include icon(before, '\f28D')
+}
+
+.presenter-forward {
+  @include icon(before, '\f211')
+}

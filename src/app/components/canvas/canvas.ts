@@ -92,7 +92,7 @@ class NodeLayer {
     template: require('./canvas.html'),
     styles: [require('./canvas.scss')]
 })
-export class Diagram implements AfterViewInit {
+export default class Diagram implements AfterViewInit {
     private _platformProvider: PlatformService;
     private _platform: IPlatformLayer;
 

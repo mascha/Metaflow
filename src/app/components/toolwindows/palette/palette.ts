@@ -8,6 +8,7 @@ import PaletteRegistry from "../../../services/palettes";
 })
 export default class Palette {
     categories: Array<string>;
+    dimmed = false;
 
     components = [
         'Source',
@@ -39,5 +40,13 @@ export default class Palette {
     
     constructor(@Inject(PaletteRegistry) registry: PaletteRegistry) {
         this.categories = registry.getCategories();
+        
+        setTimeout(() => {
+            this.dimmed = true;
+        }, 4000);
+
+        setTimeout(() => {
+            this.dimmed = false;
+        }, 8000);
     }
 }
