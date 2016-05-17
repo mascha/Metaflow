@@ -160,7 +160,7 @@ export class Diagram implements AfterViewInit {
     onClick(event: MouseEvent) {
         let off = HTML.getOffset(this._diagram, event);
         this._behavior.handleClick(off.x, off.y);
-        HTML.block(event);
+        return false;
     }
 
     /**
@@ -172,7 +172,7 @@ export class Diagram implements AfterViewInit {
         let off = HTML.getOffset(this._diagram, event);
         let sca = HTML.normalizeWheel(event);
         this._behavior.handleZoom(off.x, off.y, -sca*20);
-        HTML.block(event);
+        return false;
     }
 
     /**
@@ -203,7 +203,7 @@ export class Diagram implements AfterViewInit {
     onMouseMove(event: MouseEvent) {
         const pos = HTML.getOffset(this._diagram, event);
         this._behavior.handleDrag(pos.x,pos.y);
-        HTML.block(event);
+        return false;
     }
 
     /**
@@ -213,7 +213,7 @@ export class Diagram implements AfterViewInit {
     @HostListener('window:mouseup', ['$event'])
     onMouseUp(event: MouseEvent) {
         this._behavior.stopDrag();
-        HTML.block(event);
+        return false;
     }
 
     /**

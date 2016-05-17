@@ -26,14 +26,14 @@
     top: 0;
     left: 0;
     bottom: 0;
-    padding-right: 0;
+    right: $splitpane-divider-width;
   }
 
   &.right {
     right: 0;
     top: 0;
     bottom: 0;
-    padding-left: $splitpane-divider-width;
+    left: $splitpane-divider-width;
   }
 }
 

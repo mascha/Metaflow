@@ -38,20 +38,39 @@
 
 .sidebar-extras {
 
-  .sidebar-close-icon {
-    position: absolute;
-    right: 8px;
-    top: 6px;
-    cursor: pointer;
+}
 
-    &:hover {
-      @include icon(before, '\f156') {
-        color: $icon-hover;
-      }
-    }
+.sidebar-close-icon {
+  position: absolute;
+  right: 8px;
+  top: 6px;
+  cursor: pointer;
 
+  &:hover {
     @include icon(before, '\f156') {
-      color: $icon-color;
+      color: $icon-hover;
     }
+  }
+
+  @include icon(before, '\f156') {
+    color: $icon-color;
+  }
+}
+
+
+.sidebar-config-icon {
+  position: absolute;
+  right: 32px;
+  top: 6px;
+  cursor: pointer;
+
+  &:hover {
+    @include icon(before, '\f1d8') {
+      color: $icon-hover;
+    }
+  }
+
+  @include icon(before, '\f1d8') {
+    color: $icon-color;
   }
 }

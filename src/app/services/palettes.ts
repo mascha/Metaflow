@@ -9,14 +9,16 @@ import {Injectable} from '@angular/core';
 @Injectable()
 export default class PaletteRegistry {
 
-    private palettes = [
+    private categories = [
         'Processes',
         'Manufacturing',
         'System Dynamics',
-        'Agents'
+        'Agents',
+        'Supply Chain',
+        'Petri Nets'
     ];
 
-    getPalettes(): Array<string> {
-        return this.palettes;
+    getCategories(): Array<string> {
+        return this.categories;
     }
 }

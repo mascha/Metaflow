@@ -25,6 +25,7 @@ export default class Sidebar {
             visible: this.visible
         });
 
+        /*
         setTimeout(() => {
             this.visible = !this.visible;
             this.visibility.emit({
@@ -32,6 +33,7 @@ export default class Sidebar {
                 visible: this.visible
             });
         }, 2000)
+        */
     }
 
     constructor() {

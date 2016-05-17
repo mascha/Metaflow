@@ -1,3 +1,19 @@
-<div class="palette-container">
-
+<div class="palette-components">
+  <div *ngFor="let c of components" class="palette-component">
+    <span>{{c}}</span>
+  </div>
+</div>
+<div class="palette-icons">
+  <div *ngFor="let c of categories" class="palette-icon circle"></div>
+</div>
+<!--
+<div class="palette-labels">
+  <div *ngFor="let c of categories" class="palette-label">
+    <span>{{c}}</span>
+  </div>
+</div>
+-->
+<div class="palette-selected">
+  <span></span>
+  <span></span>
 </div>
