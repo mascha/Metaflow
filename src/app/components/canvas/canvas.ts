@@ -130,6 +130,10 @@ export default class Diagram implements AfterViewInit {
         this._velocity = (value < 0) ? 0.01 : (value > 3.0) ? 3.0 : value;
     }
 
+    get cachedGroups(): Array<ViewGroup> {
+        return this._platform.cachedGroups;
+    }
+
     animatedZoom = false;
     animatedNavigation = true;
     frames = 60;
@@ -246,7 +250,7 @@ export default class Diagram implements AfterViewInit {
      */
     ngAfterViewInit() {
         /* get html elements */
-        this._diagram = this._element.nativeElement; //document.getElementById('diagram-canvas');
+        this._diagram = this._element.nativeElement;
         let surface = this._nodeLayer.getElement();
 
         /* retrieve rendering platform */
@@ -255,9 +259,14 @@ export default class Diagram implements AfterViewInit {
         /* link behavior state machine*/
         if (this._platform) {
             this._camera = this._platform.getCamera();
+        } else {
+            throw Error('Could not create rendering platform');
         }
+
         if (this._camera) {
             this._behavior = new DiagramBehavior(this);
+        } else {
+            throw new Error('Could not create camera instance')
         }
 
         /* attach all layers */
@@ -272,7 +281,7 @@ export default class Diagram implements AfterViewInit {
                 this._camera.attachObserver(this._platform);
             }
         } else {
-            throw new Error('Could not create behavior class for diagram');
+            throw new Error('Could not create diagram controller');
         }
         
         this.onResize();
@@ -338,6 +347,7 @@ class DiagramBehavior implements StateMachine {
             }
             this.current = newState;
             newState.enterState(params);
+            console.log('diagram state: ' + state);
         }
     }
 
@@ -463,7 +473,7 @@ abstract class BaseState implements DiagramState {
             }
         }
 
-        let groups = this.diagram.platform.contents;
+        let groups = this.diagram.cachedGroups;
         // check each child group
         if (!groups) return false;
         let len = groups.length;
@@ -643,37 +653,35 @@ class Panning extends BaseState {
     }
 
     handleMouseUp(x: number, y: number) {
-        const isKinetic = this.isKinetic();
-        const isRubbing = this.isBanding();
+        const kinetic = this.isKinetic();
+        const banding = this.isBanding();
 
-        if (isKinetic && !isRubbing) {
-            let kinetics = Interpolator.throwCamera({
-                speed: this.kinetics.speed,
-                angle: this.kinetics.angle,
-                decay: this.diagram.inertiaDecay
-            });
-
-            this.machine.transitionTo('animating', {
-                forced: false, interpolator: kinetics
-            })
-        }
-
-        if (isRubbing) {
+        if (banding) {
             const ca = this.camera;
-            const wX = ca.worldX;
-            const wY = ca.worldY;
-            const wW = wX + ca.projWidth;
-            const wH = wY + ca.projHeight;
+            const wX = ca.worldX, wW = wX + ca.projWidth;
+            const wY = ca.worldY, wH = wY + ca.projHeight;
             const dx = this.horizontalDisplacement(wX, wW);
             const dy = this.verticalDisplacement(wY, wH);
-            
-            let move = Interpolator.navigateTo({
-                targetX: wX + ca.projWidth / 2 - dx,
-                targetY: wY + ca.projHeight / 2 - dy
-            });
+
             this.machine.transitionTo('animating', {
-                forced: true, interpolator: move
-            })
+                forced: true, interpolator: Interpolator.navigateTo({
+                    targetX: wX + ca.projWidth / 2 - dx,
+                    targetY: wY + ca.projHeight / 2 - dy
+                })
+            });
+        } else if (kinetic) {
+            if (kinetic && !banding) {
+                this.machine.transitionTo('animating', {
+                    forced: false,
+                    interpolator: Interpolator.throwCamera({
+                        speed: this.kinetics.speed,
+                        angle: this.kinetics.angle,
+                        decay: this.diagram.inertiaDecay
+                    })
+                })
+            }
+        } else {
+            this.machine.transitionTo('idle')
         }
     }
     
