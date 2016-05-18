@@ -1,7 +1,3 @@
-/*
- * Copyright (C) Martin Schade, 2015-2016. All rights reserved.
- */
-
 import {Camera} from "../camera";
 import {ViewGroup, ViewItem, ViewVertex} from "../viewmodel";
 import {PlatformLayer, ViewModelRenderer} from "../platform";
@@ -181,19 +177,25 @@ export class PixiRenderer implements ViewModelRenderer<any, any> {
         group.visual = root;
     }
 
-    renderTree(group:ViewGroup):any {
+    renderTree(group: ViewGroup): any {
         throw new Error('Not implemented yet');
     }
 
-    attach(node:ViewVertex, group:ViewGroup) {
+    attach(node: ViewVertex, group: ViewGroup) {
         let child = node.visual;
-        if (!child) throw new Error('Node has no rendered visual');
+        if (!child) {
+            throw new Error('Node has no rendered visual');
+        }
 
         let root = group.visual as PIXI.Container;
-        if (!root) throw new Error('Could not find renderer visual of the given group');
+        if (!root) {
+            throw new Error('Could not find renderer visual of the given group');
+        }
 
         let content = root.children[2] as PIXI.Container;
-        if (!content) throw new Error('Could not find low level content container');
+        if (!content) {
+            throw new Error('Could not find low level content container');
+        }
 
         content.addChild(child);
     }

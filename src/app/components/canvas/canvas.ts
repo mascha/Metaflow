@@ -156,6 +156,7 @@ export default class Diagram {
     private _velocity: number = 1.4;
     private _diagram: HTMLElement;
     private _model: ViewGroup;
+    private _modelProvider: ModelService;
     private _platformProvider: PlatformService;
     private _platform: PlatformLayer;
 
@@ -283,7 +284,9 @@ export default class Diagram {
         } else {
             throw new Error('Could not create diagram controller');
         }
-        
+
+        this.model = this._modelProvider.getModel();
+
         this.onResize();
         this.camera.zoomAndMoveTo(-250, -150, 0.2);
     }
@@ -291,7 +294,7 @@ export default class Diagram {
     constructor(@Inject(PlatformService) service: PlatformService,
                 @Inject(ModelService) models: ModelService,
                 @Inject(ElementRef) element: ElementRef) {
-        this._model = models.getModel();
+        this._modelProvider = models;
         this._element = element;
         this._platformProvider = service;
     }
@@ -373,6 +376,8 @@ class DiagramBehavior implements StateMachine, DiagramEvents {
 
 /**
  * Base state which contains reused state data.
+ * @author Martin Schade
+ * @since 1.0.0
  */
 abstract class BaseState implements DiagramState {
 
@@ -474,7 +479,6 @@ abstract class BaseState implements DiagramState {
         }
 
         let groups = this.diagram.cachedGroups;
-        // check each child group
         if (!groups) return false;
         let len = groups.length;
         for (let i = 0; i < len; i++) {
@@ -524,19 +528,23 @@ abstract class BaseState implements DiagramState {
                 cam.projHeight > parent.height + driftV);
     }
 
+    protected becomeIdle() {
+        this.machine.transitionTo('idle')
+    }
+
     enterState(params?: any) { /* ignore*/ }
 
     leaveState() { /* ignore*/ }
 
-    handleClick(x:number, y:number, double:boolean) { /* ignore*/ }
+    handleClick(x: number, y: number, double: boolean) { /* ignore*/ }
 
-    handleMouseDown(x:number, y:number) { /* ignore*/ }
+    handleMouseDown(x:number, y: number) { /* ignore*/ }
 
-    handleMouseMove(x:number, y:number) { /* ignore*/ }
+    handleMouseMove(x:number, y: number) { /* ignore*/ }
 
-    handleMouseUp(x:number, y:number) { /* ignore*/ }
+    handleMouseUp(x: number, y: number) { /* ignore*/ }
 
-    handleZoom(x:number, y:number, f:number) { /* ignore */}
+    handleZoom(x: number, y: number, f: number) { /* ignore */}
 
     handleKey(event:KeyboardEvent) { /* ignore */}
 
@@ -544,9 +552,8 @@ abstract class BaseState implements DiagramState {
 
     handleStop() { /* ignore */ }
 
-    constructor(
-        protected machine: DiagramBehavior,
-        protected diagram: Diagram) {
+    constructor(protected machine: DiagramBehavior,
+                protected diagram: Diagram) {
         this.camera = diagram.camera;
     }
 }
@@ -563,6 +570,30 @@ abstract class BaseState implements DiagramState {
 class Idle extends BaseState {
     
     private maxZoom = 10;
+
+    /**
+     * TODO detect (drag | pan | draw | select)
+     */
+    handleMouseDown(x: number, y: number) {
+        this.machine.transitionTo('panning', {x: x, y: y});
+    }
+
+    handleClick(x: number, y: number, double: boolean) {
+        if (double) {
+            this.machine.transitionTo('animating', {
+                interpolator: Interpolator.navigateTo({
+                    centerX: this.camera.castRayX(x),
+                    centerY: this.camera.castRayY(y),
+                    velocity: this.diagram.navigationVelocity,
+                    panZoom: this.diagram.zoomPanPreference,
+                    targetWidth: this.getAppropriateScale(),
+                    camera: this.camera,
+                })
+            })
+        } else {
+            /* single click not yet implemented */
+        }
+    }
 
     handleZoom(x: number, y: number, units: number) {
         let zoom = this.camera.scale;
@@ -591,6 +622,13 @@ class Idle extends BaseState {
             );
         }
     }
+
+    /**
+     * TODO change target width to level specific width scale.
+     */
+    private getAppropriateScale(): number {
+        return 1000;
+    }
 }
 
 /**
@@ -601,6 +639,7 @@ class Idle extends BaseState {
  *  TODO limit changing on level switch
  */
 class Panning extends BaseState {
+
     protected offLeft = false;
     protected offRight = false;
     protected offBottom = false;
@@ -611,9 +650,15 @@ class Panning extends BaseState {
     protected pressedY = 0.0;
     protected kinetics: Kinetics;
 
-    enterState() {
+    enterState(params?: any) {
         if (!this.kinetics) {
             this.kinetics = new Kinetics();
+        }
+        if (params) {
+            this.handleMouseDown(
+                params.x || 0,
+                params.y || 0
+            );
         }
     }
 
@@ -792,14 +837,28 @@ class Animating extends BaseState {
     private forceAnimation = false;
     private animation: Interpolator;
 
-    enterState(params?: any) {
-        if (params) {
-            this.forceAnimation = params.forced || false;
-            this.animation = params.interpolator;
-            this.animation.play();    
-        } else {
-            this.machine.transitionTo('idle') ;  
+    handleZoom(x, y, f) {
+        if (!this.forceAnimation) {
+            this.becomeIdle();
+            this.machine.handleZoom(x, y, f);
         }
+    }
+
+    handleMouseDown(x, y) {
+        if (!this.forceAnimation) {
+            this.machine.transitionTo('panning');
+            this.machine.handleMouseDown(x, y);
+        }
+    }
+
+    handleStop() {
+        if (!this.forceAnimation) {
+            this.becomeIdle();
+        }
+    }
+
+    handleAbort() {
+        this.becomeIdle();
     }
 
     leaveState() {
@@ -808,6 +867,18 @@ class Animating extends BaseState {
             this.animation = undefined;
         }
     }
+
+    enterState(params?: any) {
+        if (params) {
+            this.forceAnimation = params.forced || false;
+            this.animation = params.interpolator;
+            this.animation.onFinished = () => this.becomeIdle();
+            this.animation.play();
+        } else {
+            this.becomeIdle();
+        }
+    }
+
 }
 
 /**
@@ -869,13 +940,19 @@ class Selecting extends Panning {
 class Interpolator {
     private start: number;
     private active = false;
-    private onFinished: () => void;
     private frame: number;
 
+    onFinished: () => void;
+
+    /**
+     * Stop the animation
+     */
     stop() {
         if (this.frame) {
             window.cancelAnimationFrame(this.frame);
         }
+
+        this.onFinished = undefined;
         this.frame = undefined;
         this.active = false;
         this.update = undefined;
@@ -911,10 +988,10 @@ class Interpolator {
         const dist = params.speed * time / 4;
         const distX = dist * Math.cos(params.angle);
         const distY = dist * Math.sin(params.angle);
-        return new Interpolator(frac => {
-            const f = 1 - Math.exp(-rate * frac);
-            const posX = cam.cameraX + f * distX;
-            const posY = cam.cameraY + f * distY;
+        return new Interpolator(f => {
+            const t = 1 - Math.exp(-rate * f);
+            const posX = cam.cameraX + t * distX;
+            const posY = cam.cameraY + t * distY;
             cam.moveTo(-posX, -posY);
         }, time);
     }
@@ -923,8 +1000,8 @@ class Interpolator {
      * Navigate to the given center coordinates.
      */
     static navigateTo(params: any): Interpolator {
-        const z = params.canvas.zoomPanPreference;
-        const v = params.canvas.navigationVelocity;
+        const z = params.panZoom;
+        const v = params.velocity;
         const camera = params.camera;
         const aW = camera.projWidth;
         const aX = camera.centerX;
