@@ -2,7 +2,7 @@
  * Copyright (C) Martin Schade, 2015-2016. All rights reserved.
  */
 
-import {ICameraObserver, Camera} from './camera';
+import {CameraObserver, Camera} from './camera';
 import {ViewGroup, ViewVertex} from "./viewmodel";
 
 /**
@@ -25,7 +25,7 @@ import {ViewGroup, ViewVertex} from "./viewmodel";
  * @since 1.0.0
  * @author Martin Schade
  */
-export default class Border implements ICameraObserver {
+export default class Border implements CameraObserver {
     private camera: Camera;
     private region: HTMLCanvasElement;
     private brush: CanvasRenderingContext2D;

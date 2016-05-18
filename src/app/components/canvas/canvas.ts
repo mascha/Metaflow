@@ -2,7 +2,7 @@ import {Component, ElementRef, ViewChild, AfterViewInit, Inject, HostListener} f
 import {Camera} from "../../common/camera";
 import {ViewGroup} from "../../common/viewmodel";
 import {PlatformService} from "../../services/platforms";
-import {IPlatformLayer} from "../../common/platform";
+import {PlatformLayer} from "../../common/platform";
 import Grid from '../../common/grid';
 import Border from '../../common/border';
 import NavigationBar from "../breadcrumbs/breadcrumbs";
@@ -88,7 +88,7 @@ class NodeLayer {
 })
 export default class Diagram implements AfterViewInit {
     private _platformProvider: PlatformService;
-    private _platform: IPlatformLayer;
+    private _platform: PlatformLayer;
 
     get camera(): Camera {
         return this._camera;
@@ -140,14 +140,16 @@ export default class Diagram implements AfterViewInit {
     doBanding = false;
     limitMovement = false;
     doKinetics = false;
-    
+
+    /* Layers and children */
+
     @ViewChild(BorderLayer) private _borderLayer: BorderLayer;
     @ViewChild(GridLayer) private _gridLayer: GridLayer;
     @ViewChild(NodeLayer) private _nodeLayer: NodeLayer;
 
     private _element: ElementRef;
     private _camera: Camera;
-    private _behavior: DiagramContext;
+    private _behavior: StateMachine;
     private _inertiaDecay: number = 0.05;
     private _zoomPan: number = 2.33;
     private _velocity: number = 1.4;
@@ -159,9 +161,28 @@ export default class Diagram implements AfterViewInit {
      * @param event
      */
     @HostListener('dblclick', ['$event'])
+    onDoubleClick(event: MouseEvent) {
+        let off = HTML.getOffset(this._diagram, event);
+        this._behavior.handleClick(off.x, off.y, true);
+        return false;
+    }
+
+    /**
+     * On click event handler.
+     * @param event
+     */
+    @HostListener('click', ['$event'])
     onClick(event: MouseEvent) {
         let off = HTML.getOffset(this._diagram, event);
-        this._behavior.handleClick(off.x, off.y);
+        this._behavior.handleClick(off.x, off.y, false);
+        return false;
+    }
+
+    /**
+     *
+     */
+    @HostListener('keyup', ['$event'])
+    onKeyUp(event: KeyboardEvent) {
         return false;
     }
 
@@ -208,12 +229,14 @@ export default class Diagram implements AfterViewInit {
     }
 
     /**
-     * Mouse upFrom event.
+     * Mouse up event.
+     * @param event
      */
     @HostListener('mouseup', ['$event'])
     @HostListener('window:mouseup', ['$event'])
     onMouseUp(event: MouseEvent) {
-        this._behavior.handleMouseUp();
+        const pos = HTML.getOffset(this._diagram, event);
+        this._behavior.handleMouseUp(pos.x, pos.y);
         return false;
     }
 
@@ -267,13 +290,10 @@ export default class Diagram implements AfterViewInit {
 }
 
 /**
- * Diagram state definition.
- * @author Martin Schade
- * @since 1.0.0
+ * All possible diagram events.
+ *  TODO make this more elegant!
  */
-interface DiagramState {
-    enterState(params: any)
-    leaveState()
+interface DiagramEvents {
     handleClick(x: number, y: number, double: boolean)
     handleMouseDown(x: number, y: number)
     handleMouseMove(x: number, y: number)
@@ -284,7 +304,17 @@ interface DiagramState {
     handleKey(event: KeyboardEvent)
 }
 
-interface StateMachine {
+/**
+ * Diagram state definition.
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+interface DiagramState extends DiagramEvents {
+    enterState(params: any)
+    leaveState()
+}
+
+interface StateMachine extends DiagramEvents {
     transitionTo(state: DiagramState, params: any)
 }
 
@@ -335,7 +365,7 @@ class DiagramContext {
     constructor(
         private canvas: Diagram,
         private camera: Camera,
-        private platform: IPlatformLayer) {
+        private platform: PlatformLayer) {
         this.loadLevel(canvas.model);
     }
 }

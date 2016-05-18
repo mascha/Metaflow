@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {IPlatformLayer} from "../common/platform";
+import {PlatformLayer} from "../common/platform";
 import {PixiLayer} from "../common/platform/pixi";
 
 /**
@@ -16,7 +16,7 @@ export class PlatformService {
      * @param element A html canvas element. Currently only canvas is supported.
      * @returns {IPlatformLayer}
      */
-    getPlatform(element: HTMLCanvasElement): IPlatformLayer {
+    getPlatform(element: HTMLCanvasElement): PlatformLayer {
         return new PixiLayer(element);
     }
 }

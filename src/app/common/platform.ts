@@ -3,7 +3,7 @@
  */
 
 import {ViewGroup, ViewItem, ViewVertex} from "./viewmodel";
-import {ICameraObserver, Camera} from "./camera";
+import {CameraObserver, Camera} from "./camera";
 
 /**
  * A view model renderer.
@@ -99,7 +99,7 @@ export interface IVisualRenderer<E, G> {
  * @author Martin Schade
  * @since 1.0.0
  */
-export interface IPlatformLayer extends ICameraObserver {
+export interface PlatformLayer extends CameraObserver {
     cachedGroups: Array<ViewGroup>;
     getCamera(): Camera;
     setModel(model: ViewGroup)

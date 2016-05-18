@@ -9,7 +9,7 @@
  * @since 1.0.0
  * @author Martin Schade
  */
-export interface ICameraObserver {
+export interface CameraObserver {
     onViewResized();
     onPanChanged(posX: number, posY: number);
     onZoomChanged(zoom: number);
@@ -112,12 +112,12 @@ export abstract class Camera {
     private adjY = 0.0;
     private adjW = -1.0;
     private adjH = -1.0;
-    private obs = Array<ICameraObserver>();
+    private obs = Array<CameraObserver>();
 
     /**
      * Attach a observer to this camera.
      */
-    attachObserver(observer:ICameraObserver) {
+    attachObserver(observer:CameraObserver) {
         this.obs.push(observer);
     }
 

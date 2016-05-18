@@ -2,7 +2,7 @@
  * Copyright (C) Martin Schade, 2015-2016. All rights reserved.
  */
 
-import {ICameraObserver, Camera} from './camera';
+import {CameraObserver, Camera} from './camera';
 
 /**
  * The grid layer is the lowest of all layers. It'scale job is to paint the background of the editor canvas,
@@ -11,7 +11,7 @@ import {ICameraObserver, Camera} from './camera';
  * @author Martin Schade
  * @since 1.0.0
  */
-export default class Grid implements ICameraObserver {
+export default class Grid implements CameraObserver {
     private base: number = 10.0;
     private spacing: number = 1000.0;
     private _active: boolean = true;

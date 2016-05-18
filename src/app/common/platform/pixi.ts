@@ -4,7 +4,7 @@
 
 import {Camera} from "../camera";
 import {ViewGroup, ViewItem, ViewVertex} from "../viewmodel";
-import {IPlatformLayer, IViewModelRenderer} from "../platform";
+import {PlatformLayer, IViewModelRenderer} from "../platform";
 import WebGLRenderer = PIXI.WebGLRenderer;
 
 /**
@@ -41,7 +41,7 @@ export class PixiCamera extends Camera {
  * @author Martin Schade
  * @since 1.0.0
  */
-export class PixiLayer implements IPlatformLayer {
+export class PixiLayer implements PlatformLayer {
 
     private camera: PixiCamera;
     private stage: PIXI.Container;
