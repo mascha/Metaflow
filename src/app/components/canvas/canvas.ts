@@ -1,17 +1,12 @@
-/*
- * Copyright (C) Martin Schade, 2015-2016. All rights reserved.
- */
-
 import {Component, ElementRef, ViewChild, AfterViewInit, Inject, HostListener} from '@angular/core';
 import {Camera} from "../../common/camera";
-import {PlatformService} from "../../services/platforms";
 import {ViewGroup} from "../../common/viewmodel";
+import {PlatformService} from "../../services/platforms";
 import {IPlatformLayer} from "../../common/platform";
 import Grid from '../../common/grid';
 import Border from '../../common/border';
 import NavigationBar from "../breadcrumbs/breadcrumbs";
 import HTML from "../../common/html";
-import Kinetics from "../../common/kinetic";
 import ModelService from "../../services/models";
 
 /**
@@ -61,7 +56,6 @@ class BorderLayer {
         }
     }
 }
-
 
 /**
  * Grid layer component.
@@ -137,6 +131,15 @@ export default class Diagram implements AfterViewInit {
     set navigationVelocity(value: number) {
         this._velocity = (value < 0) ? 0.01 : (value > 3.0) ? 3.0 : value;
     }
+
+    animateZoom = false;
+    animateClick = true;
+    frames = 60;
+    pathFactor = 1000;
+
+    doBanding = false;
+    limitMovement = false;
+    doKinetics = false;
     
     @ViewChild(BorderLayer) private _borderLayer: BorderLayer;
     @ViewChild(GridLayer) private _gridLayer: GridLayer;
@@ -177,8 +180,7 @@ export default class Diagram implements AfterViewInit {
     /**
      * Handle resize events.
      */
-    @HostListener('window:resize')
-    onResize() {
+    @HostListener('window:resize') onResize() {
         const rect = this._diagram.getBoundingClientRect();
         this._camera.updateVisual(0, 0, rect.width, rect.height);
     }
@@ -190,7 +192,7 @@ export default class Diagram implements AfterViewInit {
     @HostListener('mousedown', ['$event'])
     onMouseDown(event: MouseEvent) {
         const pos = HTML.getOffset(this._diagram, event);
-        this._behavior.startDrag(pos.x, pos.y);
+        this._behavior.handleMouseDown(pos.x, pos.y);
         HTML.block(event);
     }
 
@@ -201,7 +203,7 @@ export default class Diagram implements AfterViewInit {
     @HostListener('mousemove', ['$event'])
     onMouseMove(event: MouseEvent) {
         const pos = HTML.getOffset(this._diagram, event);
-        this._behavior.handleDrag(pos.x,pos.y);
+        this._behavior.handleMouseMove(pos.x,pos.y);
         return false;
     }
 
@@ -211,7 +213,7 @@ export default class Diagram implements AfterViewInit {
     @HostListener('mouseup', ['$event'])
     @HostListener('window:mouseup', ['$event'])
     onMouseUp(event: MouseEvent) {
-        this._behavior.stopDrag();
+        this._behavior.handleMouseUp();
         return false;
     }
 
@@ -270,7 +272,7 @@ export default class Diagram implements AfterViewInit {
  * @since 1.0.0
  */
 interface DiagramState {
-    enterState()
+    enterState(params: any)
     leaveState()
     handleClick(x: number, y: number, double: boolean)
     handleMouseDown(x: number, y: number)
@@ -283,7 +285,7 @@ interface DiagramState {
 }
 
 interface StateMachine {
-    transitionTo(event: DiagramState, params: any)
+    transitionTo(state: DiagramState, params: any)
 }
 
 /**
@@ -297,42 +299,18 @@ interface StateMachine {
  */
 class DiagramContext {
 
-    /* Dragging */
-    anchorX = 0.0;
-    anchorY = 0.0;
-    pressedX = 0.0;
-    pressedY = 0.0;
-    doKinetics = false;
-    kinetics: Kinetics;
-
-    /* States */
-    panning = false;
-    animating = false;
-    pathFactor = 1000;
     state: DiagramState;
 
     /* Limits */
-    offLeft = false;
-    offRight = false;
-    offBottom = false;
-    offTop = false;
     rightLimit = +5000.0;
     leftLimit = -5000.0;
     topLimit = -5000.0;
     botLimit = +5000.0;
-    doBanding = false;
-    doLimits = false;
+
+    /* Zooming */
     maxZoom = 10;
 
-    /* Animation */
-    frames = 60;
-    forceAnimation = false;
-    animation: Interpolator;
-    animateZoom = false;
-    animateClick = true;
-
-    /* Viewmodel */
-    private current: ViewGroup;
+    current: ViewGroup;
 
     /**
      * Handle the scroll event.
@@ -341,13 +319,217 @@ class DiagramContext {
      * @param units
      */
     handleZoom(x: number, y: number, units: number) {
-        this.reset();
+        this.state.handleZoom(x, y, units);
+    }
+
+    /**
+     * Handle double click.
+     * @param x Horizontal canvas position
+     * @param y Vertical canvas position
+     * @param doubleClick wether this click was a double click
+     */
+    handleClick(x: number, y: number, doubleClick: boolean) {
+        this.state.handleClick(x, y, doubleClick);
+    }
+    
+    constructor(
+        private canvas: Diagram,
+        private camera: Camera,
+        private platform: IPlatformLayer) {
+        this.loadLevel(canvas.model);
+    }
+}
+
+/**
+ * Idle state.
+ */
+abstract class BaseState implements DiagramState {
+
+    protected camera: Camera;
+
+    /**
+     * Adjust the pan/zoom limits to the new level.
+     * @param level
+     */
+    private adjustLimits(level: ViewGroup) {
+        const widthSpan = 0.9 * level.width;
+        const heightSpan = 0.9 * level.height;
+        this.leftLimit = -widthSpan;
+        this.topLimit = -heightSpan;
+        this.botLimit = level.height + heightSpan;
+        this.rightLimit = level.width + widthSpan;
+    }
+
+    /**
+     * Switches the reference level to the parent level.
+     * If no parent is present, nothing will be done and the
+     * camera stays the same.
+     */
+    private ascend() {
+        if (!this.isRoot()) {
+            let parent = this.getParent();
+            let current = this.context.current;
+
+            let wX = this.camera.worldX;
+            let wY = this.camera.worldY;
+            let cS = this.camera.scale;
+            let rS = cS / parent.scale;
+            let rX = (wX + current.left) * cS;
+            let rY = (wY + current.top) * cS;
+
+            this.loadLevel(parent);
+            this.camera.zoomAndMoveTo(rX, rY, rS);
+        }
+    }
+
+    /**
+     * Switches downTo from the reference level to the child level.
+     * If the given level is not a child of the current one, nothing
+     * will be done.
+     * @param target
+     */
+    private descendInto(target: ViewGroup) {
+        let current = this.context.current;
+        if (target && current && target.parent === current) {
+            let wX = this.camera.worldX;
+            let wY = this.camera.worldY;
+            let cS = this.camera.scale;
+            let rX = (wX - target.left * current.scale) * cS;
+            let rY = (wY - target.top * current.scale) * cS;
+            let rS = (cS * current.scale);
+
+            this.loadLevel(target);
+            this.camera.zoomAndMoveTo(rX, rY, rS);
+        }
+    }
+
+    /**
+     * Render the given viewmodel.
+     * TODO rendering
+     * TODO proxies
+     * TODO caching, reuse previous elements
+     * TODO accelerate
+     * TODO event emitting
+     * TODO move level rendering away from UI
+     * TODO dynamic descent based on LOD-area
+     * @param level
+     */
+    private loadLevel(level: ViewGroup) {
+        this.context.current = level;
+        this.context.canvas.model = level;
+        this.adjustLimits(level);
+    }
+
+    /*
+     * TODO make this really fast!
+     *  - Check content
+     *  - Acceleration structures, adaptive with item sizes
+     *  - Only check visible objects of interest
+     */
+    private detectAndDoSwitch(): boolean {
+        if (!this.current) return false;
+
+        if (!this.isRoot()) {
+            if (this.isOutsideParent()) {
+                this.ascend();
+                return true;
+            }
+        }
+
+        let groups = this.platform.cachedGroups;
+        // check each child group
+        if (!groups) return false;
+        let len = groups.length;
+        for (let i = 0; i < len; i++) {
+            let group = groups[i];
+            if (this.isWithinChildGroup(group)) {
+                this.descendInto(group);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private isRoot(): boolean {
+        return (!this.current.parent);
+    }
+
+    private getParent(): ViewGroup {
+        return this.current.parent as ViewGroup;
+    }
+
+    private isWithinChildGroup(group: ViewGroup): boolean {
+        let scale = this.current.scale;
+        let cam = this.camera;
+        let pW = cam.projWidth;
+        let pH = cam.projHeight;
+        let wX = cam.worldX;
+        let wY = cam.worldY;
+        let gX = group.left * scale;
+        let gY = group.top * scale;
+        let gW = group.width * scale;
+        let gH = group.height * scale;
+        return (wX >= gX && wY >= gY &&
+        wX + pW <= gX + gW &&
+        wY + pH <= gH + gY);
+    }
+
+    private isOutsideParent(): boolean {
+        let parent = this.getParent();
+        let cam = this.camera;
+        let adjust = 0.6;
+        let driftH = parent.width * adjust;
+        let driftV = parent.height * adjust;
+        return (cam.worldX < parent.left - driftH &&
+        cam.worldY < parent.top - driftV &&
+        cam.projWidth > parent.width + driftH &&
+        cam.projHeight > parent.height + driftV);
+    }
+
+    enterState(params: any) {}
+
+    leaveState() {}
+
+    handleClick(x:number, y:number, double:boolean) {}
+
+    handleMouseDown(x:number, y:number) {}
+
+    handleMouseMove(x:number, y:number) {}
+
+    handleMouseUp(x:number, y:number) {}
+
+    handleZoom(x:number, y:number, f:number) {}
+
+    handleKey(event:KeyboardEvent) {}
+
+    handleAbort() {}
+
+    handleStop() {}
+
+    constructor(protected name: string,
+                protected context: DiagramContext,
+                protected diagram: Diagram) {
+        this.camera = diagram.camera;
+    }
+}
+
+/**
+ * Idle state.
+ *  TODO hover effect
+ *  TODO border preview
+ *  TODO border hover effect
+ *  TODO lensing (?)
+ */
+class Idle extends BaseState {
+
+    handleZoom(x: number, y: number, units: number) {
         let zoom = this.camera.scale;
         let factor = Math.pow(1.002, units);
         let target = factor * zoom;
 
         if (!this.detectAndDoSwitch()) {
-            if (this.doLimits) {
+            if (this.canvas.limitMovement) {
                 if (target>= this.maxZoom) {
                     target = this.maxZoom;
                 } else {
@@ -366,21 +548,44 @@ class DiagramContext {
             );
         }
     }
+}
 
-    /**
-     * Handle double click.
-     */
-    handleClick(x: number, y: number) {
-        this.reset();
-        const wX = this.camera.castRayX(x);
-        const wY = this.camera.castRayY(y);
-        this.state.handleClick(
-            this.camera.castRayX(x),
-            this.camera.castRayY(y),
-            false
-        );
+/**
+ * Panning state
+ *  TODO drag vs pan vs connect vs
+ *  TODO kinetics
+ *  TODO banding
+ *  TODO limit changing on level switch
+ *  TODO
+ */
+class Panning extends BaseState {
 
-        // this.navigateTo(wX, wY, 1000.0);
+    protected offLeft = false;
+    protected offRight = false;
+    protected offBottom = false;
+    protected offTop = false;
+    protected anchorX = 0.0;
+    protected anchorY = 0.0;
+    protected pressedX = 0.0;
+    protected pressedY = 0.0;
+    protected kinetics: Kinetics;
+
+    enterState() {
+        if (!this.kinetics) {
+            this.kinetics = new Kinetics();
+        }
+    }
+
+    leaveState() {
+        this.kinetics.reset();
+        this.anchorX = 0.0;
+        this.anchorY = 0.0;
+        this.pressedX = 0.0;
+        this.pressedY = 0.0;
+        this.offLeft = false;
+        this.offRight = false;
+        this.offBottom = false;
+        this.offTop = false;
     }
 
     /**
@@ -425,10 +630,10 @@ class DiagramContext {
      */
     stopDrag() {
         const isKinetic = this.doKinetics &&
-             this.kinetics.hasEnoughMomentum();
+            this.kinetics.hasEnoughMomentum();
         const isRubbing = this.doBanding &&
             (this.offLeft || this.offRight ||
-             this.offBottom || this.offTop);
+            this.offBottom || this.offTop);
 
         if (isKinetic && !isRubbing) {
             this.throwCamera(
@@ -549,296 +754,6 @@ class DiagramContext {
         const tY = wY + pH / 2 - dy;
         ca.moveTo(tX, tY);
     }
-
-    /**
-     * Switches the reference level to the parent level.
-     * If no parent is present, nothing will be done and the
-     * camera stays the same.
-     */
-    private ascend() {
-        if (!this.isRoot()) {
-            let parent = this.getParent();
-            let current = this.current;
-
-            let wX = this.camera.worldX;
-            let wY = this.camera.worldY;
-            let cS = this.camera.scale;
-            let rS = cS / parent.scale;
-            let rX = (wX + current.left) * cS;
-            let rY = (wY + current.top) * cS;
-
-            this.loadLevel(parent);
-            this.camera.zoomAndMoveTo(rX, rY, rS);
-        }
-    }
-
-    /**
-     * Switches downTo from the reference level to the child level.
-     * If the given level is not a child of the current one, nothing
-     * will be done.
-     * @param target
-     */
-    private descendInto(target: ViewGroup) {
-        let current = this.current;
-        if (target && current && target.parent === current) {
-            let wX = this.camera.worldX;
-            let wY = this.camera.worldY;
-            let cS = this.camera.scale;
-            let rX = (wX - target.left * current.scale) * cS;
-            let rY = (wY - target.top * current.scale) * cS;
-            let rS = (cS * current.scale);
-            
-            this.loadLevel(target);
-            this.camera.zoomAndMoveTo(rX, rY, rS);
-        }
-    }
-
-    /**
-     * Render the given viewmodel.
-     * TODO rendering
-     * TODO proxies
-     * TODO caching, reuse previous elements
-     * TODO accelerate
-     * TODO event emitting
-     * TODO move level rendering away from UI
-     * TODO dynamic descent based on LOD-area
-     * @param level
-     */
-    private loadLevel(level: ViewGroup) {
-        this.current = level;
-        this.canvas.model = level;
-        this.adjustLimits(level);
-    }
-
-    private adjustLimits(level: ViewGroup) {
-        const widthSpan = 0.9 * level.width;
-        const heightSpan = 0.9 * level.height;
-        this.leftLimit = -widthSpan;
-        this.topLimit = -heightSpan;
-        this.botLimit = level.height + heightSpan;
-        this.rightLimit = level.width + widthSpan;
-    }
-
-    /*
-     * TODO make this really fast!
-     *  - Check content
-     *  - Acceleration structures, adaptive with item sizes
-     *  - Only check visible objects of interest
-     */
-    private detectAndDoSwitch(): boolean {
-        if (!this.current) return false;
-
-        if (!this.isRoot()) {
-            if (this.isOutsideParent()) {
-                this.ascend();
-                return true;
-            }
-        }
-
-        let groups = this.platform.cachedGroups;
-        // check each child group
-        if (!groups) return false;
-        let len = groups.length;
-        for (let i = 0; i < len; i++) {
-            let group = groups[i];
-            if (this.isWithinChildGroup(group)) {
-                this.descendInto(group);
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private isRoot(): boolean {
-        return (!this.current.parent);
-    }
-
-    private getParent(): ViewGroup {
-        return this.current.parent as ViewGroup;
-    }
-
-    private isWithinChildGroup(group: ViewGroup): boolean {
-        let scale = this.current.scale;
-        let cam = this.camera;
-        let pW = cam.projWidth;
-        let pH = cam.projHeight;
-        let wX = cam.worldX;
-        let wY = cam.worldY;
-        let gX = group.left * scale;
-        let gY = group.top * scale;
-        let gW = group.width * scale;
-        let gH = group.height * scale;
-        return (wX >= gX && wY >= gY &&
-                wX + pW <= gX + gW &&
-                wY + pH <= gH + gY);
-    }
-
-    private isOutsideParent(): boolean {
-        let parent = this.getParent();
-        let cam = this.camera;
-        let adjust = 0.6;
-        let driftH = parent.width * adjust;
-        let driftV = parent.height * adjust;
-        return (cam.worldX < parent.left - driftH &&
-                cam.worldY < parent.top - driftV &&
-                cam.projWidth > parent.width + driftH &&
-                cam.projHeight > parent.height + driftV);
-    }
-
-    private throwCamera(speed: number, angle: number, decay: number) {
-        const cam = this.camera;
-        const time = -(1000.0 / this.frames) / Math.log(1.0 - decay);
-        const rate = 1.0 / (1.0 - decay);
-        const dist = speed * time / 4;
-        const distX = dist * Math.cos(angle);
-        const distY = dist * Math.sin(angle);
-        this.play(new Interpolator(frac => {
-            const f = 1 - Math.exp(-rate * frac);
-            const posX = cam.cameraX + f * distX;
-            const posY = cam.cameraY + f * distY;
-            cam.moveTo(-posX, -posY);
-        }, time));
-    }
-
-    /*
-     * Navigate to the given center coordinates.
-     */
-    private navigateTo(centerX: number, centerY: number, targetWidth: number) {
-        const z = this.canvas.zoomPanPreference;
-        const v = this.canvas.navigationVelocity;
-        const camera = this.camera;
-        const aW = camera.projWidth;
-        const aX = camera.centerX;
-        const aY = camera.centerY;
-        const eW = targetWidth;
-        const dX = centerX - aX;
-        const dY = centerY - aY;
-        const dU = Math.hypot(dX, dY);
-
-        if (dU < 1e-8) {
-            const S = Math.log(eW/aW) / Math.SQRT2;
-            this.play(new Interpolator(f => {
-                const tW = aW * Math.exp(Math.SQRT2 * f * S);
-                const vW = camera.visualWidth;
-                const vH = camera.visualHeight;
-                const vZ = vW / tW;
-                const x = (aX + dX * f);
-                const y = (aY + dY * f);
-                camera.zoomAndMoveTo(
-                    vZ * x - vW / 2.0,
-                    vZ * y - vH / 2.0,
-                    vZ
-                );
-            }, Math.sqrt(1 + S) * this.pathFactor / v));
-        } else {
-            const dZ = z * z * dU;
-            const dA = eW * eW - aW * aW;
-            const b0 = (dA + dZ * dZ) / (2.0 * aW * dZ);
-            const b1 = (dA - dZ * dZ) / (2.0 * eW * dZ);
-            const f0 = Math.sqrt(1.0 + b0 * b0) - b0;
-            const f1 = Math.sqrt(1.0 + b1 * b1) - b1;
-            const r0 = Math.log(f0 > 0 ? f0 : 1e-12);
-            const r1 = Math.log(f1 > 0 ? f1 : 1e-12);
-            const ch = Math.cosh(r0);
-            const sh = Math.sinh(r0);
-            const S = (r1 - r0) / z;
-            const m = aW / (z * z);
-            this.play(new Interpolator(f => {
-                const s = f * S;
-                const u = m * (Math.tanh(z * s + r0) * ch - sh);
-                const w = aW * ch / Math.cosh(z * s + r0);
-                const vW = camera.visualWidth;
-                const vH = camera.visualHeight;
-                const vZ = vW / w;
-                const x = aX + dX / dU * u;
-                const y = aY + dY / dU * u;
-                camera.zoomAndMoveTo(
-                    vZ * x - vW / 2.0,
-                    vZ * y - vH / 2.0,
-                    vZ
-                );
-            }, Math.sqrt(1 + S) * this.pathFactor / v));
-        }
-    }
-
-    private play(animation: Interpolator) {
-        this.stopAnimation();
-        this.animating = true;
-        this.animation = animation;
-        this.animation.play();
-    }
-
-    private reset() {
-        this.panning = false;
-        this.stopAnimation();
-        this.kinetics.reset();
-    }
-
-    private stopAnimation() {
-        if (this.animation) {
-            this.animation.stop();
-            this.animation = undefined;
-        }
-        this.animating = false;
-    }
-    
-    constructor(
-        private canvas: Diagram,
-        private camera: Camera,
-        private platform: IPlatformLayer) {
-        this.kinetics = new Kinetics();
-        this.loadLevel(canvas.model);
-    }
-}
-
-/**
- * Idle state.
- */
-class Idle implements DiagramState {
-    enterState() {
-    }
-
-    leaveState() {
-    }
-
-    handleClick(x:number, y:number, double:boolean) {
-    }
-
-    handleMouseDown(x:number, y:number) {
-    }
-
-    handleMouseMove(x:number, y:number) {
-    }
-
-    handleMouseUp(x:number, y:number) {
-    }
-
-    handleZoom(x:number, y:number, f:number) {
-    }
-
-    handleKey(event:KeyboardEvent) {
-    }
-
-    handleAbort() {
-    }
-
-    handleStop() {
-    }
-
-    constructor(private context: DiagramContext) {}
-}
-
-/**
- * Panning state
- *  TODO drag vs pan vs connect vs
- *  TODO kinetics
- *  TODO banding
- *  TODO limit changing on level switch
- *  TODO
- */
-class Panning extends Idle {
-
 }
 
 /**
@@ -848,8 +763,33 @@ class Panning extends Idle {
  *  TODO interaction with banding
  *  TODO forced animation
  */
-class Animating extends Idle {
+class Animating extends BaseState {
 
+    private forceAnimation = false;
+    private animation: Interpolator;
+
+    enterState(params: any) {
+
+    }
+
+    leaveState() {
+        this.stopAnimation();
+    }
+
+    private play(interpolation: Interpolator) {
+        this.stopAnimation();
+        this.animating = true;
+        this.animation = animation;
+        this.animation.play();
+    }
+
+    private stopAnimation() {
+        if (this.animation) {
+            this.animation.stop();
+            this.animation = undefined;
+        }
+        this.animating = false;
+    }
 }
 
 /**
@@ -859,7 +799,7 @@ class Animating extends Idle {
  *  TODO connect with editor
  *  TODO visual preview
  */
-class Drawing extends Dragging {
+class Drawing extends Panning {
 
 }
 
@@ -869,7 +809,7 @@ class Drawing extends Dragging {
  *  TODO multiple drag
  *  TODO node effect on possible drag
  */
-class Dragging extends Idle {
+class Dragging extends Panning {
 
 }
 
@@ -878,7 +818,7 @@ class Dragging extends Idle {
  *  TODO edge drag
  *  TODO visual connection effect
  */
-class Connecting extends Dragging {
+class Connecting extends Panning {
 
 }
 
@@ -887,7 +827,7 @@ class Connecting extends Dragging {
  *  TODO edit detection
  *  TODO input overlay (else ?)
  */
-class Editing extends Idle {
+class Editing extends BaseState {
 
 }
 
@@ -898,7 +838,7 @@ class Editing extends Idle {
  *  TODO lasso selection
  *  TODO visual overlay effect
  */
-class Selecting extends Idle {
+class Selecting extends Panning {
 
 }
 
@@ -946,6 +886,174 @@ class Interpolator {
         self.frame = window.requestAnimationFrame(func);
     }
 
+    static throwCamera(params: any): Interpolator {
+        const cam = params.camera;
+        const time = -(1000.0 / params.frames) / Math.log(1.0 - params.decay);
+        const rate = 1.0 / (1.0 - params.decay);
+        const dist = params.speed * time / 4;
+        const distX = dist * Math.cos(params.angle);
+        const distY = dist * Math.sin(params.angle);
+        return new Interpolator(frac => {
+            const f = 1 - Math.exp(-rate * frac);
+            const posX = cam.cameraX + f * distX;
+            const posY = cam.cameraY + f * distY;
+            cam.moveTo(-posX, -posY);
+        }, time);
+    }
+
+    /**
+     * Navigate to the given center coordinates.
+     */
+    static navigateTo(params: any): Interpolator {
+        const z = params.canvas.zoomPanPreference;
+        const v = params.canvas.navigationVelocity;
+        const camera = params.camera;
+        const aW = camera.projWidth;
+        const aX = camera.centerX;
+        const aY = camera.centerY;
+        const eW = params.targetWidth;
+        const dX = params.centerX - aX;
+        const dY = params.centerY - aY;
+        const dU = Math.hypot(dX, dY);
+
+        if (dU < 1e-8) {
+            const S = Math.log(eW/aW) / Math.SQRT2;
+            return new Interpolator(f => {
+                const tW = aW * Math.exp(Math.SQRT2 * f * S);
+                const vW = camera.visualWidth;
+                const vH = camera.visualHeight;
+                const vZ = vW / tW;
+                const x = (aX + dX * f);
+                const y = (aY + dY * f);
+                camera.zoomAndMoveTo(
+                    vZ * x - vW / 2.0,
+                    vZ * y - vH / 2.0,
+                    vZ
+                );
+            }, Math.sqrt(1 + S) * params.pathFactor / v);
+        } else {
+            const dZ = z * z * dU;
+            const dA = eW * eW - aW * aW;
+            const b0 = (dA + dZ * dZ) / (2.0 * aW * dZ);
+            const b1 = (dA - dZ * dZ) / (2.0 * eW * dZ);
+            const f0 = Math.sqrt(1.0 + b0 * b0) - b0;
+            const f1 = Math.sqrt(1.0 + b1 * b1) - b1;
+            const r0 = Math.log(f0 > 0 ? f0 : 1e-12);
+            const r1 = Math.log(f1 > 0 ? f1 : 1e-12);
+            const ch = Math.cosh(r0);
+            const sh = Math.sinh(r0);
+            const S = (r1 - r0) / z;
+            const m = aW / (z * z);
+            return new Interpolator(f => {
+                const s = f * S;
+                const u = m * (Math.tanh(z * s + r0) * ch - sh);
+                const w = aW * ch / Math.cosh(z * s + r0);
+                const vW = camera.visualWidth;
+                const vH = camera.visualHeight;
+                const vZ = vW / w;
+                const x = aX + dX / dU * u;
+                const y = aY + dY / dU * u;
+                camera.zoomAndMoveTo(
+                    vZ * x - vW / 2.0,
+                    vZ * y - vH / 2.0,
+                    vZ
+                );
+            }, Math.sqrt(1 + S) * params.pathFactor / v);
+        }
+    }
+
     constructor(private update: (f: number) => void,
                 private duration: number) {}
+}
+
+/**
+ * Provides kinetic state keeping. Keeps track of position, speed and angle.
+ *
+ * Every time a change is made, update the state via the [update] method, then
+ * ask whether to use the inertial scrolling behavior by using [enoughMomentum].
+ *
+ * @property speed The current magnitude of the velocity in px/ms.
+ * @property angle The current direction of the velocity in rad.
+ * @property smoothness A value between zero and smaller than one. Values around zero
+ *                      must produce a very direct, snappy speed and angle resolution,
+ *                      while higher values around one must produce more inert behavior.
+ *
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+class Kinetics {
+
+    get smoothness(): number { return this._smooth; }
+
+    set smoothness(s: number) { this._smooth = (s < 0) ? 0 : (s > 1) ? 1 : s; }
+
+    get speed(): number { return this._speed; }
+
+    get angle(): number { return this._angle; }
+
+    minimumDelay = 66; // ms
+
+    private _speed = 0.0;
+    private _angle = 0.0;
+    private _smooth = 0.8;
+    private _lastX = 0.0;
+    private _lastY = 0.0;
+    private _lastT = 0.0;
+    private _deltaX = 0.0;
+    private _deltaY = 0.0;
+
+    /**
+     * Update the internal state.
+     * @param posX
+     * @param posY
+     */
+    update(posX: number, posY: number) {
+        const x = -posX;
+        const y = -posY;
+        const t = Date.now();
+
+        if (this._lastX && this._lastY && this._lastT) {
+            const dt = (t - this._lastT);
+            const vx = (x - this._lastX) / dt;
+            const vy = (y - this._lastY) / dt;
+            const s = this._smooth;
+            this._deltaX = (1 - s) * vx + s * this._deltaX;
+            this._deltaY = (1 - s) * vy + s * this._deltaY;
+            this._angle = Math.atan2(this._deltaY, this._deltaX);
+            this._speed = Math.hypot(this._deltaX, this._deltaY);
+        }
+
+        this._lastX = x;
+        this._lastY = y;
+        this._lastT = t;
+    }
+
+    /**
+     * Check whether a) the momentum is big enough to warrant kinetic behavior
+     * and b) if the user stopped the motion mid-progress.
+     * @returns {boolean}
+     */
+    hasEnoughMomentum(): boolean {
+        if (!this._lastT) {
+            return false;
+        }
+        if (this._speed <= 0) {
+            return false;
+        }
+        const minLimit = Date.now() - this.minimumDelay;
+        return this._lastT >= minLimit;
+    }
+
+    /**
+     * Reset the internal state.
+     */
+    reset() {
+        this._lastX = NaN;
+        this._lastY = NaN;
+        this._lastT = NaN;
+        this._speed = 0.0;
+        this._angle = 0.0;
+        this._deltaX = 0.0;
+        this._deltaY = 0.0;
+    }
 }
