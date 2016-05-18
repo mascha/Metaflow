@@ -44,7 +44,7 @@ export interface DiagramState extends DiagramEvents {
 /**
  * State machine interface.
  */
-export interface StateMachine extends DiagramEvents {
+export interface StateMachine {
 
     /**
      * Execute a state transition.

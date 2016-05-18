@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild, AfterViewInit, Inject, HostListener} from '@angular/core';
+import {Component, ElementRef, ViewChild, Inject, HostListener} from '@angular/core';
 import {Camera} from "../../common/camera";
 import {ViewGroup} from "../../common/viewmodel";
 import {PlatformService} from "../../services/platforms";
@@ -8,7 +8,7 @@ import Border from '../../common/border';
 import NavigationBar from "../breadcrumbs/breadcrumbs";
 import HTML from "../../common/html";
 import ModelService from "../../services/models";
-import {StateMachine, DiagramState} from "../../common/diagrams";
+import {StateMachine, DiagramState, DiagramEvents} from "../../common/diagrams";
 
 /**
  * Grid layer component.
@@ -87,7 +87,7 @@ class NodeLayer {
     template: require('./canvas.html'),
     styles: [require('./canvas.scss')]
 })
-export default class Diagram implements AfterViewInit {
+export default class Diagram {
     get camera(): Camera {
         return this._camera;
     }
@@ -150,7 +150,7 @@ export default class Diagram implements AfterViewInit {
 
     private _element: ElementRef;
     private _camera: Camera;
-    private _behavior: StateMachine;
+    private _behavior: DiagramEvents;
     private _inertiaDecay: number = 0.05;
     private _zoomPan: number = 2.33;
     private _velocity: number = 1.4;
@@ -302,7 +302,7 @@ export default class Diagram implements AfterViewInit {
  * @author Martin Schade
  * @since 1.0.0
  */
-class DiagramBehavior implements StateMachine {
+class DiagramBehavior implements StateMachine, DiagramEvents {
 
     private current: DiagramState;
     private states: any;
