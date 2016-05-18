@@ -5,7 +5,6 @@
 import {Camera} from "../camera";
 import {ViewGroup, ViewItem, ViewVertex} from "../viewmodel";
 import {PlatformLayer, ViewModelRenderer} from "../platform";
-import WebGLRenderer = PIXI.WebGLRenderer;
 
 /**
  * Provides a pan-zoom surface for

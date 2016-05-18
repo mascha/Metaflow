@@ -8,7 +8,7 @@ import Border from '../../common/border';
 import NavigationBar from "../breadcrumbs/breadcrumbs";
 import HTML from "../../common/html";
 import ModelService from "../../services/models";
-import {DiagramEvents, StateMachine, DiagramState} from "../../common/diagrams";
+import {StateMachine, DiagramState} from "../../common/diagrams";
 
 /**
  * Grid layer component.
