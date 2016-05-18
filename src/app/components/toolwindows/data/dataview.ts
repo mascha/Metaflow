@@ -73,7 +73,7 @@ export default class Dataview {
             },
             paper_bgcolor: 'rgb(233,233,233)',
             plot_bgcolor: 'rgb(233,233,233)',
-            showlegend:false,
+            showlegend:true,
             margin: {
                 l: 0,
                 b: 0,
@@ -81,7 +81,6 @@ export default class Dataview {
                 t: 0
             }
         };
-
 
         Plotly.newPlot('plot', data, layout, {displayModeBar: false});
     }
