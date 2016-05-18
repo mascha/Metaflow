@@ -12,7 +12,7 @@ if (process.env.ENV === 'build') {
 }
 
 import {App} from './app/app';
-import {PlatformService} from "./app/services/platforms";
+import PlatformService from "./app/services/platforms";
 import ModelService from "./app/services/models";
 import PaletteRegistry from "./app/services/palettes";
 
