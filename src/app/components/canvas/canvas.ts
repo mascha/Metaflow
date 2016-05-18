@@ -314,14 +314,6 @@ class DiagramBehavior implements StateMachine {
         this.current.handleMouseUp(x, y);
     }
 
-    handleAbort() {
-        this.current.handleAbort();
-    }
-
-    handleStop() {
-        this.current.handleStop();
-    }
-
     handleZoom(x:number, y:number, f:number) {
         this.current.handleZoom(x, y, f);
     }
@@ -330,11 +322,14 @@ class DiagramBehavior implements StateMachine {
         this.current.handleKey(event);
     }
 
-    /**
-     * Enter the new state.
-     * @param state
-     * @param params
-     */
+    handleAbort() {
+        this.current.handleAbort();
+    }
+
+    handleStop() {
+        this.current.handleStop();
+    }
+
     transitionTo(state: string, params?: any) {
         let newState = this.states[state];
         if (newState) {
@@ -346,14 +341,10 @@ class DiagramBehavior implements StateMachine {
         }
     }
 
-    /**
-     * 
-     */
     reenterState(params?: any) {
         this.current.leaveState();
         this.current.enterState(params)
     }
-
 
     /**
      * Assemble state machine.
@@ -365,7 +356,7 @@ class DiagramBehavior implements StateMachine {
             'panning': new Panning(this, diagram),
             'animating': new Animating(this, diagram)
         };
-        
+        /* Initial state */
         this.transitionTo('idle', null);
     }
 }
@@ -375,7 +366,6 @@ class DiagramBehavior implements StateMachine {
  */
 abstract class BaseState implements DiagramState {
 
-    /* Limits */
     rightLimit = +5000.0;
     leftLimit = -5000.0;
     topLimit = -5000.0;
@@ -473,7 +463,7 @@ abstract class BaseState implements DiagramState {
             }
         }
 
-        let groups = this.diagram.model.contents;
+        let groups = this.diagram.platform.contents;
         // check each child group
         if (!groups) return false;
         let len = groups.length;
@@ -524,25 +514,25 @@ abstract class BaseState implements DiagramState {
                 cam.projHeight > parent.height + driftV);
     }
 
-    enterState(params?: any) {}
+    enterState(params?: any) { /* ignore*/ }
 
-    leaveState() {}
+    leaveState() { /* ignore*/ }
 
-    handleClick(x:number, y:number, double:boolean) {}
+    handleClick(x:number, y:number, double:boolean) { /* ignore*/ }
 
-    handleMouseDown(x:number, y:number) {}
+    handleMouseDown(x:number, y:number) { /* ignore*/ }
 
-    handleMouseMove(x:number, y:number) {}
+    handleMouseMove(x:number, y:number) { /* ignore*/ }
 
-    handleMouseUp(x:number, y:number) {}
+    handleMouseUp(x:number, y:number) { /* ignore*/ }
 
-    handleZoom(x:number, y:number, f:number) {}
+    handleZoom(x:number, y:number, f:number) { /* ignore */}
 
-    handleKey(event:KeyboardEvent) {}
+    handleKey(event:KeyboardEvent) { /* ignore */}
 
-    handleAbort() {}
+    handleAbort() { /* ignore */}
 
-    handleStop() {}
+    handleStop() { /* ignore */ }
 
     constructor(
         protected machine: DiagramBehavior,
@@ -561,6 +551,8 @@ abstract class BaseState implements DiagramState {
  *  TODO lensing (?)
  */
 class Idle extends BaseState {
+    
+    private maxZoom = 10;
 
     handleZoom(x: number, y: number, units: number) {
         let zoom = this.camera.scale;
@@ -599,7 +591,6 @@ class Idle extends BaseState {
  *  TODO limit changing on level switch
  */
 class Panning extends BaseState {
-
     protected offLeft = false;
     protected offRight = false;
     protected offBottom = false;
@@ -627,24 +618,14 @@ class Panning extends BaseState {
         this.offBottom = false;
         this.offTop = false;
     }
-
-    /**
-     * Handle drag start.
-     * @param x
-     * @param y
-     */
+    
     handleMouseDown(x: number, y: number) {
         this.pressedX = x;
         this.pressedY = y;
         this.anchorX = this.camera.cameraX;
         this.anchorY = this.camera.cameraY;
     }
-
-    /**
-     * Handle a continuing drag event.
-     * @param x
-     * @param y
-     */
+    
     handleMouseMove(x: number, y: number) {
         let dragX = this.pressedX - this.anchorX - x;
         let dragY = this.pressedY - this.anchorY - y;
@@ -661,6 +642,49 @@ class Panning extends BaseState {
         this.camera.moveTo(dragX, dragY);
     }
 
+    handleMouseUp(x: number, y: number) {
+        const isKinetic = this.isKinetic();
+        const isRubbing = this.isBanding();
+
+        if (isKinetic && !isRubbing) {
+            let kinetics = Interpolator.throwCamera({
+                speed: this.kinetics.speed,
+                angle: this.kinetics.angle,
+                decay: this.diagram.inertiaDecay
+            });
+
+            this.machine.transitionTo('animating', {
+                forced: false, interpolator: kinetics
+            })
+        }
+
+        if (isRubbing) {
+            const ca = this.camera;
+            const wX = ca.worldX;
+            const wY = ca.worldY;
+            const wW = wX + ca.projWidth;
+            const wH = wY + ca.projHeight;
+            const dx = this.horizontalDisplacement(wX, wW);
+            const dy = this.verticalDisplacement(wY, wH);
+            
+            let move = Interpolator.navigateTo({
+                targetX: wX + ca.projWidth / 2 - dx,
+                targetY: wY + ca.projHeight / 2 - dy
+            });
+            this.machine.transitionTo('animating', {
+                forced: true, interpolator: move
+            })
+        }
+    }
+    
+    private horizontalDisplacement(wX: number, wW: number): number {
+        return (this.offLeft) ? wX - this.leftLimit: (this.offRight) ? wW - this.rightLimit: 0;
+    }
+    
+    private verticalDisplacement(wY: number, wH: number): number {
+        return (this.offTop) ? wY - this.topLimit: (this.offBottom) ? wH - this.botLimit: 0;
+    }
+
     private isBanding(): boolean {
         return (this.diagram.doBanding && (this.offLeft || this.offRight || this.offBottom || this.offTop));
     }
@@ -669,33 +693,6 @@ class Panning extends BaseState {
         return (this.diagram.useKinetics && this.kinetics.hasEnoughMomentum());
     }
 
-    /**
-     * Finish the current dragging state.
-     */
-    handleMouseUp(x: number, y: number) {
-        const isKinetic = this.isKinetic();
-        const isRubbing = this.isBanding();
-
-        if (isKinetic && !isRubbing) {
-            let anim = Interpolator.throwCamera({
-                speed: this.kinetics.speed,
-                angle: this.kinetics.angle,
-                decay: this.diagram.inertiaDecay
-            });
-
-            this.transitionTo('animating', {
-                forced: true, interpolator: anim
-            })
-        }
-
-        if (isRubbing) {
-            this.handleOffLimitSetback();
-        }
-    }
-
-    /*
-     * Modify the dragged position according to the damping applied at the border.
-     */
     private handleHorizontalConstraints(dragX: number): number {
         const cameraMin = this.camera.worldX;
         const cameraWid = this.camera.projWidth;
@@ -733,9 +730,6 @@ class Panning extends BaseState {
         return dragX;
     }
 
-    /*
-     * Modify the dragged position according to the damping applied at the border.
-     */
     private handleVerticalConstraints(dragY: number): number {
         const cM = this.camera.worldY;
         const cH = this.camera.projHeight;
@@ -772,32 +766,9 @@ class Panning extends BaseState {
 
         return dragY;
     }
-
-    /*
-     * Calculate damping factor.
-     */
+    
     private damp(violation: number, limit: number): number {
         return 1.0 + Math.log10(Math.abs(violation / limit));
-    }
-
-    /*
-     * Reset the camera to a valid position.
-     */
-    private handleOffLimitSetback() {
-        const ca = this.camera;
-        const wX = ca.worldX;
-        const wY = ca.worldY;
-        const pW = ca.projWidth;
-        const pH = ca.projHeight;
-        const wW = wX + pW;
-        const wH = wY + pH;
-        const dx = (this.offLeft) ? wX - this.leftLimit:
-                   (this.offRight) ? wW - this.rightLimit: 0;
-        const dy = (this.offTop) ? wY - this.topLimit:
-                   (this.offBottom) ? wH - this.botLimit: 0;
-        const tX = wX + pW / 2 - dx;
-        const tY = wY + pH / 2 - dy;
-        ca.moveTo(tX, tY);
     }
 }
 
@@ -813,10 +784,14 @@ class Animating extends BaseState {
     private forceAnimation = false;
     private animation: Interpolator;
 
-    enterState(params: any) {
-        this.forceAnimation = params.forced || false;
-        this.animation = params.interpolator;
-        this.animation.play();
+    enterState(params?: any) {
+        if (params) {
+            this.forceAnimation = params.forced || false;
+            this.animation = params.interpolator;
+            this.animation.play();    
+        } else {
+            this.machine.transitionTo('idle') ;  
+        }
     }
 
     leaveState() {
