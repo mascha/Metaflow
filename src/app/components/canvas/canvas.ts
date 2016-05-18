@@ -968,6 +968,7 @@ class Interpolator {
         if (this.active) {
             return;
         }
+        console.log('animating ...');
         this.active = true;
         this.start = Date.now();
         const self = this;
