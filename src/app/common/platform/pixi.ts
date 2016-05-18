@@ -4,7 +4,7 @@
 
 import {Camera} from "../camera";
 import {ViewGroup, ViewItem, ViewVertex} from "../viewmodel";
-import {PlatformLayer, IViewModelRenderer} from "../platform";
+import {PlatformLayer, ViewModelRenderer} from "../platform";
 import WebGLRenderer = PIXI.WebGLRenderer;
 
 /**
@@ -145,7 +145,7 @@ export class PixiLayer implements PlatformLayer {
  * @author Martin Schade
  * @since 1.0.0
  */
-export class PixiRenderer implements IViewModelRenderer<any, any> {
+export class PixiRenderer implements ViewModelRenderer<any, any> {
 
     renderItem(item:ViewItem) : any {
         let shape = new PIXI.Graphics()

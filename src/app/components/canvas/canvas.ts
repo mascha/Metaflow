@@ -8,6 +8,7 @@ import Border from '../../common/border';
 import NavigationBar from "../breadcrumbs/breadcrumbs";
 import HTML from "../../common/html";
 import ModelService from "../../services/models";
+import {DiagramEvents, StateMachine, DiagramState} from "../../common/diagrams";
 
 /**
  * Grid layer component.
@@ -87,9 +88,6 @@ class NodeLayer {
     styles: [require('./canvas.scss')]
 })
 export default class Diagram implements AfterViewInit {
-    private _platformProvider: PlatformService;
-    private _platform: PlatformLayer;
-
     get camera(): Camera {
         return this._camera;
     }
@@ -132,14 +130,13 @@ export default class Diagram implements AfterViewInit {
         this._velocity = (value < 0) ? 0.01 : (value > 3.0) ? 3.0 : value;
     }
 
-    animateZoom = false;
-    animateClick = true;
+    animatedZoom = false;
+    animatedNavigation = true;
     frames = 60;
     pathFactor = 1000;
-
     doBanding = false;
     limitMovement = false;
-    doKinetics = false;
+    useKinetics = false;
 
     /* Layers and children */
 
@@ -155,6 +152,8 @@ export default class Diagram implements AfterViewInit {
     private _velocity: number = 1.4;
     private _diagram: HTMLElement;
     private _model: ViewGroup;
+    private _platformProvider: PlatformService;
+    private _platform: PlatformLayer;
 
     /**
      * On click event handler.
@@ -179,10 +178,12 @@ export default class Diagram implements AfterViewInit {
     }
 
     /**
-     *
+     * Keyboard event handler.
+     * @param event
      */
     @HostListener('keyup', ['$event'])
     onKeyUp(event: KeyboardEvent) {
+        this._behavior.handleKey(event);
         return false;
     }
 
@@ -242,8 +243,6 @@ export default class Diagram implements AfterViewInit {
 
     /**
      * Assemble all canvas layers.
-     *
-     * TODO refactor so assembly is easier to understand!
      */
     ngAfterViewInit() {
         /* get html elements */
@@ -258,7 +257,7 @@ export default class Diagram implements AfterViewInit {
             this._camera = this._platform.getCamera();
         }
         if (this._camera) {
-            this._behavior = new DiagramContext(this, this._camera, this._platform);
+            this._behavior = new DiagramBehavior(this);
         }
 
         /* attach all layers */
@@ -282,7 +281,7 @@ export default class Diagram implements AfterViewInit {
     
     constructor(@Inject(PlatformService) service: PlatformService,
                 @Inject(ModelService) models: ModelService,
-                @Inject(ElementRef) element:ElementRef) {
+                @Inject(ElementRef) element: ElementRef) {
         this._model = models.getModel();
         this._element = element;
         this._platformProvider = service;
@@ -290,46 +289,91 @@ export default class Diagram implements AfterViewInit {
 }
 
 /**
- * All possible diagram events.
- *  TODO make this more elegant!
- */
-interface DiagramEvents {
-    handleClick(x: number, y: number, double: boolean)
-    handleMouseDown(x: number, y: number)
-    handleMouseMove(x: number, y: number)
-    handleMouseUp(x: number, y: number)
-    handleAbort()
-    handleStop()
-    handleZoom(x: number, y: number, f: number)
-    handleKey(event: KeyboardEvent)
-}
-
-/**
- * Diagram state definition.
+ * The state machine for the diagramming view.
  * @author Martin Schade
  * @since 1.0.0
  */
-interface DiagramState extends DiagramEvents {
-    enterState(params: any)
-    leaveState()
-}
+class DiagramBehavior implements StateMachine {
 
-interface StateMachine extends DiagramEvents {
-    transitionTo(state: DiagramState, params: any)
+    private current: DiagramState;
+    private states: any;
+    
+    handleClick(x:number, y:number, double:boolean) {
+        this.current.handleClick(x, y, double);
+    }
+
+    handleMouseDown(x:number, y:number) {
+        this.current.handleMouseDown(x, y);
+    }
+
+    handleMouseMove(x:number, y:number) {
+        this.current.handleMouseMove(x, y);
+    }
+
+    handleMouseUp(x:number, y:number) {
+        this.current.handleMouseUp(x, y);
+    }
+
+    handleAbort() {
+        this.current.handleAbort();
+    }
+
+    handleStop() {
+        this.current.handleStop();
+    }
+
+    handleZoom(x:number, y:number, f:number) {
+        this.current.handleZoom(x, y, f);
+    }
+
+    handleKey(event:KeyboardEvent) {
+        this.current.handleKey(event);
+    }
+
+    /**
+     * Enter the new state.
+     * @param state
+     * @param params
+     */
+    transitionTo(state: string, params?: any) {
+        let newState = this.states[state];
+        if (newState) {
+            if (this.current) {
+                this.current.leaveState();
+            }
+            this.current = newState;
+            newState.enterState(params);
+        }
+    }
+
+    /**
+     * 
+     */
+    reenterState(params?: any) {
+        this.current.leaveState();
+        this.current.enterState(params)
+    }
+
+
+    /**
+     * Assemble state machine.
+     * @param diagram Pass-through diagram reference.
+     */
+    constructor(private diagram: Diagram) {
+        this.states = {
+            'idle': new Idle(this, diagram),
+            'panning': new Panning(this, diagram),
+            'animating': new Animating(this, diagram)
+        };
+        
+        this.transitionTo('idle', null);
+    }
 }
 
 /**
- * Diagram context specification.
- *
- * Acts as an object encoding the state of the
- * canvas and state machine.
- *
- * @author Martin Schade
- * @since 1.0.0
+ * Base state which contains reused state data.
  */
-class DiagramContext {
-
-    state: DiagramState;
+abstract class BaseState implements DiagramState {
 
     /* Limits */
     rightLimit = +5000.0;
@@ -337,45 +381,8 @@ class DiagramContext {
     topLimit = -5000.0;
     botLimit = +5000.0;
 
-    /* Zooming */
-    maxZoom = 10;
-
-    current: ViewGroup;
-
-    /**
-     * Handle the scroll event.
-     * @param x
-     * @param y
-     * @param units
-     */
-    handleZoom(x: number, y: number, units: number) {
-        this.state.handleZoom(x, y, units);
-    }
-
-    /**
-     * Handle double click.
-     * @param x Horizontal canvas position
-     * @param y Vertical canvas position
-     * @param doubleClick wether this click was a double click
-     */
-    handleClick(x: number, y: number, doubleClick: boolean) {
-        this.state.handleClick(x, y, doubleClick);
-    }
-    
-    constructor(
-        private canvas: Diagram,
-        private camera: Camera,
-        private platform: PlatformLayer) {
-        this.loadLevel(canvas.model);
-    }
-}
-
-/**
- * Idle state.
- */
-abstract class BaseState implements DiagramState {
-
     protected camera: Camera;
+    protected current: ViewGroup;
 
     /**
      * Adjust the pan/zoom limits to the new level.
@@ -398,7 +405,7 @@ abstract class BaseState implements DiagramState {
     private ascend() {
         if (!this.isRoot()) {
             let parent = this.getParent();
-            let current = this.context.current;
+            let current = this.current;
 
             let wX = this.camera.worldX;
             let wY = this.camera.worldY;
@@ -419,7 +426,7 @@ abstract class BaseState implements DiagramState {
      * @param target
      */
     private descendInto(target: ViewGroup) {
-        let current = this.context.current;
+        let current = this.current;
         if (target && current && target.parent === current) {
             let wX = this.camera.worldX;
             let wY = this.camera.worldY;
@@ -445,8 +452,8 @@ abstract class BaseState implements DiagramState {
      * @param level
      */
     private loadLevel(level: ViewGroup) {
-        this.context.current = level;
-        this.context.canvas.model = level;
+        this.current = level;
+        this.diagram.model = level;
         this.adjustLimits(level);
     }
 
@@ -456,7 +463,7 @@ abstract class BaseState implements DiagramState {
      *  - Acceleration structures, adaptive with item sizes
      *  - Only check visible objects of interest
      */
-    private detectAndDoSwitch(): boolean {
+    protected detectAndDoSwitch(): boolean {
         if (!this.current) return false;
 
         if (!this.isRoot()) {
@@ -466,7 +473,7 @@ abstract class BaseState implements DiagramState {
             }
         }
 
-        let groups = this.platform.cachedGroups;
+        let groups = this.diagram.model.contents;
         // check each child group
         if (!groups) return false;
         let len = groups.length;
@@ -501,8 +508,8 @@ abstract class BaseState implements DiagramState {
         let gW = group.width * scale;
         let gH = group.height * scale;
         return (wX >= gX && wY >= gY &&
-        wX + pW <= gX + gW &&
-        wY + pH <= gH + gY);
+                wX + pW <= gX + gW &&
+                wY + pH <= gH + gY);
     }
 
     private isOutsideParent(): boolean {
@@ -512,12 +519,12 @@ abstract class BaseState implements DiagramState {
         let driftH = parent.width * adjust;
         let driftV = parent.height * adjust;
         return (cam.worldX < parent.left - driftH &&
-        cam.worldY < parent.top - driftV &&
-        cam.projWidth > parent.width + driftH &&
-        cam.projHeight > parent.height + driftV);
+                cam.worldY < parent.top - driftV &&
+                cam.projWidth > parent.width + driftH &&
+                cam.projHeight > parent.height + driftV);
     }
 
-    enterState(params: any) {}
+    enterState(params?: any) {}
 
     leaveState() {}
 
@@ -537,9 +544,9 @@ abstract class BaseState implements DiagramState {
 
     handleStop() {}
 
-    constructor(protected name: string,
-                protected context: DiagramContext,
-                protected diagram: Diagram) {
+    constructor(
+        protected machine: DiagramBehavior,
+        protected diagram: Diagram) {
         this.camera = diagram.camera;
     }
 }
@@ -547,6 +554,8 @@ abstract class BaseState implements DiagramState {
 /**
  * Idle state.
  *  TODO hover effect
+ *  TODO connection hover effect
+ *  TODO click, the show info
  *  TODO border preview
  *  TODO border hover effect
  *  TODO lensing (?)
@@ -559,14 +568,16 @@ class Idle extends BaseState {
         let target = factor * zoom;
 
         if (!this.detectAndDoSwitch()) {
-            if (this.canvas.limitMovement) {
-                if (target>= this.maxZoom) {
-                    target = this.maxZoom;
+            if (this.diagram.limitMovement) {
+                let maxZoom = this.maxZoom;
+                if (target>= maxZoom) {
+                    target = maxZoom;
                 } else {
+                    const limits = this;
                     const w = this.camera.visualWidth;
                     const h = this.camera.visualHeight;
-                    const l = this.rightLimit - this.leftLimit;
-                    const d = this.botLimit - this.topLimit;
+                    const l = limits.rightLimit - limits.leftLimit;
+                    const d = limits.botLimit - limits.topLimit;
                     const limit = (w > h) ? w / l : h / d;
                     target = (target <= limit) ? limit : target;
                 }
@@ -581,12 +592,11 @@ class Idle extends BaseState {
 }
 
 /**
- * Panning state
+ * Panning state.
  *  TODO drag vs pan vs connect vs
  *  TODO kinetics
  *  TODO banding
  *  TODO limit changing on level switch
- *  TODO
  */
 class Panning extends BaseState {
 
@@ -623,9 +633,7 @@ class Panning extends BaseState {
      * @param x
      * @param y
      */
-    startDrag(x: number, y: number) {
-        this.reset();
-        this.panning = true;
+    handleMouseDown(x: number, y: number) {
         this.pressedX = x;
         this.pressedY = y;
         this.anchorX = this.camera.cameraX;
@@ -637,47 +645,52 @@ class Panning extends BaseState {
      * @param x
      * @param y
      */
-    handleDrag(x: number, y: number) {
-        if (!this.panning) return;
-
+    handleMouseMove(x: number, y: number) {
         let dragX = this.pressedX - this.anchorX - x;
         let dragY = this.pressedY - this.anchorY - y;
 
-        if (this.doLimits) {
+        if (this.diagram.limitMovement) {
             dragX = this.handleHorizontalConstraints(dragX);
             dragY = this.handleVerticalConstraints(dragY);
         }
 
-        if (this.doKinetics) {
+        if (this.diagram.useKinetics) {
             this.kinetics.update(dragX, dragY);
         }
 
         this.camera.moveTo(dragX, dragY);
     }
 
+    private isBanding(): boolean {
+        return (this.diagram.doBanding && (this.offLeft || this.offRight || this.offBottom || this.offTop));
+    }
+
+    private isKinetic(): boolean {
+        return (this.diagram.useKinetics && this.kinetics.hasEnoughMomentum());
+    }
+
     /**
      * Finish the current dragging state.
      */
-    stopDrag() {
-        const isKinetic = this.doKinetics &&
-            this.kinetics.hasEnoughMomentum();
-        const isRubbing = this.doBanding &&
-            (this.offLeft || this.offRight ||
-            this.offBottom || this.offTop);
+    handleMouseUp(x: number, y: number) {
+        const isKinetic = this.isKinetic();
+        const isRubbing = this.isBanding();
 
         if (isKinetic && !isRubbing) {
-            this.throwCamera(
-                this.kinetics.speed,
-                this.kinetics.angle,
-                this.canvas.inertiaDecay
-            );
+            let anim = Interpolator.throwCamera({
+                speed: this.kinetics.speed,
+                angle: this.kinetics.angle,
+                decay: this.diagram.inertiaDecay
+            });
+
+            this.transitionTo('animating', {
+                forced: true, interpolator: anim
+            })
         }
 
         if (isRubbing) {
             this.handleOffLimitSetback();
         }
-
-        this.panning = false;
     }
 
     /*
@@ -690,7 +703,7 @@ class Panning extends BaseState {
         const cameraMax = cameraMin + cameraWid;
 
         if (cameraMax >= this.rightLimit) {
-            if (this.doBanding) {
+            if (this.diagram.doBanding) {
                 this.offRight = true;
                 const drag = dragX / cameraZoom + cameraWid;
                 const factor = this.damp(drag, this.rightLimit);
@@ -704,7 +717,7 @@ class Panning extends BaseState {
         }
 
         if (cameraMin <= this.leftLimit) {
-            if (this.doBanding) {
+            if (this.diagram.doBanding) {
                 this.offLeft = true;
                 const drag = dragX / cameraZoom;
                 const factor = this.damp(drag, this.leftLimit);
@@ -730,7 +743,7 @@ class Panning extends BaseState {
         const cMax = cM + cH;
 
         if (cMax >= this.botLimit) {
-            if (this.doBanding) {
+            if (this.diagram.doBanding) {
                 this.offBottom = true;
                 const drag = dragY / cZ + cH;
                 const factor = this.damp(drag, this.botLimit);
@@ -745,7 +758,7 @@ class Panning extends BaseState {
         }
 
         if (cM <= this.topLimit) {
-            if (this.doBanding) {
+            if (this.diagram.doBanding) {
                 this.offTop = true;
                 const factor = this.damp(dragY / cZ, this.topLimit);
                 const offset = this.topLimit * factor;
@@ -778,8 +791,10 @@ class Panning extends BaseState {
         const pH = ca.projHeight;
         const wW = wX + pW;
         const wH = wY + pH;
-        const dx = (this.offLeft) ? wX - this.leftLimit: (this.offRight) ? wW - this.rightLimit: 0;
-        const dy = (this.offTop) ? wY - this.topLimit: (this.offBottom) ? wH - this.botLimit: 0;
+        const dx = (this.offLeft) ? wX - this.leftLimit:
+                   (this.offRight) ? wW - this.rightLimit: 0;
+        const dy = (this.offTop) ? wY - this.topLimit:
+                   (this.offBottom) ? wH - this.botLimit: 0;
         const tX = wX + pW / 2 - dx;
         const tY = wY + pH / 2 - dy;
         ca.moveTo(tX, tY);
@@ -799,26 +814,16 @@ class Animating extends BaseState {
     private animation: Interpolator;
 
     enterState(params: any) {
-
-    }
-
-    leaveState() {
-        this.stopAnimation();
-    }
-
-    private play(interpolation: Interpolator) {
-        this.stopAnimation();
-        this.animating = true;
-        this.animation = animation;
+        this.forceAnimation = params.forced || false;
+        this.animation = params.interpolator;
         this.animation.play();
     }
 
-    private stopAnimation() {
+    leaveState() {
         if (this.animation) {
             this.animation.stop();
             this.animation = undefined;
         }
-        this.animating = false;
     }
 }
 
