@@ -115,7 +115,7 @@ $palette-component-entry: #eeeeee;
 
 .palette-components {
   position: absolute;
-  overflow: scroll;
+  overflow: hidden;
   top:0;
   right:$icon-bar-width;
   bottom:0;

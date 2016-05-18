@@ -8,14 +8,13 @@ import HTML from "../../../common/HTML";
  * @since 1.0.0
  */
 @Component({
-    selector: 'palette',
-    template: require('./palette.html'),
-    styles: [require('./palette.scss')]
+    selector: 'explorer',
+    template: require('./project.html'),
+    styles: [require('./project.scss')]
 })
-export default class Palette {
+export default class ProjectExplorer {
     categories: Array<any>;
     components: any;
-    selected: string;
     dimmed = false;
 
     @ViewChild('icons') icons: ElementRef;
@@ -29,7 +28,6 @@ export default class Palette {
                 this.select.nativeElement, 'transform', `translateY(${index * 32}px)`
             );
             this.components = this.categories[index].components;
-            this.selected = this.categories[index].name;
         }
     }
     
@@ -44,15 +42,5 @@ export default class Palette {
     constructor(private registry: PaletteRegistry,
                 private renderer: Renderer) {
         this.categories = registry.getCategories();
-
-        /*
-        setTimeout(() => {
-            this.dimmed = true;
-        }, 4000);
-
-        setTimeout(() => {
-            this.dimmed = false;
-        }, 8000);
-        */
     }
 }
