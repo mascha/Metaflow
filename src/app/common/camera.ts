@@ -1,7 +1,3 @@
-/*
- * Copyright (C) Martin Schade, 2015-2016. All rights reserved.
- */
-
 /**
  * A listener that can be attached to track the position,
  * viewport dimensions and scale levels of the camera.

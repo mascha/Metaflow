@@ -133,7 +133,7 @@ export class PixiLayer implements PlatformLayer {
         };
         
         this.pixi = PIXI.autoDetectRenderer(500, 500, options);
-        this.webgl = (this.pixi instanceof WebGLRenderer)? true : false;
+        this.webgl = (this.pixi instanceof PIXI.WebGLRenderer)? true : false;
     }
 }
 
