@@ -13,40 +13,21 @@ import HTML from "../../../common/HTML";
     styles: [require('./palette.scss')]
 })
 export default class Palette {
-    categories: Array<string>;
+    categories: Array<any>;
+    components: any;
     dimmed = false;
 
     @ViewChild('icons') icons: ElementRef;
     @ViewChild('select') select: ElementRef;
-
-    components = [
-        'Source',
-        'Sink',
-        'Buffer',
-        'Queue',
-        'Processor',
-        'Delay',
-        'Conveyor',
-        'Decision',
-        'Split',
-        'Join',
-        'Merge',
-        'Resource',
-        'Hold',
-        'Limiter',
-        'Release',
-        'Metric',
-        'Measure'
-    ];
 
     onIconSelect(event) {
         let off = HTML.getOffset(this.icons.nativeElement, event);
         let index = Math.floor(off.y / 32);
         if (index >= 0 && index < this.categories.length && this.select.nativeElement) {
             this.renderer.setElementStyle(
-                this.select.nativeElement,
-                'transform', `translateY(${index * 32}px)`
-            )
+                this.select.nativeElement, 'transform', `translateY(${index * 32}px)`
+            );
+            this.components = this.categories[index].components;
         }
     }
     
