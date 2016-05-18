@@ -1,6 +1,12 @@
-import {Component, Inject} from '@angular/core';
+import {Component, ViewChild, ElementRef, Renderer} from '@angular/core';
 import PaletteRegistry from "../../../services/palettes";
+import HTML from "../../../common/HTML";
 
+/**
+ * A component palette.
+ * @author Martin Schade
+ * @since 1.0.0
+ */
 @Component({
     selector: 'palette',
     template: require('./palette.html'),
@@ -9,6 +15,9 @@ import PaletteRegistry from "../../../services/palettes";
 export default class Palette {
     categories: Array<string>;
     dimmed = false;
+
+    @ViewChild('icons') icons: ElementRef;
+    @ViewChild('select') select: ElementRef;
 
     components = [
         'Source',
@@ -29,6 +38,17 @@ export default class Palette {
         'Metric',
         'Measure'
     ];
+
+    onIconSelect(event) {
+        let off = HTML.getOffset(this.icons.nativeElement, event);
+        let index = Math.floor(off.y / 32);
+        if (index >= 0 && index < this.categories.length && this.select.nativeElement) {
+            this.renderer.setElementStyle(
+                this.select.nativeElement,
+                'transform', `translateY(${index * 32}px)`
+            )
+        }
+    }
     
     onEnter() {
         console.log('entered!')
@@ -38,9 +58,11 @@ export default class Palette {
         console.log('leaved!')
     }
     
-    constructor(@Inject(PaletteRegistry) registry: PaletteRegistry) {
+    constructor(private registry: PaletteRegistry,
+                private renderer: Renderer) {
         this.categories = registry.getCategories();
-        
+
+        /*
         setTimeout(() => {
             this.dimmed = true;
         }, 4000);
@@ -48,5 +70,6 @@ export default class Palette {
         setTimeout(() => {
             this.dimmed = false;
         }, 8000);
+        */
     }
 }

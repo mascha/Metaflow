@@ -3,11 +3,11 @@
     <span>{{c}}</span>
   </div>
 </div>
-<div class="palette-selected">
+<div #select class="palette-selected">
   <span></span>
   <span></span>
 </div>
-<div class="palette-icons">
+<div #icons class="palette-icons" (click)="onIconSelect($event)">
   <div *ngFor="let c of categories" class="palette-icon circle"></div>
 </div>
 <div class="palette-labels" [class.dimmed]="dimmed == true">

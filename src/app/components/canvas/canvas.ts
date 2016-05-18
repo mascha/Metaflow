@@ -565,8 +565,8 @@ abstract class BaseState implements DiagramState {
  *  TODO click, the show info
  *  TODO border preview
  *  TODO border hover effect
- *  TODO lensing (?)
- *  TODO hand off descent detection & level loading
+ *  TODO lenses (?)
+ *  TODO hand off descent detection & level loading to worker
  */
 class Idle extends BaseState {
     
@@ -587,8 +587,9 @@ class Idle extends BaseState {
                     centerY: this.camera.castRayY(y),
                     velocity: this.diagram.navigationVelocity,
                     panZoom: this.diagram.zoomPanPreference,
+                    pathFactor: this.diagram.pathFactor,
                     targetWidth: this.getAppropriateScale(),
-                    camera: this.camera,
+                    camera: this.camera
                 })
             })
         } else {
@@ -919,7 +920,6 @@ class Connecting extends Panning {
  *  TODO lasso selection
  *  TODO circular selection
  *  TODO pie selection
- *
  *  TODO visual overlay effect
  */
 class Selecting extends Panning {
@@ -968,7 +968,6 @@ class Interpolator {
         if (this.active) {
             return;
         }
-        console.log('animating ...');
         this.active = true;
         this.start = Date.now();
         const self = this;
@@ -1007,8 +1006,6 @@ class Interpolator {
      * Navigate to the given center coordinates.
      */
     static navigateTo(params: any): Interpolator {
-        const z = params.panZoom;
-        const v = params.velocity;
         const camera = params.camera;
         const aW = camera.projWidth;
         const aX = camera.centerX;
@@ -1017,11 +1014,13 @@ class Interpolator {
         const dX = params.centerX - aX;
         const dY = params.centerY - aY;
         const dU = Math.hypot(dX, dY);
+        const z = params.panZoom;
+        const v = params.velocity;
 
         if (dU < 1e-8) {
             const S = Math.log(eW/aW) / Math.SQRT2;
             return new Interpolator(f => {
-                const tW = aW * Math.exp(Math.SQRT2 * f * S);
+                const tW = aW * Math.exp(Math.SQRT2 * S * f);
                 const vW = camera.visualWidth;
                 const vH = camera.visualHeight;
                 const vZ = vW / tW;
@@ -1064,8 +1063,11 @@ class Interpolator {
         }
     }
 
+
     constructor(private update: (f: number) => void,
-                private duration: number) {}
+                private duration: number) {
+        this.duration = duration || 1000;
+    }
 }
 
 /**

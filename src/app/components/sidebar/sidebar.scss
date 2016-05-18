@@ -17,6 +17,7 @@
   overflow: hidden;
   min-height: 18px;
   background-color: $sidebar-header;
+  z-index: 12;
 
   .sidebar-header-title {
     margin-top: -2px;

@@ -4,7 +4,7 @@
 
 $palette-component: $sidebar-main;
 $palette-icons: darken($sidebar-main, 16);
-$palette-icons-glyph: #4b5176;
+$palette-icons-glyph: darken($navigation-fill ,6);;
 $palette-icons-span-adjust: 4px;
 $palette-component-entry-hover: #dddddd;
 $palette-component-entry: #eeeeee;
