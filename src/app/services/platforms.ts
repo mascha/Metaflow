@@ -8,7 +8,7 @@ import {PixiLayer} from "../common/platform/pixi";
  * @since 1.0.0
  */
 @Injectable()
-export class PlatformService {
+export default class PlatformService {
 
     /**
      * Retrieve a newly initialized rendering layer, which

@@ -1,13 +1,13 @@
-import {Component, ElementRef, ViewChild, Inject, HostListener} from '@angular/core';
+import {Component, ElementRef, ViewChild, HostListener} from '@angular/core';
 import {Camera} from "../../common/camera";
 import {ViewGroup} from "../../common/viewmodel";
-import {PlatformService} from "../../services/platforms";
 import {PlatformLayer} from "../../common/platform";
 import Grid from '../../common/grid';
 import Border from '../../common/border';
 import NavigationBar from "../breadcrumbs/breadcrumbs";
 import HTML from "../../common/html";
 import ModelService from "../../services/models";
+import PlatformService from "../../services/platforms";
 import {StateMachine, DiagramState, DiagramEvents} from "../../common/diagrams";
 
 /**
@@ -148,7 +148,6 @@ export default class Diagram {
     @ViewChild(GridLayer) private _gridLayer: GridLayer;
     @ViewChild(NodeLayer) private _nodeLayer: NodeLayer;
 
-    private _element: ElementRef;
     private _camera: Camera;
     private _behavior: DiagramEvents;
     private _inertiaDecay: number = 0.05;
@@ -156,8 +155,6 @@ export default class Diagram {
     private _velocity: number = 1.4;
     private _diagram: HTMLElement;
     private _model: ViewGroup;
-    private _modelProvider: ModelService;
-    private _platformProvider: PlatformService;
     private _platform: PlatformLayer;
 
     /**
@@ -255,7 +252,11 @@ export default class Diagram {
         let surface = this._nodeLayer.getElement();
 
         /* retrieve rendering platform */
-        this._platform = this._platformProvider.getPlatform(surface);
+        if (this._diagram) {
+            this._platform = this._platformProvider.getPlatform(surface);
+        } else {
+            throw new Error('Could not find diagram DOM element')
+        }
 
         /* link behavior state machine*/
         if (this._platform) {
@@ -285,23 +286,22 @@ export default class Diagram {
             throw new Error('Could not create diagram controller');
         }
 
+        /* Load level data */
         this.model = this._modelProvider.getModel();
 
         this.onResize();
         this.camera.zoomAndMoveTo(-250, -150, 0.2);
     }
-    
-    constructor(@Inject(PlatformService) service: PlatformService,
-                @Inject(ModelService) models: ModelService,
-                @Inject(ElementRef) element: ElementRef) {
-        this._modelProvider = models;
-        this._element = element;
-        this._platformProvider = service;
+
+    constructor(private _platformProvider: PlatformService,
+                private _modelProvider: ModelService,
+                private _element: ElementRef) {
     }
 }
 
 /**
  * The state machine for the diagramming view.
+ * Simply delegates all events to the currently active state.
  * @author Martin Schade
  * @since 1.0.0
  */
@@ -566,6 +566,7 @@ abstract class BaseState implements DiagramState {
  *  TODO border preview
  *  TODO border hover effect
  *  TODO lensing (?)
+ *  TODO hand off descent detection & level loading
  */
 class Idle extends BaseState {
     
@@ -912,22 +913,27 @@ class Connecting extends Panning {
 }
 
 /**
+ * Selection state.
+ *  TODO single click
+ *  TODO rectangular selection
+ *  TODO lasso selection
+ *  TODO circular selection
+ *  TODO pie selection
+ *
+ *  TODO visual overlay effect
+ */
+class Selecting extends Panning {
+
+    private isLocked = false;
+}
+
+
+/**
  * Property editing state.
  *  TODO edit detection
  *  TODO input overlay (else ?)
  */
 class Editing extends BaseState {
-
-}
-
-/**
- * Selection state.
- *  TODO single click
- *  TODO rectangular selection
- *  TODO lasso selection
- *  TODO visual overlay effect
- */
-class Selecting extends Panning {
 
 }
 
