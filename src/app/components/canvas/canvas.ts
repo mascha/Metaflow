@@ -141,11 +141,10 @@ export default class Diagram implements AfterViewInit {
     @ViewChild(BorderLayer) private _borderLayer: BorderLayer;
     @ViewChild(GridLayer) private _gridLayer: GridLayer;
     @ViewChild(NodeLayer) private _nodeLayer: NodeLayer;
-    @ViewChild(NavigationBar) private _navigation: NavigationBar;
 
     private _element: ElementRef;
     private _camera: Camera;
-    private _behavior: DiagramBehavior;
+    private _behavior: DiagramContext;
     private _inertiaDecay: number = 0.05;
     private _zoomPan: number = 2.33;
     private _velocity: number = 1.4;
@@ -234,14 +233,11 @@ export default class Diagram implements AfterViewInit {
             this._camera = this._platform.getCamera();
         }
         if (this._camera) {
-            this._behavior = new DiagramBehavior(this, this._camera, this._platform);
+            this._behavior = new DiagramContext(this, this._camera, this._platform);
         }
 
         /* attach all layers */
         if (this._behavior) {
-            if (this._navigation) {
-                this._behavior.pushTo(this._navigation);
-            }
             if (this._borderLayer) {
                 this._borderLayer.observe(this._camera);
             }
@@ -269,36 +265,74 @@ export default class Diagram implements AfterViewInit {
 }
 
 /**
- * Diagram behavior specification.
+ * Diagram state definition.
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+interface DiagramState {
+    enterState()
+    leaveState()
+    handleClick(x: number, y: number, double: boolean)
+    handleMouseDown(x: number, y: number)
+    handleMouseMove(x: number, y: number)
+    handleMouseUp(x: number, y: number)
+    handleAbort()
+    handleStop()
+    handleZoom(x: number, y: number, f: number)
+    handleKey(event: KeyboardEvent)
+}
+
+interface StateMachine {
+    transitionTo(event: DiagramState, params: any)
+}
+
+/**
+ * Diagram context specification.
+ *
+ * Acts as an object encoding the state of the
+ * canvas and state machine.
  *
  * @author Martin Schade
  * @since 1.0.0
  */
-class DiagramBehavior {
-    private kinetics: Kinetics;
-    private anchorX = 0.0;
-    private anchorY = 0.0;
-    private pressedX = 0.0;
-    private pressedY = 0.0;
-    private panning = false;
-    private animating = false;
-    private rightLimit = +5000.0;
-    private leftLimit = -5000.0;
-    private topLimit = -5000.0;
-    private botLimit = +5000.0;
-    private pathFactor = 1000;
-    private offLeft = false;
-    private offRight = false;
-    private offBottom = false;
-    private offTop = false;
-    private frames = 60;
-    private maxZoom = 10;
-    private animation: Interpolator;
-    private doKinetics = false;
-    private doBanding = false;
-    private doLimits = false;
+class DiagramContext {
+
+    /* Dragging */
+    anchorX = 0.0;
+    anchorY = 0.0;
+    pressedX = 0.0;
+    pressedY = 0.0;
+    doKinetics = false;
+    kinetics: Kinetics;
+
+    /* States */
+    panning = false;
+    animating = false;
+    pathFactor = 1000;
+    state: DiagramState;
+
+    /* Limits */
+    offLeft = false;
+    offRight = false;
+    offBottom = false;
+    offTop = false;
+    rightLimit = +5000.0;
+    leftLimit = -5000.0;
+    topLimit = -5000.0;
+    botLimit = +5000.0;
+    doBanding = false;
+    doLimits = false;
+    maxZoom = 10;
+
+    /* Animation */
+    frames = 60;
+    forceAnimation = false;
+    animation: Interpolator;
+    animateZoom = false;
+    animateClick = true;
+
+    /* Viewmodel */
     private current: ViewGroup;
-    private _navi: NavigationBar;
 
     /**
      * Handle the scroll event.
@@ -340,7 +374,13 @@ class DiagramBehavior {
         this.reset();
         const wX = this.camera.castRayX(x);
         const wY = this.camera.castRayY(y);
-        this.navigateTo(wX, wY, 1000.0);
+        this.state.handleClick(
+            this.camera.castRayX(x),
+            this.camera.castRayY(y),
+            false
+        );
+
+        // this.navigateTo(wX, wY, 1000.0);
     }
 
     /**
@@ -403,10 +443,6 @@ class DiagramBehavior {
         }
 
         this.panning = false;
-    }
-
-    pushTo(crumbs: NavigationBar) {
-        this._navi = crumbs;
     }
 
     /*
@@ -569,7 +605,6 @@ class DiagramBehavior {
      * @param level
      */
     private loadLevel(level: ViewGroup) {
-        if (this._navi) this._navi.setPath(level);
         this.current = level;
         this.canvas.model = level;
         this.adjustLimits(level);
@@ -758,6 +793,116 @@ class DiagramBehavior {
 }
 
 /**
+ * Idle state.
+ */
+class Idle implements DiagramState {
+    enterState() {
+    }
+
+    leaveState() {
+    }
+
+    handleClick(x:number, y:number, double:boolean) {
+    }
+
+    handleMouseDown(x:number, y:number) {
+    }
+
+    handleMouseMove(x:number, y:number) {
+    }
+
+    handleMouseUp(x:number, y:number) {
+    }
+
+    handleZoom(x:number, y:number, f:number) {
+    }
+
+    handleKey(event:KeyboardEvent) {
+    }
+
+    handleAbort() {
+    }
+
+    handleStop() {
+    }
+
+    constructor(private context: DiagramContext) {}
+}
+
+/**
+ * Panning state
+ *  TODO drag vs pan vs connect vs
+ *  TODO kinetics
+ *  TODO banding
+ *  TODO limit changing on level switch
+ *  TODO
+ */
+class Panning extends Idle {
+
+}
+
+/**
+ * Animation state
+ *  TODO handle abort
+ *  TODO handle cancel
+ *  TODO interaction with banding
+ *  TODO forced animation
+ */
+class Animating extends Idle {
+
+}
+
+/**
+ * Paint-like state.
+ *  TODO startDrawing event
+ *  TODO connect with palette
+ *  TODO connect with editor
+ *  TODO visual preview
+ */
+class Drawing extends Dragging {
+
+}
+
+/**
+ * Node drag state.
+ *  TODO singular drag
+ *  TODO multiple drag
+ *  TODO node effect on possible drag
+ */
+class Dragging extends Idle {
+
+}
+
+/**
+ * Edge drag state.
+ *  TODO edge drag
+ *  TODO visual connection effect
+ */
+class Connecting extends Dragging {
+
+}
+
+/**
+ * Property editing state.
+ *  TODO edit detection
+ *  TODO input overlay (else ?)
+ */
+class Editing extends Idle {
+
+}
+
+/**
+ * Selection state.
+ *  TODO single click
+ *  TODO rectangular selection
+ *  TODO lasso selection
+ *  TODO visual overlay effect
+ */
+class Selecting extends Idle {
+
+}
+
+/**
  * Interpolator helper class, which encapsulates
  * requestAnimationFrame and onFinished callbacks.
  * @author Martin Schade
@@ -770,14 +915,18 @@ class Interpolator {
     private frame: number;
 
     stop() {
-        if (this.frame) window.cancelAnimationFrame(this.frame);
+        if (this.frame) {
+            window.cancelAnimationFrame(this.frame);
+        }
         this.frame = undefined;
         this.active = false;
         this.update = undefined;
     }
 
     play() {
-        if (this.active) return;
+        if (this.active) {
+            return;
+        }
         this.active = true;
         this.start = Date.now();
         const self = this;
@@ -798,6 +947,5 @@ class Interpolator {
     }
 
     constructor(private update: (f: number) => void,
-                private duration: number) {
-    }
+                private duration: number) {}
 }
