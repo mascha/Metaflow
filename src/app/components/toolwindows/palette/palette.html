@@ -7,11 +7,12 @@
   <span></span>
   <span></span>
 </div>
-<div #icons class="palette-icons" (click)="onIconSelect($event)">
+<div #icons (click)="onSelect($event)" (mouseenter)="onEnter()" class="palette-icons" >
   <div *ngFor="let c of categories" class="palette-icon circle"></div>
 </div>
-<div class="palette-labels" [class.dimmed]="dimmed == true">
+<div class="palette-labels" [class.dimmed]="dimmed == true"
+  (click)="onSelect($event)">
   <div *ngFor="let c of categories" class="palette-label">
-    <span>{{c}}</span>
+    <span>{{c.name}}</span>
   </div>
 </div>

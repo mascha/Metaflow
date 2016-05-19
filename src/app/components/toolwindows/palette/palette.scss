@@ -111,11 +111,12 @@ $palette-component-entry: #eeeeee;
   text-align: right;
   margin-right: 6px;
   color: white;
+  cursor: pointer;
 }
 
 .palette-components {
   position: absolute;
-  overflow: scroll;
+  overflow: hidden;
   top:0;
   right:$icon-bar-width;
   bottom:0;
