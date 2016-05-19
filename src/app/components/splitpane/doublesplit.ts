@@ -1,5 +1,5 @@
 import {Component, ElementRef, ViewChild, Renderer, Inject, Input, HostListener} from "@angular/core";
-import HTML from "../../common/html";
+import HTML from "../../common/util";
 
 /**
  * Simple split pane.

@@ -5,7 +5,7 @@ import {PlatformLayer} from "../../common/platform";
 import Grid from '../../common/grid';
 import Border from '../../common/border';
 import NavigationBar from "../breadcrumbs/breadcrumbs";
-import HTML from "../../common/html";
+import HTML from "../../common/util";
 import ModelService from "../../services/models";
 import PlatformService from "../../services/platforms";
 import {StateMachine, DiagramState, DiagramEvents} from "../../common/diagrams";

@@ -1,6 +1,6 @@
 import {Component, ViewChild, ElementRef, Renderer, HostListener} from '@angular/core';
 import PaletteRegistry from "../../../services/palettes";
-import HTML from "../../../common/HTML";
+import HTMLUtil from "../../../common/util";
 
 /**
  * A component palette.
@@ -26,44 +26,54 @@ export default class Palette {
 
     onSelect(event) {
         let ele = this.icons.nativeElement;
-        let off = HTML.getOffset(ele, event);
+        let off = HTMLUtil.getOffset(ele, event);
         let index = this.getIndex(off.y);
         if (this.isValidIndex(index)) {
             this.selectItem(index);
-            clearTimeout(this.timer);
+            this.resetTimer();
             this.dimmed = false;
         }
     }
 
     onOverlayClick(event) {
         let ele = this.overlay.nativeElement;
-        let off = HTML.getOffset(ele, event);
+        let off = HTMLUtil.getOffset(ele, event);
         let index = this.getIndex(off.y);
         if (!this.isValidIndex(index)) {
             this.selectItem(index);
         }
+        this.resetTimer();
         this.dimmed = false;
     }
 
     onEnter() {
-        this.timer = setTimeout(() => {
-            this.dimmed = true;
-        }, 666);
+        this.startTimer();
     }
 
     onLeave() {
         if (!this.dimmed) {
-            clearTimeout(this.timer)
+            this.resetTimer();
         }
     }
 
     @HostListener('mouseleave')
     onHostLeave() {
-        clearTimeout(this.timer);
+        this.resetTimer();
         if (this.dimmed) {
             this.dimmed = false;
         }
         return false;
+    }
+    
+    private startTimer() {
+        this.timer = setTimeout(() => {
+            this.dimmed = true;
+        }, 666);
+    }
+    
+    private resetTimer() {
+        clearTimeout(this.timer);
+        this.timer = null;
     }
 
     private selectItem(index: number) {

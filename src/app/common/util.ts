@@ -3,7 +3,7 @@
  * @author Martin Schade.
  * @since 1.0.0
  */
-export default class HTML {
+export default class HTMLUtil {
 
     static PIXEL_STEP = 10;
     static LINE_HEIGHT = 40;
@@ -72,13 +72,13 @@ export default class HTML {
             x += e.offsetLeft;
             y += e.offsetTop;
             let style = getComputedStyle(e, null);
-            let borderTop = HTML.parseStyle(style, 'border-top-width');
-            let borderLeft = HTML.parseStyle(style, 'border-left-width');
+            let borderTop = HTMLUtil.parseStyle(style, 'border-top-width');
+            let borderLeft = HTMLUtil.parseStyle(style, 'border-left-width');
             y += borderTop;
             x += borderLeft;
             if (inner) {
-                let paddingTop = HTML.parseStyle(style, 'padding-top');
-                let paddingLeft = HTML.parseStyle(style, 'padding-left');
+                let paddingTop = HTMLUtil.parseStyle(style, 'padding-top');
+                let paddingLeft = HTMLUtil.parseStyle(style, 'padding-left');
                 y += paddingTop;
                 x += paddingLeft;
             }
@@ -98,7 +98,7 @@ export default class HTML {
      * @returns {{x: number, y: number}}
      */
     static getOffset(element: HTMLElement, event: MouseEvent): any {
-        let offset = HTML.elementPosition(element);
+        let offset = HTMLUtil.elementPosition(element);
         return {
             x: event.pageX - offset.x,
             y: event.pageY - offset.y
