@@ -49,14 +49,13 @@ $palette-component-entry: #eeeeee;
 .palette-selected {
   right: 0;
   position: absolute;
-  transform: translateY(3*$icon-bar-height);
-  transition: transform .3s ease-out,-webkit-transform .3s ease-out;
+  transform: translateY(3 * $icon-bar-height);
+  transition: transform .3s ease-out;
   width: $icon-bar-width;
   height: $icon-bar-height;
   background-color: $palette-component;
   z-index: 0;
 
-  // optimized for right sided display
   span {
     background-color: $palette-component;
     position: absolute;

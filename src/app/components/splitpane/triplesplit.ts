@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild, Renderer, Inject} from "@angular/core";
+import {Component, ElementRef, ViewChild, Renderer} from "@angular/core";
 import HTML from "../../common/util";
 
 /**
@@ -20,6 +20,8 @@ export default class TripleSplit {
 
     private lastLeft = 15 + 1;
     private lastRight = 85 - 1;
+    private leftVisible = true;
+    private rightVisible = true;
     private primaryDrag: boolean;
 
     private moveHandler = (event: MouseEvent) => {
@@ -103,6 +105,6 @@ export default class TripleSplit {
         this.renderer.setElementStyle(e.nativeElement, p, s);
     }
 
-    constructor(@Inject(Renderer) private renderer: Renderer,
-                @Inject(ElementRef) private root: ElementRef) {}
+    constructor(private renderer: Renderer,
+                private root: ElementRef) {}
 }
