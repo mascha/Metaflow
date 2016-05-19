@@ -255,7 +255,7 @@ export default class Diagram {
         if (this._diagram) {
             this._platform = this._platformProvider.getPlatform(surface);
         } else {
-            throw new Error('Could not find diagram DOM element')
+            throw new Error('Could not find diagram DOM element');
         }
 
         /* link behavior state machine*/
@@ -268,7 +268,7 @@ export default class Diagram {
         if (this._camera) {
             this._behavior = new DiagramBehavior(this);
         } else {
-            throw new Error('Could not create camera instance')
+            throw new Error('Could not create camera instance');
         }
 
         /* attach all layers */
@@ -356,7 +356,7 @@ class DiagramBehavior implements StateMachine, DiagramEvents {
 
     reenterState(params?: any) {
         this.current.leaveState();
-        this.current.enterState(params)
+        this.current.enterState(params);
     }
 
     /**
@@ -529,7 +529,7 @@ abstract class BaseState implements DiagramState {
     }
 
     protected becomeIdle() {
-        this.machine.transitionTo('idle')
+        this.machine.transitionTo('idle');
     }
 
     enterState(params?: any) { /* ignore*/ }
@@ -591,7 +591,7 @@ class Idle extends BaseState {
                     targetWidth: this.getAppropriateScale(),
                     camera: this.camera
                 })
-            })
+            });
         } else {
             /* single click not yet implemented */
         }
@@ -725,10 +725,10 @@ class Panning extends BaseState {
                         angle: this.kinetics.angle,
                         decay: this.diagram.inertiaDecay
                     })
-                })
+                });
             }
         } else {
-            this.machine.transitionTo('idle')
+            this.machine.transitionTo('idle');
         }
     }
     
@@ -776,7 +776,7 @@ class Panning extends BaseState {
                 const offset = this.leftLimit * factor;
                 return offset * cameraZoom;
             } else {
-                return this.leftLimit
+                return this.leftLimit;
             }
         } else {
             this.offLeft = false;
@@ -923,8 +923,7 @@ class Connecting extends Panning {
  *  TODO visual overlay effect
  */
 class Selecting extends Panning {
-
-    private isLocked = false;
+    
 }
 
 

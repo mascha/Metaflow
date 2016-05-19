@@ -158,7 +158,7 @@ export abstract class Camera {
      * @param worldY
      */
     zoomToAbout(zoomLevel:number, worldX:number, worldY:number) {
-        if (zoomLevel <= 0) return;
+        if (zoomLevel <= 0) { return; }
         try {
             this.isZooming = true;
             const oldZoom = this._scale;
@@ -224,8 +224,8 @@ export abstract class Camera {
      * @param positionY
      * @param zoom Must not be negative or zero.
      */
-    zoomAndMoveTo(positionX:number, positionY:number, zoom:number) {
-        if (zoom <= 0) return;
+    zoomAndMoveTo(positionX: number, positionY: number, zoom: number) {
+        if (zoom <= 0) { return; }
         
         this._scale = zoom;
         this.camX = -positionX;
@@ -245,7 +245,7 @@ export abstract class Camera {
     /**
      * Update the internal paintable surface metrics.
      */
-    updateVisual(viewX:number, viewY:number, viewW:number, viewH:number) {
+    updateVisual(viewX: number, viewY: number, viewW: number, viewH: number) {
         this.viewX = viewX;
         this.viewY = viewY;
         this.viewW = viewW;

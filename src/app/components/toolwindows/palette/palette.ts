@@ -91,7 +91,7 @@ export default class Palette {
 
     private isValidIndex(index: number) {
         if (!this.categories) { return false; }
-        return (index >= 0 && index < this.categories.length)
+        return (index >= 0 && index < this.categories.length);
     }
 
     private getIndex(y: number) {

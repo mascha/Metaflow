@@ -77,7 +77,7 @@ export class PixiLayer implements PlatformLayer {
                             renderer.renderItem(it);
                         }
                         renderer.attach(it, item);
-                    })
+                    });
                 }
             } else if (item instanceof ViewItem) {
                 renderer.renderItem(item);

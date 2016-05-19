@@ -20,8 +20,6 @@ export default class TripleSplit {
 
     private lastLeft = 15 + 1;
     private lastRight = 85 - 1;
-    private leftVisible = true;
-    private rightVisible = true;
     private primaryDrag: boolean;
 
     private moveHandler = (event: MouseEvent) => {
@@ -49,15 +47,20 @@ export default class TripleSplit {
         HTML.block(event);
     }
 
+    /**
+     * TODO implement hiding
+     * @param event
+     * @param primary
+     */
     toggleVisibility(event: any, primary: boolean) {
-
+        /* NOP for now */
     }
 
     private handleAdjust(adjusted: number) {
         if (this.primaryDrag) {
             this.adjustBoth(adjusted, this.lastRight);
         } else {
-            this.adjustBoth(this.lastLeft, adjusted)
+            this.adjustBoth(this.lastLeft, adjusted);
         }
     }
 

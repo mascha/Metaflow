@@ -234,7 +234,11 @@ module.exports = function makeWebpackConfig() {
     config.plugins.push(
       new webpack.NoErrorsPlugin(),
       new webpack.optimize.DedupePlugin(),
-      new webpack.optimize.UglifyJsPlugin({mangle: true}),
+      new webpack.optimize.UglifyJsPlugin(
+        {
+          mangle: true,
+          comments: false
+        }),
       new CopyWebpackPlugin([{from: root('src/public')}])
     );
   }

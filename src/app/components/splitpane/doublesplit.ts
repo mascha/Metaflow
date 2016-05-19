@@ -27,7 +27,7 @@ export default class DoubleSplit {
         let offs = HTML.getOffset(elem, event);
         let page = this.vertical ? offs.x : offs.y;
         let upper = this.vertical ? elem.offsetWidth : elem.offsetHeight;
-        if (!upper) return;
+        if (!upper) { return; }
         page = ((page < 0)? 0 : ((page > upper) ? upper : page));
         let adjusted = Math.round(page/upper * 99);
         this.readjust(adjusted);

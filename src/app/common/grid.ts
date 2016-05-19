@@ -29,7 +29,7 @@ export default class Grid implements CameraObserver {
         this.redraw();
     }
 
-    onPanChanged(posX: number, posY: number){
+    onPanChanged(posX: number, posY: number) {
         this.redraw();
     }
 
