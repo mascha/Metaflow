@@ -4,7 +4,7 @@ import Sidebar from "../sidebar/sidebar";
 import DoubleSplit from "../splitpane/doublesplit";
 import TripleSplit from "../splitpane/triplesplit";
 import Palette from "../toolwindows/palette/palette";
-// import Dataview from "../toolwindows/data/dataview";
+import Dataview from "../toolwindows/data/dataview";
 import ProjectExplorer from "../toolwindows/project/project";
 
 /**
@@ -19,7 +19,7 @@ import ProjectExplorer from "../toolwindows/project/project";
     directives: [
         DoubleSplit, TripleSplit,
         Diagram, Sidebar,
-        Palette, /* Dataview, */
+        Palette, Dataview,
         ProjectExplorer
     ],
 })
