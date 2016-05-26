@@ -13,16 +13,19 @@ import HTMLUtil from "../../../common/util";
     styles: [require('./palette.scss')]
 })
 export default class Palette {
-    categories: Array<any>;
-    components: any;
-    selected: string;
-    dimmed = false;
-
+    private categories: Array<any>;
+    private components: Array<any>;
+    private selected: string;
+    private dimmed = false;
     private timer: any;
 
     @ViewChild('icons') icons: ElementRef;
     @ViewChild('select') select: ElementRef;
     @ViewChild('overlay') overlay: ElementRef;
+
+    ngAfterViewInit() {
+        // this.selectItem(0);
+    }
 
     onSelect(event) {
         let ele = this.icons.nativeElement;
@@ -51,9 +54,12 @@ export default class Palette {
     }
 
     onLeave() {
+        this.dimmed = false;
+        /*
         if (!this.dimmed) {
             this.resetTimer();
         }
+        */
     }
 
     @HostListener('mouseleave')
@@ -68,7 +74,7 @@ export default class Palette {
     private startTimer() {
         this.timer = setTimeout(() => {
             this.dimmed = true;
-        }, 666);
+        }, 888);
     }
     
     private resetTimer() {
@@ -101,5 +107,6 @@ export default class Palette {
     constructor(private registry: PaletteRegistry,
                 private renderer: Renderer) {
         this.categories = registry.getCategories();
+        this.components = this.categories[0].components;
     }
 }

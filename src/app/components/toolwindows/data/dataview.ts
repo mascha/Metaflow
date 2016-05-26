@@ -1,4 +1,4 @@
-import {Component, Inject, ElementRef, HostListener} from '@angular/core';
+import {Component, ElementRef, HostListener} from '@angular/core';
 
 let Plotly = require('plotly.js');
 
@@ -90,7 +90,7 @@ export default class Dataview {
         Plotly.Plots.resize(this.element.nativeElement.children[0]);
     }
     
-    constructor(@Inject(ElementRef) private element: ElementRef) {
+    constructor(private element: ElementRef) {
         // NOP
     }
 }

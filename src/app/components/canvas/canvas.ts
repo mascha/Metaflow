@@ -9,6 +9,8 @@ import HTML from "../../common/util";
 import ModelService from "../../services/models";
 import PlatformService from "../../services/platforms";
 import {StateMachine, DiagramState, DiagramEvents} from "../../common/diagrams";
+import Presenter from "../controls/presenter";
+import Overview from "./overview/overview";
 
 /**
  * Grid layer component.
@@ -83,7 +85,11 @@ class NodeLayer {
  */
 @Component({
     selector: 'diagram',
-    directives: [GridLayer, NodeLayer, BorderLayer, NavigationBar],
+    directives: [
+        GridLayer, NodeLayer,
+        BorderLayer, NavigationBar,
+        Presenter, Overview
+    ],
     template: require('./canvas.html'),
     styles: [require('./canvas.scss')]
 })

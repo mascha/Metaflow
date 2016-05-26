@@ -8,8 +8,9 @@
   <span></span>
 </div>
 <div #icons (click)="onSelect($event)" (mouseenter)="onEnter()"
-     class="palette-icons" >
-  <div *ngFor="let c of categories" class="palette-icon circle"></div>
+     class="palette-icons" (mouseleave)="onLeave()">
+  <div *ngFor="let c of categories" class="palette-icon circle">
+  </div>
 </div>
 <div class="palette-labels" [class.dimmed]="dimmed == true"
   (click)="onSelect($event)">

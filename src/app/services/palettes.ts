@@ -33,17 +33,55 @@ export default class PaletteRegistry {
         },
         {
             name: 'Manufacturing',
-            components: []
+            components : [
+                'Source',
+                'Sink',
+                'Buffer',
+                'Merge',
+                'Resource',
+                'Hold',
+                'Limiter',
+                'Release',
+                'Metric',
+                'Measure']
         },
         {
             name: 'System Dynamics',
-            components: []
+            components : [
+                'Source',
+                'Sink',
+                'Buffer',
+                'Queue',
+                'Processor',
+                'Delay']
         },{
             name: 'Supply Chain',
-            components: []
+            components : [
+                'Source',
+                'Sink',
+                'Buffer',
+                'Queue',
+                'Processor']
         },{
             name: 'Pedestrians',
-            components: []
+            components : [
+                'Source',
+                'Sink',
+                'Buffer',
+                'Queue',
+                'Processor',
+                'Delay',
+                'Conveyor',
+                'Decision',
+                'Split',
+                'Join',
+                'Merge',
+                'Resource',
+                'Hold',
+                'Limiter',
+                'Release',
+                'Metric',
+                'Measure']
         }
     ];
 

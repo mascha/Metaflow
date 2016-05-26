@@ -98,7 +98,7 @@ $palette-component-entry: #eeeeee;
   z-index: -1;
 
   &.dimmed {
-    background-color: rgba(0,0,0,0.7);
+    background-color: rgba($palette-component, 0.9);
     z-index: 9;
   }
 }
@@ -109,7 +109,7 @@ $palette-component-entry: #eeeeee;
   font-weight: bold;
   text-align: right;
   margin-right: 6px;
-  color: white;
+  color: invert($palette-component);
   cursor: pointer;
 }
 

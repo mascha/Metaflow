@@ -1,12 +1,13 @@
 @import "../../../style/mixins";
 
-$presenter-body: #222222;
-$presenter-icon-hover: white;
-$presenter-icon: #cecece;
+$presenter-body: #222222 !default;
+$presenter-icon-hover: white !default;
+$presenter-icon: #cecece !default;
 
+$presenter-body: rgba(#efefef, 0.8);
 :host {
-  bottom: 10px;
-  left: 50px;
+  right: 32px;
+  bottom: 32px;
   position: absolute;
   height: 32px;
 }
