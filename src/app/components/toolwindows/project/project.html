@@ -1,9 +1,9 @@
 <div class="project-header">
-  <div role="button" (click)="goUpwards()" class="upwards"></div>
-  <span class="project-reference">{{level.name}}</span>
+  <div (click)="goUpwards()" class="upwards" [class.disabled]="isDisabled == true"></div>
+  <span class="project-reference">{{level.label}}</span>
 </div>
 <div class="project-entities">
-  <div *ngFor="let node of level.contents" class="entity-cell">
-    <span>{{node.name}}</span>
+  <div *ngFor="let node of contents" class="entity-cell">
+    <span>{{node.label}}</span>
   </div>
 </div>

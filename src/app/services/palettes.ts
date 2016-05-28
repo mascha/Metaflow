@@ -96,6 +96,6 @@ export default class PaletteRegistry {
                 a[i - 1] = a[j];
                 a[j] = x;
             }
-        })
+        });
     }
 }

@@ -1,6 +1,15 @@
 @import "../../../style/theme";
 @import "../../../style/variables";
 
+:host {
+  position: absolute;
+  overflow: hidden;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
 .splitpane-content {
   position: absolute;
   overflow: hidden;
@@ -19,7 +28,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    width:100%;
+    width: 100%;
   }
 
   &.left {
@@ -35,15 +44,6 @@
     bottom: 0;
     margin-left: $splitpane-divider-width - 1;
   }
-}
-
-:host {
-  position: absolute;
-  overflow: hidden;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
 }
 
 .splitpane-divider {

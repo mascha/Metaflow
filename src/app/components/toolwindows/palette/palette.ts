@@ -22,11 +22,7 @@ export default class Palette {
     @ViewChild('icons') icons: ElementRef;
     @ViewChild('select') select: ElementRef;
     @ViewChild('overlay') overlay: ElementRef;
-
-    ngAfterViewInit() {
-        // this.selectItem(0);
-    }
-
+    
     onSelect(event) {
         let index = this.eventIndex(event);
         if (this.isValidIndex(index)) {
@@ -51,14 +47,10 @@ export default class Palette {
 
     onLeave() {
         this.dimmed = false;
-        /*
-        if (!this.dimmed) {
-            this.resetTimer();
-        }
-        */
     }
 
-    @HostListener('mouseleave') onHostLeave() {
+    @HostListener('mouseleave') 
+    onHostLeave() {
         this.resetTimer();
         if (this.dimmed) {
             this.dimmed = false;
@@ -96,7 +88,7 @@ export default class Palette {
     }
 
     private eventIndex(event: MouseEvent): number {
-        let ele = this.overlay.nativeElement;
+        let ele = this.icons.nativeElement;
         let off = HTMLUtil.getOffset(ele, event);
         return this.getIndex(off.y);
     }

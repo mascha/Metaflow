@@ -475,7 +475,9 @@ abstract class BaseState implements DiagramState {
      *  - Only check visible objects of interest
      */
     protected detectAndDoSwitch(): boolean {
-        if (!this.current) return false;
+        if (!this.current) {
+            return false;
+        }
 
         if (!this.isRoot()) {
             if (this.isOutsideParent()) {
@@ -485,7 +487,10 @@ abstract class BaseState implements DiagramState {
         }
 
         let groups = this.diagram.cachedGroups;
-        if (!groups) return false;
+        if (!groups) {
+            return false;
+        }
+        
         let len = groups.length;
         for (let i = 0; i < len; i++) {
             let group = groups[i];

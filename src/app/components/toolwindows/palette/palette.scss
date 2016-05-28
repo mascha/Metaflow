@@ -49,7 +49,7 @@ $palette-component-entry: #eeeeee;
 .palette-selected {
   right: 0;
   position: absolute;
-  transform: translateY(3 * $icon-bar-height);
+  transform: translateY(0);
   transition: transform .3s ease-out;
   width: $icon-bar-width;
   height: $icon-bar-height;

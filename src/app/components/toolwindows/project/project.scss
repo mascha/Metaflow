@@ -71,6 +71,10 @@ $project-header-padding: 6px;
     transition: background .333s ease-in-out;
   }
 
+  &.disabled:before {
+    color: #eeeeee;
+  }
+
   @include icon(before, '\f141') {
     color: lighten($branding-fill, 32);
     font-size: 24px;

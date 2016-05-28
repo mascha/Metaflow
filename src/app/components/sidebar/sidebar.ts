@@ -24,16 +24,6 @@ export default class Sidebar {
             pane: this,
             visible: this.visible
         });
-
-        /*
-        setTimeout(() => {
-            this.visible = !this.visible;
-            this.visibility.emit({
-                pane: this,
-                visible: this.visible
-            });
-        }, 2000)
-        */
     }
 
     constructor() {

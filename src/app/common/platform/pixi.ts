@@ -73,7 +73,7 @@ export class PixiLayer implements PlatformLayer {
                     item.contents.forEach(it => {
                         if (it instanceof ViewGroup) {
                             renderer.renderGroup(it, false);
-                        } else if (it instanceof ViewItem){
+                        } else if (it instanceof ViewItem) {
                             renderer.renderItem(it);
                         }
                         renderer.attach(it, item);
@@ -146,7 +146,7 @@ export class PixiRenderer implements ViewModelRenderer<any, any> {
         let shape = new PIXI.Graphics()
             //.lineStyle(4, 0x3367D6, 1)
             .beginFill(0x66CCFF)
-            .drawRect(item.left, item.top, item.width, item.height)
+            .drawRoundedRect(item.left, item.top, item.width, item.height, 3)
             .endFill();
         item.visual = shape;
     }
