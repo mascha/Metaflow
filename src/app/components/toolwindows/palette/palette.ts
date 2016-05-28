@@ -28,9 +28,7 @@ export default class Palette {
     }
 
     onSelect(event) {
-        let ele = this.icons.nativeElement;
-        let off = HTMLUtil.getOffset(ele, event);
-        let index = this.getIndex(off.y);
+        let index = this.eventIndex(event);
         if (this.isValidIndex(index)) {
             this.selectItem(index);
             this.resetTimer();
@@ -39,9 +37,7 @@ export default class Palette {
     }
 
     onOverlayClick(event) {
-        let ele = this.overlay.nativeElement;
-        let off = HTMLUtil.getOffset(ele, event);
-        let index = this.getIndex(off.y);
+        let index = this.eventIndex(event);
         if (!this.isValidIndex(index)) {
             this.selectItem(index);
         }
@@ -49,7 +45,7 @@ export default class Palette {
         this.dimmed = false;
     }
 
-    onEnter() {
+    onEnter(event: MouseEvent) {
         this.startTimer();
     }
 
@@ -62,8 +58,7 @@ export default class Palette {
         */
     }
 
-    @HostListener('mouseleave')
-    onHostLeave() {
+    @HostListener('mouseleave') onHostLeave() {
         this.resetTimer();
         if (this.dimmed) {
             this.dimmed = false;
@@ -98,6 +93,12 @@ export default class Palette {
     private isValidIndex(index: number) {
         if (!this.categories) { return false; }
         return (index >= 0 && index < this.categories.length);
+    }
+
+    private eventIndex(event: MouseEvent): number {
+        let ele = this.overlay.nativeElement;
+        let off = HTMLUtil.getOffset(ele, event);
+        return this.getIndex(off.y);
     }
 
     private getIndex(y: number) {

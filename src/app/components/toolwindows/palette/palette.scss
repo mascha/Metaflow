@@ -123,7 +123,7 @@ $palette-component-entry: #eeeeee;
   bottom:0;
   left:0;
   right:$icon-bar-width;
-  padding: 6px;
+  padding: 6px 6px 6px 0;
   background-color: $palette-component;
   direction: rtl;
   .flipped {

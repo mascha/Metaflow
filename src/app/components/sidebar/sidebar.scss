@@ -1,5 +1,6 @@
 @import "../../../style/theme";
 @import "../../../style/mixins";
+@import "../../../style/variables";
 
 :host {
   position: absolute;
@@ -10,7 +11,7 @@
 
 .sidebar-header {
   box-sizing: border-box;
-  height: 30px;
+  height: $sidebar-header-height;
   padding: 8px 12px;
   width: 100%;
   position: relative;

@@ -9,8 +9,7 @@ import {Injectable} from '@angular/core';
 @Injectable()
 export default class PaletteRegistry {
 
-    private categories = [
-        {
+    private categories = [{
             name : 'Processes',
             components : [
             'Source',

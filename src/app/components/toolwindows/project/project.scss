@@ -1,3 +1,76 @@
 @import "../../../../style/variables";
 @import "../../../../style/theme";
 @import "../../../../style/mixins";
+
+$project-cell-height: 26px;
+$project-header-height: 32px;
+$project-upwards-fill: #eeeeee;
+$project-header-padding: 6px;
+
+.project-header {
+  height: $project-header-height - $project-header-padding;
+  position: relative;
+  background-color: #efefef;
+  padding-top: $project-header-padding;
+}
+
+.project-reference {
+  margin-left: 46px;
+  margin-bottom: 0;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: left;
+  text-overflow-ellipsis: ellipsis;
+  line-height: 1.2em;
+  color: $sidebar-header-title;
+  cursor: default;
+}
+
+.entity-cell {
+  padding-left: 8px;
+  width: 100%;
+  height: $project-cell-height;
+  display: inline-block;
+  line-height: $project-cell-height;
+  cursor: pointer;
+  font-weight: bold;
+
+  @include icon(before, '\f12f') {
+    color: rgba(#0e2231, .8);
+    transform: translateY(12.5%);
+  }
+
+  &:hover {
+    background-color: #0C2C53;
+  }
+}
+
+.project-entities {
+  position: relative;
+  height: 100%;
+  overflow: scroll;
+}
+
+.upwards {
+  position: absolute;
+  overflow: hidden;
+  height: $project-header-height;
+  width: $project-header-height;
+  left: 0;
+  top: 0;
+  cursor: pointer;
+  background-color: #efefef;
+
+  &:hover {
+    background-color: #dddddd;
+    transition: background .333s ease-in-out;
+  }
+
+  @include icon(before, '\f141') {
+    color: lighten($branding-fill, 32);
+    font-size: 24px;
+    position: absolute;
+    transform: translate(12.5%, 15%);
+  }
+}

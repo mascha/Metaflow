@@ -12,4 +12,20 @@ import {Component} from '@angular/core';
 })
 export default class ProjectExplorer {
 
+    entities = [];
+    level = "Market";
+    
+    goUpwards() {
+        this.level = "Europe";
+        this.entities = [];
+        for (let i = 0; i < 11; i++) {
+            this.entities.push({name: `entity${i}`, type: 'Type'})
+        }
+    }
+
+    constructor() {
+        for (let i = 0; i < 25; i++) {
+            this.entities.push({name: 'name', type: 'Type'})
+        }
+    }
 }

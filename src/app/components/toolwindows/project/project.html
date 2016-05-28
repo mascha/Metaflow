@@ -1,0 +1,9 @@
+<div class="project-header">
+  <div role="button" (click)="goUpwards()" class="upwards"></div>
+  <span class="project-reference">{{level}}</span>
+</div>
+<div class="project-entities">
+  <div *ngFor="let e of entities" class="entity-cell">
+    <span>{{e.name}} : {{e.type}}</span>
+  </div>
+</div>
