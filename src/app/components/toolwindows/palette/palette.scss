@@ -111,21 +111,29 @@ $palette-component-entry: #eeeeee;
   margin-right: 6px;
   color: invert($palette-component);
   cursor: pointer;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .palette-components {
   position: absolute;
-  overflow: hidden;
+  overflow: scroll;
+  overflow-x: hidden;
   top:0;
-  right:$icon-bar-width;
   bottom:0;
   left:0;
+  right:$icon-bar-width;
   padding: 6px;
   background-color: $palette-component;
+  direction: rtl;
+  .flipped {
+    direction: ltr !important;
+  }
 }
 
 .palette-component {
   background-color: $palette-component-entry;
+  overflow: hidden;
   display: inline-block;
   width: 70px;
   height: 70px;

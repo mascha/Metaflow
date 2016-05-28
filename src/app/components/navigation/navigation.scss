@@ -9,7 +9,7 @@
   top:0;
   left:0;
   right:0;
-  bottom:0;
+  height: $navigation-height;
 
   background-color: $navigation-fill;
 
@@ -99,13 +99,13 @@
   .branding {
     height: $navigation-height;
     width: $leftbar-width;
-    background-color: $leftbar-logo;
+    background-color: $branding-fill;
     display: table-cell;
     text-align: center;
     vertical-align: middle;
 
     &:hover {
-      background-color: lighten($leftbar-logo, 8);
+      background-color: $branding-hover;
       transition: background .333s ease-in-out;
     }
 

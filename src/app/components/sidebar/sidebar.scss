@@ -49,15 +49,14 @@
 
   &:hover {
     @include icon(before, '\f156') {
-      color: $icon-hover;
+      color: $sidebar-header-icons-hover;
     }
   }
 
   @include icon(before, '\f156') {
-    color: $icon-color;
+    color: $sidebar-header-icons;
   }
 }
-
 
 .sidebar-config-icon {
   position: absolute;
@@ -67,11 +66,11 @@
 
   &:hover {
     @include icon(before, '\f1d8') {
-      color: $icon-hover;
+      color: $sidebar-header-icons-hover;
     }
   }
 
   @include icon(before, '\f1d8') {
-    color: $icon-color;
+    color: $sidebar-header-icons;
   }
 }

@@ -10,6 +10,7 @@ abstract class Style {
     opacity: number;
     border: string;
     borderWidth: number;
+    margin: number;
 }
 
 /**

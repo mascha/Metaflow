@@ -1,4 +1,4 @@
-import {Component, ViewChild} from "@angular/core";
+import {Component, ViewChild, Input} from "@angular/core";
 import Diagram from "../canvas/canvas";
 import Sidebar from "../sidebar/sidebar";
 import DoubleSplit from "../splitpane/doublesplit";
@@ -25,7 +25,7 @@ import ProjectExplorer from "../toolwindows/project/project";
 })
 export default class Workspace {
     
-    slimLayout = false;
+    @Input() slimLayout = true;
     
     @ViewChild(TripleSplit) triple: TripleSplit;
     @ViewChild(DoubleSplit) double: DoubleSplit;

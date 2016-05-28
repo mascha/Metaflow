@@ -30,8 +30,7 @@ export default class PaletteRegistry {
             'Release',
             'Metric',
             'Measure']
-        },
-        {
+        }, {
             name: 'Manufacturing',
             components : [
                 'Source',
@@ -44,8 +43,7 @@ export default class PaletteRegistry {
                 'Release',
                 'Metric',
                 'Measure']
-        },
-        {
+        }, {
             name: 'System Dynamics',
             components : [
                 'Source',
@@ -54,7 +52,7 @@ export default class PaletteRegistry {
                 'Queue',
                 'Processor',
                 'Delay']
-        },{
+        }, {
             name: 'Supply Chain',
             components : [
                 'Source',
@@ -62,7 +60,7 @@ export default class PaletteRegistry {
                 'Buffer',
                 'Queue',
                 'Processor']
-        },{
+        }, {
             name: 'Pedestrians',
             components : [
                 'Source',
@@ -87,5 +85,18 @@ export default class PaletteRegistry {
 
     getCategories(): Array<any> {
         return this.categories;
+    }
+
+    constructor() {
+        this.categories.forEach((it) => {
+            let a = it.components;
+            var j, x, i;
+            for (i = a.length; i; i -= 1) {
+                j = Math.floor(Math.random() * i);
+                x = a[i - 1];
+                a[i - 1] = a[j];
+                a[j] = x;
+            }
+        })
     }
 }

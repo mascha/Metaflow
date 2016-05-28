@@ -3,6 +3,8 @@ $sidebar-header: #dddddd !default;
 $sidebar-header-title: #4d4d4d !default;
 $sidebar-main: white !default;
 $sidebar-cards: false !default;
+$sidebar-header-icons: #999999 !default;
+$sidebar-header-icons-hover: #212637 !default;
 
 /* Splitpane design */
 $splitpane-divider: #dddddd !default;
@@ -21,6 +23,7 @@ $toolbar-fill: #efefef !default;
 
 /* Branding */
 $branding-fill: #212637 !default;
+$branding-hover: lighten($branding-fill, 6) !default;
 
 /* Navigation bar */
 $navigation-fill: #3165AE !default;
@@ -43,7 +46,7 @@ $grid-lines: lightgray !default;
 $grid-fill: white !default;
 
 /* Interactive border */
-
+$border-fill: rgba(lightgray, 0.95) !default;
 
 /* Palette */
 $palette-component: #3F4652 !default;
