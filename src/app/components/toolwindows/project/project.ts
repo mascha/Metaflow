@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
-import ModelService from "../../../services/models";
 import {ViewGroup} from "../../../common/viewmodel";
+import ModelService from "../../../services/models";
 
 /**
  * A project navigator/explorer.

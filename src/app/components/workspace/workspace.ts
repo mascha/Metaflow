@@ -25,7 +25,7 @@ import ProjectExplorer from "../toolwindows/project/project";
 })
 export default class Workspace {
     
-    @Input() slimLayout = true;
+    @Input() slimLayout = false;
     
     @ViewChild(TripleSplit) triple: TripleSplit;
     @ViewChild(DoubleSplit) double: DoubleSplit;
