@@ -1,7 +1,9 @@
 import {Component} from '@angular/core';
+import ModelService from "../../../services/models";
+import {ViewGroup} from "../../../common/viewmodel";
 
 /**
- * A project explorer.
+ * A project navigator/explorer.
  * @author Martin Schade
  * @since 1.0.0
  */
@@ -11,21 +13,18 @@ import {Component} from '@angular/core';
     styles: [require('./project.scss')]
 })
 export default class ProjectExplorer {
-
-    entities = [];
-    level = "Market";
+    
+    level: ViewGroup;
+    isLocked = false;
     
     goUpwards() {
-        this.level = "Europe";
-        this.entities = [];
-        for (let i = 0; i < 11; i++) {
-            this.entities.push({name: `entity${i}`, type: 'Type'})
+        let parent = this.level.parent;
+        if (parent && !this.isLocked) {
+            this.level = parent;
         }
     }
 
-    constructor() {
-        for (let i = 0; i < 25; i++) {
-            this.entities.push({name: 'name', type: 'Type'})
-        }
+    constructor(private models : ModelService) {
+        this.level = models.getModel();
     }
 }

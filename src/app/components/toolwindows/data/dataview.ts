@@ -1,6 +1,6 @@
 import {Component, ElementRef, HostListener} from '@angular/core';
 
-let Plotly = require('plotly.js');
+// let Plotly = require('plotly.js');
 
 /**
  * Simulation run data analysis view.
@@ -82,12 +82,12 @@ export default class Dataview {
             }
         };
 
-        Plotly.newPlot('plot', data, layout, {displayModeBar: false});
+        // Plotly.newPlot('plot', data, layout, {displayModeBar: false});
     }
 
     @HostListener('window:resize')
     onResize() {
-        Plotly.Plots.resize(this.element.nativeElement.children[0]);
+        // Plotly.Plots.resize(this.element.nativeElement.children[0]);
     }
     
     constructor(private element: ElementRef) {

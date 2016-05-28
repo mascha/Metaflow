@@ -46,7 +46,7 @@ export default class Palette {
     }
 
     onEnter(event: MouseEvent) {
-        this.startTimer();
+        this.startTimer(); 
     }
 
     onLeave() {

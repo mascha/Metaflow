@@ -28,7 +28,7 @@ $project-header-padding: 6px;
 }
 
 .entity-cell {
-  padding-left: 8px;
+  padding-left: 6px;
   width: 100%;
   height: $project-cell-height;
   display: inline-block;
@@ -42,7 +42,11 @@ $project-header-padding: 6px;
   }
 
   &:hover {
-    background-color: #0C2C53;
+    background-color: rgba(royalblue, 0.6);
+    color: white;
+    &:before {
+      color: white;
+    }
   }
 }
 

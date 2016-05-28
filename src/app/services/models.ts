@@ -10,6 +10,7 @@ export default class ModelService {
     private model: ViewGroup;
 
     getModel(): ViewGroup {
+        this.model = this.model || ModelService.createDebugModel();
         return this.model;
     }
 
@@ -23,7 +24,7 @@ export default class ModelService {
             while (j) {
                 let x = Math.random() * 18000;
                 let y = Math.random() * 18000;
-                let item = new ViewItem('Item', x, y, 192, 108);
+                let item = new ViewItem(`Item (${j}/${i})`, x, y, 192, 108);
                 group.addContent(item);
                 j--;
             }
@@ -36,9 +37,5 @@ export default class ModelService {
         }
 
         return root;
-    }
-
-    constructor() {
-        this.model = ModelService.createDebugModel();
     }
 }

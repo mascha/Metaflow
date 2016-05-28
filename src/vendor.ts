@@ -7,4 +7,4 @@ import '@angular/http';
 
 // Other
 import 'pixi.js';
-import 'plotly.js';
+// import 'plotly.js';
