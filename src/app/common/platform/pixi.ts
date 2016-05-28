@@ -3,7 +3,7 @@ import {ViewGroup, ViewItem, ViewVertex} from "../viewmodel";
 import {PlatformLayer, ViewModelRenderer} from "../platform";
 
 /**
- * Provides a pan-zoom surface for
+ * Provides a pan-zoom surface for the PIXI renderer.
  *
  * TODO: Implement a LOD vs Text sclaing loop
  * TODO: Combine with group caching etc.
