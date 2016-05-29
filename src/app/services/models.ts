@@ -3,11 +3,20 @@ import {Injectable} from '@angular/core';
 
 /**
  * Model provider service.
+ *
+ * @author Martin Schade
+ * @since 1.0.0
  */
 @Injectable()
 export default class ModelService {
     
     private model: ViewGroup;
+    private empty: ViewGroup;
+
+    getDefaultModel() {
+        this.empty = this.empty || new ViewGroup('EMPTY', 2000, 2000, 2000, 2000, 1);
+        return this.empty;
+    }
 
     getModel(): ViewGroup {
         this.model = this.model || ModelService.createDebugModel();

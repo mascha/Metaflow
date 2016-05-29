@@ -128,7 +128,7 @@ export class PixiLayer implements PlatformLayer {
             resolution: 1
         };
         
-        this.pixi = PIXI.autoDetectRenderer(500, 500, options);
+        this.pixi = new PIXI.CanvasRenderer(500, 500, options);
         this.webgl = (this.pixi instanceof PIXI.WebGLRenderer)? true : false;
     }
 }
@@ -144,7 +144,7 @@ export class PixiRenderer implements ViewModelRenderer<any, any> {
 
     renderItem(item:ViewItem) : any {
         let shape = new PIXI.Graphics()
-            //.lineStyle(4, 0x3367D6, 1)
+            .lineStyle(4, 0x3367D6, 1)
             .beginFill(0x66CCFF)
             .drawRoundedRect(item.left, item.top, item.width, item.height, 3)
             .endFill();
