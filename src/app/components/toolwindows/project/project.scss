@@ -33,27 +33,22 @@ $project-header-padding: 6px;
   height: $project-cell-height;
   display: inline-block;
   line-height: $project-cell-height;
-  cursor: pointer;
   font-weight: bold;
 
   @include icon(before, '\f12f') {
     color: rgba(#0e2231, .8);
     transform: translateY(12.5%);
   }
-
-  &:hover {
-    background-color: rgba(royalblue, 0.6);
-    color: white;
-    &:before {
-      color: white;
-    }
-  }
 }
 
 .project-entities {
-  position: relative;
-  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left:0;
+  right: 0;
   overflow: scroll;
+  overflow-x: hidden;
 }
 
 .upwards {

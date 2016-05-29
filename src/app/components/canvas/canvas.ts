@@ -4,12 +4,12 @@ import {ViewGroup} from "../../common/viewmodel";
 import {PlatformLayer} from "../../common/platform";
 import Grid from '../../common/grid';
 import Border from '../../common/border';
-import NavigationBar from "../breadcrumbs/breadcrumbs";
 import HTML from "../../common/util";
 import ModelService from "../../services/models";
 import PlatformService from "../../services/platforms";
 import {StateMachine, DiagramState, DiagramEvents} from "../../common/diagrams";
-import Presenter from "../controls/presenter";
+import Presenter from "./controls/presenter";
+import NavigationBar from "./breadcrumbs/breadcrumbs";
 import Overview from "./overview/overview";
 
 /**
@@ -23,13 +23,13 @@ import Overview from "./overview/overview";
 })
 class GridLayer {
     @ViewChild('gridLayer')
-    private _canvas: ElementRef;
-    private _grid: Grid;
+    private canvas: ElementRef;
+    private grid: Grid;
 
     observe(camera: Camera) {
-        let canvas = this._canvas.nativeElement;
-        this._grid = new Grid(camera, canvas);
-        camera.attachObserver(this._grid);
+        let canvas = this.canvas.nativeElement;
+        this.grid = new Grid(camera, canvas);
+        camera.attachObserver(this.grid);
     }
 }
 
@@ -44,18 +44,18 @@ class GridLayer {
 })
 class BorderLayer {
     @ViewChild('borderLayer')
-    private _element: ElementRef;
-    private _border: Border;
+    private element: ElementRef;
+    private border: Border;
 
     observe(camera: Camera) {
-        let canvas = this._element.nativeElement as HTMLCanvasElement;
-        this._border = new Border(camera, canvas);
-        camera.attachObserver(this._border);
+        let canvas = this.element.nativeElement as HTMLCanvasElement;
+        this.border = new Border(camera, canvas);
+        camera.attachObserver(this.border);
     }
 
     update(group:ViewGroup) {
-        if (this._border) {
-            this._border.updateProxies(group);
+        if (this.border) {
+            this.border.updateProxies(group);
         }
     }
 }
