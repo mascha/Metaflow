@@ -1,4 +1,5 @@
 import {Component, ElementRef, ViewChild, HostListener} from '@angular/core';
+import {StateMachine, DiagramState, DiagramEvents} from "../../common/diagrams";
 import {Camera} from "../../common/camera";
 import {ViewGroup} from "../../common/viewmodel";
 import {PlatformLayer} from "../../common/platform";
@@ -7,10 +8,9 @@ import Border from '../../common/border';
 import HTML from "../../common/util";
 import ModelService from "../../services/models";
 import PlatformService from "../../services/platforms";
-import {StateMachine, DiagramState, DiagramEvents} from "../../common/diagrams";
-import Presenter from "./controls/presenter";
-import NavigationBar from "./breadcrumbs/breadcrumbs";
+import Breadcrumbs from "./breadcrumbs/breadcrumbs";
 import Overview from "./overview/overview";
+import Presenter from "./controls/presenter";
 
 /**
  * Grid layer component.
@@ -87,7 +87,7 @@ class NodeLayer {
     selector: 'diagram',
     directives: [
         GridLayer, NodeLayer,
-        BorderLayer, NavigationBar,
+        BorderLayer, Breadcrumbs,
         Presenter, Overview
     ],
     template: require('./canvas.html'),

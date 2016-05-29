@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {NgFor} from '@angular/common';
 import {ViewGroup} from "../../../common/viewmodel";
 
 /**
@@ -11,7 +10,6 @@ import {ViewGroup} from "../../../common/viewmodel";
     selector: 'breadcrumbs',
     styles: [require('./breadcrumbs.scss')],
     template: require('./breadcrumbs.html'),
-    directives: [NgFor]
 })
 export default class Breadcrumbs {
 
