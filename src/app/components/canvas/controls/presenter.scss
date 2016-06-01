@@ -3,11 +3,11 @@
 $presenter-body: #222222 !default;
 $presenter-icon-hover: white !default;
 $presenter-icon: #cecece !default;
-
 $presenter-body: rgba(#efefef, 0.8);
+
 :host {
   right: 32px;
-  bottom: 96px;
+  bottom: 93px;
   position: absolute;
   height: 32px;
 }
@@ -19,11 +19,16 @@ $presenter-body: rgba(#efefef, 0.8);
   border-radius: 4px;
   background-color: $presenter-body;
   direction: ltr;
-  padding: 0 5px;
   display: block;
   font-size: 13px;
   white-space: nowrap;
   z-index: 11;
+
+  padding: 0 5px;
+
+  &.vertical {
+    padding: 2px 2px;
+  }
 
   &.active {
     opacity: 1;
@@ -40,7 +45,6 @@ $presenter-body: rgba(#efefef, 0.8);
 
     &.vertical {
       display: block;
-      padding: 6px 2px;
     }
 
     &:before {
