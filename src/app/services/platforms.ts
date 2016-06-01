@@ -14,7 +14,7 @@ export default class PlatformService {
      * Retrieve a newly initialized rendering layer, which
      * will be added to the DOM.
      * @param element A html canvas element. Currently only canvas is supported.
-     * @returns {IPlatformLayer}
+     * @returns {PlatformLayer}
      */
     getPlatform(element: HTMLCanvasElement): PlatformLayer {
         return new PixiLayer(element);

@@ -315,6 +315,7 @@ class DiagramBehavior implements StateMachine, DiagramEvents {
 
     private current: DiagramState;
     private states: any;
+    private debug = false;
     
     handleClick(x:number, y:number, double:boolean) {
         this.current.handleClick(x, y, double);
@@ -356,7 +357,9 @@ class DiagramBehavior implements StateMachine, DiagramEvents {
             }
             this.current = newState;
             newState.enterState(params);
-            console.log('diagram state: ' + state);
+            if (this.debug) {
+                console.log('diagram state: ' + state);
+            }
         }
     }
 
@@ -378,6 +381,16 @@ class DiagramBehavior implements StateMachine, DiagramEvents {
         /* Initial state */
         this.transitionTo('idle', null);
     }
+}
+
+/**
+ * Responsible for handling level transition events and detection.
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+class ReferenceManager {
+    private current: ViewGroup;
+
 }
 
 /**
