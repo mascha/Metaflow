@@ -8,6 +8,7 @@ $palette-icons-glyph: darken($navigation-fill ,6);;
 $palette-icons-span-adjust: 4px;
 $palette-component-entry-hover: #dddddd;
 $palette-component-entry: #eeeeee;
+$palette-labels: rgba(white, 0.85);
 
 :host {
   position: absolute;
@@ -98,21 +99,21 @@ $palette-component-entry: #eeeeee;
   z-index: -1;
 
   &.dimmed {
-    background-color: rgba($palette-component, 0.9);
+    background-color: $palette-labels;
     z-index: 9;
   }
-}
 
-.palette-label {
-  height: $icon-bar-height;
-  line-height: $icon-bar-height;
-  font-weight: bold;
-  text-align: right;
-  margin-right: 6px;
-  color: invert($palette-component);
-  cursor: pointer;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  .palette-label {
+    height: $icon-bar-height;
+    line-height: $icon-bar-height;
+    font-weight: bold;
+    text-align: right;
+    margin-right: 6px;
+    color: invert($palette-labels);
+    cursor: pointer;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 }
 
 .palette-components {
@@ -125,29 +126,30 @@ $palette-component-entry: #eeeeee;
   right:$icon-bar-width;
   padding: 6px 6px 6px 0;
   background-color: $palette-component;
+
   direction: rtl;
   .flipped {
     direction: ltr !important;
   }
-}
 
-.palette-component {
-  background-color: $palette-component-entry;
-  overflow: hidden;
-  display: inline-block;
-  width: 70px;
-  height: 70px;
-  margin: 4px;
-  text-align: center;
-  line-height: 70px;
-  border-radius: 3px;
+  .palette-component {
+    background-color: $palette-component-entry;
+    overflow: hidden;
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    margin: 4px;
+    text-align: center;
+    line-height: 70px;
+    border-radius: 3px;
 
-  // transform-origin: 0 150%;
-  transition: all .15s linear;
+    // transform-origin: 0 150%;
+    transition: all .15s linear;
 
-  &:hover {
-    background-color: $palette-component-entry-hover;
-    transform: scale(1.1);
+    &:hover {
+      background-color: $palette-component-entry-hover;
+      transform: scale(1.1);
+    }
   }
 }
 

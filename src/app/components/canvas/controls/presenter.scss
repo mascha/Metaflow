@@ -7,7 +7,7 @@ $presenter-icon: #cecece !default;
 $presenter-body: rgba(#efefef, 0.8);
 :host {
   right: 32px;
-  bottom: 32px;
+  bottom: 96px;
   position: absolute;
   height: 32px;
 }
@@ -30,12 +30,18 @@ $presenter-body: rgba(#efefef, 0.8);
   }
 
   .flat-button {
-    display: inline-block;
     font-weight: bold;
     line-height: 14px;
     margin: 0;
-    padding: 6px 5px;
     vertical-align: middle;
+
+    padding: 6px 5px;
+    display: inline-block;
+
+    &.vertical {
+      display: block;
+      padding: 6px 2px;
+    }
 
     &:before {
       color: $presenter-icon;
@@ -48,11 +54,11 @@ $presenter-body: rgba(#efefef, 0.8);
 }
 
 .presenter-play {
-  @include icon(before, '\f40A')
+  @include icon(before, '\f415')
 }
 
 .presenter-next {
-  @include icon(before, '\f28D')
+  @include icon(before, '\f374')
 }
 
 .presenter-forward {
