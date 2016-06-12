@@ -3,7 +3,7 @@
 $presenter-body: #222222 !default;
 $presenter-icon-hover: white !default;
 $presenter-icon: #cecece !default;
-$presenter-body: rgba(#efefef, 0.8);
+$presenter-body: rgba(#efefef, 0.8) !default;
 
 :host {
   right: 32px;
@@ -67,5 +67,5 @@ $presenter-body: rgba(#efefef, 0.8);
 }
 
 .presenter-forward {
-  @include icon(before, '\f211')
+  @include icon(before, '\f19f')
 }
