@@ -22,46 +22,43 @@ export default class Palette {
     @ViewChild('icons') icons: ElementRef;
     @ViewChild('select') select: ElementRef;
     @ViewChild('overlay') overlay: ElementRef;
+
+    onIconsMove() {
+        this.reset();
+    }
+
+    onIconsEnter() {
+        this.startTimer();
+    }
+
+    onIconsLeave() {
+        this.reset();
+    }
     
-    onSelect(event) {
+    onSelect(event: MouseEvent) {
         let index = this.eventIndex(event);
         if (this.isValidIndex(index)) {
             this.selectItem(index);
-            this.resetTimer();
-            this.dimmed = false;
+            this.reset();
         }
     }
 
-    onOverlayClick(event) {
+    onOverlayClick(event: MouseEvent) {
         let index = this.eventIndex(event);
         if (!this.isValidIndex(index)) {
             this.selectItem(index);
         }
-        this.resetTimer();
-        this.dimmed = false;
-    }
-
-    onEnter(event: MouseEvent) {
-        this.startTimer(); 
-    }
-
-    onLeave() {
-        this.dimmed = false;
+        this.reset();
     }
 
     @HostListener('mouseleave') 
     onHostLeave() {
-        this.resetTimer();
-        if (this.dimmed) {
-            this.dimmed = false;
-        }
+        this.reset();
         return false;
     }
     
     private startTimer() {
-        this.timer = setTimeout(() => {
-            this.dimmed = true;
-        }, 888);
+        this.timer = setTimeout(() => { this.dimmed = true;}, 1200);
     }
     
     private resetTimer() {
@@ -69,16 +66,27 @@ export default class Palette {
         this.timer = null;
     }
 
+    private resetDimming() {
+        if (this.dimmed) { this.dimmed = false; }
+    }
+
+    private reset() {
+        this.resetDimming();
+        this.resetTimer();
+    }
+
     private selectItem(index: number) {
-        let category = this.categories[index];
-        this.components = category.components;
-        this.selected = category.name;
-        let e = this.select.nativeElement;
-        if (e) {
-            let value = `translateY(${index * 32}px)`;
-            this.renderer.setElementStyle(
-                e, 'transform', value
-            );
+        if (index >= 0 && index < this.categories.length) {
+            let category = this.categories[index];
+            this.components = category.components;
+            this.selected = category.name;
+            let element = this.select.nativeElement;
+            if (element) {
+                let value = `translateY(${index * 32}px)`;
+                this.renderer.setElementStyle(
+                    element, 'transform', value
+                );
+            }
         }
     }
 
