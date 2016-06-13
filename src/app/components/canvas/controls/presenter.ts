@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 
 /**
+ * Diagramming overlay tools. 
  * @author Martin Schade    
  * @since 1.0.0
  */
