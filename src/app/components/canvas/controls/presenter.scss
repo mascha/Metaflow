@@ -3,7 +3,7 @@
 $presenter-body: #222222 !default;
 $presenter-icon-hover: white !default;
 $presenter-icon: #cecece !default;
-$presenter-body: rgba(#efefef, 0.8) !default;
+$presenter-body: rgba(#efefef, 0.8);
 
 :host {
   right: 32px;
