@@ -19,21 +19,62 @@ export default class ModelService {
     }
 
     getModel(): ViewGroup {
-        this.model = this.model || ModelService.createDebugModel();
+        this.model = this.model || this.createDebugModel();
         return this.model;
     }
 
-    private static createDebugModel(): ViewGroup {
+    private createStock() {
+        return new ViewItem(
+            this.randomName(),
+            Math.random() * 18000,
+            Math.random() * 18000,
+            192,
+            108
+        );
+    }
+
+    private createVariable() {
+        return new ViewItem(
+            this.randomName(),
+            Math.random() * 18000,
+            Math.random() * 18000,
+            64,
+            64
+        );
+    }
+
+    private createModule() {
+        return new ViewGroup(
+            this.randomName(),
+            Math.random() * 18000,
+            Math.random() * 18000,
+            300,
+            260,
+            1
+        );
+    }
+
+    private randomName() {
+        return 'Item #' + (Math.random().toString(36) + '00000000000000000').slice(2, 8+2);
+    }
+
+    private createDebugModel(): ViewGroup {
         let i = 40;
         let o : ViewGroup = null;
         let root: ViewGroup = null;
         while (i--) {
-            let group = new ViewGroup(`Level ${40 - i}`, 2000, 2000, 2000, 2000, 0.1);
+            let group = new ViewGroup(`Level #${40 - i}`, 2000, 2000, 2000, 2000, 0.1);
             let j = 120;
             while (j) {
-                let x = Math.random() * 18000;
-                let y = Math.random() * 18000;
-                let item = new ViewItem(`Item (${j}/${i})`, x, y, 192, 108);
+                let rnd = Math.random();
+                let item;
+                if (rnd < .3333) {
+                    item = this.createStock();
+                } else if (rnd < .6666) {
+                    item = this.createVariable();
+                } else {
+                    item = this.createModule();
+                }
                 group.addContent(item);
                 j--;
             }

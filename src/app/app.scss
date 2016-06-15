@@ -15,7 +15,7 @@
   position: absolute;
   overflow: hidden;
   @if $show-navigation-border {
-    top: ($navigation-height + 1); /* + $toolbar-height */
+    top: ($navigation-height + 1) + $toolbar-height;
   } @else {
     top: ($navigation-height);
   }
@@ -34,6 +34,8 @@
   width: $leftbar-width;
   bottom: 0;
 }
+
+*/
 
 .toolbar {
   position: absolute;
@@ -84,4 +86,3 @@
   @include icon(before, '\F328')
 }
 
-*/
