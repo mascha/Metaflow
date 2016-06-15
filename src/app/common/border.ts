@@ -78,8 +78,10 @@ export default class Border implements CameraObserver {
         const b = this.border;
         brush.globalAlpha = alpha;
         brush.fillStyle = 'black';
+        brush.strokeStyle = 'blue';
         brush.fillRect(0, 0, w, h);
-        brush.clearRect(b, b, w - b * 2.0, h - b * 2.0);
+        brush.strokeRect(b,b, w - 2*b, h - 2*b);
+        brush.clearRect(b, b, w - 2*b, h - 2*b);
     }
 
     /**

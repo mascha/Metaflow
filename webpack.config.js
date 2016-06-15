@@ -16,6 +16,7 @@ var isTest = ENV === 'test' || ENV === 'test-watch';
 var isProd = ENV === 'build';
 
 module.exports = function makeWebpackConfig() {
+
   /**
    * Config
    * Reference: http://webpack.github.io/docs/configuration.html
@@ -44,7 +45,12 @@ module.exports = function makeWebpackConfig() {
    * Reference: http://webpack.github.io/docs/configuration.html#entry
    */
   config.entry = isTest ? {} : {
-    'polyfills': ['es6-shim/es6-shim.js', 'rxjs/Rx.js', 'zone.js/dist/zone.js', 'reflect-metadata/Reflect.js'],
+    'polyfills': [
+      'es6-shim/es6-shim.js',
+      'rxjs/Rx.js',
+      'zone.js/dist/zone.js',
+      'reflect-metadata/Reflect.js'
+    ],
     'vendor': './src/vendor.ts',
     'app': './src/bootstrap.ts' // our angular app
   };
@@ -162,11 +168,7 @@ module.exports = function makeWebpackConfig() {
         loader: 'raw'
       }
     ],
-    
-    // Webpack lets us use postLoaders to specify a module loader that runs after
-    // all other module loaders. In this case, we can use Browserify's brfs
-    // transform as a final build step. Here, we restrict this loader to files in
-    // the node_modules/pixi.js directory so it won't slow us down too much.
+
     postLoaders: [
       {
         test: /\.js$/,
@@ -183,7 +185,6 @@ module.exports = function makeWebpackConfig() {
   };
 
   if (isTest) {
-    // instrument only testing sources with Istanbul, covers js compiled files for now :-/
     config.module.postLoaders.push({
       test: /\.(js|ts)$/,
       include: path.resolve('src'),
@@ -286,7 +287,6 @@ module.exports = function makeWebpackConfig() {
   return config;
 }();
 
-// Helper functions
 function root(args) {
   args = Array.prototype.slice.call(arguments, 0);
   return path.join.apply(path, [__dirname].concat(args));
