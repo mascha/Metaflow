@@ -1,8 +1,6 @@
 @import "../../../../style/mixins";
+@import "../../../../style/theme";
 
-$presenter-body: #222222 !default;
-$presenter-icon-hover: white !default;
-$presenter-icon: #cecece !default;
 $presenter-body: rgba(#efefef, 0.8);
 
 :host {
@@ -49,11 +47,11 @@ $presenter-body: rgba(#efefef, 0.8);
     }
 
     &:before {
-      color: $presenter-icon;
+      color: $icon-color;
     }
 
     &:hover:before {
-      color: $presenter-icon-hover;
+      color: $icon-hover;
     }
   }
 }

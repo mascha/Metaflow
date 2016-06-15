@@ -12,6 +12,7 @@
   height: $navigation-height;
 
   background-color: $navigation-fill;
+  user-select: none;
 
   @if $show-navigation-border {
     border-color: $navigation-border;

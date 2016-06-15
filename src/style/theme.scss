@@ -1,10 +1,14 @@
+/* Icons and glyphs */
+$icon-hover: #212637 !default;
+$icon-color: #999999 !default;
+
 /* Tool sidebar design */
 $sidebar-header: #dddddd !default;
 $sidebar-header-title: #4d4d4d !default;
 $sidebar-main: white !default;
 $sidebar-cards: false !default;
-$sidebar-header-icons: #999999 !default;
-$sidebar-header-icons-hover: #212637 !default;
+$sidebar-header-icons: $icon-color !default;
+$sidebar-header-icons-hover: $icon-hover !default;
 
 /* Splitpane design */
 $splitpane-divider: #dddddd !default;
@@ -37,10 +41,6 @@ $instruments-pause: lightgray !default;
 $leftbar-fill: #3165AE !default;
 $leftbar-logo: #212637 !default;
 
-/* Icons and glyphs */
-$icon-hover: #212637 !default;
-$icon-color: #999999 !default;
-
 /* Grid fill and lines */
 $grid-lines: lightgray !default;
 $grid-fill: white !default;
@@ -51,3 +51,8 @@ $border-fill: rgba(lightgray, 0.95) !default;
 /* Palette */
 $palette-component: #3F4652 !default;
 $palette-icons: #272C33 !default;
+
+/* Canvas controls */
+$presenter-body: #222222 !default;
+$presenter-icon-hover: white !default;
+$presenter-icon: #cecece !default;
