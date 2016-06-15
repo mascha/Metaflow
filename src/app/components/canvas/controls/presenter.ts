@@ -11,12 +11,5 @@ import {Component} from '@angular/core';
     template: require('./presenter.html')
 })
 export default class Presenter {
-
-    active = false;
-    
-    constructor() {
-        setTimeout(()=> {
-            this.active = true;
-        }, 6000)
-    }
+    active = true;
 }
