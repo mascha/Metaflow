@@ -16,12 +16,14 @@ import PlatformService from "./app/services/platforms";
 import ModelService from "./app/services/models";
 import PaletteRegistry from "./app/services/palettes";
 import ConfigService from "./app/services/configs";
+import ProjectService from "./app/services/projects";
 
 const SERVICES = [
     PlatformService, 
     ModelService,
     PaletteRegistry,
-    ConfigService
+    ConfigService,
+    ProjectService
 ];
 
 document.addEventListener('DOMContentLoaded', function main() {

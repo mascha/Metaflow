@@ -28,5 +28,5 @@ export declare class RouteInfo implements RouteInfoMetadata {
 
 export const ROUTES: RouteInfo[] = [
     // { path: '/', component: HomeComponent, title: "Project Overview", menuType: MenuType.BRAND },
-    // { path: '/projects', component: HomeComponent, title: "Heroes", menuType: MenuType.LEFT },
+    // { path: '/projectpage', component: HomeComponent, title: "Heroes", menuType: MenuType.LEFT },
 ];
