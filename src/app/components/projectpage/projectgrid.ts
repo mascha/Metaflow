@@ -13,7 +13,5 @@ import ProjectService from "../../services/projects";
 })
 export default class ProjectPage {
     
-    constructor(projects : ProjectService) {
-        
-    }
+    constructor(private projects : ProjectService) {}
 }
