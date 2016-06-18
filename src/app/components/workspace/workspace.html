@@ -1,4 +1,4 @@
-<triple-split *ngIf="slimLayout != true">
+<triple-split *ngIf="config.slimLayout != true">
     <sidebar left title="Project" side="left" (visibility)="togglePrimary($event)">
       <explorer></explorer>
     </sidebar>
@@ -12,7 +12,7 @@
       <palette></palette>
     </sidebar>
 </triple-split>
-<double-split *ngIf="slimLayout == true" orientation="horizontal">
+<double-split *ngIf="config.slimLayout == true" orientation="horizontal">
   <triple-split left>
     <sidebar left title="Project" side="left" (visibility)="togglePrimary($event)">
       <explorer></explorer>

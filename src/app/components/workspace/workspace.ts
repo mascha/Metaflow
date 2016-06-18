@@ -6,6 +6,7 @@ import TripleSplit from "../splitpane/triplesplit";
 import Palette from "../toolwindows/palette/palette";
 import Dataview from "../toolwindows/data/dataview";
 import ProjectExplorer from "../toolwindows/project/project";
+import {WorkspaceConfig, default as ConfigService} from "../../services/configs";
 
 /**
  * Workspace component.
@@ -25,7 +26,7 @@ import ProjectExplorer from "../toolwindows/project/project";
 })
 export default class Workspace {
     
-    @Input() slimLayout = false;
+    workspace: WorkspaceConfig;
     
     @ViewChild(TripleSplit) triple: TripleSplit;
     @ViewChild(DoubleSplit) double: DoubleSplit;
@@ -40,5 +41,9 @@ export default class Workspace {
 
     toggleTernary(event: any) {
         this.double.toggleVisibility(event);
+    }
+    
+    constructor(private config: ConfigService) {
+        this.workspace = config.getWorkspaceConfig();
     }
 }

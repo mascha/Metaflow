@@ -1,8 +1,10 @@
-<navigation></navigation>
-<div class="toolbar">
-  <div class="toolbar-button undo"></div>
-  <div class="toolbar-button redo"></div>
-  <div class="toolbar-button layers"></div>
+<div class="fullscreen" *ngIf="workspace.fullscreen != true">
+  <navigation></navigation>
+  <toolbar></toolbar>
+  <workspace class="workspace">
+  </workspace>
 </div>
-<workspace class="workspace"></workspace>
+<diagram class="fullscreen" *ngIf="workspace.fullscreen == true">
+
+</diagram>
 

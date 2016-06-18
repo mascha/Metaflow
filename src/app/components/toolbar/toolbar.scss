@@ -1,0 +1,53 @@
+@import "../../../style/theme";
+@import "../../../style/variables";
+@import "../../../style/mixins";
+
+:host {
+  position: absolute;
+  overflow: hidden;
+  top: $navigation-height + 1;
+  left:0;
+  right:0;
+  height: $toolbar-height - 7px;
+  border-bottom: solid 1px darken($toolbar-fill, 12);
+  background-color: $toolbar-fill;
+  padding-top: 6px;
+  padding-left: ($leftbar-width + $navigation-inset);
+  white-space: nowrap;
+}
+
+.toolbar-button {
+  border-radius: 2px;
+  border: 1px solid transparent;
+  height: 24px;
+  padding-right: 12px;
+  line-height: 24px;
+  list-style: none;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  display: inline;
+
+  &.before {
+    color: $toolbar-button-fill;
+  }
+
+  &:hover {
+    &:before {
+      color: $toolbar-button-hover;
+    }
+  }
+}
+
+.undo {
+  @include icon(before, '\F54C')
+}
+
+.redo {
+  @include icon(before, '\F44E')
+}
+
+.layers {
+  @include icon(before, '\F328')
+}
+

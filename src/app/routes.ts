@@ -1,5 +1,4 @@
 import { Type } from '@angular/core';
-import { HomeComponent } from './home/home';
 
 export enum MenuType {
     BRAND,
@@ -28,8 +27,6 @@ export declare class RouteInfo implements RouteInfoMetadata {
 }
 
 export const ROUTES: RouteInfo[] = [
-    { path: '/', component: HomeComponent, title: "Project Overview", menuType: MenuType.BRAND },
-    { path: '/projects', component: ProjectComponents, title: "Heroes", menuType: MenuType.LEFT },
-    { path: '/about', component: AboutUsComponent, title: "About Us", menuType: MenuType.RIGHT },
-    { path: '/contact', component: ContactComponent, title: "Contact", menuType: MenuType.RIGHT }
-]
+    // { path: '/', component: HomeComponent, title: "Project Overview", menuType: MenuType.BRAND },
+    // { path: '/projects', component: HomeComponent, title: "Heroes", menuType: MenuType.LEFT },
+];

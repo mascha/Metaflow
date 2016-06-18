@@ -15,11 +15,13 @@ import {App} from './app/app';
 import PlatformService from "./app/services/platforms";
 import ModelService from "./app/services/models";
 import PaletteRegistry from "./app/services/palettes";
+import ConfigService from "./app/services/configs";
 
-let SERVICES = [
+const SERVICES = [
     PlatformService, 
     ModelService,
-    PaletteRegistry
+    PaletteRegistry,
+    ConfigService
 ];
 
 document.addEventListener('DOMContentLoaded', function main() {
