@@ -4,14 +4,40 @@
 $presenter-body: rgba(#efefef, 0.8);
 
 :host {
-  right: 32px;
-  bottom: 93px;
   position: absolute;
-  height: 32px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+}
+
+.flat-button {
+  font-weight: bold;
+  line-height: 14px;
+  margin: 0;
+  vertical-align: middle;
+
+  padding: 6px 5px;
+  display: inline-block;
+  cursor: pointer;
+
+  &.vertical {
+    display: block;
+  }
+
+  &:before {
+    color: $icon-color;
+  }
+
+  &:hover:before {
+    color: $icon-hover;
+  }
 }
 
 .presenter {
-  position: relative;
+  right: 32px;
+  bottom: 32px;
+  position: absolute;
   opacity: 0;
   transition: opacity 500ms linear;
   border-radius: 4px;
@@ -31,29 +57,6 @@ $presenter-body: rgba(#efefef, 0.8);
   &.active {
     opacity: 1;
   }
-
-  .flat-button {
-    font-weight: bold;
-    line-height: 14px;
-    margin: 0;
-    vertical-align: middle;
-
-    padding: 6px 5px;
-    display: inline-block;
-    cursor: pointer;
-
-    &.vertical {
-      display: block;
-    }
-
-    &:before {
-      color: $icon-color;
-    }
-
-    &:hover:before {
-      color: $icon-hover;
-    }
-  }
 }
 
 .presenter-play {
@@ -66,4 +69,19 @@ $presenter-body: rgba(#efefef, 0.8);
 
 .presenter-forward {
   @include icon(before, '\f19f')
+}
+
+
+.main-menu {
+  position: absolute;
+  left: 32px;
+  top: 24px;
+  @include icon(before, '\f35c') {
+    color: $icon-color;
+    font-size: 24px;
+  }
+
+  &:hover {
+    color: $icon-hover;
+  }
 }

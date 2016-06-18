@@ -1,4 +1,6 @@
 import {Component} from '@angular/core';
+import {WorkspaceConfig} from "../../../services/configs";
+import ConfigService from "../../../services/configs";
 
 /**
  * Diagramming overlay tools. 
@@ -11,5 +13,11 @@ import {Component} from '@angular/core';
     template: require('./presenter.html')
 })
 export default class Presenter {
-    active = true;
+    active : boolean;
+    workspace : WorkspaceConfig;
+
+    constructor(config: ConfigService) {
+        this.workspace = config.getWorkspaceConfig();
+        this.active = true;
+    }
 }
