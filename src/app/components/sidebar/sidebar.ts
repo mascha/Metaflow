@@ -16,6 +16,8 @@ export default class Sidebar {
     @Input() titleVisible: boolean = true;
     @Input() visible: boolean = true;
 
+    isLoading: boolean = false;
+
     @Output('visibility') visibility: EventEmitter<any>;
     
     toggle() {
@@ -28,5 +30,6 @@ export default class Sidebar {
 
     constructor() {
         this.visibility = new EventEmitter();
+        this.isLoading = Math.random() < 0.5
     }
 }

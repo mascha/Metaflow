@@ -7,7 +7,16 @@ import {Injectable} from "@angular/core";
  */
 export class WorkspaceConfig {
     slimLayout : boolean = false;
-    fullscreen : boolean = true;
+    fullscreen : boolean = false;
+
+    setDefaults() {
+        this.slimLayout = false;
+        this.fullscreen = false;
+    }
+    
+    showFullscreen() {
+        this.fullscreen = true;
+    }
 }
 
 /**

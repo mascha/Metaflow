@@ -2,7 +2,7 @@ import {Component} from "@angular/core";
 import ProjectService from "../../services/projects";
 
 /**
- * 
+ * A project dashboard. 
  * @author Martin Schade
  * @since 1.0.0
  */

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Host} from '@angular/core';
 import {ViewGroup} from "../../../common/viewmodel";
 import ModelService from "../../../services/models";
 
@@ -13,7 +13,6 @@ import ModelService from "../../../services/models";
     styles: [require('./project.scss')]
 })
 export default class ProjectExplorer {
-
     contents = [];
     level: ViewGroup;
     isLocked = false;

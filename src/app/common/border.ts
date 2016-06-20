@@ -80,7 +80,7 @@ export default class Border implements CameraObserver {
         brush.fillStyle = 'black';
         brush.strokeStyle = 'blue';
         brush.fillRect(0, 0, w, h);
-        brush.strokeRect(b,b, w - 2*b, h - 2*b);
+        brush.strokeRect(b, b, w - 2*b, h - 2*b);
         brush.clearRect(b, b, w - 2*b, h - 2*b);
     }
 
@@ -99,15 +99,6 @@ export default class Border implements CameraObserver {
         const maxX = minX + cam.projWidth;
         const maxY = minY + cam.projHeight;
 
-        /*
-        const fact = 0.25;
-        const adjW = (fact * cam.visualWidth) / scale;
-        const adjH = (fact * cam.visualHeight) / scale;
-        const left = minX - adjW;
-        const top  = minY - adjH;
-        const right = maxX + adjW;
-        const bottom = maxY + adjH;
-        */
         const a = this.halfW - this.middle;
         const b = this.halfH - this.middle;
         const c = this.brush;
@@ -121,15 +112,6 @@ export default class Border implements CameraObserver {
             let proxy = proxies[j];
             let x = (proxy.left + proxy.width * .5) * scale;
             let y = (proxy.top + proxy.height * .5) * scale;
-
-            /*
-            // Ignore item outside area of interest
-            if (x < left || x > right || y < top && y > bottom) {
-                c.fillStyle = 'red'
-            } else {
-                c.fillStyle = 'mediumseagreen'
-            }
-            */
 
             // Ignore items within viewport
             if (x > minX && x < maxX && y > minY && y < maxY) {
@@ -149,11 +131,11 @@ export default class Border implements CameraObserver {
             let pX = 0, pY = 0;
             if (Math.abs(A) <= Math.abs(B)) {
                 if (x < 0) {
-                    pX = -a;
                     pY = -A/x;
+                    pX = -a;
                 } else if (x > 0) {
-                    pX = a;
                     pY = A/x;
+                    pX = a;
                 }
             } else {
                 if (y < 0) {
@@ -165,8 +147,8 @@ export default class Border implements CameraObserver {
                 }
             }
 
-            let drawX = Math.round(this.halfW + pX - 8.0);
-            let drawY = Math.round(this.halfH + pY - 8.0);
+            let drawX = Math.floor(this.halfW + pX - 8.0);
+            let drawY = Math.floor(this.halfH + pY - 8.0);
             c.fillRect(drawX, drawY, 16, 16);
         }
     }
