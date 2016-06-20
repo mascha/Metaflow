@@ -5,8 +5,9 @@ $mdi-font-weight:      "regular";
 $mdi-font-size-base:   24px !default;
 $mdi-css-prefix:       mdi !default;
 $mdi-version:          "1.5.54" !default;
-
 $mdi-font-path: '~mdi/fonts';
+
+@import "theme";
 
 @font-face {
   font-family: '#{$mdi-font-name}';
@@ -21,8 +22,8 @@ $mdi-font-path: '~mdi/fonts';
 }
 
 body {
- margin: 0;
+  margin: 0;
   color: #4d4d4d;
-  font: 14px "Helvetica Neue",Arial,Helvetica,sans-serif;
+  font: 14px "Helvetica Neue", Arial, Helvetica, sans-serif;
   line-height: 18px;
 }
