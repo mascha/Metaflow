@@ -1,6 +1,6 @@
 import {Component, ViewChild, ElementRef, Renderer, HostListener} from '@angular/core';
 import PaletteRegistry from "../../../services/palettes";
-import HTMLUtil from "../../../common/util";
+import HTMLUtil from "../../../common/utility";
 
 /**
  * A component palette.

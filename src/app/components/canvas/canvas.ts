@@ -5,7 +5,7 @@ import {ViewGroup} from "../../common/viewmodel";
 import {PlatformLayer} from "../../common/platform";
 import Grid from '../../common/grid';
 import Border from '../../common/border';
-import HTML from "../../common/util";
+import HTML from "../../common/utility";
 import ModelService from "../../services/models";
 import PlatformService from "../../services/platforms";
 import Breadcrumbs from "./breadcrumbs/breadcrumbs";
