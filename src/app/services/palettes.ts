@@ -28,7 +28,8 @@ export default class PaletteRegistry {
             'Limiter',
             'Release',
             'Metric',
-            'Measure']
+            'Measure'
+            ]
         }, {
             name: 'Manufacturing',
             components : [
@@ -41,7 +42,8 @@ export default class PaletteRegistry {
                 'Limiter',
                 'Release',
                 'Metric',
-                'Measure']
+                'Measure'
+            ]
         }, {
             name: 'System Dynamics',
             components : [
@@ -50,7 +52,8 @@ export default class PaletteRegistry {
                 'Buffer',
                 'Queue',
                 'Processor',
-                'Delay']
+                'Delay'
+            ]
         }, {
             name: 'Supply Chain',
             components : [
@@ -58,7 +61,8 @@ export default class PaletteRegistry {
                 'Sink',
                 'Buffer',
                 'Queue',
-                'Processor']
+                'Processor'
+            ]
         }, {
             name: 'Pedestrians',
             components : [
@@ -78,7 +82,8 @@ export default class PaletteRegistry {
                 'Limiter',
                 'Release',
                 'Metric',
-                'Measure']
+                'Measure'
+            ]
         }
     ];
 

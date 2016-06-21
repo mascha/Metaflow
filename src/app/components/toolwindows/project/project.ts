@@ -1,4 +1,4 @@
-import {Component, Host} from '@angular/core';
+import {Component} from '@angular/core';
 import {ViewGroup} from "../../../common/viewmodel";
 import ModelService from "../../../services/models";
 

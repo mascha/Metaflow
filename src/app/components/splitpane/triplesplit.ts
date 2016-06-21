@@ -55,7 +55,7 @@ export default class TripleSplit {
      * @param primary
      */
     toggleVisibility(event: any, primary: boolean) {
-        /* NOP for now */
+        /* TODO NOP for now */
     }
 
     private handleAdjust(adjusted: number) {

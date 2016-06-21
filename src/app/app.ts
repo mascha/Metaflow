@@ -24,13 +24,11 @@ require('../style/globals.scss');
   template: require('./app.html')
 })
 export class App {
-  
-  NAME = "Metaflow";
-  
+
   workspace: WorkspaceConfig;
   
   constructor(config: ConfigService) {
     this.workspace = config.getWorkspaceConfig();
-    document.title = this.NAME;
+    document.title = config.getName();
   }
 }

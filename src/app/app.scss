@@ -3,44 +3,25 @@
 @import "../style/mixins";
 
 :host {
-  position: absolute;
   overflow: hidden;
-  left:0;
-  top:0;
-  right:0;
-  bottom:0;
+  @include fill();
 }
 
 .workspace {
   position: absolute;
   overflow: hidden;
+  right:0;
+  left:0;
+  bottom: 0;
+
   @if $show-navigation-border {
     top: ($navigation-height + 1) + $toolbar-height;
   } @else {
     top: ($navigation-height);
   }
-
-  right:0;
-  left:0;
-  bottom: 0;
 }
 
 .fullscreen {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
+  @include fill()
 }
-
-/*
-.leftbar {
-  position: absolute;
-  overflow: hidden;
-  left:0;
-  top:0;
-  width: $leftbar-width;
-  bottom: 0;
-}
-*/
 

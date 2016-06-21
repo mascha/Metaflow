@@ -18,3 +18,20 @@
     @content;
   }
 }
+
+@mixin fill($left: 0, $top: 0, $right : 0, $bottom: 0) {
+  position: absolute;
+  left: $left;
+  right: $right;
+  bottom: $bottom;
+  top: $top;
+}
+
+@mixin fillh($left: 0, $top: 0, $right : 0, $bottom: 0) {
+  position: absolute;
+  overflow: hidden;
+  left: $left;
+  right: $right;
+  bottom: $bottom;
+  top: $top;
+}

@@ -3,7 +3,7 @@
 @import "../../../../style/mixins";
 
 $project-cell-height: 21px;
-$project-header-height: 21px;
+$project-header-height: 28px;
 $project-upwards-fill: #eeeeee;
 
 :host {
@@ -25,27 +25,13 @@ $project-upwards-fill: #eeeeee;
   margin-left: 12px;
   margin-bottom: 0;
   text-decoration: none;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: bold;
   text-align: left;
   text-overflow-ellipsis: ellipsis;
-  line-height: 13px;
+  line-height: $project-header-height;
   color: $sidebar-header-title;
   cursor: default;
-}
-
-.entity-cell {
-  padding-left: 6px;
-  width: 100%;
-  height: $project-cell-height;
-  line-height: $project-cell-height;
-  font-weight: bold;
-  display: inline-block;
-
-  @include icon(before, '\f12f') {
-    color: rgba(#0e2231, .8);
-    transform: translateY(12.5%);
-  }
 }
 
 .project-entities {
@@ -57,4 +43,27 @@ $project-upwards-fill: #eeeeee;
   overflow: scroll;
   overflow-x: hidden;
   background-color: white;
+}
+
+.entity-cell {
+  padding-left: 6px;
+  width: 100%;
+  height: $project-cell-height;
+  line-height: $project-cell-height;
+  font-weight: bold;
+  display: inline-block;
+
+  &.leaf-item {
+    @include icon(before, '\f12f') {
+      color: rgba(#0e2231, .8);
+      transform: translateY(12.5%);
+    }
+  }
+
+  &.group-item {
+    @include icon(before, '\F1A6') {
+      color: rgba(#0e2231, .8);
+      transform: translateY(12.5%);
+    }
+  }
 }

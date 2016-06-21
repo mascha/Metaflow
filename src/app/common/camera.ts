@@ -188,7 +188,7 @@ export abstract class Camera {
      * @param deltaX
      * @param deltaY
      */
-    moveBy(deltaX:number, deltaY:number) {
+    moveBy(deltaX: number, deltaY: number) {
         this.moveTo(deltaX - this.camX, deltaY - this.camY);
     }
 
@@ -325,9 +325,13 @@ export class History<T> {
     private current: T;
 
     /**
-     * Returns the next camera view;
+     * Returns the next camera view.
      */
     next(): T {
+        /*
+         TODO what if future is null?
+         TODO what if present is null?
+         */
         this.past.push(this.current);
         this.current = this.future.pop();
         return this.current;
@@ -337,15 +341,19 @@ export class History<T> {
      * Returns the last camera view.
      */
     previous(): T {
+        /*
+         TODO what if past is null?
+         TODO what if present is null?
+         */
         this.future.push(this.current);
         this.current = this.past.pop();
         return this.current;
     }
 
     /**
-     * Clears all future frames, remembers the current frame and sets the current
-     * frame to the given one.
-     * @param t
+     * Clears all future frames, remembers the current one and
+     * updates the current frame to the given one.
+     * @param t A non-null frame. 
      */
     add(t: T) {
         if (t) {

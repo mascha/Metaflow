@@ -105,6 +105,8 @@ export abstract class ViewVertex {
     parent: ViewGroup;
     visual: any;
     
+    abstract isLeaf(): boolean;
+    
     constructor(public label: string, public left: number,
                 public top: number, public width: number,
                 public height: number) {}
@@ -118,6 +120,10 @@ export abstract class ViewVertex {
  */
 export class ViewItem extends ViewVertex {
     style: Style;
+    
+    isLeaf() {
+        return true;
+    }
 }
 
 /**
@@ -127,6 +133,10 @@ export class Proxy extends ViewVertex {
     request: string;
     level: number;
     path: string;
+    
+    isLeaf() {
+        return true;
+    }
 }
 
 /**
@@ -171,6 +181,9 @@ export class ViewGroup extends ViewVertex {
         return false;
     }
 
+    isLeaf() {
+        return false;
+    }
     constructor(l: string, x: number, y: number, w: number, h: number, public scale: number) {
         super(l,x,y,w,h);
     }

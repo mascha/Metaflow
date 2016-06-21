@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 
 @Component({
-    selector: 'palette',
+    selector: 'inspector',
     template: require('./inspector.html'),
     styles: [require('./inspector.scss')]
 })

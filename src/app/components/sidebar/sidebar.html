@@ -1,5 +1,6 @@
 <div class="sidebar-header" *ngIf="titleVisible == true">
     <h3 class="sidebar-header-title">{{title}}</h3>
+    <!--<ng-content select="[sidebar.extras]"></ng-content>-->
     <div class="sidebar-extras">
       <div class="sidebar-close-icon" (click)="toggle()"></div>
       <div class="sidebar-config-icon"></div>

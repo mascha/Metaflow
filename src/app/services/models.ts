@@ -55,7 +55,7 @@ export default class ModelService {
     }
 
     private randomName() {
-        return 'Item #' + (Math.random().toString(36) + '00000000000000000').slice(2, 8+2);
+        return '#' + (Math.random().toString(36) + '00000000000000000').slice(2, 8+2);
     }
 
     private createDebugModel(): ViewGroup {
