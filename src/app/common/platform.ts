@@ -17,7 +17,7 @@ export interface ViewModelRenderer<I, G> {
     /**
      * Render a view group.
      */
-    renderGroup(group: ViewGroup, topLevel: boolean): G;
+    renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): G;
 
     /**
      * 

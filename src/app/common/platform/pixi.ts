@@ -46,46 +46,49 @@ export class PixiLayer implements PlatformLayer {
 
     cachedGroups:Array<ViewGroup>;
 
-    getCamera():Camera {
+    getCamera(): Camera {
         return this.camera;
     }
 
     setModel(level: ViewGroup) {
+        let now = Date.now();
+
         this.stage.removeChildren();
 
         // first level
         let renderer = this.renderer;
-        renderer.renderGroup(level, true);
+        renderer.renderGroup(level, true, false);
 
         // second levels
         this.cachedGroups = [];
         let contents = level.contents;
         let length = contents.length;
-        for (let i = 0;i < length; i++) {
+        for (let i = 0; i < length; i++) {
             let item = contents[i];
-            if (item instanceof ViewGroup) {
-                this.cachedGroups.push(item);
-                renderer.renderGroup(item, false);
-
-                // third levels
-                // todo make dynamic!
-                if (item.contents) {
-                    item.contents.forEach(it => {
-                        if (it instanceof ViewGroup) {
-                            renderer.renderGroup(it, false);
-                        } else if (it instanceof ViewItem) {
-                            renderer.renderItem(it);
+            if (!item.isLeaf()) {
+                let itm = item as ViewGroup;
+                this.cachedGroups.push(itm);
+                if (itm.contents && itm.contents.length > 0) {
+                    renderer.renderGroup(itm, false, false);
+                    itm.contents.forEach(it => {
+                        if (!it.isLeaf()) {
+                            renderer.renderGroup(it as ViewGroup, false, true);
+                        } else if (it.isLeaf()) {
+                            renderer.renderItem(it as ViewItem);
                         }
-                        renderer.attach(it, item);
+                        renderer.attach(it, itm);
                     });
+                } else {
+                    renderer.renderGroup(itm, false, true);
                 }
-            } else if (item instanceof ViewItem) {
-                renderer.renderItem(item);
+            } else if (item.isLeaf()) {
+                renderer.renderItem(item as ViewItem);
             }
             renderer.attach(item, level);
         }
 
         this.stage.addChild(level.visual);
+        console.log(`Model rendering took ${Date.now() - now} ms`);
     }
 
     /**
@@ -151,7 +154,7 @@ export class PixiRenderer implements ViewModelRenderer<any, any> {
         item.visual = shape;
     }
 
-    renderGroup(group: ViewGroup, topLevel: boolean):any {
+    renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): any {
         let root = new PIXI.Container();
         root.width = group.width;
         root.height = group.height;
@@ -163,8 +166,16 @@ export class PixiRenderer implements ViewModelRenderer<any, any> {
         let label = new PIXI.Text(group.label);
 
         let shape = new PIXI.Graphics();
-        shape.lineStyle(16, 0xeeeeee);
-        shape.drawRoundedRect(0, 0, group.width, group.height, 12);
+
+
+        if (oblique) {
+            shape.beginFill(0xeeeeee);
+            shape.drawRoundedRect(0, 0, group.width, group.height, 12);
+            shape.endFill();
+        } else {
+            shape.lineStyle(16, 0xeeeeee);
+            shape.drawRoundedRect(0, 0, group.width, group.height, 12);
+        }
 
         let content = new PIXI.Container();
         let inner = group.scale;

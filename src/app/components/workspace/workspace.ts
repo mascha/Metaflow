@@ -7,6 +7,7 @@ import Palette from "../toolwindows/palette/palette";
 import Dataview from "../toolwindows/data/dataview";
 import ProjectExplorer from "../toolwindows/project/project";
 import {WorkspaceConfig, default as ConfigService} from "../../services/configs";
+import Inspector from "../toolwindows/inspector/inspector";
 
 /**
  * Workspace component.
@@ -19,7 +20,7 @@ import {WorkspaceConfig, default as ConfigService} from "../../services/configs"
     styles: [require('./workspace.scss')],
     directives: [
         DoubleSplit, TripleSplit,
-        Diagram, Sidebar,
+        Diagram, Sidebar, Inspector,
         Palette, Dataview,
         ProjectExplorer
     ],

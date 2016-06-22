@@ -52,18 +52,18 @@ $project-upwards-fill: #eeeeee;
   line-height: $project-cell-height;
   font-weight: bold;
   display: inline-block;
+}
 
-  &.leaf-item {
-    @include icon(before, '\f12f') {
-      color: rgba(#0e2231, .8);
-      transform: translateY(12.5%);
-    }
+.leaf-item {
+  @include icon(before, '\f12f') {
+    color: rgba(#0e2231, .8);
+    transform: translateY(12.5%);
   }
+}
 
-  &.group-item {
-    @include icon(before, '\F1A6') {
-      color: rgba(#0e2231, .8);
-      transform: translateY(12.5%);
-    }
+.group-item {
+  @include icon(before, '\F1A6') {
+    color: rgba(#0e2231, .8);
+    transform: translateY(12.5%);
   }
 }

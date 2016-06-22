@@ -1,5 +1,21 @@
 import {ViewGroup, ViewItem} from "../common/viewmodel";
-import {Injectable} from '@angular/core';
+import {Injectable} from "@angular/core";
+
+const seed = function(s) {
+    let m_w  = s;
+    let m_z  = 987654321;
+    let mask = 0xffffffff;
+
+    return function() {
+        m_z = (36969 * (m_z & 65535) + (m_z >> 16)) & mask;
+        m_w = (18000 * (m_w & 65535) + (m_w >> 16)) & mask;
+
+        var result = ((m_z << 16) + m_w) & mask;
+        result /= 4294967296;
+
+        return result + 0.5;
+    }
+};
 
 /**
  * Model provider service.
@@ -12,6 +28,8 @@ export default class ModelService {
     
     private model: ViewGroup;
     private empty: ViewGroup;
+
+    private random = seed(123456);
 
     getDefaultModel() {
         this.empty = this.empty || new ViewGroup('EMPTY', 2000, 2000, 2000, 2000, 1);
@@ -26,8 +44,8 @@ export default class ModelService {
     private createStock() {
         return new ViewItem(
             this.randomName(),
-            Math.random() * 18000,
-            Math.random() * 18000,
+            this.random() * 18000,
+            this.random() * 18000,
             192,
             108
         );
@@ -36,8 +54,8 @@ export default class ModelService {
     private createVariable() {
         return new ViewItem(
             this.randomName(),
-            Math.random() * 18000,
-            Math.random() * 18000,
+            this.random() * 18000,
+            this.random() * 18000,
             64,
             64
         );
@@ -46,8 +64,8 @@ export default class ModelService {
     private createModule() {
         return new ViewGroup(
             this.randomName(),
-            Math.random() * 18000,
-            Math.random() * 18000,
+            this.random() * 18000,
+            this.random() * 18000,
             300,
             260,
             1
@@ -55,7 +73,7 @@ export default class ModelService {
     }
 
     private randomName() {
-        return '#' + (Math.random().toString(36) + '00000000000000000').slice(2, 8+2);
+        return '#' + (this.random().toString(36) + '00000000000000000').slice(2, 8+2);
     }
 
     private createDebugModel(): ViewGroup {
@@ -66,7 +84,7 @@ export default class ModelService {
             let group = new ViewGroup(`Level #${40 - i}`, 2000, 2000, 2000, 2000, 0.1);
             let j = 120;
             while (j) {
-                let rnd = Math.random();
+                let rnd = this.random();
                 let item;
                 if (rnd < .3333) {
                     item = this.createStock();

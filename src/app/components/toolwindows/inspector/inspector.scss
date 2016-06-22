@@ -1,5 +1,32 @@
-.palette-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
+@import "../../../../style/mixins";
+
+$inspector-categories-height: 21px;
+$inspector-categories-fill: red;
+$inspector-category-fill: blue;
+$inspector-category-hover: cornflowerblue;
+$inspector-content-fill: green;
+
+:host {
+  @include fillh();
+}
+
+.inspector-categories {
+  @include topHeight($inspector-categories-height);
+  background-color: $inspector-categories-fill;
+
+  .inspector-category {
+    width: 33%;
+    height: $inspector-categories-height;
+    display: inline-block;
+
+    background-color: $inspector-category-fill;
+    &:hover {
+      background-color: $inspector-category-hover;
+    }
+  }
+}
+
+.inspector-content {
+  @include fillh($inspector-categories-height, 0, 0, 0);
+  background-color: $inspector-content-fill;
 }
