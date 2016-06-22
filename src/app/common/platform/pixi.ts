@@ -52,7 +52,6 @@ export class PixiLayer implements PlatformLayer {
 
     setModel(level: ViewGroup) {
         let now = Date.now();
-
         this.stage.removeChildren();
 
         // first level
@@ -145,7 +144,7 @@ export class PixiLayer implements PlatformLayer {
  */
 export class PixiRenderer implements ViewModelRenderer<any, any> {
 
-    renderItem(item:ViewItem) : any {
+    renderItem(item: ViewItem): any {
         let shape = new PIXI.Graphics()
             .lineStyle(4, 0x3367D6, 1)
             .beginFill(0x66CCFF)
@@ -203,6 +202,7 @@ export class PixiRenderer implements ViewModelRenderer<any, any> {
             throw new Error('Could not find renderer visual of the given group');
         }
 
+        /* TODO fix this direct index access */
         let content = root.children[2] as PIXI.Container;
         if (!content) {
             throw new Error('Could not find low level content container');
