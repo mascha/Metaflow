@@ -1,10 +1,10 @@
 @import "../../../../style/mixins";
 
-$inspector-categories-height: 21px;
-$inspector-categories-fill: red;
-$inspector-category-fill: blue;
-$inspector-category-hover: cornflowerblue;
-$inspector-content-fill: green;
+$inspector-categories-height: 28px;
+$inspector-categories-fill: #efefef;
+$inspector-category-fill: transparent;
+$inspector-category-hover: darken($inspector-categories-fill, 6);
+$inspector-content-fill: transparent;
 
 :host {
   @include fillh();
@@ -13,20 +13,48 @@ $inspector-content-fill: green;
 .inspector-categories {
   @include topHeight($inspector-categories-height);
   background-color: $inspector-categories-fill;
+  display: inline;
 
   .inspector-category {
-    width: 33%;
+    position: absolute;
     height: $inspector-categories-height;
     display: inline-block;
-
+    line-height: $inspector-categories-height;
+    text-transform: capitalize;
+    text-align: center;
+    font-weight: bold;
+    font-size: 12px;
+    vertical-align: middle;
+    cursor: pointer;
     background-color: $inspector-category-fill;
     &:hover {
       background-color: $inspector-category-hover;
+    }
+
+    &.left { left: 0; width: 33%}
+    &.center { left: 33%; right: 33%; }
+    &.right { left: 66%; right: 0}
+    &.active {
+      color: cornflowerblue;
     }
   }
 }
 
 .inspector-content {
-  @include fillh($inspector-categories-height, 0, 0, 0);
+  @include fillh(0, $inspector-categories-height, 0, 0);
   background-color: $inspector-content-fill;
+}
+
+.inspector-overlay {
+  @include fill();
+
+  h2 {
+    color: lightgray;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    text-align: center;
+    cursor: default;
+  }
 }

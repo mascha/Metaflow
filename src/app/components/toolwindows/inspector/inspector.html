@@ -1,7 +1,10 @@
-<sidebar title="Inspector">
-  <div class="inspector-categories">
+<section class="inspector-categories">
+  <span class="inspector-category left" [class.active]="categoryIndex == 1">Properties</span>
+  <span class="inspector-category center" [class.active]="categoryIndex == 2">Style</span>
+  <span class="inspector-category right" [class.active]="categoryIndex == 3">Notes</span>
+</section>
+<section class="inspector-content">
+  <div *ngIf="showOverlay == true" class="inspector-overlay">
+    <h2>{{overlayMessage}}</h2>
   </div>
-  <div class="inspector-content">
-
-  </div>
-</sidebar>
+</section>

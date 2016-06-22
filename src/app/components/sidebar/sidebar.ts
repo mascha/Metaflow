@@ -29,11 +29,13 @@ export default class Sidebar {
 
     constructor() {
         this.visibility = new EventEmitter();
+        /*
         this.isLoading = Math.random() < 1;
         if (this.isLoading) {
             setTimeout(() => {
                 this.isLoading = false;
             }, (Math.random() + 0.5) * 2500);
         }
+        */
     }
 }

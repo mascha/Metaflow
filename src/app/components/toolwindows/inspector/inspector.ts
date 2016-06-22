@@ -8,4 +8,7 @@ import Sidebar from "../../sidebar/sidebar";
     directives: [Sidebar]
 })
 export default class Inspector {
+    categoryIndex = 1;
+    showOverlay = true;
+    overlayMessage = 'No selection'
 }

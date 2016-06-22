@@ -4,6 +4,7 @@
 
 $project-cell-height: 21px;
 $project-header-height: 28px;
+$project-header-fill: #efefef;
 $project-upwards-fill: #eeeeee;
 
 :host {
@@ -18,7 +19,7 @@ $project-upwards-fill: #eeeeee;
   top: 0; left: 0; right: 0;
   height: $project-header-height;
   position: absolute;
-  background-color: #efefef;
+  background-color: $project-header-fill;
 }
 
 .project-reference {
