@@ -96,9 +96,12 @@ export default class Border implements CameraObserver {
         const cenY = cam.centerY;
         const minX = cam.worldX;
         const minY = cam.worldY;
-        const maxX = minX + cam.projWidth;
-        const maxY = minY + cam.projHeight;
-
+        const miX = minX - 200;
+        const miY = minY - 200;
+        const wmX = minX + cam.projWidth;
+        const wmY = minY + cam.projHeight;
+        const maX = wmX + 200;
+        const maY = wmY + 200;
         const a = this.halfW - this.middle;
         const b = this.halfH - this.middle;
         const c = this.brush;
@@ -113,8 +116,9 @@ export default class Border implements CameraObserver {
             let x = (proxy.left + proxy.width * .5) * scale;
             let y = (proxy.top + proxy.height * .5) * scale;
 
-            // Ignore items within viewport
-            if (x > minX && x < maxX && y > minY && y < maxY) {
+            if (x > minX && x < wmX && y > minY && y < wmY) {
+                continue;
+            } else if (x < miX || x > maX || y < miY || y > maY) {
                 continue;
             }
 

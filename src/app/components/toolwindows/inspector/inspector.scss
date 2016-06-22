@@ -8,6 +8,7 @@ $inspector-content-fill: transparent;
 
 :host {
   @include fillh();
+  user-select: none;
 }
 
 .inspector-categories {
@@ -48,7 +49,7 @@ $inspector-content-fill: transparent;
 .inspector-overlay {
   @include fill();
 
-  h2 {
+  h3 {
     color: lightgray;
     position: absolute;
     top: 50%;

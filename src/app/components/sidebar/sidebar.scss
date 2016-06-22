@@ -68,6 +68,7 @@
   right: 32px;
   top: 6px;
   cursor: pointer;
+  transform: translateY(18%);
 
   &:hover {
     @include icon(before, '\f1d8') {
