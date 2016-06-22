@@ -28,13 +28,26 @@ $inspector-content-fill: transparent;
     vertical-align: middle;
     cursor: pointer;
     background-color: $inspector-category-fill;
+
     &:hover {
       background-color: $inspector-category-hover;
     }
 
-    &.left { left: 0; width: 33%}
-    &.center { left: 33%; right: 33%; }
-    &.right { left: 66%; right: 0}
+    &.left {
+      left: 0;
+      width: 33%;
+    }
+
+    &.center {
+      left: 33%;
+      right: 33%;
+    }
+
+    &.right {
+      left: 66%;
+      right: 0
+    }
+
     &.active {
       color: cornflowerblue;
     }
