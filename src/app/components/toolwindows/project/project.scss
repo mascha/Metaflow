@@ -68,3 +68,17 @@ $project-upwards-fill: #eeeeee;
     transform: translateY(12.5%);
   }
 }
+
+.project-overlay {
+  @include fill();
+
+  h3 {
+    color: lightgray;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    text-align: center;
+    cursor: default;
+  }
+}
