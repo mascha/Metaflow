@@ -1,13 +1,17 @@
-<div class="branding">
+<section class="branding" [class.show-branding]="showBranding == true">>
   <a href="#" title="Go back to projects"></a>
-</div>
-<div class="navigation-upper" (click)="onFavoriteClick()">
+</section>
+<section class="navigation-upper" (click)="onFavoriteClick()" [class.show-branding]="showBranding == true">
   <h2 class="navigation-title" [class.starred]="favorite">{{projectName}}</h2>
-</div>
-<div class="navigation-lower">
+</section>
+<section class="navigation-lower" [class.show-branding]="showBranding == true">
   <menu-bar>
   </menu-bar>
-</div>
-<div class="navigation-account">
+</section>
+<form action="query/" method="get" class="search search-form">
+  <input class="search search-text" placeholder="Search to find model elements and patterns">
+  <button type="submit" class="search-button"></button>
+</form>
+<section class="navigation-account">
   <h3 class="account-title">{{userName}}</h3>
-</div>
+</section>

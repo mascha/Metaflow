@@ -3,13 +3,7 @@
 @import "../../../style/mixins";
 
 :host {
-  position: absolute;
-  overflow: hidden;
-
-  top:0;
-  left:0;
-  right:0;
-  height: $navigation-height;
+  @include topHeight($navigation-height);
 
   background-color: $navigation-fill;
   user-select: none;
@@ -23,10 +17,14 @@
     position: absolute;
     top:0;
     height: 60%;
-    left: $leftbar-width;
+    left: 0;
     width: 33%;
     margin-left: $navigation-inset;
     margin-top: 2px;
+
+    &.show-branding {
+      left: $leftbar-width;
+    }
 
     .navigation-title {
       margin-top: 8px;
@@ -66,7 +64,7 @@
 
     .account-avatar {
       position: absolute;
-      top:50%;
+      top: 50%;
       transform: translateY(-50%);
     }
 
@@ -93,19 +91,20 @@
     position: absolute;
     top: 60%;
     bottom: 0;
-    left: $leftbar-width;
+    left: 0;
     width:33%;
     margin-left: $navigation-inset;
     white-space: nowrap;
+
+    &.show-branding {
+      left: $leftbar-width;
+    }
   }
 
   .branding {
     height: $navigation-height;
     width: $leftbar-width;
     background-color: $branding-fill;
-    display: table-cell;
-    text-align: center;
-    vertical-align: middle;
 
     &:hover {
       background-color: $branding-hover;
@@ -124,5 +123,50 @@
         font-size: 32px;
       }
     }
+  }
+}
+
+.search {
+  display: inline-block;
+  background-color: lighten($navigation-fill, 8);
+  border: 0;
+  border-radius: 3px;
+  color: white;
+  font-size: .875rem;
+  font-weight: 700;
+  margin: 0;
+  padding: 7px 30px 7px 7px;
+
+  &.search-text {
+    @include fill();
+    width: 100%;
+    box-sizing: content-box;
+    line-height: 18px;
+  }
+
+  &.search-form {
+    position: absolute;
+    left: 35%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 495px;
+    height: 18px;
+  }
+}
+
+.search-button {
+  border: 0;
+  position: absolute;
+  right: -30px;
+  top: 50%;
+  background-color: transparent;
+  transform: translateY(-45%);
+  outline: none;
+  cursor: pointer;
+
+  @include icon(before, '\f349') {
+    background-color: transparent;
+    font-size: 18px;
+    color: white;
   }
 }

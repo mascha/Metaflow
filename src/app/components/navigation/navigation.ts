@@ -13,6 +13,7 @@ export default class Navigation {
     favorite = false;
     showBranding = true;
     userName = 'Martin Schade';
+    showBraning = true;
 
     onFavoriteClick() {
         this.favorite = !this.favorite;
