@@ -1,6 +1,7 @@
 import {Component, ViewChild, ElementRef, Renderer, HostListener} from '@angular/core';
 import PaletteRegistry from "../../../services/palettes";
 import HTMLUtil from "../../../common/utility";
+import Sidebar from "../../sidebar/sidebar";
 
 /**
  * A component palette.
@@ -10,7 +11,7 @@ import HTMLUtil from "../../../common/utility";
 @Component({
     selector: 'palette',
     template: require('./palette.html'),
-    styles: [require('./palette.scss')]
+    styles: [require('./palette.scss')],
 })
 export default class Palette {
     private categories: Array<any>;

@@ -77,11 +77,44 @@ export default class ModelService {
     }
 
     private createDebugModel(): ViewGroup {
-        let i = 40;
+        let i = 10;
         let o : ViewGroup = null;
         let root: ViewGroup = null;
         while (i--) {
             let group = new ViewGroup(`Level #${40 - i}`, 2000, 2000, 2000, 2000, 0.1);
+            let j = 120;
+            while (j) {
+                let rnd = this.random();
+                let item;
+                if (rnd < .3333) {
+                    item = this.createStock();
+                } else if (rnd < .6666) {
+                    item = this.createVariable();
+                } else {
+                    item = this.createModule();
+                }
+                group.addContent(item);
+                j--;
+            }
+            if (o) {
+                o.addContent(group);
+            } else {
+                root = group;
+                // root.addContent(this.createDebugModelSecondary(6000, 8000));
+                // root.addContent(this.createDebugModelSecondary(14000, 13000));
+            }
+            o = group;
+        }
+
+        return root;
+    }
+
+    private createDebugModelSecondary(x, y): ViewGroup {
+        let i = 3;
+        let o : ViewGroup = null;
+        let root: ViewGroup = null;
+        while (i--) {
+            let group = new ViewGroup(`Level #${40 - i}`, x, y, 2000, 2000, 0.1);
             let j = 120;
             while (j) {
                 let rnd = this.random();

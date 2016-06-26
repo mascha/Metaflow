@@ -5,7 +5,7 @@ import DoubleSplit from "../splitpane/doublesplit";
 import TripleSplit from "../splitpane/triplesplit";
 import Palette from "../toolwindows/palette/palette";
 import Dataview from "../toolwindows/data/dataview";
-import ProjectExplorer from "../toolwindows/project/project";
+import Explorer from "../toolwindows/project/project";
 import {WorkspaceConfig, default as ConfigService} from "../../services/configs";
 import Inspector from "../toolwindows/inspector/inspector";
 
@@ -20,9 +20,8 @@ import Inspector from "../toolwindows/inspector/inspector";
     styles: [require('./workspace.scss')],
     directives: [
         DoubleSplit, TripleSplit,
-        Diagram, Sidebar, Inspector,
-        Palette, Dataview,
-        ProjectExplorer
+        Diagram, Sidebar,
+        Inspector, Palette, Dataview, Explorer
     ],
 })
 export default class Workspace {

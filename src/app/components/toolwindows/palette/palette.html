@@ -14,7 +14,7 @@
   </div>
 </section>
 <section class="palette-labels" [class.dimmed]="dimmed == true"
-  (click)="onSelect($event)">
+         (click)="onSelect($event)">
   <div *ngFor="let c of categories" class="palette-label">
     <span>{{c.name}}</span>
   </div>

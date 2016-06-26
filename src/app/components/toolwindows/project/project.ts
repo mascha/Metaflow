@@ -12,7 +12,7 @@ import ModelService from "../../../services/models";
     template: require('./project.html'),
     styles: [require('./project.scss')]
 })
-export default class ProjectExplorer {
+export default class Explorer {
     contents = [];
     level: ViewGroup;
     isLocked = false;
