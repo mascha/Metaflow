@@ -15,7 +15,7 @@
   bottom: 0;
 
   @if $show-navigation-border {
-    top: ($navigation-height + 1) + $toolbar-height;
+    top: ($navigation-height + 1) /* + $toolbar-height */;
   } @else {
     top: ($navigation-height);
   }

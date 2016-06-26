@@ -1,0 +1,9 @@
+<form class="sheet-properties">
+  <div class="sheet-property" *ngFor="let i of items">
+    <label class="sheet-label" [class.locked]="i.derived == true">
+      {{i.field}}
+    </label>
+    <input class="sheet-input" [disabled]="i.derived == true"
+           placeholder="{{i.hint}}" value="{{i.value}}" name="{{i.field}}">
+  </div>
+</form>

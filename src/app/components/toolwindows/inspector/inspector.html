@@ -1,10 +1,14 @@
 <section class="inspector-categories">
-  <span class="inspector-category left" [class.active]="categoryIndex == 1">Properties</span>
-  <span class="inspector-category center" [class.active]="categoryIndex == 2">Style</span>
-  <span class="inspector-category right" [class.active]="categoryIndex == 3">Notes</span>
+  <span #props class="inspector-category left" [class.active]="categoryIndex == 1"
+    (click)="onSelect($event)">Properties</span>
+  <span #styles class="inspector-category center" [class.active]="categoryIndex == 2"
+        (click)="onSelect($event)">Style</span>
+  <span #notes class="inspector-category right" [class.active]="categoryIndex == 3"
+        (click)="onSelect($event)">Notes</span>
 </section>
 <section class="inspector-content">
-  <div *ngIf="showOverlay == true" class="inspector-overlay">
+  <div class="inspector-overlay" *ngIf="showOverlay == true" >
     <h3>{{overlayMessage}}</h3>
   </div>
+  <property-sheet *ngIf="categoryIndex == 1"></property-sheet>
 </section>
