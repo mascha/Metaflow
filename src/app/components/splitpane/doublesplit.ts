@@ -15,7 +15,7 @@ export default class DoubleSplit {
     @ViewChild('left') left: ElementRef;
     @ViewChild('divider') div: ElementRef;
     @ViewChild('right') right: ElementRef;
-    @Input() orientation: string;
+    @Input() horizontal = false;
 
     private vertical = true;
     private visible = true;
@@ -41,7 +41,7 @@ export default class DoubleSplit {
     };
 
     ngAfterViewInit() {
-        this.vertical = (this.orientation !== 'horizontal');
+        this.vertical = !this.horizontal;
         this.readjust(this.visible ? 69 : 100);
     }
 

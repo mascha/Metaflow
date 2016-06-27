@@ -9,10 +9,11 @@ import {Component, Input, EventEmitter, Output} from '@angular/core';
     selector: 'sidebar',
     template: require('./sidebar.html'),
     styles: [require('./sidebar.scss')],
+    host: {'[class.secondary]':'isPrimary == false'}
 })
 export default class Sidebar {
     @Input() title: string = "Header";
-    @Input() side: string;
+    @Input() isPrimary: string;
     @Input() titleVisible: boolean = true;
     @Input() visible: boolean = true;
 

@@ -1,24 +1,24 @@
 <triple-split *ngIf="config.slimLayout != true">
-    <sidebar left title="Project" side="left" (visibility)="togglePrimary($event)">
+    <sidebar left title="Project" isPrimary="true" (visibility)="togglePrimary($event)">
       <explorer></explorer>
     </sidebar>
-    <double-split center orientation="horizontal">
+    <double-split center horizontal="true">
       <diagram left></diagram>
       <sidebar right title="Simulation" (visibility)="toggleTernary($event)">
         <dataview></dataview>
       </sidebar>
     </double-split>
-    <sidebar right title="Inspector" side="right" (visibility)="toggleSecondary($event)">
+    <sidebar right title="Inspector" isPrimary="false" (visibility)="toggleSecondary($event)">
       <inspector></inspector>
     </sidebar>
 </triple-split>
-<double-split *ngIf="config.slimLayout == true" orientation="horizontal">
+<double-split *ngIf="config.slimLayout == true" horizontal="true">
   <triple-split left>
-    <sidebar left title="Project" side="left" (visibility)="togglePrimary($event)">
+    <sidebar left title="Project" isPrimary="true" (visibility)="togglePrimary($event)">
       <explorer></explorer>
     </sidebar>
     <diagram center></diagram>
-    <sidebar right title="Inspector" side="right" (visibility)="toggleSecondary($event)">
+    <sidebar right title="Inspector" isPrimary="false" (visibility)="toggleSecondary($event)">
       <inspector></inspector>
     </sidebar>
   </triple-split>

@@ -1,9 +1,9 @@
-<section #left class="splitpane-content {{orientation == 'horizontal'? 'top': 'left'}}">
+<section #left class="splitpane-content {{horizontal? 'top': 'left'}}">
   <ng-content select="[left]"></ng-content>
 </section>
-<section #divider *ngIf="visible" class="splitpane-divider {{orientation == 'horizontal'? 'horizontal': 'vertical'}}"
+<section #divider *ngIf="visible" class="splitpane-divider {{horizontal? 'horizontal': 'vertical'}}"
      (mousedown)="onMouseDown($event)">
 </section>
-<section #right *ngIf="visible" class="splitpane-content {{orientation == 'horizontal'? 'bottom': 'right'}}">
+<section #right *ngIf="visible" class="splitpane-content {{horizontal? 'bottom': 'right'}}">
   <ng-content select="[right]"></ng-content>
 </section>
