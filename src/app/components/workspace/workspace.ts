@@ -1,11 +1,11 @@
-import {Component, ViewChild, Input} from "@angular/core";
+import {Component, ViewChild} from "@angular/core";
+import {WorkspaceConfig, default as ConfigService} from "../../services/configs";
 import Diagram from "../canvas/canvas";
 import Sidebar from "../sidebar/sidebar";
 import DoubleSplit from "../splitpane/doublesplit";
 import TripleSplit from "../splitpane/triplesplit";
 import Palette from "../toolwindows/palette/palette";
 import Dataview from "../toolwindows/data/dataview";
-import {WorkspaceConfig, default as ConfigService} from "../../services/configs";
 import Inspector from "../toolwindows/inspector/inspector";
 import Explorer from "../toolwindows/explorer/explorer";
 
