@@ -35,15 +35,7 @@
 }
 
 .sidebar-content {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  top: $sidebar-header-height;
-}
-
-.sidebar-extras {
-
+  @include fill(0, $sidebar-header-height, 0, 0);
 }
 
 .sidebar-close-icon {

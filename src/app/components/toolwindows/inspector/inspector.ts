@@ -9,8 +9,8 @@ import PropertySheet from "./propertysheet/propertysheet";
     directives: [Sidebar, PropertySheet]
 })
 export default class Inspector {
-    categoryIndex = 2;
-    selection = true;
+    categoryIndex = 1;
+    selection = null;
     overlayMessage = 'No selection';
 
     @ViewChild('props') props: ElementRef;

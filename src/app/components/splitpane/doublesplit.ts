@@ -15,6 +15,7 @@ export default class DoubleSplit {
     @ViewChild('left') left: ElementRef;
     @ViewChild('divider') div: ElementRef;
     @ViewChild('right') right: ElementRef;
+    
     @Input() horizontal = false;
 
     private vertical = true;

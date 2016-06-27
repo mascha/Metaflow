@@ -35,14 +35,12 @@
     top: 0;
     left: 0;
     bottom: 0;
-    margin-right: $splitpane-divider-width - 1;
   }
 
   &.right {
     right: 0;
     top: 0;
     bottom: 0;
-    margin-left: $splitpane-divider-width - 1;
   }
 }
 
