@@ -3,7 +3,6 @@
  */
 
 import {CameraObserver, Camera} from './camera';
-import {ViewGroup, ViewVertex} from "./viewmodel";
 
 /**
  * Interactive region border region. This class is responsible for projection
@@ -125,7 +124,7 @@ export default class Border implements CameraObserver {
             x -= cenX;
             y -= cenY;
 
-            if (Math.hypot(x,y) > 1000) {
+            if (x*x + y*y > 1000000) {
                 continue;
             }
 

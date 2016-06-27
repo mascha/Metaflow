@@ -1,6 +1,6 @@
 import {
     Style, NodeStyle, LabelStyle, Vertical, Placement, Horizontal, ShapeDescriptor
-} from "../common/styling";
+} from "../common/viewmodel/styling";
 
 const VARIABLE = new NodeStyle({
     fill : 1,
