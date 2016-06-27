@@ -1,9 +1,0 @@
-<section class="project-header">
-  <div (click)="goUpwards()" class="upwards" [class.disabled]="isDisabled == true"></div>
-  <span class="project-reference">{{level.label}}</span>
-</section>
-<section class="project-entities">
-  <div *ngFor="let node of contents" class="entity-cell" [class.leaf-item]="node.isLeaf() == true" [class.group-item]="node.isLeaf() == false">
-    <span>{{node.label}}</span>
-  </div>
-</section>

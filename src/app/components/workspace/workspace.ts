@@ -5,9 +5,9 @@ import DoubleSplit from "../splitpane/doublesplit";
 import TripleSplit from "../splitpane/triplesplit";
 import Palette from "../toolwindows/palette/palette";
 import Dataview from "../toolwindows/data/dataview";
-import Explorer from "../toolwindows/project/project";
 import {WorkspaceConfig, default as ConfigService} from "../../services/configs";
 import Inspector from "../toolwindows/inspector/inspector";
+import Explorer from "../toolwindows/explorer/explorer";
 
 /**
  * Workspace component.
