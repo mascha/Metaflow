@@ -1,7 +1,7 @@
 import {Component, ElementRef, ViewChild, HostListener} from '@angular/core';
 import {StateMachine, DiagramState, DiagramEvents} from "../../common/diagrams";
 import {Camera} from "../../common/camera";
-import {ViewGroup} from "../../common/viewmodel";
+import {ViewGroup, ViewVertex} from "../../common/viewmodel";
 import {PlatformLayer} from "../../common/platform";
 import Grid from '../../common/grid';
 import Border from '../../common/border';
@@ -12,6 +12,7 @@ import PlatformService from "../../services/platforms";
 import Breadcrumbs from "./breadcrumbs/breadcrumbs";
 import Overview from "./overview/overview";
 import Presenter from "./controls/presenter";
+import {Observable} from "rxjs/Rx";
 
 /**
  * Grid layer component.
@@ -847,8 +848,9 @@ class Panning extends BaseState {
         return dragY;
     }
     
-    private damp(violation: number, limit: number): number {
-        return 1.0 + Math.log10(Math.abs(violation / limit));
+    private damp(actual: number, limit: number): number {
+        let ratio = Math.abs(actual / limit);
+        return 1 + Math.log10(ratio || 1);
     }
 }
 
@@ -1091,5 +1093,15 @@ class Interpolator {
     constructor(private update: (f: number) => void,
                 private duration: number) {
         this.duration = duration || 1000;
+    }
+}
+
+export class CanvasSelection extends Observable<Array<ViewVertex>> {
+    private items: ViewVertex[];
+
+    setSelection(items: ViewVertex[]) {
+        // TODO emit deselection
+        // update internals
+        // TODO emit selection
     }
 }

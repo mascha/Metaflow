@@ -145,12 +145,12 @@ export class PixiLayer implements PlatformLayer {
 export class PixiRenderer implements ViewModelRenderer<any, any> {
 
     renderItem(item: ViewItem): any {
-        let shape = new PIXI.Graphics()
+        item.visual = item.visual ||
+            new PIXI.Graphics()
             .lineStyle(4, 0x3367D6, 1)
             .beginFill(0x66CCFF)
             .drawRoundedRect(item.left, item.top, item.width, item.height, 3)
             .endFill();
-        item.visual = shape;
     }
 
     renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): any {
@@ -163,9 +163,7 @@ export class PixiRenderer implements ViewModelRenderer<any, any> {
         }
 
         let label = new PIXI.Text(group.label);
-
         let shape = new PIXI.Graphics();
-
 
         if (oblique) {
             shape.beginFill(0xeeeeee);

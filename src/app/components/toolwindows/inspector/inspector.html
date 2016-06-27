@@ -7,8 +7,8 @@
         (click)="onSelect($event)">Notes</span>
 </section>
 <section class="inspector-content">
-  <div class="inspector-overlay" *ngIf="showOverlay == true" >
+  <div class="inspector-overlay" *ngIf="!selection" >
     <h3>{{overlayMessage}}</h3>
   </div>
-  <property-sheet *ngIf="categoryIndex == 1"></property-sheet>
+  <property-sheet *ngIf="categoryIndex == 1 && selection != null"></property-sheet>
 </section>
