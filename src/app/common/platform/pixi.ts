@@ -1,5 +1,5 @@
 import {Camera} from "../camera";
-import {ViewGroup, ViewItem, ViewVertex} from "../viewmodel";
+import {ViewGroup, ViewItem, ViewVertex} from "../viewmodel/viewmodel";
 import {PlatformLayer, ViewModelRenderer} from "../platform";
 
 /**

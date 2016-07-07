@@ -87,7 +87,7 @@ export default class DoubleSplit {
             HTML.dispatchResizeEvent();
         }
     }
-
+    
     constructor(@Inject(Renderer) private renderer: Renderer,
                 @Inject(ElementRef) private root: ElementRef) {}
 }

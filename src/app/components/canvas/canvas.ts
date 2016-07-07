@@ -1,7 +1,7 @@
 import {Component, ElementRef, ViewChild, HostListener} from '@angular/core';
 import {StateMachine, DiagramState, DiagramEvents} from "../../common/diagrams";
 import {Camera} from "../../common/camera";
-import {ViewGroup, ViewVertex} from "../../common/viewmodel";
+import {ViewGroup, ViewVertex} from "../../common/viewmodel/viewmodel";
 import {PlatformLayer} from "../../common/platform";
 import Grid from '../../common/grid';
 import Border from '../../common/border';
@@ -55,7 +55,7 @@ class BorderLayer {
         camera.attachObserver(this.border);
     }
 
-    update(group:ViewGroup) {
+    update(group: ViewGroup) {
         if (this.border) {
             this.border.updateProxies(group);
         }
@@ -643,7 +643,7 @@ class Idle extends BaseState {
                     target = (target <= limit) ? limit : target;
                 }
             }
-
+            
             this.camera.zoomToAbout(target,
                 this.camera.castRayX(x),
                 this.camera.castRayY(y)

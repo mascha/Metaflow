@@ -1,4 +1,4 @@
-import {ViewGroup, ViewItem, ViewVertex} from "./viewmodel";
+import {ViewGroup, ViewItem, ViewVertex} from "./viewmodel/viewmodel";
 import {CameraObserver, Camera} from "./camera";
 
 /**

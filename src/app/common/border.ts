@@ -3,6 +3,7 @@
  */
 
 import {CameraObserver, Camera} from './camera';
+import {ViewVertex, ViewGroup} from "./viewmodel/viewmodel";
 
 /**
  * Interactive region border region. This class is responsible for projection

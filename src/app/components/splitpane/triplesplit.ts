@@ -38,6 +38,12 @@ export default class TripleSplit {
         HTML.block(event);
     };
 
+    private keyHandler = (event: KeyboardEvent) => {
+        if (event.which == 27) {
+            
+        }
+    };
+
     ngAfterViewInit() {
         this.adjustBoth(15, 85);
     }

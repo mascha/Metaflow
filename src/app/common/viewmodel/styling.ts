@@ -18,7 +18,6 @@ export abstract class Style {
     constructor(config?: any) {
         this.fill = config.fill || 0;
         this.opacity = config.opacity;
-        this.border
     }
 }
 
