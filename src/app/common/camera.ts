@@ -202,15 +202,16 @@ export abstract class Camera {
         this.camY = -positionY;
         
         this.translateWorldTo(
-            this.camX,
-            this.camY
+            -positionX,
+            -positionY
         );
 
         if (!this.isZooming) {
             this.updateCache();
-            let length = this.obs.length;
-            for (let i = 0; i < length; i++) {
-                this.obs[i].onPanChanged(positionX, positionY);   
+            let obs = this.obs;
+            let len = obs.length;
+            for (let i = 0; i < len; i++) {
+                obs[i].onPanChanged(positionX, positionY);   
             }
         }
     }
@@ -232,7 +233,10 @@ export abstract class Camera {
         this.camY = -positionY;
 
         this.scaleWorldTo(zoom);
-        this.translateWorldTo(this.camX, this.camY);
+        this.translateWorldTo(
+            -positionX, 
+            -positionY
+        );
         this.updateCache();
 
         let obs = this.obs;
@@ -251,9 +255,10 @@ export abstract class Camera {
         this.viewW = viewW;
         this.viewH = viewH;
         this.updateCache();
+        let obs = this.obs;
         let len = this.obs.length;
         for (let i = 0; i < len; i++) {
-            this.obs[i].onViewResized();
+            obs[i].onViewResized();
         }
     }
 
