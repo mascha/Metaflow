@@ -57,9 +57,11 @@
     width: 5px;
 
     &:before {
-      width: 10px;
+      padding-top: 16px;
+      padding-bottom: 16px;
+      width: 5px;
       top: 50%;
-      left: -2.3px;
+      left: -0.25px;
       margin-top: -15px;
     }
   }
@@ -70,7 +72,10 @@
     height: 5px;
 
     &:before {
+      padding-left: 16px;
+      padding-right: 16px;
       left: 50%;
+      width: 21px;
       margin-left: -6px;
     }
   }
@@ -95,8 +100,6 @@
   }
 
   &:hover {
-    background-color: $splitpane-divider-hover;
-
     &.vertical {
       cursor: col-resize;
     }
@@ -106,7 +109,8 @@
     }
 
     &:before {
-      color: $splitpane-divider-handle-hover;
+      color: $splitpane-divider-handle-color;
+      background-color: $splitpane-divider-handle-hover;
     }
   }
 }

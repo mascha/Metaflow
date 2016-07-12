@@ -144,39 +144,30 @@ export abstract class Camera {
 
     /**
      * Sets the new scale level with the given point as it'scale pivot.
-     * @param zoomLevel
+     * @param zoom
      * @param worldX
      * @param worldY
      */
-    zoomToAbout(zoomLevel: number, worldX: number, worldY: number) {
-        if (zoomLevel <= 0) { return; }
-        const oldZoom = this._scale;
-        this._scale = zoomLevel;
-        const dZ = zoomLevel - oldZoom;
+    zoomToAbout(zoom: number, worldX: number, worldY: number) {
+        if (zoom <= 0) { return; }
+        
+        const last = this._scale;
+        this._scale = zoom;
+        const diff = zoom - last;
 
         /* platform scaling */
-        this.scaleWorldTo(zoomLevel);
+        this.scaleWorldTo(zoom, last);
 
-        this.camX = this.camX - dZ * worldX;
-        this.camY = this.camY - dZ * worldY;
+        this.camX = this.camX - diff * worldX;
+        this.camY = this.camY - diff * worldY;
         this.translateWorldTo(this.camX, this.camY);
 
         this.updateCache();
-
         let obs = this.obs;
-        let length = obs.length;
-        for (let i = 0; i < length; i++) {
-            obs[i].onZoomChanged(zoomLevel);
+        let len = obs.length;
+        for (let i = 0; i < len; i++) {
+            obs[i].onZoomChanged(zoom);
         }
-    }
-
-    /**
-     * Move the camera by the given delta values.
-     * @param deltaX
-     * @param deltaY
-     */
-    moveBy(deltaX: number, deltaY: number) {
-        this.moveTo(deltaX - this.camX, deltaY - this.camY);
     }
 
     /**
@@ -194,7 +185,6 @@ export abstract class Camera {
         );
 
         this.updateCache();
-
         let obs = this.obs;
         let length = obs.length;
         for (let i = 0; i < length; i++) {
@@ -213,18 +203,19 @@ export abstract class Camera {
      */
     zoomAndMoveTo(positionX: number, positionY: number, zoom: number) {
         if (zoom <= 0) { return; }
-        
+
+        let last = this._scale;
         this._scale = zoom;
         this.camX = -positionX;
         this.camY = -positionY;
 
-        this.scaleWorldTo(zoom);
+        this.scaleWorldTo(zoom, last);
         this.translateWorldTo(
             -positionX, 
             -positionY
         );
+        
         this.updateCache();
-
         let obs = this.obs;
         let len = obs.length;
         for (let i = 0; i < len; i++) {
@@ -236,11 +227,10 @@ export abstract class Camera {
      * Update the internal paintable surface metrics.
      */
     updateVisual(viewX: number, viewY: number, viewW: number, viewH: number) {
-        this.viewX = viewX;
-        this.viewY = viewY;
-        this.viewW = viewW;
-        this.viewH = viewH;
+        this.viewX = viewX; this.viewY = viewY;
+        this.viewW = viewW; this.viewH = viewH;
         this.updateCache();
+        
         let obs = this.obs;
         let len = obs.length;
         for (let i = 0; i < len; i++) {
@@ -248,9 +238,9 @@ export abstract class Camera {
         }
     }
 
-    protected abstract translateWorldTo(tX:number, tY:number):void
+    protected abstract translateWorldTo(tX: number, tY: number):void
 
-    protected abstract scaleWorldTo(zoom:number):void
+    protected abstract scaleWorldTo(zoom: number, last: number):void
 
     private updateCache() {
         const zoom = this._scale;

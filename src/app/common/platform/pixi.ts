@@ -141,8 +141,8 @@ export class PixiLayer implements PlatformLayer {
         this.renderer = new PIXI.CanvasRenderer(500, 500, {
             antialias: true,
             transparent: true,
-            view: element,
-            resolution: 1
+            resolution: 1.0,
+            view: element
         });
     }
 }
@@ -164,12 +164,11 @@ export class PixiCamera extends Camera {
     private overlayPosition = this.overlay.position;
 
     protected translateWorldTo(tX: number, tY: number) {
-        let s = this.scale;
         this.worldPosition.set(tX, tY);
         this.overlayPosition.set(tX, tY);
     }
 
-    protected scaleWorldTo(zoom: number) {
+    protected scaleWorldTo(zoom: number, last: number) {
         this.worldScale.set(zoom, zoom);
         this.overlay.scale.set(zoom, zoom);
     }
