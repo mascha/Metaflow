@@ -3,34 +3,6 @@ import {ViewGroup, ViewItem, ViewVertex} from "../viewmodel/viewmodel";
 import {PlatformLayer, ViewModelRenderer} from "../platform";
 
 /**
- * Provides a pan-zoom surface for the PIXI renderer.
- *
- * TODO: Implement a LOD vs Text sclaing loop
- * TODO: Combine with group caching etc.
- * TODO: Split into node-, label & edge layer
- *
- * @author Martin Schade
- * @since 1.0.0
- */
-export class PixiCamera extends Camera {
-
-    private s = this.stage.scale;
-    private p = this.stage.position;
-
-    protected translateWorldTo(tX:number, tY:number) {
-        this.p.set(tX, tY);
-    }
-
-    protected scaleWorldTo(zoom:number) {
-        this.s.set(zoom, zoom);
-    }
-
-    constructor(private stage: PIXI.Container) {
-        super();
-    }
-}
-
-/**
  * Implements a pixi.js graph layer system.
  *
  * @author Martin Schade
@@ -39,10 +11,14 @@ export class PixiCamera extends Camera {
 export class PixiLayer implements PlatformLayer {
 
     private camera: PixiCamera;
-    private stage: PIXI.Container;
-    private pixi: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
-    private renderer: PixiRenderer;
-    private webgl: boolean;
+    private scene: PIXI.Container;
+    private nodes: PIXI.Container;
+    private world: PIXI.Container;
+    private overlay: PIXI.Container;
+    private edges: PIXI.Container;
+    private labels: PIXI.Container;
+    private renderer: PIXI.SystemRenderer;
+    private mapper: PixiRenderer;
 
     cachedGroups:Array<ViewGroup>;
 
@@ -52,11 +28,12 @@ export class PixiLayer implements PlatformLayer {
 
     setModel(level: ViewGroup) {
         let now = Date.now();
-        this.stage.removeChildren();
+        this.nodes.removeChildren();
+        this.labels.removeChildren();
 
         // first level
-        let renderer = this.renderer;
-        renderer.renderGroup(level, true, false);
+        let mapper = this.mapper;
+        mapper.renderGroup(level, true, false);
 
         // second levels
         this.cachedGroups = [];
@@ -64,29 +41,43 @@ export class PixiLayer implements PlatformLayer {
         let length = contents.length;
         for (let i = 0; i < length; i++) {
             let item = contents[i];
+            let itemLabel = new PIXI.Text(item.label);
+            let scale = 0.01 + Math.random() * 0.5;
+            itemLabel.scale.set(scale, scale);
+            this.labels.addChild(itemLabel);
+
             if (!item.isLeaf()) {
+                itemLabel.position.set(
+                    item.left * level.scale,
+                    item.top * level.scale
+                );
+
                 let itm = item as ViewGroup;
                 this.cachedGroups.push(itm);
                 if (itm.contents && itm.contents.length > 0) {
-                    renderer.renderGroup(itm, false, false);
+                    mapper.renderGroup(itm, false, false);
                     itm.contents.forEach(it => {
                         if (!it.isLeaf()) {
-                            renderer.renderGroup(it as ViewGroup, false, true);
+                            mapper.renderGroup(it as ViewGroup, false, true);
                         } else if (it.isLeaf()) {
-                            renderer.renderItem(it as ViewItem);
+                            mapper.renderItem(it as ViewItem);
                         }
-                        renderer.attach(it, itm);
+                        mapper.attach(it, itm);
                     });
                 } else {
-                    renderer.renderGroup(itm, false, true);
+                    mapper.renderGroup(itm, false, true);
                 }
             } else if (item.isLeaf()) {
-                renderer.renderItem(item as ViewItem);
+                itemLabel.position.set(
+                    (item.left + item.width * 1.12) * level.scale,
+                    (item.top + item.height / 4)* level.scale
+                );
+                mapper.renderItem(item as ViewItem);
             }
-            renderer.attach(item, level);
+            mapper.attach(item, level);
         }
 
-        this.stage.addChild(level.visual);
+        this.attachNode(level);
         console.log(`Model rendering took ${Date.now() - now} ms`);
     }
 
@@ -94,11 +85,11 @@ export class PixiLayer implements PlatformLayer {
      * Simply issue drawing commands.
      */
     onViewResized() {
-        let renderer = this.pixi;
+        let renderer = this.renderer;
         let width = this.camera.visualWidth;
         let height = this.camera.visualHeight;
         renderer.resize(width, height);
-        renderer.render(this.stage);
+        renderer.render(this.scene);
     }
 
     /**
@@ -107,7 +98,7 @@ export class PixiLayer implements PlatformLayer {
      * @param posY
      */
     onPanChanged(posX: number, posY: number) {
-        this.pixi.render(this.stage);
+        this.renderer.render(this.scene);
     }
 
     /**
@@ -115,25 +106,80 @@ export class PixiLayer implements PlatformLayer {
      * @param zoom
      */
     onZoomChanged(zoom: number) {
-        this.pixi.render(this.stage);
+        this.renderer.render(this.scene);
+    }
+
+    private attachNode(level: ViewGroup) {
+        this.nodes.addChild(level.visual);
     }
 
     constructor(element: HTMLCanvasElement) {
-        this.stage = new PIXI.Container();
-        this.camera = new PixiCamera(this.stage);
-        this.renderer = new PixiRenderer();
+        /* create root */
+        this.scene = new PIXI.Container();
 
-        let options = {
-            antialiasing: true,
+        /* overlays */
+        // this.overlay = new PIXI.Container();
+        this.labels = new PIXI.Container();
+        this.overlay = this.labels;
+
+        /* worlds */
+        // this.world = new PIXI.Container();
+        // this.edges = new PIXI.Container();
+        this.nodes = new PIXI.Container();
+        this.world = this.nodes;
+
+        /* assemble in order of rendering */
+        // this.overlay.addChild(this.labels);
+        // this.world.addChild(this.nodes);
+        // this.world.addChild(this.edges);
+        this.scene.addChild(this.world);
+        this.scene.addChild(this.overlay);
+
+        this.camera = new PixiCamera(this.world, this.overlay);
+        this.mapper = new PixiRenderer();
+
+        this.renderer = new PIXI.CanvasRenderer(500, 500, {
+            antialias: true,
             transparent: true,
             view: element,
             resolution: 1
-        };
-        
-        this.pixi = new PIXI.CanvasRenderer(500, 500, options);
-        this.webgl = (this.pixi instanceof PIXI.WebGLRenderer)? true : false;
+        });
     }
 }
+
+/**
+ * Provides a pan-zoom surface for the PIXI renderer.
+ *
+ * TODO: Implement a LOD vs Text scaling loop
+ * TODO: Combine with group caching etc.
+ * TODO: Split into node-, label & edge layer
+ *
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+export class PixiCamera extends Camera {
+
+    private worldScale = this.world.scale;
+    private worldPosition = this.world.position;
+    private overlayPosition = this.overlay.position;
+
+    protected translateWorldTo(tX: number, tY: number) {
+        let s = this.scale;
+        this.worldPosition.set(tX, tY);
+        this.overlayPosition.set(tX, tY);
+    }
+
+    protected scaleWorldTo(zoom: number) {
+        this.worldScale.set(zoom, zoom);
+        this.overlay.scale.set(zoom, zoom);
+    }
+
+    constructor(private world: PIXI.Container,
+                private overlay: PIXI.Container) {
+        super();
+    }
+}
+
 
 
 /**
@@ -147,10 +193,10 @@ export class PixiRenderer implements ViewModelRenderer<any, any> {
     renderItem(item: ViewItem): any {
         item.visual = item.visual ||
             new PIXI.Graphics()
-            .lineStyle(4, 0x3367D6, 1)
-            .beginFill(0x66CCFF)
-            .drawRoundedRect(item.left, item.top, item.width, item.height, 3)
-            .endFill();
+                .lineStyle(4, 0x3367D6, 1)
+                .beginFill(0x66CCFF)
+                .drawRoundedRect(item.left, item.top, item.width, item.height, 3)
+                .endFill();
     }
 
     renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): any {
@@ -162,7 +208,6 @@ export class PixiRenderer implements ViewModelRenderer<any, any> {
             root.position.set(group.left, group.top);
         }
 
-        let label = new PIXI.Text(group.label);
         let shape = new PIXI.Graphics();
 
         if (oblique) {
@@ -179,7 +224,6 @@ export class PixiRenderer implements ViewModelRenderer<any, any> {
         content.scale.set(inner, inner);
 
         root.addChild(shape);
-        root.addChild(label);
         root.addChild(content);
 
         group.visual = root;
@@ -201,12 +245,11 @@ export class PixiRenderer implements ViewModelRenderer<any, any> {
         }
 
         /* TODO fix this direct index access */
-        let content = root.children[2] as PIXI.Container;
+        let content = root.children[1] as PIXI.Container;
         if (!content) {
             throw new Error('Could not find low level content container');
         }
 
         content.addChild(child);
     }
-
 }
