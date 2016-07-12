@@ -44,59 +44,50 @@ export interface CameraObserver {
  */
 export abstract class Camera {
     
-    get cameraX():number {
+    get cameraX(): number {
         return this.camX;
     }
 
-    get cameraY():number {
+    get cameraY(): number {
         return this.camY;
     }
 
-    get worldX():number {
+    get worldX(): number {
         return this.adjX;
     }
 
-    get worldY():number {
+    get worldY(): number {
         return this.adjY;
     }
 
-    get projWidth():number {
+    get projWidth(): number {
         return this.adjW;
     }
 
-    get projHeight():number {
+    get projHeight(): number {
         return this.adjH;
     }
 
-    get centerX():number {
+    get centerX(): number {
         return this.adjX + this.adjW / 2;
     }
 
-    get centerY():number {
+    get centerY(): number {
         return this.adjY + this.adjH / 2;
     }
 
-    get visualWidth():number {
+    get visualWidth(): number {
         return this.viewW;
     }
 
-    get visualHeight():number {
+    get visualHeight(): number {
         return this.viewH;
-    }
-
-    get visualCenterX():number {
-        return this.viewX + this.viewW / 2;
-    }
-
-    get visualCenterY(): number {
-        return this.viewY + this.viewH / 2;
     }
 
     get scale(): number {
         return this._scale;
     }
 
-    private isZooming = false;
     private viewX = 0.0;
     private viewY = 0.0;
     private viewW = 0.0;
@@ -157,29 +148,25 @@ export abstract class Camera {
      * @param worldX
      * @param worldY
      */
-    zoomToAbout(zoomLevel:number, worldX:number, worldY:number) {
+    zoomToAbout(zoomLevel: number, worldX: number, worldY: number) {
         if (zoomLevel <= 0) { return; }
-        try {
-            this.isZooming = true;
-            const oldZoom = this._scale;
-            this._scale = zoomLevel;
+        const oldZoom = this._scale;
+        this._scale = zoomLevel;
+        const dZ = zoomLevel - oldZoom;
 
-            /* platform scaling */
-            this.scaleWorldTo(zoomLevel);
+        /* platform scaling */
+        this.scaleWorldTo(zoomLevel);
 
-            /* correct for scale difference */
-            const dZ = zoomLevel - oldZoom;
-            this.moveBy(dZ * worldX, dZ * worldY);
+        this.camX = this.camX - dZ * worldX;
+        this.camY = this.camY - dZ * worldY;
+        this.translateWorldTo(this.camX, this.camY);
 
-            /* notify and release */
-            this.updateCache();
+        this.updateCache();
 
-            let length = this.obs.length;
-            for (let i = 0; i < length; i++) {
-                this.obs[i].onZoomChanged(zoomLevel);
-            }
-        } finally {
-            this.isZooming = false;
+        let obs = this.obs;
+        let length = obs.length;
+        for (let i = 0; i < length; i++) {
+            obs[i].onZoomChanged(zoomLevel);
         }
     }
 
@@ -197,7 +184,7 @@ export abstract class Camera {
      * @param positionX
      * @param positionY
      */
-    public moveTo(positionX:number, positionY:number) {
+    public moveTo(positionX: number, positionY: number) {
         this.camX = -positionX;
         this.camY = -positionY;
         
@@ -206,12 +193,12 @@ export abstract class Camera {
             this.camY
         );
 
-        if (!this.isZooming) {
-            this.updateCache();
-            let length = this.obs.length;
-            for (let i = 0; i < length; i++) {
-                this.obs[i].onPanChanged(positionX, positionY);   
-            }
+        this.updateCache();
+
+        let obs = this.obs;
+        let length = obs.length;
+        for (let i = 0; i < length; i++) {
+            obs[i].onPanChanged(positionX, positionY);
         }
     }
 
@@ -251,9 +238,10 @@ export abstract class Camera {
         this.viewW = viewW;
         this.viewH = viewH;
         this.updateCache();
-        let len = this.obs.length;
+        let obs = this.obs;
+        let len = obs.length;
         for (let i = 0; i < len; i++) {
-            this.obs[i].onViewResized();
+            obs[i].onViewResized();
         }
     }
 

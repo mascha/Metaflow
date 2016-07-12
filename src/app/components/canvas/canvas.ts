@@ -298,7 +298,7 @@ export default class Diagram {
         this.model = this._modelProvider.getModel();
 
         this.onResize();
-        this.camera.zoomAndMoveTo(-250, -150, 0.2);
+        this.camera.zoomAndMoveTo(-250, -150, 0.5);
     }
 
     constructor(private _platformProvider: PlatformService,
@@ -392,7 +392,6 @@ class DiagramBehavior implements StateMachine, DiagramEvents {
  */
 class ReferenceManager {
     private current: ViewGroup;
-
 }
 
 /**
@@ -502,6 +501,7 @@ abstract class BaseState implements DiagramState {
         }
 
         let groups = this.diagram.cachedGroups;
+        console.log(groups);
         if (!groups) {
             return false;
         }
