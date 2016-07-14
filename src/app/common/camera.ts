@@ -85,20 +85,20 @@ export abstract class Camera {
     }
 
     get scale(): number {
-        return this._scale;
+        return this.zoom;
     }
 
-    private viewX = 0.0;
-    private viewY = 0.0;
-    private viewW = 0.0;
-    private viewH = 0.0;
+    private viewX = 0;
+    private viewY = 0;
+    private viewW = 0;
+    private viewH = 0;
     private camX = 0.0;
     private camY = 0.0;
-    private _scale = 1.0;
+    private zoom = 1.0;
     private adjX = 0.0;
     private adjY = 0.0;
-    private adjW = -1.0;
-    private adjH = -1.0;
+    private adjW = -1;
+    private adjH = -1;
     private obs = Array<CameraObserver>();
 
     /**
@@ -113,8 +113,8 @@ export abstract class Camera {
      * @param canvasX {number} the horizontal position on the canvas.
      * @returns {number}
      */
-    castRayX(canvasX:number): number {
-        return (canvasX - this.camX) / this._scale;
+    castRayX(canvasX: number): number {
+        return (canvasX - this.camX) / this.zoom;
     }
 
     /**
@@ -122,8 +122,8 @@ export abstract class Camera {
      * @param canvasY {number} the vertical position on the canvas.
      * @returns {number}
      */
-    castRayY(canvasY:number): number {
-        return (canvasY - this.camY) / this._scale;
+    castRayY(canvasY: number): number {
+        return (canvasY - this.camY) / this.zoom;
     }
 
     /**
@@ -131,7 +131,7 @@ export abstract class Camera {
      * @param worldX
      */
     inverseRayX(worldX: number) {
-        return this.camX + this._scale * worldX;
+        return this.camX + this.zoom * worldX;
     }
 
     /**
@@ -139,11 +139,11 @@ export abstract class Camera {
      * @param worldY
      */
     inverseRayY(worldY:number) {
-        return this.camY + this._scale * worldY;
+        return this.camY + this.zoom * worldY;
     }
 
     /**
-     * Sets the new scale level with the given point as it'scale pivot.
+     * Sets the new scale level with the given point as it's pivot.
      * @param zoom
      * @param worldX
      * @param worldY
@@ -151,12 +151,12 @@ export abstract class Camera {
     zoomToAbout(zoom: number, worldX: number, worldY: number) {
         if (zoom <= 0) { return; }
         
-        const last = this._scale;
-        this._scale = zoom;
+        const last = this.zoom;
+        this.zoom = zoom;
         const diff = zoom - last;
 
         /* platform scaling */
-        this.scaleWorldTo(zoom, last);
+        this.scaleWorldTo(zoom, diff);
 
         this.camX = this.camX - diff * worldX;
         this.camY = this.camY - diff * worldY;
@@ -197,29 +197,29 @@ export abstract class Camera {
      *
      * It it a more performant option to manually setting the translation and scale
      * because only a single pan update notification will be dispatched to the observers.
-     * @param positionX
-     * @param positionY
+     * @param posX
+     * @param posY
      * @param zoom Must not be negative or zero.
      */
-    zoomAndMoveTo(positionX: number, positionY: number, zoom: number) {
+    zoomAndMoveTo(posX: number, posY: number, zoom: number) {
         if (zoom <= 0) { return; }
 
-        let last = this._scale;
-        this._scale = zoom;
-        this.camX = -positionX;
-        this.camY = -positionY;
+        let last = this.zoom;
+        this.zoom = zoom;
+        this.camX = -posX;
+        this.camY = -posY;
 
         this.scaleWorldTo(zoom, last);
         this.translateWorldTo(
-            -positionX, 
-            -positionY
+            -posX, 
+            -posY
         );
         
         this.updateCache();
         let obs = this.obs;
         let len = obs.length;
         for (let i = 0; i < len; i++) {
-            obs[i].onPanChanged(positionX, positionY);
+            obs[i].onPanChanged(posX, posY);
         }
     }
 
@@ -243,7 +243,7 @@ export abstract class Camera {
     protected abstract scaleWorldTo(zoom: number, last: number):void
 
     private updateCache() {
-        const zoom = this._scale;
+        const zoom = this.zoom;
         this.adjX = (this.viewX - this.camX) / zoom;
         this.adjY = (this.viewY - this.camY) / zoom;
         this.adjW = this.viewW / zoom;
