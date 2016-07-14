@@ -12,6 +12,7 @@ import PlatformService from "../../services/platforms";
 import Breadcrumbs from "./breadcrumbs/breadcrumbs";
 import Overview from "./overview/overview";
 import Presenter from "./controls/presenter";
+
 import {Observable} from "rxjs/Rx";
 
 /**

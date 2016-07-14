@@ -77,12 +77,18 @@ export default class ModelService {
     }
 
     private createDebugModel(): ViewGroup {
-        let i = 10;
+        let MAX = 10;
+        let i = MAX;
         let o : ViewGroup = null;
         let root: ViewGroup = null;
         while (i--) {
-            let group = new ViewGroup(`Level #${40 - i}`, 2000, 2000, 2000, 2000, 0.1);
+            let group = new ViewGroup(`Level #${MAX - i}`, 2000, 2000, 2000, 2000, 0.1);
             let j = 120;
+
+            group.addContent(new ViewItem(
+                '100', 100, 100, 100, 100
+            ));
+            
             while (j) {
                 let rnd = this.random();
                 let item;

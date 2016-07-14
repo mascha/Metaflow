@@ -78,6 +78,7 @@ export class PixiLayer implements PlatformLayer {
         }
 
         this.attachNode(level);
+        
         console.log(`Model rendering took ${Date.now() - now} ms`);
     }
 
@@ -165,12 +166,22 @@ export class PixiCamera extends Camera {
 
     protected translateWorldTo(tX: number, tY: number) {
         this.worldPosition.set(tX, tY);
-        this.overlayPosition.set(tX, tY);
+        this.overlayPosition.set(
+            tX, tY
+        );
     }
 
     protected scaleWorldTo(zoom: number, last: number) {
         this.worldScale.set(zoom, zoom);
         this.overlay.scale.set(zoom, zoom);
+
+        let lbs = this.overlay.children;
+        let len = lbs.length;
+        let s = 1/zoom;
+        s = s < 0.5 ? 0.5 : (s > 3)? 3: s;
+        for (let i = 0; i < len; i++) {
+            lbs[i].scale.set(s, s);
+        }
     }
 
     constructor(private world: PIXI.Container,
