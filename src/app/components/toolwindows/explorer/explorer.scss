@@ -8,9 +8,7 @@ $project-header-fill: #efefef;
 $project-upwards-fill: #eeeeee;
 
 :host {
-  position: absolute;
-  height: 100%;
-  width: 100%;
+  @include fill;
   background-color: $palette-icons;
   user-select: none;
 }
@@ -44,17 +42,7 @@ $project-upwards-fill: #eeeeee;
   overflow: scroll;
   overflow-x: hidden;
   background-color: white;
-}
-
-.entity-cell {
-  padding-left: 6px;
-  width: 100%;
-  height: $project-cell-height;
-  line-height: $project-cell-height;
-  font-weight: bold;
-  display: inline-block;
-}
-
+  
 .leaf-item {
   @include icon(before, '\f12f') {
     color: rgba(#0e2231, .8);
@@ -67,6 +55,16 @@ $project-upwards-fill: #eeeeee;
     color: rgba(#0e2231, .8);
     transform: translateY(12.5%);
   }
+}
+}
+
+.entity-cell {
+  padding-left: 6px;
+  width: 100%;
+  height: $project-cell-height;
+  line-height: $project-cell-height;
+  font-weight: bold;
+  display: inline-block;
 }
 
 .project-overlay {
