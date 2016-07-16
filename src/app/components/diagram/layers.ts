@@ -41,7 +41,7 @@ export class GridLayer implements DiagramLayer {
     selector: 'border-layer',
     template: '<canvas #borderLayer class="layer"></canvas>'
 })
-export class BorderLayer {
+export class BorderLayer implements DiagramLayer {
     @ViewChild('borderLayer')
     private element: ElementRef;
     private border: Border;
@@ -68,11 +68,15 @@ export class BorderLayer {
     selector: 'node-layer',
     template: '<canvas #nodeLayer class="layer"></canvas>'
 })
-export class NodeLayer {
-    @ViewChild('nodeLayer')
-    private _element: ElementRef;
+export class NodeLayer implements DiagramLayer {
+
+    @ViewChild('nodeLayer') element: ElementRef;
+
+    observe(camera: Camera) {
+
+    }
 
     getElement(): HTMLCanvasElement {
-        return this._element.nativeElement;
+        return this.element.nativeElement;
     }
 }
