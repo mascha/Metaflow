@@ -1,6 +1,6 @@
 import {Component, ViewChild} from "@angular/core";
 import {WorkspaceConfig, default as ConfigService} from "../../services/configs";
-import Diagram from "../canvas/canvas";
+import Diagram from "../diagram/diagram";
 import Sidebar from "../sidebar/sidebar";
 import DoubleSplit from "../splitpane/doublesplit";
 import TripleSplit from "../splitpane/triplesplit";

@@ -1,312 +1,9 @@
-import {Component, ElementRef, ViewChild, HostListener} from '@angular/core';
-import {StateMachine, DiagramState, DiagramEvents} from "../../common/diagrams";
-import {Camera} from "../../common/camera";
-import {ViewGroup, ViewVertex} from "../../common/viewmodel/viewmodel";
-import {PlatformLayer} from "../../common/platform";
-import Grid from '../../common/grid';
-import Border from '../../common/border';
-import HTML from "../../common/utility";
-import Kinetics from "../../common/kinetics";
-import ModelService from "../../services/models";
-import PlatformService from "../../services/platforms";
-import Breadcrumbs from "./breadcrumbs/breadcrumbs";
-import Overview from "./overview/overview";
-import Presenter from "./controls/presenter";
-
-import {Observable} from "rxjs/Rx";
-
-/**
- * Grid layer component.
- * @author Martin Schade
- * @since 1.0.0
- */
-@Component({
-    selector: 'grid-layer',
-    template: `<canvas #gridLayer class="layer"></canvas>`
-})
-class GridLayer {
-    @ViewChild('gridLayer')
-    private canvas: ElementRef;
-    private grid: Grid;
-
-    observe(camera: Camera) {
-        let canvas = this.canvas.nativeElement;
-        this.grid = new Grid(camera, canvas);
-        camera.attachObserver(this.grid);
-    }
-}
-
-/**
- * Grid layer component.
- * @author Martin Schade
- * @since 1.0.0
- */
-@Component({
-    selector: 'border-layer',
-    template: '<canvas #borderLayer class="layer"></canvas>'
-})
-class BorderLayer {
-    @ViewChild('borderLayer')
-    private element: ElementRef;
-    private border: Border;
-
-    observe(camera: Camera) {
-        let canvas = this.element.nativeElement as HTMLCanvasElement;
-        this.border = new Border(camera, canvas);
-        camera.attachObserver(this.border);
-    }
-
-    update(group: ViewGroup) {
-        if (this.border) {
-            this.border.updateProxies(group);
-        }
-    }
-}
-
-/**
- * Grid layer component.
- * @author Martin Schade
- * @since 1.0.0
- */
-@Component({
-    selector: 'node-layer',
-    template: '<canvas #nodeLayer class="layer"></canvas>'
-})
-class NodeLayer {
-    @ViewChild('nodeLayer')
-    private _element: ElementRef;
-
-    getElement(): HTMLCanvasElement {
-        return this._element.nativeElement;
-    }
-}
-
-/**
- * The canvas component.
- * @author Martin Schade
- * @since 1.0.0
- */
-@Component({
-    selector: 'diagram',
-    directives: [
-        GridLayer, NodeLayer,
-        BorderLayer, Breadcrumbs,
-        Presenter, Overview
-    ],
-    template: require('./diagram.html'),
-    styles: [require('./diagram.scss')]
-})
-export default class Diagram {
-    get camera(): Camera {
-        return this._camera;
-    }
-
-    get inertiaDecay(): number {
-        return this._inertiaDecay;
-    }
-
-    set inertiaDecay(value: number) {
-        this._inertiaDecay = (value < 0) ? 0.01 : (value > 0.999) ? 0.99 : value;
-    }
-
-    get zoomPanPreference(): number {
-        return this._zoomPan;
-    }
-
-    set zoomPanPreference(value: number) {
-        this._zoomPan = (value < 0) ? 0.01 : (value > 2) ? 2.0 : value;
-    }
-
-    get navigationVelocity(): number {
-        return this._velocity;
-    }
-
-    set model(group: ViewGroup) {
-        this._model = group;
-        if (this._platform) {
-            this._platform.setModel(group);
-        }
-        if (this._borderLayer) {
-            this._borderLayer.update(group);
-        }
-    }
-
-    get model(): ViewGroup {
-        return this._model;
-    }
-
-    set navigationVelocity(value: number) {
-        this._velocity = (value < 0) ? 0.01 : (value > 3.0) ? 3.0 : value;
-    }
-
-    get cachedGroups(): Array<ViewGroup> {
-        return this._platform.cachedGroups;
-    }
-
-    animatedZoom = false;
-    animatedNavigation = true;
-    frames = 60;
-    pathFactor = 1000;
-    doBanding = false;
-    limitMovement = false;
-    useKinetics = false;
-
-    /* Layers and children */
-
-    @ViewChild(BorderLayer) private _borderLayer: BorderLayer;
-    @ViewChild(GridLayer) private _gridLayer: GridLayer;
-    @ViewChild(NodeLayer) private _nodeLayer: NodeLayer;
-
-    private _camera: Camera;
-    private _behavior: DiagramEvents;
-    private _inertiaDecay: number = 0.05;
-    private _zoomPan: number = 2.33;
-    private _velocity: number = 1.4;
-    private _diagram: HTMLElement;
-    private _model: ViewGroup;
-    private _platform: PlatformLayer;
-
-    /**
-     * On click event handler.
-     * @param event
-     */
-    @HostListener('dblclick', ['$event'])
-    onDoubleClick(event: MouseEvent) {
-        let off = HTML.getOffset(this._diagram, event);
-        this._behavior.handleClick(off.x, off.y, true);
-        return false;
-    }
-
-    /**
-     * On click event handler.
-     * @param event
-     */
-    @HostListener('click', ['$event'])
-    onClick(event: MouseEvent) {
-        let off = HTML.getOffset(this._diagram, event);
-        this._behavior.handleClick(off.x, off.y, false);
-        return false;
-    }
-
-    /**
-     * Keyboard event handler.
-     * @param event
-     */
-    @HostListener('keyup', ['$event'])
-    onKeyUp(event: KeyboardEvent) {
-        this._behavior.handleKey(event);
-        return false;
-    }
-
-    /**
-     * Handle mouse wheel event.
-     * @param event
-     */
-    @HostListener('wheel', ['$event'])
-    onScroll(event: MouseEvent) {
-        let off = HTML.getOffset(this._diagram, event);
-        let sca = HTML.normalizeWheel(event);
-        this._behavior.handleZoom(off.x, off.y, -sca*20);
-        return false;
-    }
-
-    /**
-     * Handle resize events.
-     */
-    @HostListener('window:resize') onResize() {
-        const rect = this._diagram.getBoundingClientRect();
-        this._camera.updateVisual(0, 0, rect.width, rect.height);
-    }
-
-    /**
-     *
-     * @param event
-     */
-    @HostListener('mousedown', ['$event'])
-    onMouseDown(event: MouseEvent) {
-        const pos = HTML.getOffset(this._diagram, event);
-        this._behavior.handleMouseDown(pos.x, pos.y);
-        HTML.block(event);
-    }
-
-    /**
-     * Mouse movement.
-     * @param event
-     */
-    @HostListener('mousemove', ['$event'])
-    onMouseMove(event: MouseEvent) {
-        const pos = HTML.getOffset(this._diagram, event);
-        this._behavior.handleMouseMove(pos.x,pos.y);
-        return false;
-    }
-
-    /**
-     * Mouse up event.
-     * @param event
-     */
-    @HostListener('mouseup', ['$event'])
-    @HostListener('window:mouseup', ['$event'])
-    onMouseUp(event: MouseEvent) {
-        const pos = HTML.getOffset(this._diagram, event);
-        this._behavior.handleMouseUp(pos.x, pos.y);
-        return false;
-    }
-
-    /**
-     * Assemble all canvas layers.
-     */
-    ngAfterViewInit() {
-        /* get html elements */
-        this._diagram = this._element.nativeElement;
-        let surface = this._nodeLayer.getElement();
-
-        /* retrieve rendering platform */
-        if (this._diagram) {
-            this._platform = this._platformProvider.getPlatform(surface);
-        } else {
-            throw new Error('Could not find diagram DOM element');
-        }
-
-        /* link behavior state machine*/
-        if (this._platform) {
-            this._camera = this._platform.getCamera();
-        } else {
-            throw Error('Could not create rendering platform');
-        }
-
-        if (this._camera) {
-            this._behavior = new DiagramBehavior(this);
-        } else {
-            throw new Error('Could not create camera instance');
-        }
-
-        /* attach all layers */
-        if (this._behavior) {
-            if (this._borderLayer) {
-                this._borderLayer.observe(this._camera);
-            }
-            if (this._gridLayer) {
-                this._gridLayer.observe(this._camera);
-            }
-            if (this._nodeLayer) {
-                this._camera.attachObserver(this._platform);
-            }
-        } else {
-            throw new Error('Could not create diagram controller');
-        }
-
-        /* Load level data */
-        this.model = this._modelProvider.getModel();
-
-        this.onResize();
-        this.camera.zoomAndMoveTo(-250, -150, 0.5);
-    }
-
-    constructor(private _platformProvider: PlatformService,
-                private _modelProvider: ModelService,
-                private _element: ElementRef) {
-    }
-}
+import {StateMachine, DiagramState, DiagramEvents} from '../../common/diagrams';
+import {Camera} from '../../common/camera';
+import {ViewGroup, ViewVertex} from '../../common/viewmodel/viewmodel';
+import {Interpolator} from './animations';
+import Kinetics from '../../common/kinetics';
+import Diagram from './diagram';
 
 /**
  * The state machine for the diagramming view.
@@ -314,8 +11,7 @@ export default class Diagram {
  * @author Martin Schade
  * @since 1.0.0
  */
-class DiagramBehavior implements StateMachine, DiagramEvents {
-
+export default class DiagramBehavior implements StateMachine, DiagramEvents {
     private current: DiagramState;
     private states: any;
     private debug = false;
@@ -360,6 +56,7 @@ class DiagramBehavior implements StateMachine, DiagramEvents {
             }
             this.current = newState;
             newState.enterState(params);
+            
             if (this.debug) {
                 console.log('diagram state: ' + state);
             }
@@ -384,15 +81,6 @@ class DiagramBehavior implements StateMachine, DiagramEvents {
         /* Initial state */
         this.transitionTo('idle', null);
     }
-}
-
-/**
- * Responsible for handling level transition events and detection.
- * @author Martin Schade
- * @since 1.0.0
- */
-class ReferenceManager {
-    private current: ViewGroup;
 }
 
 /**
@@ -502,7 +190,6 @@ abstract class BaseState implements DiagramState {
         }
 
         let groups = this.diagram.cachedGroups;
-        console.log(groups);
         if (!groups) {
             return false;
         }
@@ -573,7 +260,7 @@ abstract class BaseState implements DiagramState {
 
     handleZoom(x: number, y: number, f: number) { /* ignore */}
 
-    handleKey(event:KeyboardEvent) { /* ignore */}
+    handleKey(event: KeyboardEvent) { /* ignore */}
 
     handleAbort() { /* ignore */}
 
@@ -715,8 +402,8 @@ class Panning extends BaseState {
         let dragY = this.pressedY - this.anchorY - y;
 
         if (this.diagram.limitMovement) {
-            dragX = this.handleHorizontalConstraints(dragX);
-            dragY = this.handleVerticalConstraints(dragY);
+            dragX = this.handleLimits(true, dragX);
+            dragY = this.handleLimits(false, dragY);
         }
 
         if (this.diagram.useKinetics) {
@@ -775,6 +462,64 @@ class Panning extends BaseState {
         return (this.diagram.useKinetics && this.kinetics.hasEnoughMomentum());
     }
 
+    private damp(actual: number, limit: number): number {
+        let ratio = Math.abs(actual / limit);
+        return 1 + Math.log10(ratio || 1);
+    }
+
+    private updateBanding(horizontal: boolean, lower: boolean, value: boolean) {
+        if (horizontal) {
+            if (lower) this.offLeft = value;
+            else this.offRight = value;
+        } else {
+            if (lower) this.offTop = value;
+            else this.offBottom = value;
+        }
+    }
+
+    private handleLimits(horizontal: boolean, drag: number): number {
+        const cam = this.camera;
+        const min = horizontal ? cam.worldX : cam.worldY; 
+        const wid = horizontal ? cam.projWidth : cam.projHeight;
+        const low = horizontal ? this.leftLimit : this.topLimit;
+        const hig = horizontal ? this.rightLimit : this.botLimit;
+        const band = this.diagram.doBanding;
+        const scale = cam.scale;
+        const max = min + wid;
+        
+        /**
+         * Check if the lower limit was violated.
+         */
+        if (min <= low) {
+            if (band) {
+                this.updateBanding(horizontal, true, true);
+                const x = drag / cam.scale;
+                return low * this.damp(x, low) * scale;
+            } else {
+                return low;
+            }
+        } else {
+            this.updateBanding(horizontal, true, false);
+        }
+
+        /**
+         * Check if the upper limit was violated
+         */
+        if (max >= hig) {
+            if (band) {
+                this.updateBanding(horizontal, false, true);
+                return (hig * this.damp(drag / scale + wid, hig) - wid) * scale;
+            } else {
+                return hig;
+            }
+        } else {
+            this.updateBanding(horizontal, false, false);
+        }
+
+        return drag;
+    }
+
+    /*
     private handleHorizontalConstraints(dragX: number): number {
         const cameraMin = this.camera.worldX;
         const cameraWid = this.camera.projWidth;
@@ -848,11 +593,8 @@ class Panning extends BaseState {
 
         return dragY;
     }
-    
-    private damp(actual: number, limit: number): number {
-        let ratio = Math.abs(actual / limit);
-        return 1 + Math.log10(ratio || 1);
-    }
+
+    */
 }
 
 /**
@@ -962,147 +704,4 @@ class Selecting extends Panning {
  */
 class Editing extends BaseState {
 
-}
-
-/**
- * Interpolator helper class, which encapsulates
- * requestAnimationFrame and onFinished callbacks.
- * @author Martin Schade
- * @since 1.0.0
- */
-class Interpolator {
-    private start: number;
-    private active = false;
-    private frame: number;
-
-    onFinished: () => void;
-
-    /**
-     * Stop the animation
-     */
-    stop() {
-        if (this.frame) {
-            window.cancelAnimationFrame(this.frame);
-        }
-
-        this.onFinished = undefined;
-        this.frame = undefined;
-        this.active = false;
-        this.update = undefined;
-    }
-
-    play() {
-        if (this.active) {
-            return;
-        }
-        this.active = true;
-        this.start = Date.now();
-        const self = this;
-        const func = function() {
-            if (self.active) {
-                let f = (Date.now()-self.start)/self.duration;
-                f = (f > 1) ? 1 : (f < 0) ? 0 : f;
-                if (f < 1 && self.active) {
-                    self.update(f);
-                    self.frame = window.requestAnimationFrame(func);
-                } else if (f >= 1 && self.onFinished) {
-                    self.onFinished();
-                    self.onFinished = null;
-                }
-            }
-        };
-        self.frame = window.requestAnimationFrame(func);
-    }
-
-    static throwCamera(params: any): Interpolator {
-        const cam = params.camera;
-        const time = -(1000.0 / params.frames) / Math.log(1.0 - params.decay);
-        const rate = 1.0 / (1.0 - params.decay);
-        const dist = params.speed * time / 4;
-        const distX = dist * Math.cos(params.angle);
-        const distY = dist * Math.sin(params.angle);
-        return new Interpolator(f => {
-            const t = 1 - Math.exp(-rate * f);
-            const posX = cam.cameraX + t * distX;
-            const posY = cam.cameraY + t * distY;
-            cam.moveTo(-posX, -posY);
-        }, time);
-    }
-
-    /**
-     * Navigate to the given center coordinates.
-     */
-    static navigateTo(params: any): Interpolator {
-        const camera = params.camera;
-        const aW = camera.projWidth;
-        const aX = camera.centerX;
-        const aY = camera.centerY;
-        const eW = params.targetWidth;
-        const dX = params.centerX - aX;
-        const dY = params.centerY - aY;
-        const dU = Math.hypot(dX, dY);
-        const z = params.panZoom;
-        const v = params.velocity;
-
-        if (dU < 1e-8) {
-            const S = Math.log(eW/aW) / Math.SQRT2;
-            return new Interpolator(f => {
-                const tW = aW * Math.exp(Math.SQRT2 * S * f);
-                const vW = camera.visualWidth;
-                const vH = camera.visualHeight;
-                const vZ = vW / tW;
-                const x = (aX + dX * f);
-                const y = (aY + dY * f);
-                camera.zoomAndMoveTo(
-                    vZ * x - vW / 2.0,
-                    vZ * y - vH / 2.0,
-                    vZ
-                );
-            }, Math.sqrt(1 + S) * params.pathFactor / v);
-        } else {
-            const dZ = z * z * dU;
-            const dA = eW * eW - aW * aW;
-            const b0 = (dA + dZ * dZ) / (2.0 * aW * dZ);
-            const b1 = (dA - dZ * dZ) / (2.0 * eW * dZ);
-            const f0 = Math.sqrt(1.0 + b0 * b0) - b0;
-            const f1 = Math.sqrt(1.0 + b1 * b1) - b1;
-            const r0 = Math.log(f0 > 0 ? f0 : 1e-12);
-            const r1 = Math.log(f1 > 0 ? f1 : 1e-12);
-            const ch = Math.cosh(r0);
-            const sh = Math.sinh(r0);
-            const S = (r1 - r0) / z;
-            const m = aW / (z * z);
-            return new Interpolator(f => {
-                const s = f * S;
-                const u = m * (Math.tanh(z * s + r0) * ch - sh);
-                const w = aW * ch / Math.cosh(z * s + r0);
-                const vW = camera.visualWidth;
-                const vH = camera.visualHeight;
-                const vZ = vW / w;
-                const x = aX + dX / dU * u;
-                const y = aY + dY / dU * u;
-                camera.zoomAndMoveTo(
-                    vZ * x - vW / 2.0,
-                    vZ * y - vH / 2.0,
-                    vZ
-                );
-            }, Math.sqrt(1 + S) * params.pathFactor / v);
-        }
-    }
-
-
-    constructor(private update: (f: number) => void,
-                private duration: number) {
-        this.duration = duration || 1000;
-    }
-}
-
-export class CanvasSelection extends Observable<Array<ViewVertex>> {
-    private items: ViewVertex[];
-
-    setSelection(items: ViewVertex[]) {
-        // TODO emit deselection
-        // update internals
-        // TODO emit selection
-    }
 }
