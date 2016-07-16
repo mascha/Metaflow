@@ -322,11 +322,10 @@ class Idle extends BaseState {
                 if (target>= maxZoom) {
                     target = maxZoom;
                 } else {
-                    const limits = this;
                     const w = this.camera.visualWidth;
                     const h = this.camera.visualHeight;
-                    const l = limits.rightLimit - limits.leftLimit;
-                    const d = limits.botLimit - limits.topLimit;
+                    const l = this.rightLimit - this.leftLimit;
+                    const d = this.botLimit - this.topLimit;
                     const limit = (w > h) ? w / l : h / d;
                     target = (target <= limit) ? limit : target;
                 }
