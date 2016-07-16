@@ -93,8 +93,8 @@ class NodeLayer {
         BorderLayer, Breadcrumbs,
         Presenter, Overview
     ],
-    template: require('./canvas.html'),
-    styles: [require('./canvas.scss')]
+    template: require('./diagram.html'),
+    styles: [require('./diagram.scss')]
 })
 export default class Diagram {
     get camera(): Camera {
