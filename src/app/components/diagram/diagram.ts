@@ -29,6 +29,28 @@ import {GridLayer, BorderLayer, NodeLayer} from './layers';
     ]
 })
 export default class Diagram {
+
+    animatedZoom = false;
+    animatedNavigation = true;
+    frames = 60;
+    pathFactor = 1000;
+    doBanding = false;
+    limitMovement = false;
+    useKinetics = false;
+
+    @ViewChild(BorderLayer) private _borderLayer: BorderLayer;
+    @ViewChild(GridLayer) private _gridLayer: GridLayer;
+    @ViewChild(NodeLayer) private _nodeLayer: NodeLayer;
+
+    private _camera: Camera;
+    private _behavior: DiagramEvents;
+    private _inertiaDecay: number = 0.05;
+    private _zoomPan: number = 2.33;
+    private _velocity: number = 1.4;
+    private _diagram: HTMLElement;
+    private _model: ViewGroup;
+    private _platform: PlatformLayer;
+
     get camera(): Camera {
         return this._camera;
     }
@@ -74,29 +96,6 @@ export default class Diagram {
     get cachedGroups(): Array<ViewGroup> {
         return this._platform.cachedGroups;
     }
-
-    animatedZoom = false;
-    animatedNavigation = true;
-    frames = 60;
-    pathFactor = 1000;
-    doBanding = false;
-    limitMovement = false;
-    useKinetics = false;
-
-    /* Layers and children */
-
-    @ViewChild(BorderLayer) private _borderLayer: BorderLayer;
-    @ViewChild(GridLayer) private _gridLayer: GridLayer;
-    @ViewChild(NodeLayer) private _nodeLayer: NodeLayer;
-
-    private _camera: Camera;
-    private _behavior: DiagramEvents;
-    private _inertiaDecay: number = 0.05;
-    private _zoomPan: number = 2.33;
-    private _velocity: number = 1.4;
-    private _diagram: HTMLElement;
-    private _model: ViewGroup;
-    private _platform: PlatformLayer;
 
     /**
      * On click event handler.
