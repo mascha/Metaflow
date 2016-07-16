@@ -342,7 +342,7 @@ class Idle extends BaseState {
     /**
      * TODO change target width to level specific width scale.
      */
-    private getAppropriateScale(): number {
+    private getAppropriateScale(level?: ViewGroup): number {
         return 1000;
     }
 }
@@ -398,19 +398,24 @@ class Panning extends BaseState {
     }
     
     handleMouseMove(x: number, y: number) {
-        let dragX = this.pressedX - this.anchorX - x;
-        let dragY = this.pressedY - this.anchorY - y;
+        const dragX = this.pressedX - this.anchorX - x;
+        const dragY = this.pressedY - this.anchorY - y;
+
+        let limitX = dragX, limitY = dragY;
 
         if (this.diagram.limitMovement) {
-            dragX = this.handleLimits(true, dragX);
-            dragY = this.handleLimits(false, dragY);
+            limitX = this.handleLimits(true, dragX);
+            limitY = this.handleLimits(false, dragY);
         }
 
-        if (this.diagram.useKinetics) {
+        if (this.diagram.useKinetics) 
             this.kinetics.update(dragX, dragY);
-        }
+        
+        const diffX = true // Math.abs(limitX - dragX) > 1e-2;
+        const diffY = true // Math.abs(limitY - dragY) > 1e-2;
 
-        this.camera.moveTo(dragX, dragY);
+        if (diffX || diffY)
+            this.camera.moveTo(limitX, limitY);
     }
 
     handleMouseUp(x: number, y: number) {

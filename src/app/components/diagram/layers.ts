@@ -21,8 +21,7 @@ export interface DiagramLayer {
     template: `<canvas #gridLayer class="layer"></canvas>`
 })
 export class GridLayer implements DiagramLayer {
-    @ViewChild('gridLayer')
-    private canvas: ElementRef;
+    @ViewChild('gridLayer') canvas: ElementRef;
     private grid: Grid;
 
     observe(camera: Camera) {
@@ -42,8 +41,8 @@ export class GridLayer implements DiagramLayer {
     template: '<canvas #borderLayer class="layer"></canvas>'
 })
 export class BorderLayer implements DiagramLayer {
-    @ViewChild('borderLayer')
-    private element: ElementRef;
+    
+    @ViewChild('borderLayer') element: ElementRef;
     private border: Border;
 
     observe(camera: Camera) {
