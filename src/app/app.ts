@@ -7,7 +7,7 @@ import {WorkspaceConfig} from "./services/configs";
 import Workspace from "./components/workspace/workspace";
 import Navigation from "./components/navigation/navigation";
 import Toolbar from "./components/toolbar/toolbar";
-import Diagram from "./components/canvas/canvas";
+import Diagram from "./components/diagram/diagram";
 
 require('../style/globals.scss');
 

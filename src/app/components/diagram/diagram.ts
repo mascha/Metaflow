@@ -44,9 +44,9 @@ export default class Diagram {
 
     private _camera: Camera;
     private _behavior: DiagramEvents;
-    private _inertiaDecay: number = 0.05;
-    private _zoomPan: number = 2.33;
-    private _velocity: number = 1.4;
+    private _inertiaDecay = 0.05;
+    private _zoomPan = 2.33;
+    private _velocity = 1.4;
     private _diagram: HTMLElement;
     private _model: ViewGroup;
     private _platform: PlatformLayer;
@@ -60,7 +60,7 @@ export default class Diagram {
     }
 
     set inertiaDecay(value: number) {
-        this._inertiaDecay = (value < 0) ? 0.01 : (value > 0.999) ? 0.99 : value;
+        this._inertiaDecay = (value < .01) ? .01 : (value > .99) ? .99 : value;
     }
 
     get zoomPanPreference(): number {
@@ -68,7 +68,7 @@ export default class Diagram {
     }
 
     set zoomPanPreference(value: number) {
-        this._zoomPan = (value < 0) ? 0.01 : (value > 2) ? 2.0 : value;
+        this._zoomPan = (value < .01) ? .01 : (value > 2) ? 2 : value;
     }
 
     get navigationVelocity(): number {
@@ -90,7 +90,7 @@ export default class Diagram {
     }
 
     set navigationVelocity(value: number) {
-        this._velocity = (value < 0) ? 0.01 : (value > 3.0) ? 3.0 : value;
+        this._velocity = (value < .01) ? .01 : (value > 3) ? 3 : value;
     }
 
     get cachedGroups(): Array<ViewGroup> {
@@ -144,7 +144,8 @@ export default class Diagram {
     /**
      * Handle resize events.
      */
-    @HostListener('window:resize') onResize() {
+    @HostListener('window:resize') 
+    onResize() {
         const rect = this._diagram.getBoundingClientRect();
         this._camera.updateVisual(0, 0, rect.width, rect.height);
     }
@@ -193,7 +194,7 @@ export default class Diagram {
 
         /* retrieve rendering platform */
         if (this._diagram) {
-            this._platform = this._platformProvider.getPlatform(surface);
+            this._platform = this._platforms.getPlatform(surface);
         } else {
             throw new Error('Could not find diagram DOM element');
         }
@@ -227,14 +228,14 @@ export default class Diagram {
         }
 
         /* Load level data */
-        this.model = this._modelProvider.getModel();
+        this.model = this._models.getModel();
 
         this.onResize();
-        this.camera.zoomAndMoveTo(-250, -150, 0.5);
+        this.camera.zoomAndMoveTo(-250, -150, .5);
     }
 
-    constructor(private _platformProvider: PlatformService,
-                private _modelProvider: ModelService,
+    constructor(private _platforms: PlatformService,
+                private _models: ModelService,
                 private _element: ElementRef) {
     }
 }
