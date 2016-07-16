@@ -1,6 +1,6 @@
-import {Camera} from "../../../common/camera";
-import {ViewGroup, ViewItem, ViewVertex} from "../../../common/viewmodel/viewmodel";
-import {PlatformLayer, ViewModelRenderer} from "../../../common/platform";
+import {Camera} from "../common/camera";
+import {ViewGroup, ViewItem, ViewVertex} from "../common/viewmodel/viewmodel";
+import {PlatformLayer, ViewModelRenderer} from "../common/platform";
 
 /**
  * Implements a pixi.js graph layer system.
@@ -53,7 +53,7 @@ export class PixiLayer implements PlatformLayer {
                 );
                 posLabel.position.set(
                     item.left * level.scale,
-                    item.top * level.scale + 200
+                    item.top * level.scale + 20
                 );
 
                 let itm = item as ViewGroup;
@@ -75,6 +75,10 @@ export class PixiLayer implements PlatformLayer {
                 itemLabel.position.set(
                     (item.left + item.width * 1.12) * level.scale,
                     (item.top + item.height / 4)* level.scale
+                );
+                posLabel.position.set(
+                    item.left * level.scale,
+                    item.top * level.scale
                 );
                 mapper.renderItem(item as ViewItem);
             }

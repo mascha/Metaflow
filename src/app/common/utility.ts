@@ -130,3 +130,19 @@ export default class HTMLUtil {
         window.dispatchEvent(evt);
     }
 }
+
+export class Text {
+
+    static approximateWidth(text: string): number {
+        let len = text.length;
+        let res = 0;
+        for (let i = 0; i < len; i++) {
+            switch (text[i]) {
+                case 'M', 'W': res += 12; break;
+                case 't', 'l', 'i': res += 8;
+                default: res += 10; break;
+            }
+        }
+        return res;
+    }
+}
