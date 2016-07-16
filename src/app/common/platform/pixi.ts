@@ -40,13 +40,11 @@ export class PixiLayer implements PlatformLayer {
         let contents = level.contents;
         let length = contents.length;
         for (let i = 0; i < length; i++) {
-            let item = contents[i];
+            let item = contents[i];           
             let itemLabel = new PIXI.Text(item.label, null, 1.33);
-            let scale = 0.01 + Math.random() * 0.5;
-            itemLabel.scale.set(scale, scale);
             this.labels.addChild(itemLabel);
 
-            if (!item.isLeaf()) {
+            if (!item.isLeaf()) {          
                 itemLabel.position.set(
                     item.left * level.scale,
                     item.top * level.scale
@@ -177,10 +175,10 @@ export class PixiCamera extends Camera {
         let lbs = this.overlay.children;
         let len = lbs.length;
         let s = 1/zoom;
-        if (s < 0.25 || s >= 2) return;
+        // if (s < 0.25 || s >= 2) return;
         s = s <= 0.5 ? 0.5 : (s >= 2)? 2: s;
         for (let i = 0; i < len; i++) {
-            lbs[i].scale.set(s, s);
+            lbs[i].scale.set(s * .5, s * .5);
         }
     }
 
