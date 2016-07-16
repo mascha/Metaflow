@@ -1,6 +1,6 @@
-import {Camera} from "../camera";
-import {ViewGroup, ViewItem, ViewVertex} from "../viewmodel/viewmodel";
-import {PlatformLayer, ViewModelRenderer} from "../platform";
+import {Camera} from "../../../common/camera";
+import {ViewGroup, ViewItem, ViewVertex} from "../../../common/viewmodel/viewmodel";
+import {PlatformLayer, ViewModelRenderer} from "../../../common/platform";
 
 /**
  * Implements a pixi.js graph layer system.
@@ -42,12 +42,18 @@ export class PixiLayer implements PlatformLayer {
         for (let i = 0; i < length; i++) {
             let item = contents[i];           
             let itemLabel = new PIXI.Text(item.label, null, 1.33);
+            let posLabel = new PIXI.Text(`${item.left.toFixed(0)} - ${item.top.toFixed()}`)
             this.labels.addChild(itemLabel);
+            this.labels.addChild(posLabel);
 
             if (!item.isLeaf()) {          
                 itemLabel.position.set(
                     item.left * level.scale,
                     item.top * level.scale
+                );
+                posLabel.position.set(
+                    item.left * level.scale,
+                    item.top * level.scale + 200
                 );
 
                 let itm = item as ViewGroup;

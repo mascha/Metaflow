@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {PlatformLayer} from "../common/platform";
-import {PixiLayer} from "../common/platform/pixi";
+import {PixiLayer} from "../platform/pixi";
 
 /**
  * Service which provides the underlying rendering platform.
