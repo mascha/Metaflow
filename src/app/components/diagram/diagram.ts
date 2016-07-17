@@ -1,5 +1,5 @@
 import {Component, ElementRef, ViewChild, HostListener} from '@angular/core';
-import {StateMachine, DiagramState, DiagramEvents} from "../../common/diagrams";
+import {StateMachine, DiagramState, DiagramEvents} from "./behavior";
 import {Camera} from "../../common/camera";
 import {ViewGroup, ViewVertex} from "../../common/viewmodel/viewmodel";
 import HTML from "../../common/utility";
