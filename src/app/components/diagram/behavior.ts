@@ -10,27 +10,27 @@ import Diagram from './diagram';
  *  TODO make this more elegant!
  */
 export interface DiagramEvents {
-    
+
     /**
      * 
      */
     handleClick(x: number, y: number, double: boolean)
-    
+
     /**
      * 
      */
     handleMouseDown(x: number, y: number)
-    
+
     /**
      * 
      */
     handleMouseMove(x: number, y: number)
-    
+
     /**
      * 
      */
     handleMouseUp(x: number, y: number)
-    
+
     /**
      * 
      */
@@ -101,28 +101,28 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
     private current: DiagramState;
     private states: any;
     private debug = false;
-    
-    handleClick(x:number, y:number, double:boolean) {
+
+    handleClick(x: number, y: number, double: boolean) {
         this.current.handleClick(x, y, double);
     }
 
-    handleMouseDown(x:number, y:number) {
+    handleMouseDown(x: number, y: number) {
         this.current.handleMouseDown(x, y);
     }
 
-    handleMouseMove(x:number, y:number) {
+    handleMouseMove(x: number, y: number) {
         this.current.handleMouseMove(x, y);
     }
 
-    handleMouseUp(x:number, y:number) {
+    handleMouseUp(x: number, y: number) {
         this.current.handleMouseUp(x, y);
     }
 
-    handleZoom(x:number, y:number, f:number) {
+    handleZoom(x: number, y: number, f: number) {
         this.current.handleZoom(x, y, f);
     }
 
-    handleKey(event:KeyboardEvent) {
+    handleKey(event: KeyboardEvent) {
         this.current.handleKey(event);
     }
 
@@ -142,10 +142,12 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
             }
             this.current = newState;
             newState.enterState(params);
-            
+
             if (this.debug) {
                 console.log('diagram state: ' + state);
             }
+        } else if (this.debug) {
+            console.log(`diagram state '${state}' not found`);
         }
     }
 
@@ -279,7 +281,7 @@ abstract class BaseState implements DiagramState {
         if (!groups) {
             return false;
         }
-        
+
         let len = groups.length;
         for (let i = 0; i < len; i++) {
             let group = groups[i];
@@ -312,8 +314,8 @@ abstract class BaseState implements DiagramState {
         let gW = group.width * scale;
         let gH = group.height * scale;
         return (wX >= gX && wY >= gY &&
-                wX + pW <= gX + gW &&
-                wY + pH <= gH + gY);
+            wX + pW <= gX + gW &&
+            wY + pH <= gH + gY);
     }
 
     private isOutsideParent(): boolean {
@@ -323,9 +325,9 @@ abstract class BaseState implements DiagramState {
         let driftH = parent.width * adjust;
         let driftV = parent.height * adjust;
         return (cam.worldX < parent.left - driftH &&
-                cam.worldY < parent.top - driftV &&
-                cam.projWidth > parent.width + driftH &&
-                cam.projHeight > parent.height + driftV);
+            cam.worldY < parent.top - driftV &&
+            cam.projWidth > parent.width + driftH &&
+            cam.projHeight > parent.height + driftV);
     }
 
     protected becomeIdle() {
@@ -338,22 +340,22 @@ abstract class BaseState implements DiagramState {
 
     handleClick(x: number, y: number, double: boolean) { /* ignore*/ }
 
-    handleMouseDown(x:number, y: number) { /* ignore*/ }
+    handleMouseDown(x: number, y: number) { /* ignore*/ }
 
-    handleMouseMove(x:number, y: number) { /* ignore*/ }
+    handleMouseMove(x: number, y: number) { /* ignore*/ }
 
     handleMouseUp(x: number, y: number) { /* ignore*/ }
 
-    handleZoom(x: number, y: number, f: number) { /* ignore */}
+    handleZoom(x: number, y: number, f: number) { /* ignore */ }
 
-    handleKey(event: KeyboardEvent) { /* ignore */}
+    handleKey(event: KeyboardEvent) { /* ignore */ }
 
-    handleAbort() { /* ignore */}
+    handleAbort() { /* ignore */ }
 
     handleStop() { /* ignore */ }
 
     constructor(protected machine: DiagramBehavior,
-                protected diagram: Diagram) {
+        protected diagram: Diagram) {
         this.camera = diagram.camera;
     }
 }
@@ -369,14 +371,14 @@ abstract class BaseState implements DiagramState {
  *  TODO hand off descent detection & level loading to worker
  */
 class Idle extends BaseState {
-    
+
     private maxZoom = 10;
 
     /**
      * TODO detect (drag | pan | draw | select)
      */
     handleMouseDown(x: number, y: number) {
-        this.machine.transitionTo('panning', {x: x, y: y});
+        this.machine.transitionTo('panning', { x: x, y: y });
     }
 
     handleClick(x: number, y: number, double: boolean) {
@@ -405,7 +407,7 @@ class Idle extends BaseState {
         if (!this.detectAndDoSwitch()) {
             if (this.diagram.limitMovement) {
                 let maxZoom = this.maxZoom;
-                if (target>= maxZoom) {
+                if (target >= maxZoom) {
                     target = maxZoom;
                 } else {
                     const w = this.camera.visualWidth;
@@ -416,7 +418,7 @@ class Idle extends BaseState {
                     target = (target <= limit) ? limit : target;
                 }
             }
-            
+
             this.camera.zoomToAbout(target,
                 this.camera.castRayX(x),
                 this.camera.castRayY(y)
@@ -474,14 +476,14 @@ class Panning extends BaseState {
         this.offBottom = false;
         this.offTop = false;
     }
-    
+
     handleMouseDown(x: number, y: number) {
         this.pressedX = x;
         this.pressedY = y;
         this.anchorX = this.camera.cameraX;
         this.anchorY = this.camera.cameraY;
     }
-    
+
     handleMouseMove(x: number, y: number) {
         const dragX = this.pressedX - this.anchorX - x;
         const dragY = this.pressedY - this.anchorY - y;
@@ -493,9 +495,9 @@ class Panning extends BaseState {
             limitY = this.handleLimits(false, dragY);
         }
 
-        if (this.diagram.useKinetics) 
+        if (this.diagram.useKinetics)
             this.kinetics.update(dragX, dragY);
-        
+
         const diffX = true // Math.abs(limitX - dragX) > 1e-2;
         const diffY = true // Math.abs(limitY - dragY) > 1e-2;
 
@@ -535,13 +537,13 @@ class Panning extends BaseState {
             this.machine.transitionTo('idle');
         }
     }
-    
+
     private horizontalDisplacement(wX: number, wW: number): number {
-        return (this.offLeft) ? wX - this.leftLimit: (this.offRight) ? wW - this.rightLimit: 0;
+        return (this.offLeft) ? wX - this.leftLimit : (this.offRight) ? wW - this.rightLimit : 0;
     }
-    
+
     private verticalDisplacement(wY: number, wH: number): number {
-        return (this.offTop) ? wY - this.topLimit: (this.offBottom) ? wH - this.botLimit: 0;
+        return (this.offTop) ? wY - this.topLimit : (this.offBottom) ? wH - this.botLimit : 0;
     }
 
     private isBanding(): boolean {
@@ -569,14 +571,14 @@ class Panning extends BaseState {
 
     private handleLimits(horizontal: boolean, drag: number): number {
         const cam = this.camera;
-        const min = horizontal ? cam.worldX : cam.worldY; 
+        const min = horizontal ? cam.worldX : cam.worldY;
         const wid = horizontal ? cam.projWidth : cam.projHeight;
         const low = horizontal ? this.leftLimit : this.topLimit;
         const hig = horizontal ? this.rightLimit : this.botLimit;
         const band = this.diagram.doBanding;
         const scale = cam.scale;
         const max = min + wid;
-        
+
         /**
          * Check if the lower limit was violated.
          */
@@ -783,7 +785,7 @@ class Connecting extends Panning {
  *  TODO visual overlay effect
  */
 class Selecting extends Panning {
-    
+
 }
 
 
