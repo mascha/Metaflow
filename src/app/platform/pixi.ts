@@ -41,8 +41,9 @@ export class PixiLayer implements PlatformLayer {
         let length = contents.length;
         for (let i = 0; i < length; i++) {
             let item = contents[i];
-            let itemLabel = new PIXI.Text(item.label, null, 1.33);
-            let posLabel = new PIXI.Text(`${item.left.toFixed(0)} - ${item.top.toFixed()}`)
+            let style = { fill: 'darkgray' }
+            let itemLabel = new PIXI.Text(item.label, style, 1.33);
+            let posLabel = new PIXI.Text(`${item.left.toFixed(0)} - ${item.top.toFixed()}`, style)
             this.labels.addChild(itemLabel);
             this.labels.addChild(posLabel);
 
@@ -188,12 +189,12 @@ export class PixiCamera extends Camera {
         // if (s < 0.25 || s >= 2) return;
         s = s <= 0.5 ? 0.5 : (s >= 2) ? 2 : s;
         for (let i = 0; i < len; i++) {
-            lbs[i].scale.set(s * .5, s * .5);
+            lbs[i].scale.set(s * .35, s * .35);
         }
     }
 
-    constructor(private world: PIXI.Container,
-        private overlay: PIXI.Container) {
+    constructor(private world: PIXI.Container, 
+                private overlay: PIXI.Container) {
         super();
     }
 }
@@ -208,11 +209,16 @@ export class PixiRenderer implements ViewModelRenderer<any, any> {
 
     renderItem(item: ViewItem): any {
         item.visual = item.visual ||
-            new PIXI.Graphics()
+            (Math.random() > 0.5) ? new PIXI.Graphics()
                 .lineStyle(4, 0x3367D6, 1)
                 .beginFill(0x66CCFF)
                 .drawRoundedRect(item.left, item.top, item.width, item.height, 3)
-                .endFill();
+                .endFill() :
+                new PIXI.Graphics()
+                .lineStyle(4, 0x34aabbf, 1)
+                .beginFill(0xff00FF)
+                .drawCircle(item.left, item.top, 64)
+                .endFill()               
     }
 
     renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): any {
