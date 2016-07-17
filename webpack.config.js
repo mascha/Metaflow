@@ -174,6 +174,10 @@ module.exports = function makeWebpackConfig() {
         test: /\.js$/,
         include: path.resolve(__dirname, 'node_modules/pixi.js'),
         loader: 'transform/cacheable?brfs'
+      },
+      {
+        include: path.resolve(__dirname, 'node_modules/pixi.js'),
+        loader: 'transform/cacheable?browserify-versionify'
       }
     ],
     
