@@ -580,36 +580,37 @@ class Panning extends BaseState {
         const lim = this.limits;
         const min = horizontal ? cam.worldX : cam.worldY;
         const wid = horizontal ? cam.projWidth : cam.projHeight;
-        const low = horizontal ? lim.left : lim.top;
-        const hig = horizontal ? lim.right : lim.bottom;
+        const lower = horizontal ? lim.left : lim.top;
+        const higher = horizontal ? lim.right : lim.bottom;
         const band = this.diagram.doBanding;
         const scale = cam.scale;
         const max = min + wid;
 
         /**
-         * Check if the lower limit was violated.
+         * Check if lower limit was violated.
          */
-        if (min <= low) {
+        if (min <= lower) {
             if (band) {
                 this.updateBanding(horizontal, true, true);
-                const x = drag / cam.scale;
-                return low * this.damp(x, low) * scale;
+                const factor = this.damp(drag / scale, lower);
+                return factor * lower * scale;
             } else {
-                return low;
+                return lower;
             }
         } else {
             this.updateBanding(horizontal, true, false);
         }
 
         /**
-         * Check if the upper limit was violated
+         * Check if upper limit was violated
          */
-        if (max >= hig) {
+        if (max >= higher) {
             if (band) {
                 this.updateBanding(horizontal, false, true);
-                return (hig * this.damp(drag / scale + wid, hig) - wid) * scale;
+                const factor = this.damp(drag / scale + wid, higher);
+                return (factor * higher - wid) * scale;
             } else {
-                return hig;
+                return higher;
             }
         } else {
             this.updateBanding(horizontal, false, false);
