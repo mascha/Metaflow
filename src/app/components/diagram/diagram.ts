@@ -60,7 +60,7 @@ export default class Diagram {
     }
 
     set inertiaDecay(value: number) {
-        this._inertiaDecay = (value < .01) ? .01 : (value > .99) ? .99 : value;
+        this._inertiaDecay = minimax(.001, value, .999);
     }
 
     get zoomPanPreference(): number {
@@ -68,7 +68,7 @@ export default class Diagram {
     }
 
     set zoomPanPreference(value: number) {
-        this._zoomPan = (value < .01) ? .01 : (value > 2) ? 2 : value;
+        this._zoomPan = minimax(.01, value, 2);
     }
 
     get navigationVelocity(): number {

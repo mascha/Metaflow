@@ -20,7 +20,7 @@ export class PixiLayer implements PlatformLayer {
     private renderer: PIXI.SystemRenderer;
     private mapper: PixiRenderer;
 
-    cachedGroups:Array<ViewGroup>;
+    cachedGroups: Array<ViewGroup>;
 
     getCamera(): Camera {
         return this.camera;
@@ -40,13 +40,13 @@ export class PixiLayer implements PlatformLayer {
         let contents = level.contents;
         let length = contents.length;
         for (let i = 0; i < length; i++) {
-            let item = contents[i];           
+            let item = contents[i];
             let itemLabel = new PIXI.Text(item.label, null, 1.33);
             let posLabel = new PIXI.Text(`${item.left.toFixed(0)} - ${item.top.toFixed()}`)
             this.labels.addChild(itemLabel);
             this.labels.addChild(posLabel);
 
-            if (!item.isLeaf()) {          
+            if (!item.isLeaf()) {
                 itemLabel.position.set(
                     item.left * level.scale,
                     item.top * level.scale
@@ -74,7 +74,7 @@ export class PixiLayer implements PlatformLayer {
             } else if (item.isLeaf()) {
                 itemLabel.position.set(
                     (item.left + item.width * 1.12) * level.scale,
-                    (item.top + item.height / 4)* level.scale
+                    (item.top + item.height / 4) * level.scale
                 );
                 posLabel.position.set(
                     item.left * level.scale,
@@ -86,7 +86,7 @@ export class PixiLayer implements PlatformLayer {
         }
 
         this.attachNode(level);
-        
+
         console.log(`Model rendering took ${Date.now() - now} ms`);
     }
 
@@ -184,21 +184,19 @@ export class PixiCamera extends Camera {
 
         let lbs = this.overlay.children;
         let len = lbs.length;
-        let s = 1/zoom;
+        let s = 1 / zoom;
         // if (s < 0.25 || s >= 2) return;
-        s = s <= 0.5 ? 0.5 : (s >= 2)? 2: s;
+        s = s <= 0.5 ? 0.5 : (s >= 2) ? 2 : s;
         for (let i = 0; i < len; i++) {
             lbs[i].scale.set(s * .5, s * .5);
         }
     }
 
     constructor(private world: PIXI.Container,
-                private overlay: PIXI.Container) {
+        private overlay: PIXI.Container) {
         super();
     }
 }
-
-
 
 /**
  * Implements the pixi.js platform renderer.
