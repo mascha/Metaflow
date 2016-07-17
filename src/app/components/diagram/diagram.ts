@@ -224,7 +224,7 @@ export default class Diagram {
                 this._camera.attachObserver(this._platform);
             }
         } else {
-            throw new Error('Could not create diagram controller');
+            throw new Error('Could not create diagram behavior');
         }
 
         /* Load level data */
