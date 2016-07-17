@@ -24,7 +24,7 @@ import {GridLayer, BorderLayer, NodeLayer} from './layers';
     template: require('./diagram.html'),
     styles: [require('./diagram.scss')],
     directives: [
-        GridLayer, NodeLayer, BorderLayer, 
+        GridLayer, NodeLayer, BorderLayer,
         Breadcrumbs, Presenter, Overview
     ]
 })
@@ -90,7 +90,7 @@ export default class Diagram {
     }
 
     set navigationVelocity(value: number) {
-        this._velocity = (value < .01) ? .01 : (value > 3) ? 3 : value;
+        this._velocity = minimax(.01, value, 3);
     }
 
     get cachedGroups(): Array<ViewGroup> {
@@ -137,14 +137,14 @@ export default class Diagram {
     onScroll(event: MouseEvent) {
         let off = HTML.getOffset(this._diagram, event);
         let sca = HTML.normalizeWheel(event);
-        this._behavior.handleZoom(off.x, off.y, -sca*20);
+        this._behavior.handleZoom(off.x, off.y, -sca * 20);
         return false;
     }
 
     /**
      * Handle resize events.
      */
-    @HostListener('window:resize') 
+    @HostListener('window:resize')
     onResize() {
         const rect = this._diagram.getBoundingClientRect();
         this._camera.updateVisual(0, 0, rect.width, rect.height);
@@ -168,7 +168,7 @@ export default class Diagram {
     @HostListener('mousemove', ['$event'])
     onMouseMove(event: MouseEvent) {
         const pos = HTML.getOffset(this._diagram, event);
-        this._behavior.handleMouseMove(pos.x,pos.y);
+        this._behavior.handleMouseMove(pos.x, pos.y);
         return false;
     }
 
@@ -235,8 +235,8 @@ export default class Diagram {
     }
 
     constructor(private _platforms: PlatformService,
-                private _models: ModelService,
-                private _element: ElementRef) {
+        private _models: ModelService,
+        private _element: ElementRef) {
     }
 }
 
@@ -257,4 +257,8 @@ export class CanvasSelection extends Observable<Array<ViewVertex>> {
         // update internals
         // TODO emit selection
     }
+}
+
+function minimax(min: number, value: number, max: number) {
+    return (value < min) ? min : (value > max) ? max : value;
 }

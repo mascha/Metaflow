@@ -2,6 +2,8 @@
 @import "../../../style/variables";
 @import "../../../style/mixins";
 
+$left-shift: 40px;
+
 :host {
   @include topHeight($navigation-height);
 
@@ -137,7 +139,7 @@
   margin: 0;
   outline: none;
   box-shadow: 0 1px 1.5px rgba(0,0,0,0.06), 0 1px 1px rgba(0,0,0,0.12);
-  padding: 7px 30px 7px 7px;
+  padding: 7px $left-shift 7px 7px;
 
   &.search-text {
     @include fill();
@@ -146,7 +148,7 @@
     line-height: 18px;
 
     &:focus {
-      background-color: lighten($navigation-fill, 26);
+      background-color: lighten($navigation-fill, 14);
     }
   }
 
@@ -155,24 +157,24 @@
     left: 35%;
     top: 50%;
     transform: translateY(-50%);
-    width: 495px;
     height: 18px;
+    width: 465px;
   }
-}
 
-.search-button {
-  border: 0;
-  position: absolute;
-  right: -30px;
-  top: 50%;
-  background-color: transparent;
-  transform: translateY(-45%);
-  outline: none;
-  cursor: pointer;
-
-  @include icon(before, '\f349') {
+  .search-button {
+    border: 0;
+    position: absolute;
+    right: -$left-shift;
+    top: 50%;
     background-color: transparent;
-    font-size: 18px;
-    color: white;
+    transform: translateY(-45%);
+    outline: none;
+    cursor: pointer;
+
+    @include icon(before, '\f349') {
+      background-color: transparent;
+      font-size: 18px;
+      color: white;
+    }
   }
 }
