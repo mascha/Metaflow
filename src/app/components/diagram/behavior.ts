@@ -178,10 +178,20 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
  */
 abstract class BaseState implements DiagramState {
 
-    rightLimit = +5000.0;
-    leftLimit = -5000.0;
-    topLimit = -5000.0;
-    botLimit = +5000.0;
+    protected limits = {
+        right : +5000.0,
+        left : -5000.0,
+        top : -5000.0,
+        bottom : +5000.0,
+        adjustTo : function(level: ViewGroup) {
+            const widthSpan = 0.9 * level.width;
+            const heightSpan = 0.9 * level.height;
+            this.leftLimit = -widthSpan;
+            this.topLimit = -heightSpan;
+            this.botLimit = level.height + heightSpan;
+            this.rightLimit = level.width + widthSpan;
+        }
+    }
 
     protected camera: Camera;
     protected current: ViewGroup;
@@ -191,12 +201,7 @@ abstract class BaseState implements DiagramState {
      * @param level
      */
     private adjustLimits(level: ViewGroup) {
-        const widthSpan = 0.9 * level.width;
-        const heightSpan = 0.9 * level.height;
-        this.leftLimit = -widthSpan;
-        this.topLimit = -heightSpan;
-        this.botLimit = level.height + heightSpan;
-        this.rightLimit = level.width + widthSpan;
+        this.limits.adjustTo(level);
     }
 
     /**
@@ -410,10 +415,11 @@ class Idle extends BaseState {
                 if (target >= maxZoom) {
                     target = maxZoom;
                 } else {
+                    const limits = this.limits;
                     const w = this.camera.visualWidth;
                     const h = this.camera.visualHeight;
-                    const l = this.rightLimit - this.leftLimit;
-                    const d = this.botLimit - this.topLimit;
+                    const l = limits.right - limits.left;
+                    const d = limits.bottom - limits.top;
                     const limit = (w > h) ? w / l : h / d;
                     target = (target <= limit) ? limit : target;
                 }
@@ -539,11 +545,11 @@ class Panning extends BaseState {
     }
 
     private horizontalDisplacement(wX: number, wW: number): number {
-        return (this.offLeft) ? wX - this.leftLimit : (this.offRight) ? wW - this.rightLimit : 0;
+        return (this.offLeft) ? wX - this.limits.left : (this.offRight) ? wW - this.limits.right : 0;
     }
 
     private verticalDisplacement(wY: number, wH: number): number {
-        return (this.offTop) ? wY - this.topLimit : (this.offBottom) ? wH - this.botLimit : 0;
+        return (this.offTop) ? wY - this.limits.top : (this.offBottom) ? wH - this.limits.bottom : 0;
     }
 
     private isBanding(): boolean {
@@ -571,10 +577,11 @@ class Panning extends BaseState {
 
     private handleLimits(horizontal: boolean, drag: number): number {
         const cam = this.camera;
+        const lim = this.limits;
         const min = horizontal ? cam.worldX : cam.worldY;
         const wid = horizontal ? cam.projWidth : cam.projHeight;
-        const low = horizontal ? this.leftLimit : this.topLimit;
-        const hig = horizontal ? this.rightLimit : this.botLimit;
+        const low = horizontal ? lim.left : lim.top;
+        const hig = horizontal ? lim.right : lim.bottom;
         const band = this.diagram.doBanding;
         const scale = cam.scale;
         const max = min + wid;
@@ -610,83 +617,6 @@ class Panning extends BaseState {
 
         return drag;
     }
-
-    /*
-    private handleHorizontalConstraints(dragX: number): number {
-        const cameraMin = this.camera.worldX;
-        const cameraWid = this.camera.projWidth;
-        const cameraZoom = this.camera.scale;
-        const cameraMax = cameraMin + cameraWid;
-
-        if (cameraMax >= this.rightLimit) {
-            if (this.diagram.doBanding) {
-                this.offRight = true;
-                const drag = dragX / cameraZoom + cameraWid;
-                const factor = this.damp(drag, this.rightLimit);
-                const offset = this.rightLimit * factor - cameraWid;
-                return offset * cameraZoom;
-            } else {
-                return this.rightLimit;
-            }
-        } else {
-            this.offRight = false;
-        }
-
-        if (cameraMin <= this.leftLimit) {
-            if (this.diagram.doBanding) {
-                this.offLeft = true;
-                const drag = dragX / cameraZoom;
-                const factor = this.damp(drag, this.leftLimit);
-                const offset = this.leftLimit * factor;
-                return offset * cameraZoom;
-            } else {
-                return this.leftLimit;
-            }
-        } else {
-            this.offLeft = false;
-        }
-
-        return dragX;
-    }
-
-    private handleVerticalConstraints(dragY: number): number {
-        const cM = this.camera.worldY;
-        const cH = this.camera.projHeight;
-        const cZ = this.camera.scale;
-        const cMax = cM + cH;
-
-        if (cMax >= this.botLimit) {
-            if (this.diagram.doBanding) {
-                this.offBottom = true;
-                const drag = dragY / cZ + cH;
-                const factor = this.damp(drag, this.botLimit);
-                const offset = this.botLimit * factor - cH;
-                return offset * cZ;
-            } else {
-                return this.botLimit;
-            }
-
-        } else {
-            this.offBottom = false;
-        }
-
-        if (cM <= this.topLimit) {
-            if (this.diagram.doBanding) {
-                this.offTop = true;
-                const factor = this.damp(dragY / cZ, this.topLimit);
-                const offset = this.topLimit * factor;
-                return offset * cZ;
-            } else {
-                return this.topLimit;
-            }
-        } else {
-            this.offTop = false;
-        }
-
-        return dragY;
-    }
-
-    */
 }
 
 /**
