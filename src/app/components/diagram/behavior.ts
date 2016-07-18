@@ -420,6 +420,16 @@ class Panning extends BaseState {
         }
     }
 
+    private adjustLimit(level: ViewGroup) {
+        let limits = this.limits;
+        const widthSpan = 0.9 * level.width;
+        const heightSpan = 0.9 * level.height;
+        limits.left = level.left - widthSpan;
+        limits.top = level.top - heightSpan;
+        limits.bottom = level.left + level.height + heightSpan;
+        limits.right = level.left + level.width + widthSpan;
+    }
+
     /**
      * Returns the horizontal displacement needed to return the camera to the center.
      * Measured in world coordinates.
