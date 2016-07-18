@@ -51,6 +51,8 @@ export interface DiagramEvents {
      * Notify the state that is should terminate, but does not need to.
      */
     handleStop()
+
+    setModel(level: ViewGroup)
 }
 
 /**
@@ -134,6 +136,10 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
         this.current.handleStop();
     }
 
+    setModel(level: ViewGroup) {
+        this.current.setModel(level);
+    }
+
     transitionTo(state: string, params?: any) {
         let newState = this.states[state];
         if (newState) {
@@ -179,10 +185,10 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
 abstract class BaseState implements DiagramState {
 
     protected limits = {
-        right : +5000.0,
-        left : -5000.0,
-        top : -5000.0,
-        bottom : +5000.0,
+        left : -0,
+        top : 0,
+        right : 2000,
+        bottom : 2000,
         adjustTo : function(level: ViewGroup) {
             const widthSpan = 0.9 * level.width;
             const heightSpan = 0.9 * level.height;
@@ -195,14 +201,6 @@ abstract class BaseState implements DiagramState {
 
     protected camera: Camera;
     protected current: ViewGroup;
-
-    /**
-     * Adjust the pan/zoom limits to the new level.
-     * @param level
-     */
-    private adjustLimits(level: ViewGroup) {
-        this.limits.adjustTo(level);
-    }
 
     /**
      * Switches the reference level to the parent level.
@@ -261,7 +259,9 @@ abstract class BaseState implements DiagramState {
     private loadLevel(level: ViewGroup) {
         this.current = level;
         this.diagram.model = level;
-        this.adjustLimits(level);
+        console.log(this.limits);
+        this.limits.adjustTo(level);
+        console.log(this.limits);
     }
 
     /*
@@ -358,6 +358,10 @@ abstract class BaseState implements DiagramState {
     handleAbort() { /* ignore */ }
 
     handleStop() { /* ignore */ }
+    
+    setModel(level: ViewGroup) {
+        this.loadLevel(level);
+    }
 
     constructor(protected machine: DiagramBehavior,
         protected diagram: Diagram) {
@@ -590,6 +594,7 @@ class Panning extends BaseState {
          * Check if lower limit was violated.
          */
         if (min <= lower) {
+            console.log(`${horizontal?'horizontal':'vertical'} lower limit reached`);
             if (band) {
                 this.updateBanding(horizontal, true, true);
                 const factor = this.damp(drag / scale, lower);
@@ -605,6 +610,7 @@ class Panning extends BaseState {
          * Check if upper limit was violated
          */
         if (max >= higher) {
+            console.log(`${horizontal?'horizontal':'vertical'} upper limit reached`);
             if (band) {
                 this.updateBanding(horizontal, false, true);
                 const factor = this.damp(drag / scale + wid, higher);

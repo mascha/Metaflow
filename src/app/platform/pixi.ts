@@ -27,6 +27,7 @@ export class PixiLayer implements PlatformLayer {
     }
 
     setModel(level: ViewGroup) {
+        console.log(level);
         let now = Date.now();
         this.nodes.removeChildren();
         this.labels.removeChildren();
@@ -39,22 +40,16 @@ export class PixiLayer implements PlatformLayer {
         this.cachedGroups = [];
         let contents = level.contents;
         let length = contents.length;
+        let style = { fill: 'darkgray' }
         for (let i = 0; i < length; i++) {
             let item = contents[i];
-            let style = { fill: 'darkgray' }
             let itemLabel = new PIXI.Text(item.label, style, 1.33);
-            let posLabel = new PIXI.Text(`${item.left.toFixed(0)} - ${item.top.toFixed()}`, style)
             this.labels.addChild(itemLabel);
-            this.labels.addChild(posLabel);
-
+        
             if (!item.isLeaf()) {
                 itemLabel.position.set(
                     item.left * level.scale,
                     item.top * level.scale
-                );
-                posLabel.position.set(
-                    item.left * level.scale,
-                    item.top * level.scale + 20
                 );
 
                 let itm = item as ViewGroup;
@@ -76,10 +71,6 @@ export class PixiLayer implements PlatformLayer {
                 itemLabel.position.set(
                     (item.left + item.width * 1.12) * level.scale,
                     (item.top + item.height / 4) * level.scale
-                );
-                posLabel.position.set(
-                    item.left * level.scale,
-                    item.top * level.scale
                 );
                 mapper.renderItem(item as ViewItem);
             }
@@ -174,9 +165,7 @@ export class PixiCamera extends Camera {
 
     protected translateWorldTo(tX: number, tY: number) {
         this.worldPosition.set(tX, tY);
-        this.overlayPosition.set(
-            tX, tY
-        );
+        this.overlayPosition.set(tX, tY);
     }
 
     protected scaleWorldTo(zoom: number, last: number) {
@@ -186,7 +175,6 @@ export class PixiCamera extends Camera {
         let lbs = this.overlay.children;
         let len = lbs.length;
         let s = 1 / zoom;
-        // if (s < 0.25 || s >= 2) return;
         s = s <= 0.5 ? 0.5 : (s >= 2) ? 2 : s;
         for (let i = 0; i < len; i++) {
             lbs[i].scale.set(s * .35, s * .35);
@@ -249,10 +237,6 @@ export class PixiRenderer implements ViewModelRenderer<any, any> {
         root.addChild(content);
 
         group.visual = root;
-    }
-
-    renderTree(group: ViewGroup): any {
-        throw new Error('Not implemented yet');
     }
 
     attach(node: ViewVertex, group: ViewGroup) {

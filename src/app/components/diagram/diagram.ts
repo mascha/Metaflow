@@ -35,7 +35,7 @@ export default class Diagram {
     frames = 60;
     pathFactor = 1000;
     doBanding = false;
-    limitMovement = false;
+    limitMovement = true;
     useKinetics = false;
 
     @ViewChild(BorderLayer) private _borderLayer: BorderLayer;
@@ -79,6 +79,9 @@ export default class Diagram {
         this._model = group;
         if (this._platform) {
             this._platform.setModel(group);
+        }
+        if (this._behavior) {
+            // this._behavior.setModel(group); TODO fix inifinite cycles!
         }
         if (this._borderLayer) {
             this._borderLayer.update(group);
@@ -231,7 +234,7 @@ export default class Diagram {
         this.model = this._models.getModel();
 
         this.onResize();
-        this.camera.zoomAndMoveTo(-250, -150, .5);
+        // this.camera.zoomAndMoveTo(-250, -150, .5);
     }
 
     constructor(private _platforms: PlatformService,

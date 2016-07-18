@@ -224,7 +224,7 @@ export abstract class Camera {
     }
 
     /**
-     * Update the internal paintable surface metrics.
+     * Update the internal paintable surface metr ics.
      */
     updateVisual(viewX: number, viewY: number, viewW: number, viewH: number) {
         this.viewX = viewX; this.viewY = viewY;

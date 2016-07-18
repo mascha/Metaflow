@@ -20,11 +20,6 @@ export interface ViewModelRenderer<I, G> {
     renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): G;
 
     /**
-     * 
-     */
-    renderTree(group: ViewGroup): G;
-
-    /**
      *
      */
     attach(node: ViewVertex, group: ViewGroup)
