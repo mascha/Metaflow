@@ -12,7 +12,7 @@ import Diagram from './diagram';
 export interface DiagramEvents {
 
     /**
-     * 
+     * Handle a single/double click.
      */
     handleClick(x: number, y: number, double: boolean)
 
@@ -451,14 +451,32 @@ class Idle extends BaseState {
  */
 class Panning extends BaseState {
 
-    protected offLeft = false;
-    protected offRight = false;
-    protected offBottom = false;
-    protected offTop = false;
-    protected anchorX = 0.0;
-    protected anchorY = 0.0;
-    protected pressedX = 0.0;
-    protected pressedY = 0.0;
+    protected violations = {
+        left: false,
+   	    right: false,
+        bottom: false,
+        top: false,
+        reset: function() {
+            this.left = false; 
+            this.right = false;
+            this.top = false; 
+            this.bottom = false;
+        }
+    }
+
+    protected anchor = {
+        x: 0,
+        y: 0,
+        dragX: 0,
+        dragY: 0,
+        reset: function() {
+            this.x = 0;
+            this.y = 0;
+            this.dragX = 0;
+            this.dragY = 0;
+        }
+    }
+
     protected kinetics: Kinetics;
 
     enterState(params?: any) {
@@ -475,26 +493,22 @@ class Panning extends BaseState {
 
     leaveState() {
         this.kinetics.reset();
-        this.anchorX = 0.0;
-        this.anchorY = 0.0;
-        this.pressedX = 0.0;
-        this.pressedY = 0.0;
-        this.offLeft = false;
-        this.offRight = false;
-        this.offBottom = false;
-        this.offTop = false;
+        this.anchor.reset();
+        this.violations.reset();
     }
 
     handleMouseDown(x: number, y: number) {
-        this.pressedX = x;
-        this.pressedY = y;
-        this.anchorX = this.camera.cameraX;
-        this.anchorY = this.camera.cameraY;
+        let v = this.anchor;
+        v.dragX = x;
+        v.dragY = y;
+        v.x = this.camera.cameraX;
+        v.y = this.camera.cameraY;
     }
 
     handleMouseMove(x: number, y: number) {
-        const dragX = this.pressedX - this.anchorX - x;
-        const dragY = this.pressedY - this.anchorY - y;
+        const anchor = this.anchor;
+        const dragX = anchor.dragX - anchor.x - x;
+        const dragY = anchor.dragY - anchor.x - y;
 
         let limitX = dragX, limitY = dragY;
 
@@ -553,7 +567,8 @@ class Panning extends BaseState {
      * Measured in world coordinates.
      */
     private horizontalDisplacement(wX: number, wW: number): number {
-        return (this.offLeft) ? wX - this.limits.left : (this.offRight) ? wW - this.limits.right : 0;
+        let v = this.violations;
+        return (v.left) ? wX - this.limits.left : (v.right) ? wW - this.limits.right : 0;
     }
 
     /**
@@ -561,14 +576,16 @@ class Panning extends BaseState {
      * Measured in world coordinates.
      */
     private verticalDisplacement(wY: number, wH: number): number {
-        return (this.offTop) ? wY - this.limits.top : (this.offBottom) ? wH - this.limits.bottom : 0;
+        let violation = this.violations;
+        return (violation.top) ? wY - this.limits.top : (violation.bottom) ? wH - this.limits.bottom : 0;
     }
 
     /**
      * Check wether banding rules apply.
      */
     private isBanding(): boolean {
-        return (this.diagram.doBanding && (this.offLeft || this.offRight || this.offBottom || this.offTop));
+        let v = this.violations;
+        return (this.diagram.doBanding && (v.left || v.right || v.bottom || v.top));
     }
 
     /**
@@ -590,12 +607,13 @@ class Panning extends BaseState {
      * Update the internal banding state.
      */
     private updateBanding(horizontal: boolean, lower: boolean, value: boolean) {
+        const v = this.violations;
         if (horizontal) {
-            if (lower) { this.offLeft = value; }
-            else { this.offRight = value; }
+            if (lower) { v.left = value; }
+            else { v.right = value; }
         } else {
-            if (lower) { this.offTop = value; }
-            else { this.offBottom = value; }
+            if (lower) { v.top = value; }
+            else { v.bottom = value; }
         }
     }
 
