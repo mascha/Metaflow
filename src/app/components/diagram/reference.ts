@@ -74,7 +74,7 @@ class ReferenceManager {
     private loadLevel(level: ViewGroup) {
         this.current = level;
         this.diagram.model = level;
-        this.limits.adjustTo(level);
+        // this.limits.adjustTo(level);
     }
 
     /*

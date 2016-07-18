@@ -4,7 +4,6 @@ import {Interpolator} from './animations';
 import Kinetics from '../../common/kinetics';
 import Diagram from './diagram';
 
-
 /**
  * All possible diagram events.
  *  TODO make this more elegant!
@@ -190,15 +189,7 @@ abstract class BaseState implements DiagramState {
         left : -800,
         top : -800,
         right : 2800,
-        bottom : 2800,
-        adjustTo : function(level: ViewGroup) {
-            const widthSpan = 0.9 * level.width;
-            const heightSpan = 0.9 * level.height;
-            this.leftLimit = -widthSpan;
-            this.topLimit = -heightSpan;
-            this.botLimit = level.height + heightSpan;
-            this.rightLimit = level.width + widthSpan;
-        }
+        bottom : 2800
     }
 
     protected becomeIdle() {
@@ -324,10 +315,6 @@ class Panning extends BaseState {
    	    right: false,
         bottom: false,
         top: false,
-        reset: function() {
-            this.left = false, this.right = false;
-            this.top = false, this.bottom = false;
-        }
     }
 
     protected anchor = {
@@ -335,11 +322,6 @@ class Panning extends BaseState {
         y: 0,
         dragX: 0,
         dragY: 0,
-        reset: function() {
-            this.x = 0, this.y = 0;
-            this.dragX = 0;
-            this.dragY = 0;
-        }
     }
 
     protected kinetics: Kinetics;
@@ -358,8 +340,14 @@ class Panning extends BaseState {
 
     leaveState() {
         this.kinetics.reset();
-        this.anchor.reset();
-        this.violations.reset();
+        this.anchor.x = 0;
+        this.anchor.y = 0;
+        this.anchor.dragX = 0;
+        this.anchor.dragY = 0;
+        this.violations.left = false;
+        this.violations.right = false;
+        this.violations.bottom = false;
+        this.violations.top = false;
     }
 
     handleMouseDown(x: number, y: number) {

@@ -34,8 +34,8 @@ export default class Diagram {
     animatedNavigation = true;
     frames = 60;
     pathFactor = 1000;
-    doBanding = true;
-    respectLimits = true;
+    doBanding = false;
+    respectLimits = false;
     useKinetics = false;
 
     @ViewChild(BorderLayer) private _borderLayer: BorderLayer;
