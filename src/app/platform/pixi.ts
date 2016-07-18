@@ -27,7 +27,6 @@ export class PixiLayer implements PlatformLayer {
     }
 
     setModel(level: ViewGroup) {
-        console.log(level);
         let now = Date.now();
         this.nodes.removeChildren();
         this.labels.removeChildren();
@@ -210,6 +209,10 @@ export class PixiRenderer implements ViewModelRenderer<any, any> {
     }
 
     renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): any {
+        if (group.visual) {
+            return;
+        }
+        
         let root = new PIXI.Container();
         root.width = group.width;
         root.height = group.height;

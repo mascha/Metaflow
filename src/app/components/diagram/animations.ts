@@ -1,3 +1,5 @@
+import {Camera} from '../../common/camera';
+
 /**
  * Interpolator helper class, which encapsulates
  * requestAnimationFrame and onFinished callbacks.
@@ -63,10 +65,21 @@ export class Interpolator {
         }, time);
     }
 
+    static moveTo(centerX: number, centerY: number, time: number, camera: Camera) : Interpolator {
+        const diffX = (centerX - camera.cameraX) / camera.scale;
+        const diffY = (centerY - camera.cameraY) / camera.scale;
+        return new Interpolator(f => {
+            camera.moveTo(
+                - (camera.cameraX + diffX * f),
+                - (camera.cameraY + diffY * f)
+                );
+        }, time);
+    }
+
     /**
      * Navigate to the given center coordinates.
      */
-    static navigateTo(params: any): Interpolator {
+    static navigateTo(params: NavigateConfig): Interpolator {
         const camera = params.camera;
         const aW = camera.projWidth;
         const aX = camera.centerX;
@@ -83,16 +96,12 @@ export class Interpolator {
             const S = Math.log(eW/aW) / Math.SQRT2;
             return new Interpolator(f => {
                 const tW = aW * Math.exp(Math.SQRT2 * S * f);
-                const vW = camera.visualWidth;
-                const vH = camera.visualHeight;
-                const vZ = vW / tW;
-                const x = (aX + dX * f);
-                const y = (aY + dY * f);
-                camera.zoomAndMoveTo(
-                    vZ * x - vW / 2.0,
-                    vZ * y - vH / 2.0,
-                    vZ
-                );
+                const vW = camera.visualWidth / 2;
+                const vH = camera.visualHeight / 2;
+                const vZ = 2 * vW / tW;
+                const x = (aX + dX * f) * vZ;
+                const y = (aY + dY * f) * vZ;
+                camera.zoomAndMoveTo(x - vW,y - vH, vZ);
             }, Math.sqrt(1 + S) * params.pathFactor / v);
         } else {
             const dZ = z * z * dU;
@@ -111,16 +120,12 @@ export class Interpolator {
                 const s = f * S;
                 const u = m * (Math.tanh(z * s + r0) * ch - sh);
                 const w = aW * ch / Math.cosh(z * s + r0);
-                const vW = camera.visualWidth;
-                const vH = camera.visualHeight;
-                const vZ = vW / w;
-                const x = aX + dX / dU * u;
-                const y = aY + dY / dU * u;
-                camera.zoomAndMoveTo(
-                    vZ * x - vW / 2.0,
-                    vZ * y - vH / 2.0,
-                    vZ
-                );
+                const vW = camera.visualWidth / 2;
+                const vH = camera.visualHeight / 2;
+                const vZ = 2 * vW / w;
+                const x = (aX + dX / dU * u) * vZ;
+                const y = (aY + dY / dU * u) * vZ;
+                camera.zoomAndMoveTo(x - vW, y - vH, vZ);
             }, Math.sqrt(1 + S) * params.pathFactor / v);
         }
     }
@@ -129,4 +134,14 @@ export class Interpolator {
                 private duration: number) {
         this.duration = duration || 1000;
     }
+}
+
+export interface NavigateConfig {
+    centerX : number;
+    centerY : number;
+    panZoom : number;
+    velocity: number;
+    camera : Camera;
+    targetWidth: number;
+    pathFactor: number;
 }

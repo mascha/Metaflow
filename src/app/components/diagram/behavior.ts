@@ -185,10 +185,10 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
 abstract class BaseState implements DiagramState {
 
     protected limits = {
-        left : -0,
-        top : 0,
-        right : 2000,
-        bottom : 2000,
+        left : -800,
+        top : -800,
+        right : 2800,
+        bottom : 2800,
         adjustTo : function(level: ViewGroup) {
             const widthSpan = 0.9 * level.width;
             const heightSpan = 0.9 * level.height;
@@ -259,9 +259,7 @@ abstract class BaseState implements DiagramState {
     private loadLevel(level: ViewGroup) {
         this.current = level;
         this.diagram.model = level;
-        console.log(this.limits);
         this.limits.adjustTo(level);
-        console.log(this.limits);
     }
 
     /*
@@ -505,14 +503,16 @@ class Panning extends BaseState {
             limitY = this.handleLimits(false, dragY);
         }
 
-        if (this.diagram.useKinetics)
+        if (this.diagram.useKinetics) {
             this.kinetics.update(dragX, dragY);
+        }
 
         const diffX = true // Math.abs(limitX - dragX) > 1e-2;
         const diffY = true // Math.abs(limitY - dragY) > 1e-2;
 
-        if (diffX || diffY)
+        if (diffX || diffY) {
             this.camera.moveTo(limitX, limitY);
+        }
     }
 
     handleMouseUp(x: number, y: number) {
@@ -525,12 +525,12 @@ class Panning extends BaseState {
             const wY = ca.worldY, wH = wY + ca.projHeight;
             const dx = this.horizontalDisplacement(wX, wW);
             const dy = this.verticalDisplacement(wY, wH);
-
             this.machine.transitionTo('animating', {
-                forced: true, interpolator: Interpolator.navigateTo({
-                    targetX: wX + ca.projWidth / 2 - dx,
-                    targetY: wY + ca.projHeight / 2 - dy
-                })
+                forced: false, interpolator: Interpolator.moveTo(
+                    wX + ca.projWidth / 2 - dx,
+                    wY + ca.projHeight / 2 - dy,
+                    300, this.camera
+                )
             });
         } else if (kinetic) {
             if (kinetic && !banding) {
@@ -548,75 +548,88 @@ class Panning extends BaseState {
         }
     }
 
+    /**
+     * Returns the horizontal displacement needed to return the camera to the center.
+     * Measured in world coordinates.
+     */
     private horizontalDisplacement(wX: number, wW: number): number {
         return (this.offLeft) ? wX - this.limits.left : (this.offRight) ? wW - this.limits.right : 0;
     }
 
+    /**
+     * Returns the vertical displacement needed to return the camera to the center.
+     * Measured in world coordinates.
+     */
     private verticalDisplacement(wY: number, wH: number): number {
         return (this.offTop) ? wY - this.limits.top : (this.offBottom) ? wH - this.limits.bottom : 0;
     }
 
+    /**
+     * Check wether banding rules apply.
+     */
     private isBanding(): boolean {
         return (this.diagram.doBanding && (this.offLeft || this.offRight || this.offBottom || this.offTop));
     }
 
+    /**
+     * Check wether kinetic rules apply.
+     */
     private isKinetic(): boolean {
         return (this.diagram.useKinetics && this.kinetics.hasEnoughMomentum());
     }
 
+    /**
+     * Calculate a damping factor from a limit violation.
+     */
     private damp(actual: number, limit: number): number {
         let ratio = Math.abs(actual / limit);
         return 1 + Math.log10(ratio || 1);
     }
 
+    /**
+     * Update the internal banding state.
+     */
     private updateBanding(horizontal: boolean, lower: boolean, value: boolean) {
         if (horizontal) {
-            if (lower) this.offLeft = value;
-            else this.offRight = value;
+            if (lower) { this.offLeft = value; }
+            else { this.offRight = value; }
         } else {
-            if (lower) this.offTop = value;
-            else this.offBottom = value;
+            if (lower) { this.offTop = value; }
+            else { this.offBottom = value; }
         }
     }
 
+    /**
+     * Returns the drag coordiante, accounting for damping/banding effects.
+     */
     private handleLimits(horizontal: boolean, drag: number): number {
-        const cam = this.camera;
-        const lim = this.limits;
+        const cam = this.camera, lim = this.limits;
         const min = horizontal ? cam.worldX : cam.worldY;
         const wid = horizontal ? cam.projWidth : cam.projHeight;
         const lower = horizontal ? lim.left : lim.top;
         const higher = horizontal ? lim.right : lim.bottom;
         const band = this.diagram.doBanding;
-        const scale = cam.scale;
-        const max = min + wid;
+        const scale = cam.scale, max = min + wid;
 
-        /**
-         * Check if lower limit was violated.
-         */
         if (min <= lower) {
-            console.log(`${horizontal?'horizontal':'vertical'} lower limit reached`);
             if (band) {
                 this.updateBanding(horizontal, true, true);
                 const factor = this.damp(drag / scale, lower);
                 return factor * lower * scale;
             } else {
-                return lower;
+                return lower + 1;
             }
         } else {
             this.updateBanding(horizontal, true, false);
         }
 
-        /**
-         * Check if upper limit was violated
-         */
         if (max >= higher) {
-            console.log(`${horizontal?'horizontal':'vertical'} upper limit reached`);
             if (band) {
                 this.updateBanding(horizontal, false, true);
                 const factor = this.damp(drag / scale + wid, higher);
                 return (factor * higher - wid) * scale;
             } else {
-                return higher;
+                return higher - 1;
             }
         } else {
             this.updateBanding(horizontal, false, false);

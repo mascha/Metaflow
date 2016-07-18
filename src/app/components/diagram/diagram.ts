@@ -34,7 +34,7 @@ export default class Diagram {
     animatedNavigation = true;
     frames = 60;
     pathFactor = 1000;
-    doBanding = false;
+    doBanding = true;
     limitMovement = true;
     useKinetics = false;
 
