@@ -8,9 +8,9 @@ import {Camera} from '../../common/camera';
  */
 export class Interpolator {
     private start: number;
-    private active = false;
     private frame: number;
-
+    private active = false;
+    
     onFinished: () => void;
 
     /**
@@ -65,7 +65,10 @@ export class Interpolator {
         }, time);
     }
 
-    static moveTo(centerX: number, centerY: number, time: number, camera: Camera) : Interpolator {
+    /**
+     * Pan the camera and center on the given world coordinates.
+     */
+    static centerOnWorld(centerX: number, centerY: number, time: number, camera: Camera) : Interpolator {
         const diffX = (centerX - camera.cameraX) / camera.scale;
         const diffY = (centerY - camera.cameraY) / camera.scale;
         return new Interpolator(f => {

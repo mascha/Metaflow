@@ -35,7 +35,7 @@ export default class Diagram {
     frames = 60;
     pathFactor = 1000;
     doBanding = true;
-    limitMovement = true;
+    respectLimits = true;
     useKinetics = false;
 
     @ViewChild(BorderLayer) private _borderLayer: BorderLayer;

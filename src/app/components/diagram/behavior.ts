@@ -1,5 +1,5 @@
 import {Camera} from '../../common/camera';
-import {ViewGroup, ViewVertex} from '../../common/viewmodel/viewmodel';
+import {ViewGroup} from '../../common/viewmodel/viewmodel';
 import {Interpolator} from './animations';
 import Kinetics from '../../common/kinetics';
 import Diagram from './diagram';
@@ -184,6 +184,8 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
  */
 abstract class BaseState implements DiagramState {
 
+    protected camera: Camera;
+
     protected limits = {
         left : -800,
         top : -800,
@@ -197,140 +199,6 @@ abstract class BaseState implements DiagramState {
             this.botLimit = level.height + heightSpan;
             this.rightLimit = level.width + widthSpan;
         }
-    }
-
-    protected camera: Camera;
-    protected current: ViewGroup;
-
-    /**
-     * Switches the reference level to the parent level.
-     * If no parent is present, nothing will be done and the
-     * camera stays the same.
-     */
-    private ascend() {
-        if (!this.isRoot()) {
-            let parent = this.getParent();
-            let current = this.current;
-
-            let wX = this.camera.worldX;
-            let wY = this.camera.worldY;
-            let cS = this.camera.scale;
-            let rS = cS / parent.scale;
-            let rX = (wX + current.left) * cS;
-            let rY = (wY + current.top) * cS;
-
-            this.loadLevel(parent);
-            this.camera.zoomAndMoveTo(rX, rY, rS);
-        }
-    }
-
-    /**
-     * Switches downTo from the reference level to the child level.
-     * If the given level is not a child of the current one, nothing
-     * will be done.
-     * @param target
-     */
-    private descendInto(target: ViewGroup) {
-        let current = this.current;
-        if (target && current && target.parent === current) {
-            let wX = this.camera.worldX;
-            let wY = this.camera.worldY;
-            let cS = this.camera.scale;
-            let rX = (wX - target.left * current.scale) * cS;
-            let rY = (wY - target.top * current.scale) * cS;
-            let rS = (cS * current.scale);
-
-            this.loadLevel(target);
-            this.camera.zoomAndMoveTo(rX, rY, rS);
-        }
-    }
-
-    /**
-     * Render the given viewmodel.
-     * TODO rendering
-     * TODO proxies
-     * TODO caching, reuse previous elements
-     * TODO accelerate
-     * TODO event emitting
-     * TODO move level rendering away from UI
-     * TODO dynamic descent based on LOD-area
-     * @param level
-     */
-    private loadLevel(level: ViewGroup) {
-        this.current = level;
-        this.diagram.model = level;
-        this.limits.adjustTo(level);
-    }
-
-    /*
-     * TODO make this really fast!
-     *  - Check content
-     *  - Acceleration structures, adaptive with item sizes
-     *  - Only check visible objects of interest
-     */
-    protected detectAndDoSwitch(): boolean {
-        if (!this.current) {
-            return false;
-        }
-
-        if (!this.isRoot()) {
-            if (this.isOutsideParent()) {
-                this.ascend();
-                return true;
-            }
-        }
-
-        let groups = this.diagram.cachedGroups;
-        if (!groups) {
-            return false;
-        }
-
-        let len = groups.length;
-        for (let i = 0; i < len; i++) {
-            let group = groups[i];
-            if (this.isWithinChildGroup(group)) {
-                this.descendInto(group);
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private isRoot(): boolean {
-        return (!this.current.parent);
-    }
-
-    private getParent(): ViewGroup {
-        return this.current.parent as ViewGroup;
-    }
-
-    private isWithinChildGroup(group: ViewGroup): boolean {
-        let scale = this.current.scale;
-        let cam = this.camera;
-        let pW = cam.projWidth;
-        let pH = cam.projHeight;
-        let wX = cam.worldX;
-        let wY = cam.worldY;
-        let gX = group.left * scale;
-        let gY = group.top * scale;
-        let gW = group.width * scale;
-        let gH = group.height * scale;
-        return (wX >= gX && wY >= gY &&
-            wX + pW <= gX + gW &&
-            wY + pH <= gH + gY);
-    }
-
-    private isOutsideParent(): boolean {
-        let parent = this.getParent();
-        let cam = this.camera;
-        let adjust = 0.6;
-        let driftH = parent.width * adjust;
-        let driftV = parent.height * adjust;
-        return (cam.worldX < parent.left - driftH &&
-            cam.worldY < parent.top - driftV &&
-            cam.projWidth > parent.width + driftH &&
-            cam.projHeight > parent.height + driftV);
     }
 
     protected becomeIdle() {
@@ -358,11 +226,11 @@ abstract class BaseState implements DiagramState {
     handleStop() { /* ignore */ }
     
     setModel(level: ViewGroup) {
-        this.loadLevel(level);
+        // this.loadLevel(level);
     }
 
     constructor(protected machine: DiagramBehavior,
-        protected diagram: Diagram) {
+                protected diagram: Diagram) {
         this.camera = diagram.camera;
     }
 }
@@ -411,8 +279,8 @@ class Idle extends BaseState {
         let factor = Math.pow(1.002, units);
         let target = factor * zoom;
 
-        if (!this.detectAndDoSwitch()) {
-            if (this.diagram.limitMovement) {
+        if (true /* !this.detectAndDoSwitch() */) {
+            if (this.diagram.respectLimits) {
                 let maxZoom = this.maxZoom;
                 if (target >= maxZoom) {
                     target = maxZoom;
@@ -457,10 +325,8 @@ class Panning extends BaseState {
         bottom: false,
         top: false,
         reset: function() {
-            this.left = false; 
-            this.right = false;
-            this.top = false; 
-            this.bottom = false;
+            this.left = false, this.right = false;
+            this.top = false, this.bottom = false;
         }
     }
 
@@ -470,8 +336,7 @@ class Panning extends BaseState {
         dragX: 0,
         dragY: 0,
         reset: function() {
-            this.x = 0;
-            this.y = 0;
+            this.x = 0, this.y = 0;
             this.dragX = 0;
             this.dragY = 0;
         }
@@ -498,11 +363,11 @@ class Panning extends BaseState {
     }
 
     handleMouseDown(x: number, y: number) {
-        let v = this.anchor;
-        v.dragX = x;
-        v.dragY = y;
-        v.x = this.camera.cameraX;
-        v.y = this.camera.cameraY;
+        let anchor = this.anchor;
+        anchor.dragX = x;
+        anchor.dragY = y;
+        anchor.x = this.camera.cameraX;
+        anchor.y = this.camera.cameraY;
     }
 
     handleMouseMove(x: number, y: number) {
@@ -512,7 +377,7 @@ class Panning extends BaseState {
 
         let limitX = dragX, limitY = dragY;
 
-        if (this.diagram.limitMovement) {
+        if (this.diagram.respectLimits) {
             limitX = this.handleLimits(true, dragX);
             limitY = this.handleLimits(false, dragY);
         }
@@ -534,18 +399,23 @@ class Panning extends BaseState {
         const banding = this.isBanding();
 
         if (banding) {
-            const ca = this.camera;
-            const wX = ca.worldX, wW = wX + ca.projWidth;
-            const wY = ca.worldY, wH = wY + ca.projHeight;
-            const dx = this.horizontalDisplacement(wX, wW);
-            const dy = this.verticalDisplacement(wY, wH);
-            this.machine.transitionTo('animating', {
-                forced: false, interpolator: Interpolator.moveTo(
-                    wX + ca.projWidth / 2 - dx,
-                    wY + ca.projHeight / 2 - dy,
-                    300, this.camera
-                )
-            });
+            if (this.diagram.animatedNavigation) {
+                const ca = this.camera;
+                const wX = ca.worldX, wW = wX + ca.projWidth;
+                const wY = ca.worldY, wH = wY + ca.projHeight;
+                const dx = this.horizontalDisplacement(wX, wW);
+                const dy = this.verticalDisplacement(wY, wH);
+                this.machine.transitionTo('animating', {
+                    forced: false, interpolator: Interpolator.centerOnWorld(
+                        wX + ca.projWidth / 2 - dx,
+                        wY + ca.projHeight / 2 - dy,
+                        300, this.camera
+                    )
+                });
+            } else {
+                this.becomeIdle();
+            }
+            
         } else if (kinetic) {
             if (kinetic && !banding) {
                 this.machine.transitionTo('animating', {
@@ -558,7 +428,7 @@ class Panning extends BaseState {
                 });
             }
         } else {
-            this.machine.transitionTo('idle');
+            this.becomeIdle();
         }
     }
 
@@ -567,8 +437,8 @@ class Panning extends BaseState {
      * Measured in world coordinates.
      */
     private horizontalDisplacement(wX: number, wW: number): number {
-        let v = this.violations;
-        return (v.left) ? wX - this.limits.left : (v.right) ? wW - this.limits.right : 0;
+        let violation = this.violations;
+        return (violation.left) ? wX - this.limits.left : (violation.right) ? wW - this.limits.right : 0;
     }
 
     /**
@@ -607,13 +477,13 @@ class Panning extends BaseState {
      * Update the internal banding state.
      */
     private updateBanding(horizontal: boolean, lower: boolean, value: boolean) {
-        const v = this.violations;
+        const violation = this.violations;
         if (horizontal) {
-            if (lower) { v.left = value; }
-            else { v.right = value; }
+            if (lower) { violation.left = value; }
+            else { violation.right = value; }
         } else {
-            if (lower) { v.top = value; }
-            else { v.bottom = value; }
+            if (lower) { violation.top = value; }
+            else { violation.bottom = value; }
         }
     }
 
@@ -621,11 +491,11 @@ class Panning extends BaseState {
      * Returns the drag coordiante, accounting for damping/banding effects.
      */
     private handleLimits(horizontal: boolean, drag: number): number {
-        const cam = this.camera, lim = this.limits;
+        const cam = this.camera, limit = this.limits;
         const min = horizontal ? cam.worldX : cam.worldY;
         const wid = horizontal ? cam.projWidth : cam.projHeight;
-        const lower = horizontal ? lim.left : lim.top;
-        const higher = horizontal ? lim.right : lim.bottom;
+        const lower = horizontal ? limit.left : limit.top;
+        const higher = horizontal ? limit.right : limit.bottom;
         const band = this.diagram.doBanding;
         const scale = cam.scale, max = min + wid;
 
