@@ -42,13 +42,14 @@ export class PixiLayer implements PlatformLayer {
         let style = { fill: 'darkgray' }
         for (let i = 0; i < length; i++) {
             let item = contents[i];
-            let itemLabel = new PIXI.Text(item.label, style, 1.33);
+            let itemLabel = new PIXI.Text(item.label, style, 1);
             this.labels.addChild(itemLabel);
-        
+
             if (!item.isLeaf()) {
+                itemLabel.pivot.set(itemLabel.text.length * 6, 12);
                 itemLabel.position.set(
-                    item.left * level.scale,
-                    item.top * level.scale
+                    (item.left + item.width / 2 - itemLabel.text.length * 3) * level.scale,
+                    (item.top + item.height / 2 - 12) * level.scale
                 );
 
                 let itm = item as ViewGroup;
@@ -67,8 +68,9 @@ export class PixiLayer implements PlatformLayer {
                     mapper.renderGroup(itm, false, true);
                 }
             } else if (item.isLeaf()) {
+                itemLabel.pivot.set(0, 6);
                 itemLabel.position.set(
-                    (item.left + item.width * 1.12) * level.scale,
+                    (item.left + item.width + 6) * level.scale,
                     (item.top + item.height / 4) * level.scale
                 );
                 mapper.renderItem(item as ViewItem);
@@ -171,6 +173,10 @@ export class PixiCamera extends Camera {
         this.worldScale.set(zoom, zoom);
         this.overlay.scale.set(zoom, zoom);
 
+        /**
+         * TODO Iterate over visible children only, 
+         * TODO outsource to thread
+         */
         let lbs = this.overlay.children;
         let len = lbs.length;
         let s = 1 / zoom;
@@ -204,7 +210,7 @@ export class PixiRenderer implements ViewModelRenderer<any, any> {
                 new PIXI.Graphics()
                 .lineStyle(4, 0x34aabbf, 1)
                 .beginFill(0xff00FF)
-                .drawCircle(item.left, item.top, 64)
+                .drawCircle(item.left, item.top, item.width)
                 .endFill()               
     }
 
