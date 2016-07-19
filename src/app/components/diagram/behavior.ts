@@ -83,7 +83,7 @@ export interface StateMachine {
      * @param state
      * @param params
      */
-    transitionTo(state: string, params?: any)
+    goto(state: string, params?: any)
 
     /**
      * Reenter the current state with different or no parameters.
@@ -139,7 +139,7 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
         this.current.setModel(level);
     }
 
-    transitionTo(state: string, params?: any) {
+    goto(state: string, params?: any) {
         let newState = this.states[state];
         if (newState) {
             if (this.current) {
@@ -172,7 +172,7 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
             'animating': new Animating(this, diagram)
         };
         /* Initial state */
-        this.transitionTo('idle', null);
+        this.goto('idle', null);
     }
 }
 
@@ -186,14 +186,14 @@ abstract class BaseState implements DiagramState {
     protected camera: Camera;
 
     protected limits = {
-        left : -800,
-        top : -800,
-        right : 2800,
-        bottom : 2800
+        left: -800,
+        top: -800,
+        right: 2800,
+        bottom: 2800
     }
 
     protected becomeIdle() {
-        this.machine.transitionTo('idle');
+        this.behavior.goto('idle');
     }
 
     enterState(params?: any) { /* ignore*/ }
@@ -215,13 +215,12 @@ abstract class BaseState implements DiagramState {
     handleAbort() { /* ignore */ }
 
     handleStop() { /* ignore */ }
-    
+
     setModel(level: ViewGroup) {
         // this.loadLevel(level);
     }
 
-    constructor(protected machine: DiagramBehavior,
-                protected diagram: Diagram) {
+    constructor(protected behavior: DiagramBehavior, protected diagram: Diagram) {
         this.camera = diagram.camera;
     }
 }
@@ -244,12 +243,20 @@ class Idle extends BaseState {
      * TODO detect (drag | pan | draw | select)
      */
     handleMouseDown(x: number, y: number) {
-        this.machine.transitionTo('panning', { x: x, y: y });
+        this.behavior.goto('panning', { x: x, y: y });
     }
 
     handleClick(x: number, y: number, double: boolean) {
         if (double) {
-            this.machine.transitionTo('animating', {
+            /*
+                TODO: Check if border or diagram
+                TODO: Check if something was double-clicked
+                TODO: If nothing, check for nearest items within radius
+                        if one -> zoom in
+                        if many -> show selection for zooming
+                        if none -> show click effect // navigateTo with current width // zoom in
+            */
+            this.behavior.goto('animating', {
                 interpolator: Interpolator.navigateTo({
                     centerX: this.camera.castRayX(x),
                     centerY: this.camera.castRayY(y),
@@ -261,7 +268,12 @@ class Idle extends BaseState {
                 })
             });
         } else {
-            /* single click not yet implemented */
+            /*
+                TODO: Check if something was selected
+                        if one -> show in explorer
+                        if many -> overlaps ? show selection within radius
+                TODO: Check if border or diagram
+            */
         }
     }
 
@@ -389,7 +401,7 @@ class Panning extends BaseState {
                 const wY = ca.worldY, wH = wY + ca.projHeight;
                 const dx = this.calcDisplacement(true, wX, wW);
                 const dy = this.calcDisplacement(false, wY, wH);
-                this.machine.transitionTo('animating', {
+                this.behavior.goto('animating', {
                     forced: false, interpolator: Interpolator.centerOnWorld(
                         wX + ca.projWidth / 2 - dx,
                         wY + ca.projHeight / 2 - dy,
@@ -399,18 +411,15 @@ class Panning extends BaseState {
             } else {
                 this.becomeIdle();
             }
-            
         } else if (kinetic) {
-            if (kinetic && !banding) {
-                this.machine.transitionTo('animating', {
-                    forced: false,
-                    interpolator: Interpolator.throwCamera({
-                        speed: this.kinetics.speed,
-                        angle: this.kinetics.angle,
-                        decay: this.diagram.inertiaDecay
-                    })
-                });
-            }
+            this.behavior.goto('animating', {
+                forced: false,
+                interpolator: Interpolator.throwCamera({
+                    speed: this.kinetics.speed,
+                    angle: this.kinetics.angle,
+                    decay: this.diagram.inertiaDecay
+                })
+            });
         } else {
             this.becomeIdle();
         }
@@ -426,13 +435,13 @@ class Panning extends BaseState {
         limits.right = level.left + level.width + widthSpan;
     }
 
-    private calcDisplacement(horizontal: boolean, min : number, max : number) {
+    private calcDisplacement(horizontal: boolean, min: number, max: number) {
         let violation = this.violations, limit = this.limits;
         let lower = horizontal ? violation.left : violation.top;
         let upper = horizontal ? violation.top : violation.bottom;
         let left = horizontal ? limit.left : limit.top;
         let right = horizontal ? limit.right : limit.bottom;
-        return lower ? min - left : upper ? max - right: 0;
+        return lower ? min - left : upper ? max - right : 0;
     }
 
     /**
@@ -512,12 +521,14 @@ class Panning extends BaseState {
     }
 }
 
+export interface AnimationParams {
+    forced: boolean;
+    interpolator: Interpolator;
+}
+
 /**
  * Animation state
- *  TODO handle abort
- *  TODO handle cancel
  *  TODO interaction with banding
- *  TODO forced animation
  */
 class Animating extends BaseState {
 
@@ -527,14 +538,14 @@ class Animating extends BaseState {
     handleZoom(x, y, f) {
         if (!this.forceAnimation) {
             this.becomeIdle();
-            this.machine.handleZoom(x, y, f);
+            this.behavior.handleZoom(x, y, f);
         }
     }
 
     handleMouseDown(x, y) {
         if (!this.forceAnimation) {
-            this.machine.transitionTo('panning');
-            this.machine.handleMouseDown(x, y);
+            this.behavior.goto('panning');
+            this.behavior.handleMouseDown(x, y);
         }
     }
 
@@ -555,7 +566,7 @@ class Animating extends BaseState {
         }
     }
 
-    enterState(params?: any) {
+    enterState(params?: AnimationParams) {
         if (params) {
             this.forceAnimation = params.forced || false;
             this.animation = params.interpolator;
