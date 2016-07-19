@@ -101,7 +101,7 @@ export interface StateMachine {
 export default class DiagramBehavior implements StateMachine, DiagramEvents {
     private current: DiagramState;
     private states: any;
-    private debug = false;
+    private debug = true;
 
     handleClick(x: number, y: number, double: boolean) {
         this.current.handleClick(x, y, double);
@@ -317,12 +317,10 @@ class Panning extends BaseState {
         top: false,
     }
 
-    protected anchor = {
-        x: 0,
-        y: 0,
-        dragX: 0,
-        dragY: 0,
-    }
+    protected anchorX = 0.0;
+    protected anchorY = 0.0;
+    protected pressedX = 0.0;
+    protected pressedY = 0.0;
 
     protected kinetics: Kinetics;
 
@@ -340,10 +338,10 @@ class Panning extends BaseState {
 
     leaveState() {
         this.kinetics.reset();
-        this.anchor.x = 0;
-        this.anchor.y = 0;
-        this.anchor.dragX = 0;
-        this.anchor.dragY = 0;
+        this.anchorX = 0.0;
+        this.anchorY = 0.0;
+        this.pressedX = 0.0;
+        this.pressedY = 0.0;
         this.violations.left = false;
         this.violations.right = false;
         this.violations.bottom = false;
@@ -351,17 +349,15 @@ class Panning extends BaseState {
     }
 
     handleMouseDown(x: number, y: number) {
-        let anchor = this.anchor;
-        anchor.dragX = x;
-        anchor.dragY = y;
-        anchor.x = this.camera.cameraX;
-        anchor.y = this.camera.cameraY;
+        this.pressedX = x;
+        this.pressedY = y;
+        this.anchorX = this.camera.cameraX;
+        this.anchorY = this.camera.cameraY;
     }
 
     handleMouseMove(x: number, y: number) {
-        const anchor = this.anchor;
-        const dragX = anchor.dragX - anchor.x - x;
-        const dragY = anchor.dragY - anchor.x - y;
+        const dragX = this.pressedX - this.anchorX - x;
+        const dragY = this.pressedY - this.anchorY - y;
 
         let limitX = dragX, limitY = dragY;
 
@@ -391,8 +387,8 @@ class Panning extends BaseState {
                 const ca = this.camera;
                 const wX = ca.worldX, wW = wX + ca.projWidth;
                 const wY = ca.worldY, wH = wY + ca.projHeight;
-                const dx = this.horizontalDisplacement(wX, wW);
-                const dy = this.verticalDisplacement(wY, wH);
+                const dx = this.calcDisplacement(true, wX, wW);
+                const dy = this.calcDisplacement(false, wY, wH);
                 this.machine.transitionTo('animating', {
                     forced: false, interpolator: Interpolator.centerOnWorld(
                         wX + ca.projWidth / 2 - dx,
@@ -430,22 +426,13 @@ class Panning extends BaseState {
         limits.right = level.left + level.width + widthSpan;
     }
 
-    /**
-     * Returns the horizontal displacement needed to return the camera to the center.
-     * Measured in world coordinates.
-     */
-    private horizontalDisplacement(wX: number, wW: number): number {
-        let violation = this.violations;
-        return (violation.left) ? wX - this.limits.left : (violation.right) ? wW - this.limits.right : 0;
-    }
-
-    /**
-     * Returns the vertical displacement needed to return the camera to the center.
-     * Measured in world coordinates.
-     */
-    private verticalDisplacement(wY: number, wH: number): number {
-        let violation = this.violations;
-        return (violation.top) ? wY - this.limits.top : (violation.bottom) ? wH - this.limits.bottom : 0;
+    private calcDisplacement(horizontal: boolean, min : number, max : number) {
+        let violation = this.violations, limit = this.limits;
+        let lower = horizontal ? violation.left : violation.top;
+        let upper = horizontal ? violation.top : violation.bottom;
+        let left = horizontal ? limit.left : limit.top;
+        let right = horizontal ? limit.right : limit.bottom;
+        return lower ? min - left : upper ? max - right: 0;
     }
 
     /**
@@ -453,7 +440,7 @@ class Panning extends BaseState {
      */
     private isBanding(): boolean {
         let v = this.violations;
-        return (this.diagram.doBanding && (v.left || v.right || v.bottom || v.top));
+        return (this.diagram.rubberBanding && (v.left || v.right || v.bottom || v.top));
     }
 
     /**
@@ -494,7 +481,7 @@ class Panning extends BaseState {
         const wid = horizontal ? cam.projWidth : cam.projHeight;
         const lower = horizontal ? limit.left : limit.top;
         const higher = horizontal ? limit.right : limit.bottom;
-        const band = this.diagram.doBanding;
+        const band = this.diagram.rubberBanding;
         const scale = cam.scale, max = min + wid;
 
         if (min <= lower) {
