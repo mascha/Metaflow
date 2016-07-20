@@ -1,5 +1,6 @@
 @import "../../../../style/mixins";
 @import "../../../../style/theme";
+@import "../../../../style/variables";
 
 $presenter-body: rgba(#efefef, 0.8);
 
@@ -35,8 +36,8 @@ $presenter-body: rgba(#efefef, 0.8);
 }
 
 .presenter {
-  right: 32px;
-  bottom: 32px;
+  right: $diagram-control-offset;
+  bottom: $diagram-control-offset;
   position: absolute;
   opacity: 0;
   transition: opacity 500ms linear;
@@ -74,8 +75,8 @@ $presenter-body: rgba(#efefef, 0.8);
 
 .main-menu {
   position: absolute;
-  left: 32px;
-  top: 24px;
+  left: $diagram-control-offset;
+  top: $diagram-control-offset;
   @include icon(before, '\f35c') {
     color: $icon-color;
     font-size: 24px;

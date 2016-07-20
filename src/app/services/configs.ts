@@ -6,16 +6,20 @@ import {Injectable} from "@angular/core";
  * @since 1.0.0
  */
 export class WorkspaceConfig {
-    slimLayout : boolean = false;
-    fullscreen : boolean = false;
+    slimLayout : boolean
+    fullscreen : boolean
 
     setDefaults() {
         this.slimLayout = false;
-        this.fullscreen = false;
+        this.fullscreen = true;
     }
     
     showFullscreen() {
         this.fullscreen = true;
+    }
+
+    constructor() {
+        this.setDefaults();
     }
 }
 
@@ -28,15 +32,15 @@ export class WorkspaceConfig {
 @Injectable()    
 export default class ConfigService {
 
-    private _name = "Metaflow";
-    private _workspace : WorkspaceConfig;
+    private name = "Metaflow";
+    private workspace : WorkspaceConfig;
 
     getName() {
-        return this._name;
+        return this.name;
     }
     
     getWorkspaceConfig(): WorkspaceConfig {
-        this._workspace = this._workspace || new WorkspaceConfig;
-        return this._workspace;
+        this.workspace = this.workspace || new WorkspaceConfig;
+        return this.workspace;
     }
 }

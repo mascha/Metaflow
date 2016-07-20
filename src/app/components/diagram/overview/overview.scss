@@ -1,7 +1,9 @@
+@import "../../../../style/variables";
+
 :host {
   position: absolute;
-  left: 32px;
-  bottom: 32px;
+  left: $diagram-control-offset;
+  bottom: $diagram-control-offset;
   width: 128px;
   height: 128px;
   overflow: hidden;
