@@ -31,6 +31,25 @@ export default class ModelService {
 
     private random = seed(123456);
 
+    private names = [
+        'Population',
+        'Market Size',
+        'Price',
+        'Stock',
+        'Work in Progress',
+        'Deliverables',
+        'Workforce',
+        'Customers',
+        'Prospects',
+        'Market Growth',
+        'Ramp Up',
+        'Projects',
+        'Delayed Shippings',
+        'Processed',
+        'Inventory',
+        'Unfinished Parts'
+    ]
+
     getDefaultModel() {
         this.empty = this.empty || new ViewGroup('EMPTY', 2000, 2000, 2000, 2000, 1);
         return this.empty;
@@ -73,7 +92,8 @@ export default class ModelService {
     }
 
     private randomName() {
-        return '#' + (this.random().toString(36) + '00000000000000000').slice(2, 8+2);
+        let n = Math.floor(this.random() * this.names.length);
+        return this.names[n < 0 ? 0 : n]; 
     }
 
     private createDebugModel(): ViewGroup {
@@ -83,44 +103,7 @@ export default class ModelService {
         let root: ViewGroup = null;
         while (i--) {
             let group = new ViewGroup(`Level #${MAX - i}`, 2000, 2000, 2000, 2000, 0.1);
-            let j = 120;
-
-            group.addContent(new ViewItem(
-                '100', 100, 100, 100, 100
-            ));
-            
-            while (j) {
-                let rnd = this.random();
-                let item;
-                if (rnd < .3333) {
-                    item = this.createStock();
-                } else if (rnd < .6666) {
-                    item = this.createVariable();
-                } else {
-                    item = this.createModule();
-                }
-                group.addContent(item);
-                j--;
-            }
-            if (o) {
-                o.addContent(group);
-            } else {
-                root = group;
-                // root.addContent(this.createDebugModelSecondary(6000, 8000));
-                // root.addContent(this.createDebugModelSecondary(14000, 13000));
-            }
-            o = group;
-        }
-
-        return root;
-    }
-
-    private createDebugModelSecondary(x, y): ViewGroup {
-        let i = 3;
-        let o : ViewGroup = null;
-        let root: ViewGroup = null;
-        while (i--) {
-            let group = new ViewGroup(`Level #${40 - i}`, x, y, 2000, 2000, 0.1);
+        
             let j = 120;
             while (j) {
                 let rnd = this.random();

@@ -39,10 +39,16 @@ export class PixiLayer implements PlatformLayer {
         this.cachedGroups = [];
         let contents = level.contents;
         let length = contents.length;
-        let style = { fill: 'darkgray' }
+        let style : PIXI.TextStyle = { 
+            fill: 'darkgray',
+            dropShadow: true,
+            dropShadowColor: 'white',
+            dropShadowDistance: 1.5,
+            dropShadowAngle: 95,
+        }
         for (let i = 0; i < length; i++) {
             let item = contents[i];
-            let itemLabel = new PIXI.Text(item.label, style, 1);
+            let itemLabel = new PIXI.Text(item.label, style, 2);
             this.labels.addChild(itemLabel);
 
             if (!item.isLeaf()) {
@@ -184,7 +190,12 @@ export class PixiCamera extends Camera {
         let s = 1 / zoom;
         s = s <= 0.5 ? 0.5 : (s >= 2) ? 2 : s;
         for (let i = 0; i < len; i++) {
-            lbs[i].scale.set(s * .35, s * .35);
+            let label = lbs[i] as PIXI.Text;
+            if (label.text === 'Level #2') {
+                label.scale.set(s * .9, s * .9);
+            } else {
+                label.scale.set(s * .35, s * .35);
+            }
         }
     }
 
@@ -246,6 +257,10 @@ export class PixiRenderer implements ViewModelRenderer<any, any> {
 
         root.addChild(shape);
         root.addChild(content);
+
+        if (!topLevel && !oblique) {
+            root.cacheAsBitmap = true;
+        }
 
         group.visual = root;
     }

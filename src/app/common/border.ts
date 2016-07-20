@@ -71,7 +71,7 @@ export default class Border implements CameraObserver {
      * Draw the interactive border region.
      */
     private drawBorder(alpha: number) {
-        if (alpha == 0) { return; }
+        if (alpha <= 0) { return; }
         const brush = this.brush;
         const w = this.camera.visualWidth;
         const h = this.camera.visualHeight;
