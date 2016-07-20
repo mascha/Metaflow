@@ -62,16 +62,16 @@ export default class Border implements CameraObserver {
     private draw() {
         if (this.active && this.proxies) {
             this.clearProxies();
-            this.drawBorder(.1);
+            this.drawBorder(0);
             this.drawProxies();
         }
     }
-
 
     /**
      * Draw the interactive border region.
      */
     private drawBorder(alpha: number) {
+        if (alpha == 0) { return; }
         const brush = this.brush;
         const w = this.camera.visualWidth;
         const h = this.camera.visualHeight;
@@ -105,7 +105,7 @@ export default class Border implements CameraObserver {
         const a = this.halfW - this.middle;
         const b = this.halfH - this.middle;
         const c = this.brush;
-
+        
         c.fillStyle = 'cornflowerblue';
         c.globalAlpha = 1.0;
 
@@ -125,7 +125,7 @@ export default class Border implements CameraObserver {
             x -= cenX;
             y -= cenY;
 
-            if (x*x + y*y > 1000000) {
+            if (x * x + y * y > 1000000) {
                 continue;
             }
 
@@ -135,18 +135,18 @@ export default class Border implements CameraObserver {
             let pX = 0, pY = 0;
             if (Math.abs(A) <= Math.abs(B)) {
                 if (x < 0) {
-                    pY = -A/x;
+                    pY = -A / x;
                     pX = -a;
                 } else if (x > 0) {
-                    pY = A/x;
+                    pY = A / x;
                     pX = a;
                 }
             } else {
                 if (y < 0) {
-                    pX = -B/y;
+                    pX = -B / y;
                     pY = -b;
                 } else if (y > 0) {
-                    pX = B/y;
+                    pX = B / y;
                     pY = b;
                 }
             }

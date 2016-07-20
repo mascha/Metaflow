@@ -163,6 +163,7 @@ export class PixiCamera extends Camera {
     private worldScale = this.world.scale;
     private worldPosition = this.world.position;
     private overlayPosition = this.overlay.position;
+    private overlayScale = this.overlay.scale;
 
     protected translateWorldTo(tX: number, tY: number) {
         this.worldPosition.set(tX, tY);
@@ -171,10 +172,11 @@ export class PixiCamera extends Camera {
 
     protected scaleWorldTo(zoom: number, last: number) {
         this.worldScale.set(zoom, zoom);
-        this.overlay.scale.set(zoom, zoom);
+        this.overlayScale.set(zoom, zoom);
 
         /**
-         * TODO Iterate over visible children only, 
+         * TODO Iterate over visible children only
+         * TODO min max label scales
          * TODO outsource to thread
          */
         let lbs = this.overlay.children;
