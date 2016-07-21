@@ -178,6 +178,11 @@ module.exports = function makeWebpackConfig() {
       {
         include: path.resolve(__dirname, 'node_modules/pixi.js'),
         loader: 'transform/cacheable?browserify-versionify'
+      },
+      { 
+        test: /\.(glsl|frag|vert)$/, 
+        loader: 'transform/glslify', 
+        include: path.resolve(__dirname, 'node_modules/pixi.js'), 
       }
     ],
     
