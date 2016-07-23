@@ -17,7 +17,7 @@ $presenter-body: rgba(#efefef, 0.8);
   line-height: 14px;
   margin: 0;
   vertical-align: middle;
-
+  transition: color 2s ease-out;
   padding: 6px 5px;
   display: inline-block;
   cursor: pointer;
@@ -27,6 +27,7 @@ $presenter-body: rgba(#efefef, 0.8);
   }
 
   &:before {
+    transition: color 400ms ease-out;
     color: $icon-color;
   }
 
@@ -77,6 +78,7 @@ $presenter-body: rgba(#efefef, 0.8);
   position: absolute;
   left: $diagram-control-offset;
   top: $diagram-control-offset;
+
   @include icon(before, '\f35c') {
     color: $icon-color;
     font-size: 24px;

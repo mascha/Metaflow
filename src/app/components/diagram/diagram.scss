@@ -24,8 +24,9 @@
   background-color: $grid-fill;
 }
 
-.border {
-
+.overlay {
+  z-index: 100;
+  background-color: lighten($navigation-fill, $amount: 6);
 }
 
 .controls {

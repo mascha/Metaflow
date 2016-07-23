@@ -10,6 +10,7 @@ import Breadcrumbs from "./breadcrumbs/breadcrumbs";
 import {PlatformLayer} from "../../common/platform";
 import Overview from "./overview/overview";
 import Presenter from "./controls/presenter";
+import Loader from '../loader/loader';
 import {Observable} from "rxjs/Rx";
 import {GridLayer, BorderLayer, NodeLayer} from './layers';
 
@@ -25,11 +26,13 @@ import {GridLayer, BorderLayer, NodeLayer} from './layers';
     styles: [require('./diagram.scss')],
     directives: [
         GridLayer, NodeLayer, BorderLayer,
-        Breadcrumbs, Presenter, Overview
+        Breadcrumbs, Presenter, Overview,
+        Loader
     ]
 })
 export default class Diagram {
 
+    loading = false;
     animatedZoom = false;
     animatedNavigation = true;
     frames = 60;

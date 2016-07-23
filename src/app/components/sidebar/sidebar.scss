@@ -81,33 +81,3 @@
   width: 100%;
   background-color: white;
 }
-
-.spinner {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-
-  div {
-    width: 18px;
-    height: 18px;
-    background-color: $navigation-fill;
-
-    border-radius: 100%;
-    display: inline-block;
-    animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-  }
-
-  .bounce2 {
-    animation-delay: -0.16s;
-  }
-
-  .bounce1 {
-    animation-delay: -0.32s;
-  }
-
-  @keyframes sk-bouncedelay {
-    0%, 80%, 100% { transform: scale(0); }
-    40% { transform: scale(1.0); }
-  }
-}

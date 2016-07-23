@@ -146,7 +146,7 @@ export class PixiLayer implements PlatformLayer {
         this.camera = new PixiCamera(this.world, this.overlay);
         this.mapper = new PixiRenderer();
 
-        this.renderer = new PIXI.WebGLRenderer(500, 500, {
+        this.renderer = new PIXI.CanvasRenderer(500, 500, {
             antialias: true,
             transparent: true,
             resolution: 1.0,
@@ -259,7 +259,7 @@ export class PixiRenderer implements ViewModelRenderer<any, any> {
         root.addChild(content);
 
         if (!topLevel && !oblique) {
-            root.cacheAsBitmap = true;
+            // root.cacheAsBitmap = true;
         }
 
         group.visual = root;
