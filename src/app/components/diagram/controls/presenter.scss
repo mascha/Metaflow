@@ -2,7 +2,9 @@
 @import "../../../../style/theme";
 @import "../../../../style/variables";
 
-$presenter-body: rgba(#efefef, 0.8);
+$presenter-body:#efefef;
+$presenter-shadow: 0 2px 4px rgba(0,0,0,0.2),0 -1px 0px rgba(0,0,0,0.02);
+$presenter-radius: 4px;
 
 :host {
   position: absolute;
@@ -21,19 +23,14 @@ $presenter-body: rgba(#efefef, 0.8);
   padding: 6px 5px;
   display: inline-block;
   cursor: pointer;
-
-  &.vertical {
-    display: block;
-  }
-
+  
   &:before {
     transition: color 400ms ease-out;
     color: $icon-color;
   }
 
-  &:hover:before {
-    color: $icon-hover;
-  }
+  &.vertical { display: block; }
+  &:hover:before { color: $icon-hover; }
 }
 
 .presenter {
@@ -42,15 +39,14 @@ $presenter-body: rgba(#efefef, 0.8);
   position: absolute;
   opacity: 0;
   transition: opacity 500ms linear;
-  border-radius: 4px;
+  border-radius: $presenter-radius;
   background-color: $presenter-body;
   direction: ltr;
   display: block;
   font-size: 13px;
   white-space: nowrap;
   z-index: 11;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2),0 -1px 0px rgba(0,0,0,0.02);
-
+  box-shadow: $presenter-shadow;
   padding: 0 5px;
 
   &.vertical {
@@ -79,15 +75,25 @@ $presenter-body: rgba(#efefef, 0.8);
   position: absolute;
   left: $diagram-control-offset;
   top: $diagram-control-offset;
+  background-color: $presenter-body;
+  box-shadow: $presenter-shadow;
+  border-radius: $presenter-radius;
+  width: 348px;
+  height: 36px;
+
+  div {
+    transform: translateY(-50%);
+  }
 
   .home {
     position: absolute;
     left: 0;
-    top: 0;
+    top: 50%;
 
     @include icon(before, '\f35c') {
       color: $icon-color;
       font-size: 24px;
+      padding: 6px 6px;
     }
 
     &:hover {
@@ -95,4 +101,9 @@ $presenter-body: rgba(#efefef, 0.8);
     }
   }
   
+  .search-box {
+    position: absolute;
+    right: 54px; 
+    top: 50%;
+  }
 }
