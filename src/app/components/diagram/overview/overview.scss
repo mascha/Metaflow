@@ -1,5 +1,8 @@
 @import "../../../../style/variables";
 
+$overview-fill:  #efefef;  // rgba(#efefef, 0.8) !default;
+$diagram-control-shadow: 0 2px 4px rgba(0,0,0,0.2),0 -1px 0px rgba(0,0,0,0.02) !default;
+
 :host {
   position: absolute;
   left: $diagram-control-offset;
@@ -7,8 +10,7 @@
   width: 128px;
   height: 128px;
   overflow: hidden;
-
-  // border: solid 1px darkgrey;
   border-radius: 4px;
-  background-color: rgba(#efefef, 0.8);
+  background-color: $overview-fill;
+  box-shadow: $diagram-control-shadow;
 }

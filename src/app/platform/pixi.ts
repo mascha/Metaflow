@@ -40,11 +40,10 @@ export class PixiLayer implements PlatformLayer {
         let contents = level.contents;
         let length = contents.length;
         let style : PIXI.TextStyle = { 
-            fill: 'darkgray',
-            dropShadow: true,
-            dropShadowColor: 'white',
-            dropShadowDistance: 1.5,
-            dropShadowAngle: 95,
+            fill: 0x3d3834,
+            stroke: 'white',
+            strokeThickness: 2,
+            lineJoin: 'round'
         }
         for (let i = 0; i < length; i++) {
             let item = contents[i];
@@ -191,11 +190,11 @@ export class PixiCamera extends Camera {
         s = s <= 0.5 ? 0.5 : (s >= 2) ? 2 : s;
         for (let i = 0; i < len; i++) {
             let label = lbs[i] as PIXI.Text;
-            if (label.text === 'Level #2') {
-                label.scale.set(s * .9, s * .9);
-            } else {
-                label.scale.set(s * .35, s * .35);
-            }
+            // if (label.text === 'Level #2') {
+               // label.scale.set(s * .9, s * .9);
+            // } else {
+                label.scale.set(s * .5, s * .5);
+            // }
         }
     }
 
@@ -221,8 +220,7 @@ export class PixiRenderer implements ViewModelRenderer<any, any> {
                 .drawRoundedRect(item.left, item.top, item.width, item.height, 3)
                 .endFill() :
                 new PIXI.Graphics()
-                .lineStyle(4, 0x34aabbf, 1)
-                .beginFill(0xff00FF)
+                .beginFill(0x3cb371)
                 .drawCircle(item.left, item.top, item.width)
                 .endFill()               
     }

@@ -266,5 +266,6 @@ export class CanvasSelection extends Observable<Array<ViewVertex>> {
 }
 
 function minimax(min: number, value: number, max: number) {
+    if (max < min) { let v = min; min = max; max = min; }
     return (value < min) ? min : (value > max) ? max : value;
 }

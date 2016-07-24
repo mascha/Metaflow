@@ -1,6 +1,14 @@
 import {Injectable} from "@angular/core";
 
 /**
+ * 
+ */
+export class DiagramConfig {
+    textResolution: number = 1
+    labelBackdrop: number = 0xf
+}
+
+/**
  * Configuration of the editor workspace.
  * @author Martin Schade
  * @since 1.0.0
