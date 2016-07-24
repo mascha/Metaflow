@@ -20,15 +20,15 @@ export default class Overview {
         let i = 25;
         while (i--) {
             brush.fillRect(
-                2 + Math.random() * 124,
-                2 + Math.random() * 124,
+                Math.round(2 + Math.random() * 124) + .5,
+                Math.round(2 + Math.random() * 124) + .5,
                 2, 2
             )
         }
 
         brush.fillStyle = 'rgba(0,0,0,0.1)';
         brush.strokeStyle = 'rgba(0, 0, 0, 0.2)';
-        brush.fillRect(42, 25, 64, 28);
-        brush.strokeRect(42, 25, 64, 28);
+        brush.fillRect(42.5, 25.5, 64.5, 28.5);
+        brush.strokeRect(42.5, 25.5, 64.5, 28.5);
     }
 }
