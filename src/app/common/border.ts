@@ -87,7 +87,6 @@ export default class Border implements CameraObserver {
     /**
      * Draw all proxy items.
      * TODO draw labels
-     *
      */
     private drawProxies() {
         const cam = this.camera;
@@ -105,8 +104,9 @@ export default class Border implements CameraObserver {
         const a = this.halfW - this.middle;
         const b = this.halfH - this.middle;
         const c = this.brush;
-        
-        c.fillStyle = 'cornflowerblue';
+        const off = this.img;   
+
+        c.fillStyle = 'darkgrey';     
         c.globalAlpha = 1.0;
 
         let proxies = this.proxies;
@@ -153,7 +153,35 @@ export default class Border implements CameraObserver {
 
             let drawX = Math.floor(this.halfW + pX - 8.0);
             let drawY = Math.floor(this.halfH + pY - 8.0);
-            c.fillRect(drawX, drawY, 16, 16);
+
+            if (proxy.isLeaf()) {
+                c.fillStyle = 'goldenrod';
+                c.fillRect(drawX, drawY, 16, 16);
+                // c.drawImage(off, 0, 0, 16, 16, x - 8, y - 8, 16, 16)
+            } else {
+                c.fillStyle = 'cornflowerblue';
+                c.fillRect(drawX, drawY, 16, 16);
+            }
+        }
+    }
+
+    private img: HTMLCanvasElement;
+
+    private cacheShape() {
+        let n = 1;
+        let r = 8;
+        let d = 16;
+        this.img = document.createElement('canvas');
+        this.img.width = n * d;
+        this.img.height = d;
+        var ctx = this.img.getContext('2d');
+
+        for (var i = 0; i < n; ++i) {
+            ctx.fillStyle = 'mediumseagreen';
+            ctx.beginPath();
+            ctx.arc(i * d + r, r, r, 0, 2 * Math.PI);
+            ctx.closePath();
+            ctx.fill();
         }
     }
 
@@ -171,9 +199,9 @@ export default class Border implements CameraObserver {
     private updateCache() {
         this.width  = Math.ceil(this.camera.visualWidth);
         this.height = Math.ceil(this.camera.visualHeight);
-        this.halfW  = this.width / 2.0;
-        this.halfH  = this.height / 2.0;
-        this.middle = this.border / 2.0;
+        this.halfW  = this.width * .5;
+        this.halfH  = this.height * .5;
+        this.middle = this.border * .5;
         this.maxW   = this.width - this.middle;
         this.maxH   = this.height - this.middle;
         this.region.width = this.width;
@@ -184,5 +212,6 @@ export default class Border implements CameraObserver {
         this.region = region;
         this.brush = region.getContext('2d');
         this.camera = camera;
+        this.cacheShape();
     }
 }
