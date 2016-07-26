@@ -5,18 +5,23 @@
     font-size: 14px;
     line-height: 1.5;
     color: #333;
-    overflow-y: scroll;
     background: #fff;
+    overflow-y: scroll;
+
+    a {
+        text-decoration: none;
+    }
 }
 
 .timeline {
+    position: relative;
     width: 948px;
+    height: 100%;
     margin-left: auto;
     margin-right: auto;
     box-sizing: border-box;
 
     .header {
-
         .title {
             font-size: 32px;
             margin-right: 150px;
@@ -30,7 +35,6 @@
                 letter-spacing: -1px;
             }
         }
-
         .meta {
             padding-bottom: 20px;
             margin-top: 9px;
@@ -41,7 +45,6 @@
             margin-bottom: 15px;
         }
     }
-
     .sidebar {
         position: static;
         top: 0px;
@@ -50,7 +53,6 @@
         background-color: #ddd;
         border-radius: 3px;
     }
-
     .timestream {
         position: relative;
         float: left;
@@ -67,7 +69,6 @@
             content: "";
             background-color: #f3f3f3;
         }
-
         .wrapper {
             position: relative;
             box-sizing: border-box;
@@ -75,23 +76,44 @@
             margin-bottom: 15px;
             border-top: 2px solid #fff;
             border-bottom: 2px solid #fff;
+            .avatar {
+                float: left;
+                margin-left: -64px;
+                border-radius: 4px;
+                width: 48px;
+                height: 48px;
+                background-color: #ddd;
+            }
         }
-
         .comment {
             background-color: #fff;
             border: 1px solid #ddd;
             border-radius: 4px;
-
+            
+            &::before {
+                position: absolute;
+                top: 11px;
+                right: 100%;
+                left: -16px;
+                display: block;
+                width: 0;
+                height: 0;
+                pointer-events: none;
+                content: " ";
+                border-color: transparent;
+                border-style: solid solid outset;
+            }
+            
             &:first-child {
                 margin-top: 0;
             }
-
+            
             .content {
                 padding: 15px;
                 overflow: visible;
                 font-size: 14px;
             }
-
+            
             .header {
                 padding-right: 15px;
                 padding-left: 15px;
@@ -100,7 +122,7 @@
                 border-bottom: 1px solid #eee;
                 border-top-left-radius: 3px;
                 border-top-right-radius: 3px;
-
+                
                 .title {
                     font-size: 14px;
                     max-width: 78%;
@@ -109,29 +131,30 @@
                 }
             }
         }
+        
         .item {
             position: relative;
             box-sizing: border-box;
             padding-left: 25px;
             margin: 15px 0 15px 79px;
-
-            .header {
+            
+            .item-header {
                 min-height: 30px;
                 padding-top: 5px;
                 line-height: 20px;
                 color: #767676;
                 white-space: break-word;
-
+                
                 &:last-child {
                     padding-bottom: 0;
                 }
-                
+
                 .item-icon {
                     float: left;
                     width: 32px;
                     height: 32px;
                     margin-top: -7px;
-                    margin-left: -40px;
+                    margin-left: -42px;
                     line-height: 28px;
                     color: #767676;
                     text-align: center;

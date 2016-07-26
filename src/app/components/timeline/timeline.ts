@@ -7,10 +7,11 @@ import { Component } from '@angular/core';
   template: require('./timeline.html')
 })
 export default class Timeline {
-    title = "Timeline Title";
+    title = "Market adption rate slows down?";
     titleExtra = "#94";
 
     comments = [
-        {title: "TITLE"}
+        {title: "TITLE"},
+        {title: "TITLE"},
     ]
 }

@@ -15,10 +15,13 @@
     </section>
     <section class="timestream">
         <div *ngFor="let comment of comments" class="wrapper">
+            <div class="avatar"></div>
             <div class="comment">
                 <div class="header">
                     <div class="title">
                         <strong>Author</strong>
+                        did this and that on 
+                        <span class="timestamp">28. July 2016</span>
                     </div>
                 </div>
                 <div class="content">
@@ -39,8 +42,12 @@
             </div>
         </div>
         <div class="item">
-            <div class="item">
-                <div class="icon"></div>
+            <div class="item-header">
+                <div class="item-icon"></div>
+                <a href="ä" class="author">Martin Schade</a>
+                closed this on
+                <a href="#event-530508070" class="timestamp">
+                <relative-time class="timestamp" datetime="2016-01-28T22:50:19Z" title="28. Jan. 2016, 23:50 MEZ">on 28 Jan</relative-time></a>
             </div>
         </div>
     </section>
