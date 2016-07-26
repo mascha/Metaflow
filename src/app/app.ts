@@ -5,6 +5,7 @@ import Workspace from "./components/workspace/workspace";
 import Navigation from "./components/navigation/navigation";
 import Toolbar from "./components/toolbar/toolbar";
 import Diagram from "./components/diagram/diagram";
+import Timeline from "./components/timeline/timeline";
 
 require('../style/globals.scss');
 
@@ -15,16 +16,19 @@ require('../style/globals.scss');
  */
 @Component({
   selector: 'app',
-  directives: [Workspace, Navigation, Toolbar, Diagram],
+  directives: [Workspace, Navigation, Toolbar, Diagram, Timeline],
   styles: [require('./app.scss')],
   template: require('./app.html')
 })
 export class App {
 
  private workspace: WorkspaceConfig;
+
+ ngAfterViewInit() {
+      document.title = this.config.getName();
+ }
   
-constructor(config: ConfigService) {
+ constructor(private config: ConfigService) {
    this.workspace = config.getWorkspaceConfig();
-   document.title = config.getName();
   }
 }

@@ -3,8 +3,14 @@ import { Component } from '@angular/core';
 @Component({
     moduleId: module.id,
     selector: 'timeline',
-    templateUrl: 'timeline.html'
+  styles: [require('./timeline.scss')],
+  template: require('./timeline.html')
 })
-export class Timeline {
-    
+export default class Timeline {
+    title = "Timeline Title";
+    titleExtra = "#94";
+
+    comments = [
+        {title: "TITLE"}
+    ]
 }

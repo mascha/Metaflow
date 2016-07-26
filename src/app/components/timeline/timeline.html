@@ -1,0 +1,47 @@
+<section class="timeline">
+    <section class="header">
+        <h1 class="title">
+            {{title}}
+            <span class="extra">
+                {{titleExtra}}
+            </span>
+        </h1>
+        <div class="meta">
+            META CONTENT
+        </div>
+    </section>
+    <section class="sidebar">
+
+    </section>
+    <section class="timestream">
+        <div *ngFor="let comment of comments" class="wrapper">
+            <div class="comment">
+                <div class="header">
+                    <div class="title">
+                        <strong>Author</strong>
+                    </div>
+                </div>
+                <div class="content">
+                    <p>
+                        The team behind dezineforce include professors Simon Cox, director of the Microsoft Institute for High Performance Computing
+                        at the University of Southampton, and Andy Keane, director of the Rolls-Royce University Technology
+                        Centre for Computational Engineering at the University of Southampton. Customers include global design
+                        and engineering firm Arup, along with small design consultancy businesses and specialist manufacturers.
+                    </p>
+                    <p>
+                        The company has shown what SaaS can do for engineering at several events this year. It recently demonstrated a wind farm
+                        optimisation simulation with a company called Intelligent Fluid Solutions, which used the dezineforce
+                        service to simulate the optimal position for wind turbines on a wind farm. The service allowed Intelligent
+                        Fluid Solutions to run the simulation as a cloud service, without the need to invest in a high-performance
+                        computing cluster.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="item">
+            <div class="item">
+                <div class="icon"></div>
+            </div>
+        </div>
+    </section>
+</section>
