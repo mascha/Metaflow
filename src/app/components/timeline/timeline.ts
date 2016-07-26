@@ -1,13 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
-    moduleId: module.id,
-    selector: 'timeline',
+  selector: 'timeline',
   styles: [require('./timeline.scss')],
   template: require('./timeline.html')
 })
 export default class Timeline {
-    title = "Market adption rate slows down?";
+    @Input() title = "Market adption rate slows down?";
     titleExtra = "#94";
 
     comments = [
