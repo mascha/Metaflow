@@ -1,6 +1,5 @@
 :host {
     width: 100%;
-    height: 100%;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 14px;
     line-height: 1.5;
@@ -29,12 +28,14 @@
             font-weight: normal;
             line-height: 1.1;
             word-wrap: break-word;
+
             .extra {
                 font-weight: 300;
                 color: #aaa;
                 letter-spacing: -1px;
             }
         }
+
         .meta {
             padding-bottom: 20px;
             margin-top: 9px;
@@ -45,6 +46,7 @@
             margin-bottom: 15px;
         }
     }
+
     .sidebar {
         position: static;
         top: 0px;
@@ -53,6 +55,7 @@
         background-color: #ddd;
         border-radius: 3px;
     }
+
     .timestream {
         position: relative;
         float: left;
@@ -69,6 +72,7 @@
             content: "";
             background-color: #f3f3f3;
         }
+
         .wrapper {
             position: relative;
             box-sizing: border-box;
@@ -76,6 +80,7 @@
             margin-bottom: 15px;
             border-top: 2px solid #fff;
             border-bottom: 2px solid #fff;
+            
             .avatar {
                 float: left;
                 margin-left: -64px;
@@ -85,24 +90,11 @@
                 background-color: #ddd;
             }
         }
+
         .comment {
             background-color: #fff;
             border: 1px solid #ddd;
             border-radius: 4px;
-            
-            &::before {
-                position: absolute;
-                top: 11px;
-                right: 100%;
-                left: -16px;
-                display: block;
-                width: 0;
-                height: 0;
-                pointer-events: none;
-                content: " ";
-                border-color: transparent;
-                border-style: solid solid outset;
-            }
             
             &:first-child {
                 margin-top: 0;
@@ -164,5 +156,11 @@
                 }
             }
         }
+    }
+
+    .timeline-stop {
+        width: 100%;
+        color: red;
+        height: 2px;
     }
 }
