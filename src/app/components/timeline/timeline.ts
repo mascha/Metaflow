@@ -7,6 +7,7 @@ import { Component, Input } from '@angular/core';
 })
 export default class Timeline {
     @Input() title = "Market adption rate slows down?";
+    
     titleExtra = "#94";
 
     comments = [
