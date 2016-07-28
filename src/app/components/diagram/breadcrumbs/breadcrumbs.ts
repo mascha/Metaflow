@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ViewGroup} from "../../../common/viewmodel/viewmodel";
+import {ViewGroup} from "../../../common/viewmodel";
 
 /**
  * A breadcrumbs breadcrumbs bar.

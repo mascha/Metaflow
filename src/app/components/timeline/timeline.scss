@@ -1,3 +1,8 @@
+@import "../../../style/theme";
+@import "../../../style/mixins";
+
+$item-icon-width: 32px;
+
 :host {
     width: 100%;
     height: 100%;
@@ -52,7 +57,6 @@
     .sidebar {
         position: static;
         top: 3px;
-        // left: 1241.5px;
         float: right;
         right: 0px;
         height: 600px;
@@ -150,8 +154,8 @@
 
                 .item-icon {
                     float: left;
-                    width: 32px;
-                    height: 32px;
+                    width: $item-icon-width;
+                    height: $item-icon-width;
                     margin-top: -7px;
                     margin-left: -42px;
                     line-height: 28px;
@@ -160,6 +164,18 @@
                     background-color: #f3f3f3;
                     border: 2px solid #fff;
                     border-radius: 50%;
+                    
+                    &.opened {
+                        @include icon(before, '\f40C') {
+                            line-height: $item-icon-width;
+                        }
+                    }
+                
+                    &.closed {
+                        @include icon(before, '\f0AD') {
+                            line-height: $item-icon-width;
+                        }
+                    }
                 }
             }
         }

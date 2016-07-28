@@ -1,5 +1,5 @@
 import {Camera} from '../../common/camera';
-import {ViewGroup} from '../../common/viewmodel/viewmodel';
+import {ViewGroup} from '../../common/viewmodel';
 import Diagram from './diagram';
 
 /**

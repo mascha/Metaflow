@@ -9,7 +9,7 @@ if (process.env.ENV === 'build') {
   // ENV_PROVIDERS.push(ELEMENT_PROBE_PROVIDERS);
 }
 
-import Application from './app/app';
+import Application from './app/application';
 import PlatformService from "./app/services/platforms";
 import ModelService from "./app/services/models";
 import PaletteRegistry from "./app/services/palettes";
@@ -25,9 +25,12 @@ const SERVICES = [
 ];
 
 document.addEventListener('DOMContentLoaded', function main() {
-  return bootstrap(App, [
+  return bootstrap(Application, [
       SERVICES,
     ...HTTP_PROVIDERS,
     ...ENV_PROVIDERS
-  ]).catch(err => console.error(err));
+  ]).catch(error => {
+      console.error('Could not start application!')
+      console.error(error)}
+    );
 });

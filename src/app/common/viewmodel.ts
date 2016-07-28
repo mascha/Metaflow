@@ -1,7 +1,9 @@
 import {NodeStyle} from "./styling";
 
 /**
- * Base viewmodel class. Supports decorations, styling positioning.
+ * Base viewmodel class. 
+ * 
+ * Supports decorations, interaction and positioning.
  * 
  * @author Martin Schade
  * @since 1.0.0
@@ -10,7 +12,13 @@ export abstract class ViewVertex {
     parent: ViewGroup;
     visual: any;
     
-    abstract isLeaf(): boolean;
+    isLeaf(): boolean {
+        return true;
+    }
+
+    isProxy(): boolean {
+        return false;
+    }
     
     constructor(public label: string, public left: number,
                 public top: number, public width: number,
@@ -25,21 +33,21 @@ export abstract class ViewVertex {
  */
 export class ViewItem extends ViewVertex {
     style: NodeStyle;
-    
-    isLeaf() {
-        return true;
-    }
 }
 
 /**
- * A proxy node represents an unresolved item. 
+ * A proxy node represents an unresolved item.
+ *  
+ * @author Martin Schade
+ * @since 1.0.0
  */
-export class Proxy extends ViewVertex {
+export class ViewProxy extends ViewVertex {
+
     request: string;
     level: number;
     path: string;
     
-    isLeaf() {
+    isProxy(): boolean {
         return true;
     }
 }
@@ -55,7 +63,7 @@ export class ViewGroup extends ViewVertex {
     contents: Array<ViewVertex>;
 
     /**
-     * 
+     * Add a vertex to the group's contents.
      * @param vertex
      */
     addContent(vertex: ViewVertex) {
@@ -88,6 +96,7 @@ export class ViewGroup extends ViewVertex {
     isLeaf() {
         return false;
     }
+    
     constructor(l: string, x: number, y: number, w: number, h: number, public scale: number) {
         super(l,x,y,w,h);
     }
