@@ -1,9 +1,9 @@
-<section class="vertical presenter" [class.active]="active == true">
+<section class="vertical presenter" [class.active]="showMapControls == true">
   <div class="vertical flat-button presenter-play"></div>
   <div class="vertical flat-button presenter-next"></div>
   <div class="vertical flat-button presenter-forward"></div>
 </section>
-<section class="omnibox" *ngIf="workspace.fullscreen == true">
+<section class="omnibox" *ngIf="workspace.fullscreen == true && showOmnibox == true">
   <div class="home"> </div>
   <div class="search-box"></div>
 </section>

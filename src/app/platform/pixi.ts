@@ -73,7 +73,7 @@ export class PixiLayer implements PlatformLayer {
                     mapper.renderGroup(itm, false, true);
                 }
             } else if (item.isLeaf()) {
-                itemLabel.pivot.set(0, 6);
+                itemLabel.pivot.set(12, 6);
                 itemLabel.position.set(
                     (item.left + item.width + 6) * level.scale,
                     (item.top + item.height / 4) * level.scale

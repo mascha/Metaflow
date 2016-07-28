@@ -4,6 +4,7 @@ import ConfigService from "../../../services/configs";
 
 /**
  * Diagramming overlay tools. 
+ * 
  * @author Martin Schade    
  * @since 1.0.0
  */
@@ -13,8 +14,12 @@ import ConfigService from "../../../services/configs";
     template: require('./presenter.html')
 })
 export default class Presenter {
-    active : boolean;
-    workspace : WorkspaceConfig;
+
+    showMapControls = true;
+    showOverview = true;
+    showOmnibox = true;
+
+    private workspace : WorkspaceConfig;
 
     constructor(config: ConfigService) {
         this.workspace = config.getWorkspaceConfig();
