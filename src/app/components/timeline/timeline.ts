@@ -1,5 +1,11 @@
 import { Component, Input } from '@angular/core';
 
+/**
+ * Timeline component.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
 @Component({
   selector: 'timeline',
   styles: [require('./timeline.scss')],
