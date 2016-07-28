@@ -88,6 +88,7 @@ export class ViewGroup extends ViewVertex {
             if (contents.length < 1) {
                 this.contents = undefined;
             }
+            this.emit(ModelChange.ADD_CHILDREN, vertex);
             return true;
         }
         
@@ -98,7 +99,30 @@ export class ViewGroup extends ViewVertex {
         return false;
     }
 
+    private emit(change: ModelChange) {
+        // console.log(change);
+    }
+
     constructor(l: string, x: number, y: number, w: number, h: number, public scale: number) {
         super(l,x,y,w,h);
     }
+}
+
+/**
+ * View model change types.
+ *
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+export const enum ModelChange {
+    POSITION = 0,
+    STYLING  = POSITION + 1,
+    CHILDREN = STYLING + 1,
+    ADD      = CHILDREN + 1,
+    REMOVE   = ADD + 1,
+    FILL     = REMOVE + 1,
+    STROKE   = FILL + 1,
+    SHAPE    = STROKE + 1,
+    LABEL    = SHAPE + 1,
+    ZOOM     = LABEL + 1,
 }

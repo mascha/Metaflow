@@ -76,6 +76,7 @@ export class LabelDefinition {
     lowerZoom: number;
     upperZoom: number;
     priority: number;
+    baseScale: number;
     defaultText: string;
 }
 
@@ -106,21 +107,4 @@ export const enum Horizontal {
  */
 export const enum PlacementFreedom {
     FREE, SLIDING, FIXED
-}
-
-/**
- * View model change types.
- *
- * @author Martin Schade
- * @since 1.0.0
- */
-export const enum ModelChange {
-    POSITION = 0,
-    STYLING  = 1,
-    CHILDREN = 2,
-    FILL     = 3,
-    STROKE   = 4,
-    SHAPE    = 5,
-    LABEL    = 6,
-    ZOOM     = 7,
 }
