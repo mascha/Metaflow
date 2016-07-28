@@ -28,15 +28,13 @@ export class Interpolator {
     }
 
     play() {
-        if (this.active) {
-            return;
-        }
+        if (this.active) return;
         this.active = true;
         this.start = Date.now();
         const self = this;
         const func = function() {
             if (self.active) {
-                let f = (Date.now()-self.start)/self.duration;
+                let f = (Date.now() - self.start) / self.duration;
                 f = (f > 1) ? 1 : (f < 0) ? 0 : f;
                 if (f < 1 && self.active) {
                     self.update(f);
@@ -98,7 +96,8 @@ export class Interpolator {
         if (dU < 1e-8) {
             const S = Math.log(eW/aW) / Math.SQRT2;
             return new Interpolator(f => {
-                const tW = aW * Math.exp(Math.SQRT2 * S * f);
+                const t = f * (2 - f);
+                const tW = aW * Math.exp(Math.SQRT2 * S * t);
                 const vW = camera.visualWidth / 2;
                 const vH = camera.visualHeight / 2;
                 const vZ = 2 * vW / tW;
@@ -120,7 +119,7 @@ export class Interpolator {
             const S = (r1 - r0) / z;
             const m = aW / (z * z);
             return new Interpolator(f => {
-                const s = f * S;
+                const s = f * (2 - f) * S;
                 const u = m * (Math.tanh(z * s + r0) * ch - sh);
                 const w = aW * ch / Math.cosh(z * s + r0);
                 const vW = camera.visualWidth / 2;
