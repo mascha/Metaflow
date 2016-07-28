@@ -79,7 +79,7 @@ class ReferenceManager {
 
     /*
      * TODO make this really fast!
-     *  - Check content
+     *  - Check content (groups, portals)
      *  - Acceleration structures, adaptive with item sizes
      *  - Only check visible objects of interest
      */

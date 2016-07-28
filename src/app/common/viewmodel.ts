@@ -60,6 +60,7 @@ export class ViewProxy extends ViewVertex {
  */
 export class ViewGroup extends ViewVertex {
 
+    isPortal: boolean = true;
     contents: Array<ViewVertex>;
 
     /**
@@ -96,7 +97,7 @@ export class ViewGroup extends ViewVertex {
     isLeaf() {
         return false;
     }
-    
+
     constructor(l: string, x: number, y: number, w: number, h: number, public scale: number) {
         super(l,x,y,w,h);
     }

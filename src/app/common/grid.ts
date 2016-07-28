@@ -1,7 +1,3 @@
-/*
- * Copyright (C) Martin Schade, 2015-2016. All rights reserved.
- */
-
 import {CameraObserver, Camera} from './camera';
 
 /**

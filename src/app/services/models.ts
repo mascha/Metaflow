@@ -1,4 +1,4 @@
-import {ViewGroup, ViewItem} from "../common/viewmodel/viewmodel";
+import {ViewGroup, ViewItem} from "../common/viewmodel";
 import {Injectable} from "@angular/core";
 
 const seed = function(s) {

@@ -21,6 +21,7 @@ export default class Breadcrumbs {
             this.segments.push(group);
             group = group.parent;
         }
+        
         this.segments.reverse();
     }
 
