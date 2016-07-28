@@ -15,12 +15,12 @@ require('../style/globals.scss');
  * @since 1.0.0
  */
 @Component({
-  selector: 'app',
+  selector: 'application',
   directives: [Workspace, Navigation, Toolbar, Diagram, Timeline],
-  styles: [require('./app.scss')],
-  template: require('./app.html')
+  styles: [require('./application.scss')],
+  template: require('./application.html')
 })
-export class App {
+export default class Application {
 
  private workspace: WorkspaceConfig;
 

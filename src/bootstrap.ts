@@ -9,7 +9,7 @@ if (process.env.ENV === 'build') {
   // ENV_PROVIDERS.push(ELEMENT_PROBE_PROVIDERS);
 }
 
-import {App} from './app/app';
+import Application from './app/app';
 import PlatformService from "./app/services/platforms";
 import ModelService from "./app/services/models";
 import PaletteRegistry from "./app/services/palettes";
