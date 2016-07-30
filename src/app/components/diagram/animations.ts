@@ -56,7 +56,7 @@ export class Interpolator {
         const distX = dist * Math.cos(params.angle);
         const distY = dist * Math.sin(params.angle);
         return new Interpolator(f => {
-            const t = 1 - Math.exp(-rate * f);
+            const t = f * (2 - f); // 1 - Math.exp(-rate * f);
             const posX = cam.cameraX + t * distX;
             const posY = cam.cameraY + t * distY;
             cam.moveTo(-posX, -posY);
