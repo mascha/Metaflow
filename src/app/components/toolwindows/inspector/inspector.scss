@@ -64,9 +64,5 @@ $inspector-content-fill: white;
     width: 100%;
     text-align: center;
     cursor: default;
-
-    @include icon(before, '\f0AD') {
-      
-    }
   }
 }

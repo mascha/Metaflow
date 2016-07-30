@@ -39,7 +39,7 @@ export default class Diagram {
     pathFactor = 1000;
     rubberBanding = false;
     respectLimits = false;
-    useKinetics = false;
+    useKinetics = true;
 
     @ViewChild(BorderLayer) private _borderLayer: BorderLayer;
     @ViewChild(GridLayer) private _gridLayer: GridLayer;

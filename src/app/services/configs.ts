@@ -19,7 +19,7 @@ export class WorkspaceConfig {
 
     setDefaults() {
         this.slimLayout = false;
-        this.fullscreen = true;
+        this.fullscreen = false;
     }
     
     showFullscreen() {

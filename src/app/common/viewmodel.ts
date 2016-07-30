@@ -88,7 +88,7 @@ export class ViewGroup extends ViewVertex {
             if (contents.length < 1) {
                 this.contents = undefined;
             }
-            this.emit(ModelChange.ADD_CHILDREN, vertex);
+            this.emit(ModelChange.ADD, vertex);
             return true;
         }
         
@@ -99,7 +99,7 @@ export class ViewGroup extends ViewVertex {
         return false;
     }
 
-    private emit(change: ModelChange) {
+    private emit(change: ModelChange, item) {
         // console.log(change);
     }
 

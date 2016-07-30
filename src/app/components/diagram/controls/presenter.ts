@@ -23,6 +23,5 @@ export default class Presenter {
 
     constructor(config: ConfigService) {
         this.workspace = config.getWorkspaceConfig();
-        this.active = true;
     }
 }

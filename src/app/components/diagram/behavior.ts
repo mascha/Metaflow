@@ -66,7 +66,7 @@ export interface DiagramState extends DiagramEvents {
      * @param params Optional initialization parameters.
      */
     enterState(params?: any)
-
+ 
     /**
      * Exit the current state and perform cleanup.
      */
@@ -88,7 +88,7 @@ export interface StateMachine {
     /**
      * Reenter the current state with different or no parameters.
      */
-    reenterState(params?: any)
+    reenter(params?: any)
 }
 
 
@@ -156,7 +156,7 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
         }
     }
 
-    reenterState(params?: any) {
+    reenter(params?: any) {
         this.current.leaveState();
         this.current.enterState(params);
     }
