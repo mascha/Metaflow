@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function main() {
     ...HTTP_PROVIDERS,
     ...ENV_PROVIDERS
   ]).catch(error => {
-      console.error('Could not start application!')
-      console.error(error)}
-    );
+      console.error('Could not start application!');
+      console.error(error);
+    });
 });

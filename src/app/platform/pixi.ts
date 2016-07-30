@@ -45,9 +45,10 @@ export class PixiLayer implements PlatformLayer {
             strokeThickness: 2,
             lineJoin: 'round'
         }
+
         for (let i = 0; i < length; i++) {
             let item = contents[i];
-            let itemLabel = new PIXI.Text(item.label, style, 2);
+            let itemLabel = new PIXI.Text(item.label, style, 0.5);
             this.labels.addChild(itemLabel);
 
             if (!item.isLeaf()) {

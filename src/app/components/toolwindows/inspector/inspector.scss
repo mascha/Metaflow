@@ -30,19 +30,41 @@ $inspector-content-fill: white;
     font-size: 12px;
     vertical-align: middle;
     cursor: pointer;
-    transition: background .15s ease-in;
+    transition: background .15s ease-in, border-color .15s ease-in;
 
+    border-top: 2px solid transparent;
     background-color: $inspector-category-fill;
+
     &:hover {
       background-color: $inspector-category-hover;
     }
 
-    &.left {  left: 0;  width: 33%; }
-    &.center {  left: 33%;  right: 33%;  }
-    &.right {  left: 66%;  right: 0;  }
+    &.left {  
+      left: 0;  width: 33%;
+    }
+
+    &.center { 
+       left: 33%;  right: 33%;  
+    }
+
+    &.right {  
+      left: 66%;  right: 0;  
+    }
 
     &.active {
       background-color: $inspector-content-fill;
+      
+      &.left {
+        border-top-color: cornflowerblue;
+      }
+      
+      &.center {
+        border-top-color: salmon;
+      }
+
+      &.right {
+        border-top-color: mediumseagreen;
+      }
     }
   }
 }

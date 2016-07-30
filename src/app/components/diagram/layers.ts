@@ -1,18 +1,22 @@
-import {Component, ElementRef, ViewChild, HostListener} from '@angular/core';
-import {ViewGroup, ViewVertex} from "../../common/viewmodel";
+import {Component, ElementRef, ViewChild} from '@angular/core';
+import {ViewGroup} from "../../common/viewmodel";
 import {Camera} from "../../common/camera";
 import Grid from '../../common/grid';
 import Border from '../../common/border';
 
 /**
  * A diagram layer.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
  */
 export interface DiagramLayer {
-    observe(camera: Camera)
+    observe(camera: Camera);
 }
 
 /**
  * Grid layer component.
+ * 
  * @author Martin Schade
  * @since 1.0.0
  */
@@ -72,7 +76,7 @@ export class NodeLayer implements DiagramLayer {
     @ViewChild('nodeLayer') element: ElementRef;
 
     observe(camera: Camera) {
-
+        /* NOP */
     }
 
     getElement(): HTMLCanvasElement {

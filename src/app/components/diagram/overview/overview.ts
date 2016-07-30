@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild} from '@angular/core'
+import {Component, ElementRef, ViewChild} from '@angular/core';
 
 @Component({
     selector: 'overview',
@@ -23,7 +23,7 @@ export default class Overview {
                 Math.round(2 + Math.random() * 124) + .5,
                 Math.round(2 + Math.random() * 124) + .5,
                 2, 2
-            )
+            );
         }
 
         brush.fillStyle = 'rgba(0,0,0,0.1)';
