@@ -48,7 +48,7 @@ export class PixiLayer implements PlatformLayer {
 
         for (let i = 0; i < length; i++) {
             let item = contents[i];
-            let itemLabel = new PIXI.Text(item.label, style, 0.5);
+            let itemLabel = new PIXI.Text(item.label, style, 0.6);
             this.labels.addChild(itemLabel);
 
             if (!item.isLeaf()) {
