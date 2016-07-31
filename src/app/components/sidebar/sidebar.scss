@@ -3,10 +3,8 @@
 @import "../../../style/variables";
 
 :host {
-  position: absolute;
-  overflow: hidden;
+  @include fillh();
   background-color: $sidebar-main;
-  left: 0; right: 0; top: 0; bottom: 0;
 }
 
 .sidebar-header {
@@ -27,7 +25,7 @@
     font-size: 16px;
     font-weight: bold;
     text-align: left;
-    text-overflow-ellipsis: ellipsis;
+    text-overflow: ellipsis;
     line-height: 1.2em;
     color: $sidebar-header-title;
     user-select: none;

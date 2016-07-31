@@ -337,9 +337,8 @@ class Panning extends BaseState {
     protected kinetics: Kinetics;
 
     enterState(params?: any) {
-        if (!this.kinetics) {
-            this.kinetics = new Kinetics();
-        }
+        this.kinetics = this.kinetics || new Kinetics();
+
         if (params) {
             this.handleMouseDown(
                 params.x || 0,
@@ -391,10 +390,7 @@ class Panning extends BaseState {
     }
 
     handleMouseUp(x: number, y: number) {
-        const kinetic = this.isKinetic();
-        const banding = this.isBanding();
-
-        if (banding) {
+        if (this.isBanding()) {
             if (this.diagram.animatedNavigation) {
                 const ca = this.camera;
                 const wX = ca.worldX, wW = wX + ca.projWidth;
@@ -411,13 +407,14 @@ class Panning extends BaseState {
             } else {
                 this.becomeIdle();
             }
-        } else if (kinetic) {
+        } else if (this.isKinetic()) {
             this.behavior.goto('animating', {
                 forced: false,
                 interpolator: Interpolator.throwCamera({
                     speed: this.kinetics.speed,
                     angle: this.kinetics.angle,
-                    decay: this.diagram.inertiaDecay
+                    camera: this.camera,
+                    duration: 333
                 })
             });
         } else {

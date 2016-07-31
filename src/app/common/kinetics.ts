@@ -24,7 +24,8 @@ export default class Kinetics {
 
     get angle(): number { return this._angle; }
 
-    minimumDelay = 66; // ms
+    maximumDelay = 86; // <ms>
+    minimumSpeed = 0.12 // <pixel/ms>
 
     private _speed = 0.0;
     private _angle = 0.0;
@@ -70,10 +71,10 @@ export default class Kinetics {
         if (!this._lastT) {
             return false;
         }
-        if (this._speed <= 0) {
+        if (this._speed <= this.minimumSpeed) {
             return false;
         }
-        const minLimit = Date.now() - this.minimumDelay;
+        const minLimit = Date.now() - this.maximumDelay;
         return this._lastT >= minLimit;
     }
 

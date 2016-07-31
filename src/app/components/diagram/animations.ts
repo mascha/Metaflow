@@ -48,19 +48,20 @@ export class Interpolator {
         self.frame = window.requestAnimationFrame(func);
     }
 
-    static throwCamera(params: any): Interpolator {
+    static throwCamera(params: ThrowConfig): Interpolator {
         const cam = params.camera;
-        const time = -(1000.0 / params.frames) / Math.log(1.0 - params.decay);
-        const rate = 1.0 / (1.0 - params.decay);
-        const dist = params.speed * time / 4;
+        console.debug(params.speed.toFixed(9));
+        const dist = params.speed * params.duration;
+        const startX = cam.cameraX;
+        const startY = cam.cameraY;
         const distX = dist * Math.cos(params.angle);
         const distY = dist * Math.sin(params.angle);
         return new Interpolator(f => {
-            const t = f * (2 - f); // 1 - Math.exp(-rate * f);
-            const posX = cam.cameraX + t * distX;
-            const posY = cam.cameraY + t * distY;
+            const t = f * (2 - f);
+            const posX = startX + t * distX;
+            const posY = startY + t * distY;
             cam.moveTo(-posX, -posY);
-        }, time);
+        }, params.duration);
     }
 
     /**
@@ -136,6 +137,13 @@ export class Interpolator {
                 private duration: number) {
         this.duration = duration || 1000;
     }
+}
+
+export interface ThrowConfig {
+    camera: Camera,
+    speed: number,
+    angle: number,
+    duration: number
 }
 
 export interface NavigateConfig {

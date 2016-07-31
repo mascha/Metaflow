@@ -31,7 +31,7 @@ $inspector-content-fill: white;
     vertical-align: middle;
     cursor: pointer;
     transition: background .15s ease-in, border-color .15s ease-in;
-
+    padding-bottom: 2px;
     border-top: 2px solid transparent;
     background-color: $inspector-category-fill;
 
