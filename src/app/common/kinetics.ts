@@ -24,17 +24,17 @@ export default class Kinetics {
 
     get angle(): number { return this._angle; }
 
-    maximumDelay = 86; // <ms>
-    minimumSpeed = 0.12 // <pixel/ms>
+    maximumDelay = 33; // <ms>
+    minimumSpeed = .2 // <pixel/ms>
 
     private _speed = 0.0;
     private _angle = 0.0;
-    private _smooth = 0.8;
+    private _smooth = 0.9;
     private _lastX = 0.0;
     private _lastY = 0.0;
     private _lastT = 0.0;
-    private _deltaX = 0.0;
-    private _deltaY = 0.0;
+    private velX = 0.0;
+    private velY = 0.0;
 
     /**
      * Update the internal state.
@@ -51,10 +51,10 @@ export default class Kinetics {
             const vx = (x - this._lastX) / dt;
             const vy = (y - this._lastY) / dt;
             const s = this._smooth;
-            this._deltaX = (1 - s) * vx + s * this._deltaX;
-            this._deltaY = (1 - s) * vy + s * this._deltaY;
-            this._angle = Math.atan2(this._deltaY, this._deltaX);
-            this._speed = Math.hypot(this._deltaX, this._deltaY);
+            this.velX = (1 - s) * vx + s * this.velX;
+            this.velY = (1 - s) * vy + s * this.velY;
+            this._angle = Math.atan2(this.velY, this.velX);
+            this._speed = Math.hypot(this.velX, this.velY);
         }
 
         this._lastX = x;
@@ -87,7 +87,7 @@ export default class Kinetics {
         this._lastT = NaN;
         this._speed = 0.0;
         this._angle = 0.0;
-        this._deltaX = 0.0;
-        this._deltaY = 0.0;
+        this.velX = 0.0;
+        this.velY = 0.0;
     }
 }
