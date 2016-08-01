@@ -41,6 +41,9 @@ export default class Border implements CameraObserver {
     private proxies: Array<ViewVertex>;
     private scale = 1;
 
+    private leafCache: HTMLCanvasElement;
+    private groupCache: HTMLCanvasElement;
+
     onViewResized(): void {
         this.updateCache();
         this.draw();
@@ -103,8 +106,7 @@ export default class Border implements CameraObserver {
         const maY = wmY + 200;
         const a = this.halfW - this.middle;
         const b = this.halfH - this.middle;
-        const c = this.brush;
-        const off = this.img;   
+        const c = this.brush;  
 
         c.fillStyle = 'darkgrey';     
         c.globalAlpha = 1.0;
@@ -155,34 +157,33 @@ export default class Border implements CameraObserver {
             let drawY = Math.floor(this.halfH + pY - 8.0);
 
             if (proxy.isLeaf()) {
-                c.fillStyle = 'goldenrod';
-                c.fillRect(drawX, drawY, 16, 16);
-                // c.drawImage(off, 0, 0, 16, 16, x - 8, y - 8, 16, 16)
+                c.drawImage(this.leafCache, drawX, drawY);
             } else {
-                c.fillStyle = 'cornflowerblue';
-                c.fillRect(drawX, drawY, 16, 16);
+                c.drawImage(this.groupCache, drawX, drawY);
             }
         }
     }
 
-    private img: HTMLCanvasElement;
-
     private cacheShape() {
         let n = 1;
-        let r = 8;
-        let d = 16;
-        this.img = document.createElement('canvas');
-        this.img.width = n * d;
-        this.img.height = d;
-        var ctx = this.img.getContext('2d');
+        this.leafCache = document.createElement('canvas');
+        this.leafCache.width = 16;
+        this.leafCache.height = 16;
+        let ctx = this.leafCache.getContext('2d');
 
-        for (var i = 0; i < n; ++i) {
-            ctx.fillStyle = 'mediumseagreen';
-            ctx.beginPath();
-            ctx.arc(i * d + r, r, r, 0, 2 * Math.PI);
-            ctx.closePath();
-            ctx.fill();
-        }
+        ctx.fillStyle = 'mediumseagreen';
+        ctx.beginPath();
+        ctx.arc(8, 8, 8, 0, 2 * Math.PI);
+        ctx.closePath();
+        ctx.fill();
+
+        this.groupCache = document.createElement('canvas');
+        this.groupCache.width = 16;
+        this.groupCache.height = 16;
+        ctx = this.groupCache.getContext('2d');
+        ctx.fillStyle = 'cornflowerblue';
+        ctx.fillRect(0, 0, 16, 16);
+
     }
 
     /*
