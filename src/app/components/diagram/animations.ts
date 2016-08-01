@@ -50,7 +50,6 @@ export class Interpolator {
 
     static throwCamera(params: ThrowConfig): Interpolator {
         const cam = params.camera;
-        console.debug(params.speed.toFixed(9));
         const dist = params.speed * params.duration;
         const startX = cam.cameraX;
         const startY = cam.cameraY;

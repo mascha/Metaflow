@@ -49,7 +49,7 @@ export default class Diagram {
     private _behavior: DiagramEvents;
     private _inertiaDecay = 0.05;
     private _zoomPan = 2.33;
-    private _velocity = 1.4;
+    private _velocity = 1.44;
     private _diagram: HTMLElement;
     private _model: ViewGroup;
     private _platform: PlatformLayer;

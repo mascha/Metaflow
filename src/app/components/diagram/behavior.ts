@@ -6,7 +6,10 @@ import Diagram from './diagram';
 
 /**
  * All possible diagram events.
- *  TODO make this more elegant!
+ * TODO make this more elegant!
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
  */
 export interface DiagramEvents {
 
@@ -56,6 +59,7 @@ export interface DiagramEvents {
 
 /**
  * Diagram state definition.
+ * 
  * @author Martin Schade
  * @since 1.0.0
  */
@@ -75,6 +79,9 @@ export interface DiagramState extends DiagramEvents {
 
 /**
  * State machine interface.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
  */
 export interface StateMachine {
 
@@ -99,9 +106,10 @@ export interface StateMachine {
  * @since 1.0.0
  */
 export default class DiagramBehavior implements StateMachine, DiagramEvents {
+    
     private current: DiagramState;
     private states: any;
-    private debug = true;
+    private debug = false;
 
     handleClick(x: number, y: number, double: boolean) {
         this.current.handleClick(x, y, double);
@@ -381,8 +389,8 @@ class Panning extends BaseState {
             this.kinetics.update(dragX, dragY);
         }
 
-        const diffX = true // Math.abs(limitX - dragX) > 1e-2;
-        const diffY = true // Math.abs(limitY - dragY) > 1e-2;
+        const diffX = true; // Math.abs(limitX - dragX) > 1e-2;
+        const diffY = true; // Math.abs(limitY - dragY) > 1e-2;
 
         if (diffX || diffY) {
             this.camera.moveTo(limitX, limitY);
