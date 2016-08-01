@@ -1,3 +1,5 @@
+import {Placement, Horizontal, Vertical} from './layout';
+
 /**
  * Style descriptor.
  *
@@ -23,6 +25,7 @@ export abstract class Style {
 
 /**
  * A shape definition file akin to svg.
+ * 
  * @author Martin Schade
  * @since 1.0.0
  */
@@ -55,6 +58,9 @@ export class NodeStyle extends Style {
 
 /**
  * A style which describes a label.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
  */
 export class LabelStyle extends Style {
     label: string;
@@ -68,6 +74,7 @@ export class LabelStyle extends Style {
 
 /**
  * A definition of a label.
+ * 
  * @author Martin Schade
  * @since 1.0.0
  */
@@ -78,33 +85,4 @@ export class LabelDefinition {
     priority: number;
     baseScale: number;
     defaultText: string;
-}
-
-
-/**
- * General placement options.
- */
-export const enum Placement {
-    INSIDE, BORDER, OUTSIDE
-}
-
-/**
- * Horizontal positions.
- */
-export const enum Vertical {
-    TOP, MIDDLE, BOTTOM
-}
-
-/**
- * Horizontal positions.
- */
-export const enum Horizontal {
-    LEFT, MIDDLE, RIGHT
-}
-
-/**
- * Determines the degrees of freedom for decoration nodes.
- */
-export const enum PlacementFreedom {
-    FREE, SLIDING, FIXED
 }
