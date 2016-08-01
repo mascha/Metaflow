@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {WorkspaceConfig} from "../../../services/configs";
 import ConfigService from "../../../services/configs";
+import Breadcrumbs from '../breadcrumbs/breadcrumbs';
 
 /**
  * Diagramming overlay tools. 
@@ -11,7 +12,8 @@ import ConfigService from "../../../services/configs";
 @Component({
     selector: 'presenter',
     styles: [require('./presenter.scss')],
-    template: require('./presenter.html')
+    template: require('./presenter.html'),
+    directives: [Breadcrumbs]
 })
 export default class Presenter {
 

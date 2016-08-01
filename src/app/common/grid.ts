@@ -35,6 +35,7 @@ export default class Grid implements CameraObserver {
 
     /**
      * Draw the grid dependent on location and scale.
+     * 
      * @param worldX
      * @param worldY
      * @param worldW

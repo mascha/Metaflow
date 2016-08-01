@@ -183,7 +183,6 @@ export default class Border implements CameraObserver {
         ctx = this.groupCache.getContext('2d');
         ctx.fillStyle = 'cornflowerblue';
         ctx.fillRect(0, 0, 16, 16);
-
     }
 
     /*

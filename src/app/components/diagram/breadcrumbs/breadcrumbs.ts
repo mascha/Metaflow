@@ -13,19 +13,25 @@ import {ViewGroup} from "../../../common/viewmodel";
 })
 export default class Breadcrumbs {
 
-    segments: Array<ViewGroup>;
+    private segments: Array<ViewGroup>;
 
     setPath(group: ViewGroup) {
-        this.segments = [];
+        let segments = [];
+
         while (group) {
-            this.segments.push(group);
+            segments.push(group);
             group = group.parent;
         }
         
-        this.segments.reverse();
+        this.segments = segments.reverse();
     }
 
     constructor() {
-        this.segments = [new ViewGroup('Model',0,0,0,0,0)];
+        let child0 = new ViewGroup('Level #0',0,0,0,0,0);
+        let child1 = new ViewGroup('Level #1',0,0,0,0,0);
+        let child2 = new ViewGroup('Level #2',0,0,0,0,0);
+        child0.addContent(child1);
+        child1.addContent(child2);
+        this.setPath(child2);
     }
 }

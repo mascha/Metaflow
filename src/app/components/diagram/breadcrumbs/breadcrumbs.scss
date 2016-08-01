@@ -1,32 +1,49 @@
-$navigation-color: royalblue;
+@import "../../../../style/mixins";
+@import "../../../../style/theme";
+@import "../../../../style/variables";
 
-.navigation {
+$presenter-body:#efefef;
+$presenter-shadow: 0 2px 4px rgba(0,0,0,0.2),0 -1px 0px rgba(0,0,0,0.02);
+$breadcrumbs-text-color: darken($icon-color,8);
+
+:host {
   position: absolute;
   overflow: hidden;
-  list-style: none;
-  top: 0;
-  height: 21px;
-  left: 0;
+  top: $diagram-control-offset;
+  left: $diagram-control-offset;
+  box-shadow: $presenter-shadow;
+}
 
-  background-color: $navigation-color;
+.navigation {
+  list-style: none;
+  height: 21px;
+  line-height: 21px;
+  background-color: $presenter-body;
   border-radius: 3px;
+  padding: 0 0 0 6px;
+  margin: 0;
 
   li {
     text-decoration: none;
     text-align: left;
     display: inline;
-    margin-top: 6px;
+    color: $breadcrumbs-text-color;
 
     a {
       text-decoration: none;
-      color: #4a4a4a;
-      font-weight: bold;
+      color: $breadcrumbs-text-color;
+      font-weight: 600;
       font-family: sans-serif;
+      transition: color 200ms ease-out;
+
+      &:hover {
+        color: $icon-hover;
+      }
     }
 
     &:after {
-      padding-left: 6px;
-      padding-right: 6px;
+      padding-left: 5px;
+      padding-right: 5px;
       content: "/";
     }
 
