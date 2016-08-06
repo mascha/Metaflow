@@ -18,7 +18,7 @@ export class PixiLayer implements PlatformLayer {
     private edges: PIXI.Container;
     private labels: PIXI.Container;
     private renderer: PIXI.SystemRenderer;
-    private mapper: PixiRenderer;
+    private mapper: PixiMapper;
 
     cachedGroups: Array<ViewGroup>;
 
@@ -137,13 +137,13 @@ export class PixiLayer implements PlatformLayer {
 
         /* overlays */
         // this.overlay = new PIXI.Container();
-        this.labels = new PIXI.ParticleContainer();
+        this.labels = new PIXI.Container();
         this.overlay = this.labels;
 
         /* worlds */
         // this.world = new PIXI.Container();
         // this.edges = new PIXI.Container();
-        this.nodes = new PIXI.ParticleContainer();
+        this.nodes = new PIXI.Container();
         this.world = this.nodes;
 
         /* assemble in order of rendering */
@@ -154,7 +154,7 @@ export class PixiLayer implements PlatformLayer {
         this.scene.addChild(this.overlay);
 
         this.camera = new PixiCamera(this.world, this.overlay);
-        this.mapper = new PixiRenderer();
+        this.mapper = new PixiMapper();
 
         this.renderer = new PIXI.CanvasRenderer(500, 500, {
             antialias: true,
@@ -217,7 +217,7 @@ export class PixiCamera extends Camera {
  * @author Martin Schade
  * @since 1.0.0
  */
-export class PixiRenderer implements ViewModelRenderer<any, any> {
+export class PixiMapper implements ViewModelRenderer<any, any> {
 
     renderItem(item: ViewItem): any {
         item.visual = item.visual ||
@@ -290,3 +290,16 @@ export class PixiRenderer implements ViewModelRenderer<any, any> {
         content.addChild(child);
     }
 }
+
+/**
+ * A configuration object for the pixi layer system.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+export class PixiConfig {
+    labelResolution = 0.6
+    backgroundStrength = 8
+    baseScale = 0.5
+    labelBatchSize = 500
+} 

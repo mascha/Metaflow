@@ -16,7 +16,9 @@ import {GridLayer, BorderLayer, NodeLayer} from './layers';
 
 
 /**
- * The canvas component.
+ * The diagram view component.
+ * 
+ * 
  * @author Martin Schade
  * @since 1.0.0
  */
@@ -236,8 +238,10 @@ export default class Diagram {
         /* Load level data */
         this.model = this._models.getModel();
 
-        this.onResize();
-        // this.camera.zoomAndMoveTo(-250, -150, .5);
+        /* Do initial rendering */
+        window.setTimeout(() => {
+            this.onResize();
+        })
     }
 
     constructor(private _platforms: PlatformService,
