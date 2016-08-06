@@ -39,19 +39,26 @@ export class PixiLayer implements PlatformLayer {
         this.cachedGroups = [];
         let contents = level.contents;
         let length = contents.length;
-        let style : PIXI.TextStyle = { 
+        let leafStyle : PIXI.TextStyle = { 
             fill: 0x3d3834,
             stroke: 'white',
-            strokeThickness: 2,
+            strokeThickness: 8,
+            lineJoin: 'round'
+        }
+
+        let groupStyle : PIXI.TextStyle = { 
+            fill: 0x3367d6,
+            stroke: 'white',
+            strokeThickness: 8,
             lineJoin: 'round'
         }
 
         for (let i = 0; i < length; i++) {
             let item = contents[i];
-            let itemLabel = new PIXI.Text(item.label, style, 0.6);
-            this.labels.addChild(itemLabel);
+            let itemLabel: PIXI.Text; 
 
             if (!item.isLeaf()) {
+                itemLabel = new PIXI.Text(item.label, groupStyle, 0.6);
                 itemLabel.pivot.set(itemLabel.text.length * 6, 12);
                 itemLabel.position.set(
                     (item.left + item.width / 2 - itemLabel.text.length * 3) * level.scale,
@@ -74,13 +81,16 @@ export class PixiLayer implements PlatformLayer {
                     mapper.renderGroup(itm, false, true);
                 }
             } else if (item.isLeaf()) {
-                itemLabel.pivot.set(12, 6);
+                itemLabel = new PIXI.Text(item.label, leafStyle, 0.6);
+                itemLabel.pivot.set(14, 6);
                 itemLabel.position.set(
                     (item.left + item.width + 6) * level.scale,
                     (item.top + item.height / 4) * level.scale
                 );
                 mapper.renderItem(item as ViewItem);
             }
+
+            this.labels.addChild(itemLabel);
             mapper.attach(item, level);
         }
 
@@ -127,13 +137,13 @@ export class PixiLayer implements PlatformLayer {
 
         /* overlays */
         // this.overlay = new PIXI.Container();
-        this.labels = new PIXI.Container();
+        this.labels = new PIXI.ParticleContainer();
         this.overlay = this.labels;
 
         /* worlds */
         // this.world = new PIXI.Container();
         // this.edges = new PIXI.Container();
-        this.nodes = new PIXI.Container();
+        this.nodes = new PIXI.ParticleContainer();
         this.world = this.nodes;
 
         /* assemble in order of rendering */
