@@ -104,7 +104,7 @@ export default class ModelService {
         while (i--) {
             let group = new ViewGroup(`Level #${MAX - i}`, 2000, 2000, 2000, 2000, 0.1);
         
-            let j = 120;
+            let j = 180;
             while (j) {
                 let rnd = this.random();
                 let item;
