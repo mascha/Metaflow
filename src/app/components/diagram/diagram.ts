@@ -80,6 +80,10 @@ export default class Diagram {
         return this._velocity;
     }
 
+    get state(): DiagramState {
+        return this._behavior.current;
+    }
+
     set model(group: ViewGroup) {
         this._model = group;
         if (this._platform) {
@@ -195,7 +199,7 @@ export default class Diagram {
     /**
      * Assemble all canvas layers.
      */
-    ngAfterViewInit() {
+    public ngAfterViewInit() {
         /* get html elements */
         this._diagram = this._element.nativeElement;
         let surface = this._nodeLayer.getElement();
@@ -232,7 +236,7 @@ export default class Diagram {
                 this._camera.attachObserver(this._platform);
             }
         } else {
-            throw new Error('Could not create diagram behavior');
+            throw new Error('Could not create diagram controller');
         }
 
         /* Load level data */

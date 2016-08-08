@@ -26,7 +26,6 @@ import {ViewVertex, ViewGroup} from "./viewmodel";
  * @author Martin Schade
  */
 export default class Border implements CameraObserver {
-    private camera: Camera;
     private region: HTMLCanvasElement;
     private brush: CanvasRenderingContext2D;
     private width  = -1;
@@ -89,7 +88,6 @@ export default class Border implements CameraObserver {
 
     /**
      * Draw all proxy items.
-     * TODO draw labels
      */
     private drawProxies() {
         const cam = this.camera;
@@ -208,10 +206,9 @@ export default class Border implements CameraObserver {
         this.region.height = this.height;
     }
 
-    constructor(camera: Camera, region: HTMLCanvasElement) {
+    constructor(private camera: Camera, region: HTMLCanvasElement) {
         this.region = region;
         this.brush = region.getContext('2d');
-        this.camera = camera;
         this.cacheShape();
     }
 }

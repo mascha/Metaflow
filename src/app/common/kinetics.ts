@@ -75,7 +75,7 @@ export default class Kinetics {
             return false;
         }
         const minLimit = Date.now() - this.maximumDelay;
-        return this._lastT >= minLimit;
+        return (this._lastT >= minLimit);
     }
 
     /**

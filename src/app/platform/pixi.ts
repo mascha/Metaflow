@@ -196,10 +196,9 @@ export class PixiCamera extends Camera {
          * TODO outsource to thread
          */
         let lbs = this.overlay.children;
-        let len = lbs.length;
         let s = .5 / zoom;
         // s = s <= 0.5 ? 0.5 : (s >= 2) ? 2 : s;
-        for (let i = 0; i < len; i++) {
+        for (let i = 0, len = lbs.length; i < len; i++) {
             let label = lbs[i] as PIXI.Text;
             label.scale.set(s, s);
         }

@@ -17,14 +17,11 @@ export default class Inspector {
     @ViewChild('styles') style: ElementRef;
     @ViewChild('notes') notes: ElementRef;
 
-    onSelect(event: MouseEvent) {
-        let target = event.target;
-        if (target === this.props.nativeElement) {
-            this.categoryIndex = 1;
-        } else if (target === this.style.nativeElement) {
-            this.categoryIndex = 2;
-        } else if (target === this.notes.nativeElement) {
-            this.categoryIndex = 3;
-        } // ignore
+    onSelect(event: MouseEvent, index: number) {
+        if (index < 1 || index > 3) {
+            return;
+        } else {
+            this.categoryIndex = index;
+        }
     }
 }

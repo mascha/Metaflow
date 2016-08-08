@@ -16,7 +16,7 @@ export default class Sidebar {
     @Input() titleVisible: boolean = true;
     @Input() visible: boolean = true;
 
-    @Output('visibility') visibility: EventEmitter<any>;
+    @Output('visibility') visibility = new EventEmitter<any>();
 
     isLoading: boolean = false;
 
@@ -25,17 +25,5 @@ export default class Sidebar {
         this.visibility.emit({
             pane: this, visible: this.visible
         });
-    }
-
-    constructor() {
-        this.visibility = new EventEmitter();
-        /*
-        this.isLoading = Math.random() < 1;
-        if (this.isLoading) {
-            setTimeout(() => {
-                this.isLoading = false;
-            }, (Math.random() + 0.5) * 2500);
-        }
-        */
     }
 }

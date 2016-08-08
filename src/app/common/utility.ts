@@ -132,7 +132,6 @@ export default class HTMLUtil {
 }
 
 export class Text {
-
     static approximateWidth(text: string): number {
         let len = text.length;
         let res = 0;

@@ -10,16 +10,20 @@ import {Placement, Horizontal, Vertical} from './layout';
  * @since 1.0.0
  */
 export abstract class Style {
-    shadowedStyle : Style;
+    private parent : Style;
+
     fill: number;
     opacity: number;
     borderWidth: number;
     margin: number;
     labels: LabelDefinition[];
-    
-    constructor(config?: any) {
-        this.fill = config.fill || 0;
-        this.opacity = config.opacity;
+
+    static fork(style: Style) {
+        return null;
+    }
+
+    constructor(style?: Style) {
+        this.parent = style;
     }
 }
 
@@ -85,4 +89,5 @@ export class LabelDefinition {
     priority: number;
     baseScale: number;
     defaultText: string;
+    color: number;
 }

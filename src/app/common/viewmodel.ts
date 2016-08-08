@@ -9,6 +9,7 @@ import {NodeStyle} from "./styling";
  * @since 1.0.0
  */
 export abstract class ViewVertex {
+
     parent: ViewGroup;
     visual: any;
     
@@ -55,6 +56,7 @@ export class ViewProxy extends ViewVertex {
 /**
  * A view group acts as a styleable container
  * and decoration target for other view items.
+ * 
  * @author Martin Schade
  * @since 1.0.0
  */
@@ -115,14 +117,33 @@ export class ViewGroup extends ViewVertex {
  * @since 1.0.0
  */
 export const enum ModelChange {
-    POSITION = 0,
-    STYLING  = POSITION + 1,
-    CHILDREN = STYLING + 1,
-    ADD      = CHILDREN + 1,
+    /**
+     * x,y,w,h changes
+     */
+    GEOMETRY = 0,
+
+    /**
+     * A style or styleable property has changed.
+     */
+    STYLING  = GEOMETRY + 1,
+
+    /**
+     * A child has been added.
+     */
+    ADD      = STYLING + 1,
+
+    /**
+     * 
+     */
     REMOVE   = ADD + 1,
+
     FILL     = REMOVE + 1,
+
     STROKE   = FILL + 1,
+
     SHAPE    = STROKE + 1,
+
     LABEL    = SHAPE + 1,
+    
     ZOOM     = LABEL + 1,
 }
