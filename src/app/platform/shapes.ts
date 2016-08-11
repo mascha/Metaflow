@@ -9,20 +9,23 @@ import {Style} from '../common/styling';
  */
 export default class ShapeRenderer {
 
-  private images: any;
-  private urls: any;
+  private images = Object.create(null);
+  private urls = Object.create(null);
  
   private cacheShape(style: Style, canvas: HTMLCanvasElement) {
      canvas.width = 16;
      canvas.height = 16;
 
-     canvas.fill = 'cornflowerblue';
-     canvas.fillRect(0,0,16,16);
+     /* actually draw the representation */
+     let ctx = canvas.getContext('2d');
+     ctx.fillStyle = 'cornflowerblue';
+     ctx.fillRect(0, 0, 16, 16);
+
+     this.images[style.styleId] = canvas;
   }
 
   getImage(style: Style): HTMLCanvasElement {
-     if (!style) return style;
-     let image = this.images[style];
+     let image = this.images[style.styleId];
      if (image) {
        return image;
      } else {
@@ -33,27 +36,27 @@ export default class ShapeRenderer {
   }
 
   getUrl(style: Style): string {
-     if (!style) return style;
-     let url = this.urls[style];
+    let id = style.styleId;
+     let url = this.urls[id];
      if (url) {
        return url;
      } else {
        let image = this.getImage(style);
-       url = image.toDataUrl();
-       this.urls[style] = image;
+       url = image.toDataURL();
+       this.urls[id] = image;
        return url;
      }
   }
 
   removeStyle(style: Style) {
-    if (!style) return style;
-    let image = this.images[style];
+    let id = style.styleId;
+    let image = this.images[id];
     if (image) {
-      let url = this.urls[style];
+      let url = this.urls[id];
       if (url) {
-        this.urls[style] = undefined;
+        this.urls[id] = undefined;
       }
-      this.images[style] = undefined;
+      this.images[id] = undefined;
     } 
   }
 }
