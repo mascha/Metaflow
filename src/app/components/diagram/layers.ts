@@ -1,8 +1,8 @@
 import {Component, ElementRef, ViewChild, HostListener} from '@angular/core';
 import {ViewGroup} from "../../common/viewmodel";
 import {Camera} from "../../common/camera";
-import Grid from '../../common/grid';
-import Border from '../../common/border';
+import Grid from './grid';
+import Border from './border';
 
 /**
  * A diagram layer.

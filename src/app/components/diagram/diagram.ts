@@ -18,6 +18,8 @@ import {GridLayer, BorderLayer, NodeLayer} from './layers';
 /**
  * The diagram view component.
  * 
+ * TODO panning & zoom limits, reset animation
+ * TODO edges
  * 
  * @author Martin Schade
  * @since 1.0.0
@@ -33,8 +35,6 @@ import {GridLayer, BorderLayer, NodeLayer} from './layers';
     ]
 })
 export default class Diagram {
-
-    loading = false;
     animatedZoom = false;
     animatedNavigation = true;
     frames = 60;
