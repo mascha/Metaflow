@@ -1,4 +1,4 @@
-import {NodeStyle} from "./styling";
+import {Style} from "./styling";
 
 /**
  * Base viewmodel class. 
@@ -12,6 +12,7 @@ export abstract class ViewVertex {
 
     parent: ViewGroup;
     visual: any;
+    style: Style; 
     
     isLeaf(): boolean {
         return true;
@@ -33,7 +34,7 @@ export abstract class ViewVertex {
  * @since 1.0.0
  */
 export class ViewItem extends ViewVertex {
-    style: NodeStyle;
+    style: Style;
 }
 
 /**
