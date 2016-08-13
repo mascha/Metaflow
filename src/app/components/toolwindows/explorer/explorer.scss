@@ -27,7 +27,7 @@ $project-upwards-fill: #eeeeee;
   font-size: 14px;
   font-weight: bold;
   text-align: left;
-  text-overflow-ellipsis: ellipsis;
+  text-overflow: ellipsis;
   line-height: $project-header-height;
   color: $sidebar-header-title;
   cursor: default;
@@ -42,20 +42,15 @@ $project-upwards-fill: #eeeeee;
   overflow: scroll;
   overflow-x: hidden;
   background-color: white;
-  
-.leaf-item {
-  @include icon(before, '\f12f') {
-    color: rgba(#0e2231, .8);
-    transform: translateY(12.5%);
-  }
-}
 
-.group-item {
-  @include icon(before, '\F1A6') {
-    color: rgba(#0e2231, .8);
-    transform: translateY(12.5%);
+  .entity-icon {
+    padding: 2.5px 4px 0 4px;
   }
-}
+
+  span {
+    display: inline-block;
+    vertical-align: text-bottom;
+  }
 }
 
 .entity-cell {
