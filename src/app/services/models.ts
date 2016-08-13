@@ -1,5 +1,7 @@
-import {ViewGroup, ViewItem} from "../common/viewmodel";
 import {Injectable} from "@angular/core";
+import {ViewGroup, ViewItem} from "../common/viewmodel";
+import {Style, GroupStyle} from '../common/styling';
+import {Shape, ShapeType} from '../common/shapes';
 
 const seed = function(s) {
     let m_w  = s;
@@ -50,6 +52,11 @@ export default class ModelService {
         'Unfinished Parts'
     ]
 
+    private variableStyle: Style;
+    private rateStyle: Style;
+    private stockStyle: Style;
+    private moduleStyle: GroupStyle;
+
     getDefaultModel() {
         this.empty = this.empty || new ViewGroup('EMPTY', 2000, 2000, 2000, 2000, 1);
         return this.empty;
@@ -61,27 +68,31 @@ export default class ModelService {
     }
 
     private createStock() {
-        return new ViewItem(
+        let item = new ViewItem(
             this.randomName(),
             this.random() * 18000,
             this.random() * 18000,
             192,
             108
         );
+        item.style = this.stockStyle;
+        return item;
     }
 
     private createVariable() {
-        return new ViewItem(
+        let variable = new ViewItem(
             this.randomName(),
             this.random() * 18000,
             this.random() * 18000,
             64,
             64
         );
+        variable.style = this.variableStyle;
+        return variable;
     }
 
     private createModule() {
-        return new ViewGroup(
+        let module = new ViewGroup(
             this.randomName(),
             this.random() * 18000,
             this.random() * 18000,
@@ -89,6 +100,8 @@ export default class ModelService {
             260,
             1
         );
+        module.style = this.moduleStyle;
+        return module;
     }
 
     private randomName() {
@@ -103,7 +116,8 @@ export default class ModelService {
         let root: ViewGroup = null;
         while (i--) {
             let group = new ViewGroup(`Level #${MAX - i}`, 2000, 2000, 2000, 2000, 0.1);
-        
+            group.style = this.moduleStyle;
+
             let j = 180;
             while (j) {
                 let rnd = this.random();
@@ -127,5 +141,24 @@ export default class ModelService {
         }
 
         return root;
+    }
+
+    constructor() {
+        this.moduleStyle = new GroupStyle();
+        this.moduleStyle.actsAsPortal = true;
+        this.moduleStyle.shape = new Shape(ShapeType.ROUNDED);
+        this.moduleStyle.fill = 'darkgrey';
+        
+        this.variableStyle = new Style();
+        this.variableStyle.fill = 'mediumseagreen';
+        this.variableStyle.shape = new Shape(ShapeType.CIRCLE);
+
+        this.stockStyle = new Style();
+        this.stockStyle.fill = 'cornflowerblue';
+        this.stockStyle.shape = new Shape(ShapeType.RECTANGLE);
+
+        this.rateStyle = new Style();
+        this.rateStyle.fill = 'goldenrod';
+        this.rateStyle.shape = new Shape(ShapeType.HOURGLASS);
     }
 }

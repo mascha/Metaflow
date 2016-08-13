@@ -40,9 +40,6 @@ export default class Border implements CameraObserver {
     private proxies: Array<ViewVertex>;
     private scale = 1;
 
-    private leafCache: HTMLCanvasElement;
-    private groupCache: HTMLCanvasElement;
-
     onViewResized(): void {
         this.updateCache();
         this.draw();
@@ -154,41 +151,9 @@ export default class Border implements CameraObserver {
             let drawX = Math.floor(this.halfW + pX - 8.0);
             let drawY = Math.floor(this.halfH + pY - 8.0);
 
-            if (proxy.isLeaf()) {
-                c.drawImage(this.leafCache, drawX, drawY);
-            } else {
-                c.drawImage(this.groupCache, drawX, drawY);
-            }
+            let cache = proxy.style.cachedImage;
+            c.drawImage(cache, drawX, drawY);
         }
-    }
-
-    private cacheShape() {
-        let n = 1;
-        this.leafCache = document.createElement('canvas');
-        this.leafCache.width = 16;
-        this.leafCache.height = 16;
-        let ctx = this.leafCache.getContext('2d');
-
-        ctx.fillStyle = 'mediumseagreen';
-        ctx.beginPath();
-        ctx.arc(8, 8, 8, 0, 2 * Math.PI);
-        ctx.closePath();
-        ctx.fill();
-
-        this.groupCache = document.createElement('canvas');
-        this.groupCache.width = 16;
-        this.groupCache.height = 16;
-        ctx = this.groupCache.getContext('2d');
-
-        ctx.fillStyle = 'goldenrod';
-        ctx.beginPath();
-        ctx.moveTo(2, 0);
-        ctx.lineTo(14,0);
-        ctx.lineTo(2,14);
-        ctx.lineTo(14,14);
-        ctx.closePath();
-
-        ctx.fill();
     }
 
     /*
@@ -217,6 +182,5 @@ export default class Border implements CameraObserver {
     constructor(private camera: Camera, region: HTMLCanvasElement) {
         this.region = region;
         this.brush = region.getContext('2d');
-        this.cacheShape();
     }
 }

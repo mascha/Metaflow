@@ -4,16 +4,17 @@
  * shape instances can be derived. 
  * 
  * Shapes are always placed on their center coordinates.
+ * Offsets are relative to the parents boundary.
  * 
  * @author Martin Schade
  * @since 1.0.0
  */
 export class Shape {
-    type : ShapeType;
     vertices: Array<number>;
     x: number
     y: number
-    cache: any;
+
+    constructor(public type: ShapeType) {}
 }
 
 /**
@@ -39,6 +40,7 @@ export const enum ShapeType {
     ICON,        // Is an icon, Unused
     SQUARE,      // Square shape (width)
     RECTANGLE,   // Rectangular shape (width, height)
+    ROUNDED,     // Rectangular shape with rounded corners (width, height, radius)
     CIRCLE,      // Circular shape (radius)
     ELLIPSE,     // Ellipsoid (width, height)
     DIAMOND,     // Diamond Shape (width, height)

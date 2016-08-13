@@ -1,5 +1,5 @@
 import {Placement, Horizontal, Vertical} from './layout';
-import Shape from './shapes';
+import {Shape} from './shapes';
 
 /**
  * Style descriptor.
@@ -13,7 +13,6 @@ import Shape from './shapes';
 export class Style {
     private parent : Style;
 
-    styleId: string;
     fill: number | string;
     opacity: number;
     borderWidth: number;
@@ -33,7 +32,12 @@ export class Style {
      * An image which acts as a simple rendering
      * of the style, which is useful for icons etc. 
      */
-    cachedImage: any;
+    cachedImage: HTMLCanvasElement;
+
+    /**
+     * The cached data url of the rendered style;
+     */
+    cachedURL: string;
 
     /**
      * Creates a new style which inherits it's
@@ -47,14 +51,6 @@ export class Style {
 
     private hasMultipleLabels(): boolean {
         return (this.labels && this.labels.constructor === Array);
-    }
-
-    constructor(style?: Style) {
-        this.parent = style;
-        this.styleId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-            return v.toString(16);
-        }); 
     }
 }
 
