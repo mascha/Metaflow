@@ -77,20 +77,10 @@ export class GroupStyle extends Style {
 }
 
 /**
- * A shape definition.
- * 
- * @author Martin Schade
- * @since 1.0.0
- */
-export class Shape {
-    detailed: Array<number>;
-    simple: Array<number>;
-}
-
-
-/**
  * A definition of a label.
- * Used as a blueprint for label instances.
+ * 
+ * Used as a blueprint from which 
+ * label instances can be derived.
  * 
  * @author Martin Schade
  * @since 1.0.0
@@ -102,25 +92,39 @@ export class Label {
     priority: number;
     baseScale: number;
     defaultText: string;
-    alignment: TextAlignment;
     color: number;
     fontSize: number;
-    bold: boolean;
+    fontWeight: boolean;
     placement: Placement;
     vertical: Vertical;
     horizontal: Horizontal;
-    transform: TextTransform 
+    transform: TextTransform;
+    alignment: TextAlignment;
 }
 
+/**
+ * Enumeration of all possible 
+ * text transformations.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
 export const enum TextTransform {
-    NONE = 0,
-    LOWERCASE = NONE + 1,
-    UPPERCASE = LOWERCASE + 1,
-    CAPITALIZE = UPPERCASE + 1
+    NONE,        // as is
+    LOWERCASE,   // everything small
+    UPPERCASE,   // all bold letters
+    CAPITALIZE,  // capitalize the first letter
 }
 
+/**
+ * Enumeration of all possible
+ * text alignments.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
 export const enum TextAlignment {
-    LEFT = 0,
-    CENTER = LEFT + 1,
-    RIGHT = CENTER + 1
+    LEFT,
+    CENTER,
+    RIGHT
 }

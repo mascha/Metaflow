@@ -1,4 +1,35 @@
-import {Style} from '../common/styling';
+import {Style} from './styling';
+
+/**
+ * A shape definition.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+export class Shape {
+    detailed: Array<number>;
+    simple: Array<number>;
+}
+
+/**
+ * Enumeration of the shape class.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+export const enum ShapeClass {
+    NONE,        // No shape
+    CUSTOM,      // Defined by user
+    COMPOSITE,   // Consits of several shapes, Unused
+    ICON,        // Is an icon, Unused
+    SQUARE,      // Square shape (width)
+    RECTANGLE,   // Rectangular shape (width, height)
+    CIRCLE,      // Circular shape (radius)
+    ELLIPSE,     // Ellipsoid (width, height)
+    DIAMOND,     // Diamond Shape (width, height)
+    TRAPEZOID,   // Trapezoidal shape (width, height, topside)
+    PARALLELOID, // Parallelogram (width, height, skew)
+}
 
 /**
  * Responsible for rendering style shapes
