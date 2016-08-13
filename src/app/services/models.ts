@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {ViewGroup, ViewItem} from "../common/viewmodel";
 import {Style, GroupStyle} from '../common/styling';
 import {Shape, ShapeType} from '../common/shapes';
+import ShapeRenderer from '../platform/shapes';
 
 const seed = function(s) {
     let m_w  = s;
@@ -91,6 +92,18 @@ export default class ModelService {
         return variable;
     }
 
+    private createRate() {
+        let variable = new ViewItem(
+            this.randomName(),
+            this.random() * 18000,
+            this.random() * 18000,
+            64,
+            64
+        );
+        variable.style = this.rateStyle;
+        return variable;
+    }
+
     private createModule() {
         let module = new ViewGroup(
             this.randomName(),
@@ -122,12 +135,14 @@ export default class ModelService {
             while (j) {
                 let rnd = this.random();
                 let item;
-                if (rnd < .3333) {
+                if (rnd < .25) {
                     item = this.createStock();
-                } else if (rnd < .6666) {
+                } else if (rnd < .5) {
                     item = this.createVariable();
-                } else {
+                } else if (rnd < .75) {
                     item = this.createModule();
+                } else {
+                    item = this.createRate();
                 }
                 group.addContent(item);
                 j--;
@@ -160,5 +175,11 @@ export default class ModelService {
         this.rateStyle = new Style();
         this.rateStyle.fill = 'goldenrod';
         this.rateStyle.shape = new Shape(ShapeType.HOURGLASS);
+
+        let render = new ShapeRenderer();
+        render.cacheShape(this.moduleStyle);
+        render.cacheShape(this.stockStyle);
+        render.cacheShape(this.variableStyle);
+        render.cacheShape(this.rateStyle);
     }
 }
