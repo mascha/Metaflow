@@ -14,7 +14,8 @@ export default class ShapeRenderer {
   private images = Object.create(null);
   private urls = Object.create(null);
  
-  private cacheShape(style: Style, canvas: HTMLCanvasElement) {
+  cacheShape(style: Style) {
+     let canvas = document.createElement('canvas');
      canvas.width = 16;
      canvas.height = 16;
 
@@ -23,41 +24,39 @@ export default class ShapeRenderer {
      ctx.fillStyle = style.fill;
 
      switch (style.shape.type) {
-       case ShapeType.SQUARE:     
-        ctx.fillRect(2, 2, 14, 14);
-        break;
-
-      case ShapeType.RECTANGLE:
-        ctx.fillRect(2, 4, 14, 12);
+       case ShapeType.SQUARE, ShapeType.RECTANGLE:     
+        ctx.fillRect(0, 0, 16, 16);
         break;
 
       case ShapeType.CIRCLE:
         ctx.beginPath();
-        ctx.arc(8, 8, 6, 0, 2 * Math.PI);
+        ctx.arc(8, 8, 8, 0, 2 * Math.PI);
         ctx.closePath();
         ctx.fill();
         break;
 
       case ShapeType.ROUNDED:
+        let r = 2;
         ctx.beginPath();
-        ctx.moveTo(4, 2);
-        ctx.lineTo(12, 2);
-        ctx.quadraticCurveTo(14, 2, 14, 4);
-        ctx.lineTo(14,12);
-        ctx.quadraticCurveTo(14, 14, 12, 14);
-        ctx.lineTo(4, 14);
-        ctx.quadraticCurveTo(2, 14, 2, 12);
-        ctx.lineTo(2, 4);
-        ctx.quadraticCurveTo(2, 2, 4, 2);
+        ctx.moveTo(r, 0);
+        ctx.lineTo(16-r, 0);
+        ctx.quadraticCurveTo(16, 0, 16, r);
+        ctx.lineTo(16, 16-r);
+        ctx.quadraticCurveTo(16, 16, 16-r, 16);
+        ctx.lineTo(r, 16);
+        ctx.quadraticCurveTo(0, 16, 0, 16-r);
+        ctx.lineTo(0, r);
+        ctx.quadraticCurveTo(0, 0, r, 0);
         ctx.closePath();
+        ctx.fill();
         break;
 
       case ShapeType.HOURGLASS:
         ctx.beginPath();
         ctx.moveTo(2, 0);
         ctx.lineTo(14,0);
-        ctx.lineTo(2,14);
-        ctx.lineTo(14,14);
+        ctx.lineTo(2,16);
+        ctx.lineTo(14,16);
         ctx.closePath();
         ctx.fill();
         break;
