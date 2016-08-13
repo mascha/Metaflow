@@ -13,6 +13,25 @@ export default class ShapeRenderer {
 
   private images = Object.create(null);
   private urls = Object.create(null);
+
+  renderShape(style: Style, ctx: PIXI.Graphics) {
+    switch (style.shape.type) {
+       case ShapeType.SQUARE, ShapeType.RECTANGLE:   
+        break;
+
+      case ShapeType.CIRCLE:
+        break;
+
+      case ShapeType.ROUNDED:
+        break;
+
+      case ShapeType.HOURGLASS:
+        break;
+
+      default: console.warn('Tried to render unknown shape class (' + style.shape.type + ')')
+        break;
+     }
+  }
  
   cacheShape(style: Style) {
      let canvas = document.createElement('canvas');
@@ -66,5 +85,6 @@ export default class ShapeRenderer {
      }
 
      style.cachedImage = canvas;
+     style.cachedURL = canvas.toDataURL();
   }
 }
