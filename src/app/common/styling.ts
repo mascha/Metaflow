@@ -1,4 +1,5 @@
 import {Placement, Horizontal, Vertical} from './layout';
+import Shape from './shapes';
 
 /**
  * Style descriptor.
