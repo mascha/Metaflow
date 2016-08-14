@@ -4,7 +4,7 @@ import {Shape, ShapeType} from '../common/shapes';
 
 /**
  * Responsible for rendering style shapes
- * as cacheable bitmaps.
+ * as cacheable bitmaps orr pixi graphics.
  * 
  * @author Martin Schade
  * @since 1.0.0
@@ -16,7 +16,8 @@ export default class ShapeRenderer {
 
   renderShape(style: Style, ctx: PIXI.Graphics) {
     switch (style.shape.type) {
-       case ShapeType.SQUARE, ShapeType.RECTANGLE:   
+       case ShapeType.SQUARE, 
+            ShapeType.RECTANGLE:   
         break;
 
       case ShapeType.CIRCLE:
@@ -44,17 +45,26 @@ export default class ShapeRenderer {
 
      switch (style.shape.type) {
        case ShapeType.SQUARE, ShapeType.RECTANGLE:     
-        ctx.fillRect(0, 0, 16, 16);
-        break;
+         ctx.fillRect(0, 0, 16, 16);
+         break;
 
-      case ShapeType.CIRCLE:
-        ctx.beginPath();
-        ctx.arc(8, 8, 8, 0, 2 * Math.PI);
-        ctx.closePath();
-        ctx.fill();
-        break;
+       case ShapeType.TRIANGLE:
+         ctx.beginPath();
+         ctx.moveTo(0, 16);
+         ctx.lineTo(8, 0);
+         ctx.lineTo(16, 16);
+         ctx.closePath();
+         ctx.fill();
+         break;
 
-      case ShapeType.ROUNDED:
+       case ShapeType.CIRCLE:
+         ctx.beginPath();
+         ctx.arc(8, 8, 8, 0, 2 * Math.PI);
+         ctx.closePath();
+         ctx.fill();
+         break;
+
+       case ShapeType.ROUNDED:
         let r = 2;
         ctx.beginPath();
         ctx.moveTo(r, 0);

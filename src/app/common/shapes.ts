@@ -10,10 +10,9 @@
  * @since 1.0.0
  */
 export class Shape {
-    vertices: Array<number>;
     x: number
     y: number
-
+    vertices: Array<number>;
     constructor(public type: ShapeType) {}
 }
 
@@ -48,4 +47,5 @@ export const enum ShapeType {
     PARALLELOID, // Parallelogram (width, height, skew)
     HOURGLASS,   // Hourglass shape (width, height)
     ARC,         // Open circle (radius, angle)
+    TRIANGLE     // Triangular shape (width, height)
 }

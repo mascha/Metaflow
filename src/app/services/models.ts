@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {ViewGroup, ViewItem} from "../common/viewmodel";
 import {Style, GroupStyle} from '../common/styling';
 import {Shape, ShapeType} from '../common/shapes';
-import ShapeRenderer from '../platform/shapes';
+import ShapeRenderer from '../platform/render';
 
 const seed = function(s) {
     let m_w  = s;
