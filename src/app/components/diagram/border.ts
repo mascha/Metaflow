@@ -114,16 +114,17 @@ export default class Border implements CameraObserver {
             let y = (proxy.top + proxy.height * .5) * scale;
 
             if (x > minX && x < wmX && y > minY && y < wmY) {
-                continue;
+                continue; // ignore items within viewport
             } else if (x < miX || x > maX || y < miY || y > maY) {
-                continue;
+                continue; // ignore items outside of interest
             }
 
             x -= cenX;
             y -= cenY;
 
-            if (x * x + y * y > 1000000) {
-                continue;
+            const distance = x * x + y * y
+            if (distance > 1000000) {
+                continue; // ignore items which are too far away
             }
 
             const A = a*y;
