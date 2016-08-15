@@ -50,18 +50,17 @@ export default class ModelService {
         'Delayed Shippings',
         'Processed',
         'Inventory',
-        'Unfinished Parts'
+        'Unfinished Parts', 
+        'Spare Parts',
+        'Sales Volume',
+        'Level',
+        'Persons'
     ]
 
     private variableStyle: Style;
     private rateStyle: Style;
     private stockStyle: Style;
     private moduleStyle: GroupStyle;
-
-    getDefaultModel() {
-        this.empty = this.empty || new ViewGroup('EMPTY', 2000, 2000, 2000, 2000, 1);
-        return this.empty;
-    }
 
     getModel(): ViewGroup {
         this.model = this.model || this.createDebugModel();
@@ -85,8 +84,8 @@ export default class ModelService {
             this.randomName(),
             this.random() * 18000,
             this.random() * 18000,
-            64,
-            64
+            32,
+            32
         );
         variable.style = this.variableStyle;
         return variable;
@@ -154,7 +153,6 @@ export default class ModelService {
             }
             o = group;
         }
-
         return root;
     }
 
@@ -162,6 +160,7 @@ export default class ModelService {
         this.moduleStyle = new GroupStyle();
         this.moduleStyle.actsAsPortal = true;
         this.moduleStyle.shape = new Shape(ShapeType.ROUNDED);
+        this.moduleStyle.shape.a = 6;
         this.moduleStyle.fill = 'darkgrey';
         
         this.variableStyle = new Style();
@@ -174,7 +173,7 @@ export default class ModelService {
 
         this.rateStyle = new Style();
         this.rateStyle.fill = 'goldenrod';
-        this.rateStyle.shape = new Shape(ShapeType.HOURGLASS);
+        this.rateStyle.shape = new Shape(ShapeType.TRIANGLE);
 
         let render = new ShapeRenderer();
         render.cacheShape(this.moduleStyle);

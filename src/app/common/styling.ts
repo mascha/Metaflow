@@ -14,6 +14,7 @@ export class Style {
     private parent : Style;
 
     fill: number | string;
+    stroke: number | string;
     opacity: number;
     borderWidth: number;
     margin: number;

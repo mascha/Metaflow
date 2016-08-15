@@ -1,4 +1,5 @@
 /**
+ * Project enumeration service.
  * 
  * @author Martin Schade
  * @since 1.0.0

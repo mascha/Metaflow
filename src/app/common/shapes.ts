@@ -10,10 +10,19 @@
  * @since 1.0.0
  */
 export class Shape {
-    x: number
-    y: number
+    x: number;
+    y: number;
+    a: number;
+    b: number;
+    type: ShapeType;
     vertices: Array<number>;
-    constructor(public type: ShapeType) {}
+    
+    constructor(type?: ShapeType) {
+        this.type = type || ShapeType.CUSTOM;
+    }
+
+    static RECTANGLE = new Shape(ShapeType.RECTANGLE);
+    static TRIANGLE = new Shape(ShapeType.TRIANGLE);
 }
 
 /**

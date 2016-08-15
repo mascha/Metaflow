@@ -1,6 +1,7 @@
 import {Camera} from "../common/camera";
 import {ViewGroup, ViewItem, ViewVertex} from "../common/viewmodel";
 import {PlatformLayer, ViewModelRenderer} from "../common/platform";
+import ShapeRenderer from './render';
 
 /**
  * Implements a pixi.js graph layer system.
@@ -39,6 +40,7 @@ export class PixiLayer implements PlatformLayer {
         this.cachedGroups = [];
         let contents = level.contents;
         let length = contents.length;
+        
         let leafStyle : PIXI.TextStyle = { 
             fill: 0x3d3834,
             stroke: 'white',
@@ -59,10 +61,13 @@ export class PixiLayer implements PlatformLayer {
 
             if (!item.isLeaf()) {
                 itemLabel = new PIXI.Text(item.label, groupStyle, 0.6);
-                itemLabel.pivot.set(itemLabel.text.length * 6, 12);
+                itemLabel.pivot.set(
+                    itemLabel.text.length * 6, 
+                    12
+                );
                 itemLabel.position.set(
                     (item.left + item.width / 2 - itemLabel.text.length * 3) * level.scale,
-                    (item.top + item.height / 2 - 12) * level.scale
+                    (item.top + item.height / 2 - 15) * level.scale
                 );
 
                 let itm = item as ViewGroup;
@@ -82,10 +87,13 @@ export class PixiLayer implements PlatformLayer {
                 }
             } else if (item.isLeaf()) {
                 itemLabel = new PIXI.Text(item.label, leafStyle, 0.6);
-                itemLabel.pivot.set(14, 6);
+                itemLabel.pivot.set(
+                    14, 
+                    6
+                );
                 itemLabel.position.set(
-                    (item.left + item.width + 6) * level.scale,
-                    (item.top + item.height / 4) * level.scale
+                    (item.left + item.width * 1.1) * level.scale,
+                    (item.top + item.height / 2) * level.scale
                 );
                 mapper.renderItem(item as ViewItem);
             }
@@ -93,10 +101,7 @@ export class PixiLayer implements PlatformLayer {
             this.labels.addChild(itemLabel);
             mapper.attach(item, level);
         }
-
         this.attachNode(level);
-
-        console.log(`Model rendering took ${Date.now() - now} ms`);
     }
 
     /**
@@ -218,17 +223,18 @@ export class PixiCamera extends Camera {
  */
 export class PixiMapper implements ViewModelRenderer<any, any> {
 
+    nodes: PIXI.Graphics;
+    shapes: ShapeRenderer;
+
     renderItem(item: ViewItem): any {
-        item.visual = item.visual ||
-            (Math.random() > 0.5) ? new PIXI.Graphics()
-                .lineStyle(4, 0x3367D6, 1)
-                .beginFill(0x66CCFF)
-                .drawRoundedRect(item.left, item.top, item.width, item.height, 3)
-                .endFill() :
-                new PIXI.Graphics()
-                .beginFill(0x3cb371)
-                .drawCircle(item.left, item.top, item.width)
-                .endFill()               
+        if (item.visual) {
+            return;
+        } else {
+            let visual = new PIXI.Graphics();
+            let style = item.style;
+            this.shapes.renderShape(style, visual, item)
+            item.visual = visual;
+        }
     }
 
     renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): any {
@@ -287,6 +293,10 @@ export class PixiMapper implements ViewModelRenderer<any, any> {
         }
 
         content.addChild(child);
+    }
+
+    constructor() {
+        this.shapes = new ShapeRenderer();
     }
 }
 
