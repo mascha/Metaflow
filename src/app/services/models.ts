@@ -131,7 +131,7 @@ export default class ModelService {
             let group = new ViewGroup(`Level #${MAX - i}`, 2000, 2000, 2000, 2000, 0.1);
             group.style = this.moduleStyle;
 
-            let j = 180;
+            let j = 120;
             while (j) {
                 let rnd = this.random();
                 let item;
