@@ -1,23 +1,10 @@
-import {Style} from '../common/styling';
+import {Style, Label} from '../common/styling';
 import {Shape, ShapeType} from '../common/shapes';
-import {ViewVertex} from '../common/viewmodel';
+import {ViewVertex, ViewGroup, ViewItem} from '../common/viewmodel';
 
 /**
- * Named color lookup dictionary
- */
-let Colors = {
-    'cornflowerblue': 0x6495ED,
-    'mediumseagreen': 0x3CB371,
-    'goldenrod': 0xDAA520,
-    'darkgrey': 0xA9A9A9,
-    'lightgray': 0xD3D3D3,
-    'black': 0x000000,
-    'white' : 0xffffff,
-}
-
-/**
- * Responsible for rendering style shapes
- * as cacheable bitmaps orr pixi graphics.
+ * Class responsible for rendering style shapes
+ * as cacheable bitmaps or pixi graphics.
  * 
  * @author Martin Schade
  * @since 1.0.0
@@ -31,6 +18,36 @@ export default class ShapeRenderer {
     if (!color) return null;
     if (!color.length) return color;
     return Colors[color] || 0x000000;
+  }
+
+  renderLabel(item: ViewVertex): any {
+    let style = item.style;
+    if (!style) return; // no style
+    let labels: any = style.labels;
+    if (!labels) return; // no label
+
+    /* check for multiple labels */
+    if (labels.length) {
+
+    } else { // single label
+        let label = labels as Label;
+        let text = item.name;
+        let pixi = null;
+        
+        if (!label.cache) {
+          pixi =  {
+            fill: label.color || 0x3d3834,
+            stroke: label.backdrop || 'white',
+            strokeThickness: 8,
+            lineJoin: 'round'
+          };
+
+          label.cache = pixi;
+        }
+
+        let mapped = new PIXI.Text(text, pixi, 0.6);
+        item.labels = mapped;
+    }
   }
 
   renderShape(style: Style, ctx: PIXI.Graphics, item: ViewVertex) {
@@ -152,4 +169,91 @@ export default class ShapeRenderer {
     style.cachedImage = canvas;
     style.cachedURL = canvas.toDataURL();
   }
+
+   renderItem(item: ViewItem): any {
+        if (item.visual) {
+            return;
+        } else {
+            let visual = new PIXI.Graphics();
+            let style = item.style;
+            this.renderShape(style, visual, item)
+            item.visual = visual;
+        }
+    }
+
+    renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): any {
+        if (group.visual) {
+            return;
+        }
+        
+        let root = new PIXI.Container();
+        root.width = group.width;
+        root.height = group.height;
+
+        if (!topLevel) {
+            root.position.set(group.left, group.top);
+        }
+
+        let shape = new PIXI.Graphics();
+
+        if (oblique) {
+            shape.beginFill(0xeeeeee);
+            shape.drawRoundedRect(0, 0, group.width, group.height, 12);
+            shape.endFill();
+        } else {
+            shape.lineStyle(16, 0xeeeeee);
+            shape.drawRoundedRect(0, 0, group.width, group.height, 12);
+        }
+
+        let content = new PIXI.Container();
+        let inner = group.scale;
+        content.scale.set(inner, inner);
+
+        root.addChild(shape);
+        root.addChild(content);
+
+        if (!topLevel && !oblique) {
+            // root.cacheAsBitmap = true;
+        }
+
+        group.visual = root;
+    }
+
+    attach(node: ViewVertex, group: ViewGroup) {
+        let child = node.visual;
+        if (!child) {
+            throw new Error('Node has no rendered visual');
+        }
+
+        let root = group.visual as PIXI.Container;
+        if (!root) {
+            throw new Error('Could not find renderer visual of the given group');
+        }
+
+        /* TODO fix this direct index access */
+        let content = root.children[1] as PIXI.Container;
+        if (!content) {
+            throw new Error('Could not find low level content container');
+        }
+
+        content.addChild(child);
+    }
+}
+
+/**
+ * Named color lookup dictionary
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+let Colors = {
+    'cornflowerblue': 0x6495ED,
+    'mediumseagreen': 0x3CB371,
+    'goldenrod': 0xDAA520,
+    'darkgrey': 0xA9A9A9,
+    'darkgray': 0xA9A9A9,
+    'lightgray': 0xD3D3D3,
+    'lightgrey': 0xD3D3D3,
+    'black': 0x000000,
+    'white' : 0xffffff,
 }

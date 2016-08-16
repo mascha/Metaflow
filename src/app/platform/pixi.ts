@@ -19,7 +19,7 @@ export class PixiLayer implements PlatformLayer {
     private edges: PIXI.Container;
     private labels: PIXI.Container;
     private renderer: PIXI.SystemRenderer;
-    private mapper: PixiMapper;
+    private mapper: ShapeRenderer;
 
     cachedGroups: Array<ViewGroup>;
 
@@ -27,8 +27,15 @@ export class PixiLayer implements PlatformLayer {
         return this.camera;
     }
 
+    hitTest(worldX: number, worldY: number): Array<ViewVertex> {
+        let hits = [];
+        
+        // perform hit test
+
+        return hits;
+    }
+
     setModel(level: ViewGroup) {
-        let now = Date.now();
         this.nodes.removeChildren();
         this.labels.removeChildren();
 
@@ -60,7 +67,7 @@ export class PixiLayer implements PlatformLayer {
             let itemLabel: PIXI.Text; 
 
             if (!item.isLeaf()) {
-                itemLabel = new PIXI.Text(item.label, groupStyle, 0.6);
+                itemLabel = new PIXI.Text(item.name, groupStyle, 0.6);
                 itemLabel.pivot.set(
                     itemLabel.text.length * 6, 
                     12
@@ -86,7 +93,7 @@ export class PixiLayer implements PlatformLayer {
                     mapper.renderGroup(itm, false, true);
                 }
             } else if (item.isLeaf()) {
-                itemLabel = new PIXI.Text(item.label, leafStyle, 0.6);
+                itemLabel = new PIXI.Text(item.name, leafStyle, 0.6);
                 itemLabel.pivot.set(
                     14, 
                     6
@@ -159,7 +166,7 @@ export class PixiLayer implements PlatformLayer {
         this.scene.addChild(this.overlay);
 
         this.camera = new PixiCamera(this.world, this.overlay);
-        this.mapper = new PixiMapper();
+        this.mapper = new ShapeRenderer();
 
         this.renderer = new PIXI.CanvasRenderer(500, 500, {
             antialias: true,
@@ -216,97 +223,12 @@ export class PixiCamera extends Camera {
 }
 
 /**
- * Implements the pixi.js platform renderer.
- *
- * @author Martin Schade
- * @since 1.0.0
- */
-export class PixiMapper implements ViewModelRenderer<any, any> {
-
-    nodes: PIXI.Graphics;
-    shapes: ShapeRenderer;
-
-    renderItem(item: ViewItem): any {
-        if (item.visual) {
-            return;
-        } else {
-            let visual = new PIXI.Graphics();
-            let style = item.style;
-            this.shapes.renderShape(style, visual, item)
-            item.visual = visual;
-        }
-    }
-
-    renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): any {
-        if (group.visual) {
-            return;
-        }
-        
-        let root = new PIXI.Container();
-        root.width = group.width;
-        root.height = group.height;
-
-        if (!topLevel) {
-            root.position.set(group.left, group.top);
-        }
-
-        let shape = new PIXI.Graphics();
-
-        if (oblique) {
-            shape.beginFill(0xeeeeee);
-            shape.drawRoundedRect(0, 0, group.width, group.height, 12);
-            shape.endFill();
-        } else {
-            shape.lineStyle(16, 0xeeeeee);
-            shape.drawRoundedRect(0, 0, group.width, group.height, 12);
-        }
-
-        let content = new PIXI.Container();
-        let inner = group.scale;
-        content.scale.set(inner, inner);
-
-        root.addChild(shape);
-        root.addChild(content);
-
-        if (!topLevel && !oblique) {
-            // root.cacheAsBitmap = true;
-        }
-
-        group.visual = root;
-    }
-
-    attach(node: ViewVertex, group: ViewGroup) {
-        let child = node.visual;
-        if (!child) {
-            throw new Error('Node has no rendered visual');
-        }
-
-        let root = group.visual as PIXI.Container;
-        if (!root) {
-            throw new Error('Could not find renderer visual of the given group');
-        }
-
-        /* TODO fix this direct index access */
-        let content = root.children[1] as PIXI.Container;
-        if (!content) {
-            throw new Error('Could not find low level content container');
-        }
-
-        content.addChild(child);
-    }
-
-    constructor() {
-        this.shapes = new ShapeRenderer();
-    }
-}
-
-/**
  * A configuration object for the pixi layer system.
  * 
  * @author Martin Schade
  * @since 1.0.0
  */
-export class PixiConfig {
+class PixiConfig {
     labelResolution = 0.6
     backgroundStrength = 8
     baseScale = 0.5
