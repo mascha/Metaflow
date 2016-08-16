@@ -85,19 +85,77 @@ export class GroupStyle extends Style {
  */
 export class Label {
     formula: () => string;
+
+    /**
+     * The lowest zoom level for which this
+     * label is visible.
+     */
     lowerZoom: number;
+
+    /**
+     * The highest zoom level for which this 
+     * label is visible.
+     */
     upperZoom: number;
+    
+    /**
+     * Priority used for visibility tie breaking.
+     */
     priority: number;
+
+    /**
+     * The normal scale of the label.
+     */
     baseScale: number;
+
+    /**
+     * If all else fails, this is the 
+     * text which will be rendered.
+     */
     defaultText: string;
+
+    /**
+     * Text color.
+     */
     color: number;
-    fontSize: number;
-    fontWeight: boolean;
+    
+    /**
+     * Color of the text backdrop. Useful for
+     * making labels stand out on maps.
+     */
+    backdrop: number;
+
+    /**
+     * Wether this label should be displayed
+     * with a higher   
+     */
+    bold: boolean;
+
+    /**
+     * Where this label is going to be placed.
+     */
     placement: Placement;
+
+    /**
+     * Vertical placement.
+     */
     vertical: Vertical;
     horizontal: Horizontal;
+
+    /**
+     * Text transform choice. Default is NONE.
+     */
     transform: TextTransform;
+
+    /**
+     * Text alignment.
+     */
     alignment: TextAlignment;
+
+    /**
+     * The cached platform type.
+     */
+    cache: any;
 }
 
 /**
