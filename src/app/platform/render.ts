@@ -28,7 +28,7 @@ export default class ShapeRenderer {
   private urls = Object.create(null);
 
   private getColor(color: any): number {
-    if (!color) return color;
+    if (!color) return null;
     if (!color.length) return color;
     return Colors[color] || 0x000000;
   }
@@ -36,56 +36,47 @@ export default class ShapeRenderer {
   renderShape(style: Style, ctx: PIXI.Graphics, item: ViewVertex) {
     let fill = this.getColor(style.fill);
     let stroke = this.getColor(style.stroke);
+
+    if (fill) ctx.beginFill(fill);
     
     switch (style.shape.type) {
-      case ShapeType.SQUARE,
-           ShapeType.RECTANGLE:
-          ctx.beginFill(fill);
+      case ShapeType.SQUARE, ShapeType.RECTANGLE:
           ctx.drawRect(item.left, item.top, item.width, item.height);
-          ctx.endFill();
         break;
 
       case ShapeType.CIRCLE:
-          ctx.beginFill(fill);
           ctx.drawCircle(item.left, item.top, item.width);
-          ctx.endFill();
         break;
 
       case ShapeType.DIAMOND: 
-          ctx.beginFill(fill);
           ctx.moveTo(item.left + item.width / 2, item.top);
           ctx.lineTo(item.left + item.width, item.top + item.height / 2);
           ctx.lineTo(item.left + item.width / 2, item.top + item.height);
           ctx.lineTo(item.left, item.top + item.height / 2);
-          ctx.endFill();
         break;
 
       case ShapeType.TRIANGLE:
-          ctx.beginFill(fill);
           ctx.moveTo(item.left + item.width / 2, item.top);
           ctx.lineTo(item.left, item.top + item.height);
           ctx.lineTo(item.left + item.width, item.top + item.height);
-          ctx.endFill();
         break;
 
       case ShapeType.ROUNDED:
-          ctx.beginFill(fill);
           ctx.drawRoundedRect(item.left, item.top, item.width, item.height, style.shape.a || 12);
-          ctx.endFill();
         break;
 
       case ShapeType.HOURGLASS:
-          ctx.beginFill(fill);
           ctx.moveTo(item.left, item.top);
           ctx.lineTo(item.left + item.width, item.top);
           ctx.lineTo(item.left, item.top + item.height);
           ctx.lineTo(item.left + item.width, item.top + item.height);
-          ctx.endFill();
         break;
 
       default: console.warn('Tried to render unknown shape class (' + style.shape.type + ')')
         break;
     }
+
+    if (fill) ctx.endFill();
   }
 
   cacheShape(style: Style) {
