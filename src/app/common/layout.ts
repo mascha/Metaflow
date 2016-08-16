@@ -7,14 +7,14 @@ export const enum Placement {
 }
 
 /**
- * Vertical positions.
+ * Possible vertical positions.
  */
 export const enum Vertical {
     TOP, MIDDLE, BOTTOM
 }
 
 /**
- * Horizontal positions.
+ * Possible horizontal positions.
  */
 export const enum Horizontal {
     LEFT, MIDDLE, RIGHT
@@ -22,7 +22,23 @@ export const enum Horizontal {
 
 /**
  * Determines the degrees of freedom for decoration nodes.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
  */
 export const enum PlacementFreedom {
-    FREE, SLIDING, FIXED
+    /**
+     * Can be placed anywhere.
+     */
+    FREE,
+
+    /**
+     * Can be placed anywhere on the border.  
+     */ 
+    SLIDING, 
+
+    /**
+     * Remains in place.
+     */
+    FIXED
 }
