@@ -9,9 +9,9 @@ import {Style} from "./styling";
  * @since 1.0.0
  */
 export abstract class ViewVertex {
-
     parent: ViewGroup;
     visual: any;
+    labels: any;
     style: Style; 
     
     isLeaf(): boolean {
@@ -22,7 +22,7 @@ export abstract class ViewVertex {
         return false;
     }
     
-    constructor(public label: string, public left: number,
+    constructor(public name: string, public left: number,
                 public top: number, public width: number,
                 public height: number) {}
 }
@@ -106,8 +106,8 @@ export class ViewGroup extends ViewVertex {
         // console.log(change);
     }
 
-    constructor(l: string, x: number, y: number, w: number, h: number, public scale: number) {
-        super(l,x,y,w,h);
+    constructor(name: string, x: number, y: number, w: number, h: number, public scale: number) {
+        super(name,x,y,w,h);
     }
 }
 
