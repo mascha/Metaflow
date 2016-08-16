@@ -7,7 +7,7 @@ export const enum Placement {
 }
 
 /**
- * Horizontal positions.
+ * Vertical positions.
  */
 export const enum Vertical {
     TOP, MIDDLE, BOTTOM
