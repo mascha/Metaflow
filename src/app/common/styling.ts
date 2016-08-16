@@ -84,7 +84,6 @@ export class GroupStyle extends Style {
  * @since 1.0.0
  */
 export class Label {
-    formula: () => string;
 
     /**
      * The lowest zoom level for which this
