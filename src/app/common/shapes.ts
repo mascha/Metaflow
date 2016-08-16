@@ -15,7 +15,6 @@ export class Shape {
     a: number;
     b: number;
     type: ShapeType;
-    vertices: Array<number>;
     
     constructor(type?: ShapeType) {
         this.type = type || ShapeType.CUSTOM;
@@ -33,6 +32,10 @@ export class Shape {
  */
 export class CompositeShape extends Shape {
     shapes : Array<Shape>
+
+    constructor() {
+        super(ShapeType.COMPOSITE);
+    }
 }
 
 /**
