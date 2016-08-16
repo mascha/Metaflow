@@ -10,7 +10,7 @@ import PropertySheet from "./propertysheet/propertysheet";
 })
 export default class Inspector {
     categoryIndex = 1;
-    selection = 0;
+    selection = 0; // null
     overlayMessage = 'No selection';
 
     @ViewChild('props') props: ElementRef;
