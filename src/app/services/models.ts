@@ -122,7 +122,7 @@ export default class ModelService {
     }
 
     private createDebugModel(): ViewGroup {
-        let MAX = 10;
+        let MAX = 3;
         let i = MAX;
         let o : ViewGroup = null;
         let root: ViewGroup = null;
@@ -130,7 +130,7 @@ export default class ModelService {
             let group = new ViewGroup(`Level #${MAX - i}`, 2000, 2000, 2000, 2000, 0.1);
             group.style = this.moduleStyle;
 
-            let j = 120;
+            let j = 180;
             while (j) {
                 let rnd = this.random();
                 let item;
