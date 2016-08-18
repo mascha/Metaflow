@@ -1,9 +1,9 @@
 <section class="project-header">
   <div (click)="goUpwards()" class="upwards" [class.disabled]="isDisabled == true"></div>
-  <span class="project-reference">{{level.label}}</span>
+  <span class="project-reference">{{level.name}}</span>
 </section>
 <section class="project-entities">
   <div *ngFor="let node of contents" class="entity-cell">
-    <img src="{{node.style.cachedURL}}" class="entity-icon"><span>{{node.label}}</span>
+    <img src="{{node.style.cachedURL}}" class="entity-icon"><span>{{node.name}}</span>
   </div>
 </section>
