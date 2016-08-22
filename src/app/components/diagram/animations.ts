@@ -75,7 +75,7 @@ export class Interpolator {
             targetY: (vertex.top + vertex.height / 2) * parent.scale,
             panZoom: 3.2,
             velocity: 1,
-            targetWidth: vertex.width / vertex.parent.scale,
+            targetWidth: vertex.width * 4 * vertex.parent.scale,
             pathFactor: 1000
         })
     }
