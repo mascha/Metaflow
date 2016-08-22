@@ -62,7 +62,8 @@ export default class ShapeRenderer {
         break;
 
       case ShapeType.CIRCLE:
-          ctx.drawCircle(item.left, item.top, item.width / 2);
+          let radius = item.width / 2;
+          ctx.drawCircle(item.left + radius, item.top + radius, item.width / 2);
         break;
 
       case ShapeType.DIAMOND: 
