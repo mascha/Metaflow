@@ -38,7 +38,6 @@ export default class Diagram {
     animatedZoom = false;
     animatedNavigation = true;
     frames = 60;
-    pathFactor = 1000;
     rubberBanding = false;
     respectLimits = false;
     useKinetics = true;
@@ -46,12 +45,13 @@ export default class Diagram {
     @ViewChild(BorderLayer) private _borderLayer: BorderLayer;
     @ViewChild(GridLayer) private _gridLayer: GridLayer;
     @ViewChild(NodeLayer) private _nodeLayer: NodeLayer;
+    @ViewChild('effectLayer') private _effects: ElementRef;
 
     private _camera: Camera;
     private _behavior: DiagramEvents;
     private _inertiaDecay = 0.05;
     private _zoomPan = 1.99;
-    private _velocity = 1.44;
+    private _velocity = .9;
     private _diagram: HTMLElement;
     private _model: ViewGroup;
     private _platform: PlatformLayer;
@@ -76,14 +76,6 @@ export default class Diagram {
         this._zoomPan = minimax(.01, value, 2);
     }
 
-    get navigationVelocity(): number {
-        return this._velocity;
-    }
-
-    get state(): DiagramState {
-        return null; // this._behavior.current;
-    }
-
     set model(group: ViewGroup) {
         this._model = group;
         if (this._platform) {
@@ -99,6 +91,10 @@ export default class Diagram {
 
     get model(): ViewGroup {
         return this._model;
+    }
+
+    get navigationVelocity(): number {
+        return this._velocity;
     }
 
     set navigationVelocity(value: number) {
@@ -242,13 +238,13 @@ export default class Diagram {
             throw new Error('Could not create diagram controller');
         }
 
-        /* Load level data */
+        /* load level data */
         this.model = this._models.getModel();
 
-        /* Do initial rendering */
+        /* do initial rendering */
         window.setTimeout(() => {
             this.onResize();
-        })
+        }, 32)
     }
 
     constructor(private _platforms: PlatformService,
