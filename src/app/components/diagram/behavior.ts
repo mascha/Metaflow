@@ -268,7 +268,7 @@ class Idle extends BaseState {
     handleNavigation(vertex: ViewVertex) {
         this.behavior.goto('animating', { 
             interpolator: Interpolator.navigateToItem(
-                this.camera, vertex
+                this.camera, this.diagram, vertex
             )});
     }
 
@@ -288,7 +288,6 @@ class Idle extends BaseState {
                     targetY: this.camera.castRayY(y),
                     velocity: this.diagram.navigationVelocity,
                     panZoom: this.diagram.zoomPanPreference,
-                    pathFactor: this.diagram.pathFactor,
                     targetWidth: this.getAppropriateScale(),
                     camera: this.camera
                 })
