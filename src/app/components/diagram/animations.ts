@@ -1,15 +1,16 @@
 import {Camera} from '../../common/camera';
 import {ViewVertex} from '../../common/viewmodel';
+import Diagram from './diagram';
 
 /**
  * Interpolator helper class, which encapsulates
  * requestAnimationFrame and onFinished callbacks.
+ * 
  * @author Martin Schade
  * @since 1.0.0
  */
 export class Interpolator {
-
-    onFinished: () => void;
+    public onFinished: () => void;
     private start: number;
     private frame: number;
     private active = false;
@@ -66,17 +67,16 @@ export class Interpolator {
     }
 
 
-    static navigateToItem(cam: Camera, vertex: ViewVertex): Interpolator {
+    static navigateToItem(cam: Camera, diagram: Diagram, vertex: ViewVertex): Interpolator {
         // TODO what if parent == null ? 
         let parent = vertex.parent;
         return Interpolator.navigateTo({
             camera: cam,
             targetX: (vertex.left + vertex.width / 2) * parent.scale,
             targetY: (vertex.top + vertex.height / 2) * parent.scale,
-            panZoom: 3.2,
-            velocity: 1,
+            panZoom: diagram.zoomPanPreference,
+            velocity: diagram.navigationVelocity,
             targetWidth: vertex.width * 4 * vertex.parent.scale,
-            pathFactor: 1000
         })
     }
 
@@ -121,7 +121,7 @@ export class Interpolator {
                 const x = (aX + dX * f) * vZ;
                 const y = (aY + dY * f) * vZ;
                 camera.zoomAndMoveTo(x - vW,y - vH, vZ);
-            }, Math.sqrt(1 + S) * params.pathFactor / v);
+            }, Math.sqrt(1 + S) * NAVIGATION_FACTOR / v);
         } else {
             const dZ = z * z * dU;
             const dA = eW * eW - aW * aW;
@@ -145,7 +145,7 @@ export class Interpolator {
                 const x = (aX + dX / dU * u) * vZ;
                 const y = (aY + dY / dU * u) * vZ;
                 camera.zoomAndMoveTo(x - vW, y - vH, vZ);
-            }, Math.sqrt(1 + S) * params.pathFactor / v);
+            }, Math.sqrt(1 + S) * NAVIGATION_FACTOR / v);
         }
     }
 
@@ -169,5 +169,6 @@ export interface NavigateConfig {
     velocity: number;
     camera : Camera;
     targetWidth: number;
-    pathFactor: number;
 }
+
+const NAVIGATION_FACTOR = 1000;
