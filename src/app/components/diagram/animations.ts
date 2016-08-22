@@ -1,4 +1,5 @@
 import {Camera} from '../../common/camera';
+import {ViewVertex} from '../../common/viewmodel';
 
 /**
  * Interpolator helper class, which encapsulates
@@ -7,11 +8,24 @@ import {Camera} from '../../common/camera';
  * @since 1.0.0
  */
 export class Interpolator {
+
+    onFinished: () => void;
     private start: number;
     private frame: number;
     private active = false;
-    
-    onFinished: () => void;
+    private callback = () => {
+        if (this.active) {
+            let f = (Date.now() - this.start) / this.duration;
+            f = (f > 1) ? 1 : (f < 0) ? 0 : f;
+            if (f < 1 && this.active) {
+                this.update(f);
+                this.frame = window.requestAnimationFrame(this.callback);
+            } else if (f >= 1 && this.onFinished) {
+                this.onFinished();
+                this.onFinished = null;
+            }
+        }
+    }
 
     /**
      * Stop the animation
@@ -31,21 +45,9 @@ export class Interpolator {
         if (this.active) return;
         this.active = true;
         this.start = Date.now();
-        const self = this;
-        const func = function() {
-            if (self.active) {
-                let f = (Date.now() - self.start) / self.duration;
-                f = (f > 1) ? 1 : (f < 0) ? 0 : f;
-                if (f < 1 && self.active) {
-                    self.update(f);
-                    self.frame = window.requestAnimationFrame(func);
-                } else if (f >= 1 && self.onFinished) {
-                    self.onFinished();
-                    self.onFinished = null;
-                }
-            }
-        };
-        self.frame = window.requestAnimationFrame(func);
+        this.frame = window.requestAnimationFrame(
+            this.callback
+         );
     }
 
     static throwCamera(params: ThrowConfig): Interpolator {
@@ -61,6 +63,21 @@ export class Interpolator {
             const posY = startY + t * distY;
             cam.moveTo(-posX, -posY);
         }, params.duration);
+    }
+
+
+    static navigateToItem(cam: Camera, vertex: ViewVertex): Interpolator {
+        // TODO what if parent == null ? 
+        let parent = vertex.parent;
+        return Interpolator.navigateTo({
+            camera: cam,
+            targetX: (vertex.left + vertex.width / 2) * parent.scale,
+            targetY: (vertex.top + vertex.height / 2) * parent.scale,
+            panZoom: 3.2,
+            velocity: 1,
+            targetWidth: vertex.width / vertex.parent.scale,
+            pathFactor: 1000
+        })
     }
 
     /**
@@ -86,8 +103,8 @@ export class Interpolator {
         const aX = camera.centerX;
         const aY = camera.centerY;
         const eW = params.targetWidth;
-        const dX = params.centerX - aX;
-        const dY = params.centerY - aY;
+        const dX = params.targetX - aX;
+        const dY = params.targetY - aY;
         const dU = Math.hypot(dX, dY);
         const z = params.panZoom;
         const v = params.velocity;
@@ -146,8 +163,8 @@ export interface ThrowConfig {
 }
 
 export interface NavigateConfig {
-    centerX : number;
-    centerY : number;
+    targetX : number;
+    targetY : number;
     panZoom : number;
     velocity: number;
     camera : Camera;
