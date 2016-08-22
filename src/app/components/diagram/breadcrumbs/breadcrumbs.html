@@ -1,7 +1,8 @@
 <ol class="navigation">
   <li *ngFor="let segment of segments">
+    <img src="{{segment.style.cachedURL}}">
     <a href="#">
-      {{segment.label}}
+      {{segment.name}}
     </a>
   </li>
 </ol>

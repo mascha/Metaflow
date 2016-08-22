@@ -20,7 +20,7 @@ $breadcrumbs-text-color: darken($icon-color,8);
   line-height: 21px;
   background-color: $presenter-body;
   border-radius: 3px;
-  padding: 3px 0 3px 8px;
+  padding: 3px 0 3px 4px;
   margin: 0;
 
   li {
@@ -29,12 +29,19 @@ $breadcrumbs-text-color: darken($icon-color,8);
     display: inline;
     color: $breadcrumbs-text-color;
 
+    img {
+      padding: 2.5px 4px 0 4px;
+    }
+
     a {
       text-decoration: none;
       color: $breadcrumbs-text-color;
-      font-weight: 600;
       font-family: sans-serif;
       transition: color 200ms ease-out;
+      display: inline-block;
+      height: 21px;
+      line-height: 21px;
+      vertical-align: text-bottom;
 
       &:hover {
         color: $icon-hover;
@@ -43,8 +50,9 @@ $breadcrumbs-text-color: darken($icon-color,8);
 
     &:after {
       padding-left: 6px;
-      padding-right: 6px;
+      padding-right: 3px;
       content: "/";
+      font-size: 21px;
     }
 
     &:last-child:after {
@@ -52,7 +60,7 @@ $breadcrumbs-text-color: darken($icon-color,8);
     }
 
     &:last-child {
-      font-weight: 120%;
+      font-weight: bold;
     }
   }
 }
