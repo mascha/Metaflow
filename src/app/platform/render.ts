@@ -171,11 +171,11 @@ export default class ShapeRenderer {
     style.cachedURL = canvas.toDataURL();
   }
 
-   renderItem(item: ViewItem): any {
+   renderItem(item: ViewItem, visual: any): any {
         if (item.visual) {
             return;
         } else {
-            let visual = new PIXI.Graphics();
+            // let visual = new PIXI.Graphics();
             let style = item.style;
             this.renderShape(style, visual, item)
             item.visual = visual;

@@ -38,6 +38,7 @@ export class PixiLayer implements PlatformLayer {
     setModel(level: ViewGroup) {
         this.nodes.removeChildren();
         this.labels.removeChildren();
+        let leafs = new PIXI.Graphics();
 
         // first level
         let mapper = this.mapper;
@@ -69,8 +70,7 @@ export class PixiLayer implements PlatformLayer {
             if (!item.isLeaf()) {
                 itemLabel = new PIXI.Text(item.name, groupStyle, 0.6);
                 itemLabel.pivot.set(
-                    itemLabel.text.length * 6, 
-                    12
+                    itemLabel.text.length * 6, 12
                 );
                 itemLabel.position.set(
                     (item.left + item.width / 2 - itemLabel.text.length * 3) * level.scale,
@@ -81,11 +81,12 @@ export class PixiLayer implements PlatformLayer {
                 this.cachedGroups.push(itm);
                 if (itm.contents && itm.contents.length > 0) {
                     mapper.renderGroup(itm, false, false);
+                    let subleafs = new PIXI.Graphics();
                     itm.contents.forEach(it => {
                         if (!it.isLeaf()) {
                             mapper.renderGroup(it as ViewGroup, false, true);
                         } else if (it.isLeaf()) {
-                            mapper.renderItem(it as ViewItem);
+                            mapper.renderItem(it as ViewItem, subleafs);
                         }
                         mapper.attach(it, itm);
                     });
@@ -94,15 +95,12 @@ export class PixiLayer implements PlatformLayer {
                 }
             } else if (item.isLeaf()) {
                 itemLabel = new PIXI.Text(item.name, leafStyle, 0.6);
-                itemLabel.pivot.set(
-                    14, 
-                    6
-                );
+                itemLabel.pivot.set(14, 6);
                 itemLabel.position.set(
                     (item.left + item.width * 1.1) * level.scale,
                     (item.top + item.height / 2) * level.scale
                 );
-                mapper.renderItem(item as ViewItem);
+                mapper.renderItem(item as ViewItem, leafs);
             }
 
             this.labels.addChild(itemLabel);
