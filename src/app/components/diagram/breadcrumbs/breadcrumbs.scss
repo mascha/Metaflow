@@ -30,7 +30,7 @@ $breadcrumbs-text-color: darken($icon-color,8);
     color: $breadcrumbs-text-color;
 
     img {
-      padding: 2.5px 4px 0 4px;
+      padding: 2.5px 0 0 0;
     }
 
     a {
@@ -50,7 +50,7 @@ $breadcrumbs-text-color: darken($icon-color,8);
 
     &:after {
       padding-left: 6px;
-      padding-right: 3px;
+      padding-right: 6px;
       content: "/";
       font-size: 21px;
     }
