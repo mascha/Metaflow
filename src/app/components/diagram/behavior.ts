@@ -268,8 +268,8 @@ class Idle extends BaseState {
     handleNavigation(vertex: ViewVertex) {
         this.behavior.goto('animating', { 
             interpolator: Interpolator.navigateToItem(
-                this.camera, vertex)
-        });
+                this.camera, vertex
+            )});
     }
 
     handleClick(x: number, y: number, double: boolean) {
