@@ -1,5 +1,5 @@
 import {Camera} from '../../common/camera';
-import {ViewGroup} from '../../common/viewmodel';
+import {ViewGroup, ViewVertex} from '../../common/viewmodel';
 import {Interpolator} from './animations';
 import Kinetics from '../../common/kinetics';
 import Diagram from './diagram';
@@ -12,6 +12,11 @@ import Diagram from './diagram';
  * @since 1.0.0
  */
 export interface DiagramEvents {
+
+    /**
+     * Handle a target event.
+     */
+    handleNavigation(vertex: ViewVertex)
 
     /**
      * Handle a single/double click.
@@ -111,6 +116,10 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
     private states: any;
     private debug = false;
 
+    handleNavigation(vertex: ViewVertex) {
+        this.current.handleNavigation(vertex);
+    }
+
     handleClick(x: number, y: number, double: boolean) {
         this.current.handleClick(x, y, double);
     }
@@ -208,6 +217,8 @@ abstract class BaseState implements DiagramState {
 
     leaveState() { /* ignore*/ }
 
+    handleNavigation(vertex: ViewVertex) { /* ignore */ }
+
     handleClick(x: number, y: number, double: boolean) { /* ignore*/ }
 
     handleMouseDown(x: number, y: number) { /* ignore*/ }
@@ -254,6 +265,13 @@ class Idle extends BaseState {
         this.behavior.goto('panning', { x: x, y: y });
     }
 
+    handleNavigation(vertex: ViewVertex) {
+        this.behavior.goto('animating', { 
+            interpolator: Interpolator.navigateToItem(
+                this.camera, vertex)
+        });
+    }
+
     handleClick(x: number, y: number, double: boolean) {
         if (double) {
             /*
@@ -266,8 +284,8 @@ class Idle extends BaseState {
             */
             this.behavior.goto('animating', {
                 interpolator: Interpolator.navigateTo({
-                    centerX: this.camera.castRayX(x),
-                    centerY: this.camera.castRayY(y),
+                    targetX: this.camera.castRayX(x),
+                    targetY: this.camera.castRayY(y),
                     velocity: this.diagram.navigationVelocity,
                     panZoom: this.diagram.zoomPanPreference,
                     pathFactor: this.diagram.pathFactor,
@@ -526,6 +544,9 @@ class Panning extends BaseState {
     }
 }
 
+/**
+ * Animation parameter interface.
+ */
 export interface AnimationParams {
     forced: boolean;
     interpolator: Interpolator;

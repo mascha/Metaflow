@@ -50,7 +50,7 @@ export default class Diagram {
     private _camera: Camera;
     private _behavior: DiagramEvents;
     private _inertiaDecay = 0.05;
-    private _zoomPan = 2.33;
+    private _zoomPan = 1.99;
     private _velocity = 1.44;
     private _diagram: HTMLElement;
     private _model: ViewGroup;
@@ -81,7 +81,7 @@ export default class Diagram {
     }
 
     get state(): DiagramState {
-        return this._behavior.current;
+        return null; // this._behavior.current;
     }
 
     set model(group: ViewGroup) {
@@ -116,7 +116,10 @@ export default class Diagram {
     @HostListener('dblclick', ['$event'])
     onDoubleClick(event: MouseEvent) {
         let off = HTML.getOffset(this._diagram, event);
-        this._behavior.handleClick(off.x, off.y, true);
+        // this._behavior.handleClick(off.x, off.y, true);
+        let n = Math.floor(this.model.contents.length * Math.random())
+        let random = this.model.contents[n];
+        this._behavior.handleNavigation(random);
         return false;
     }
 
