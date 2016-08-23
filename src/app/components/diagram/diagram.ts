@@ -41,6 +41,7 @@ export default class Diagram {
     rubberBanding = false;
     respectLimits = false;
     useKinetics = true;
+    showClickEffect = true;
 
     @ViewChild(BorderLayer) private _borderLayer: BorderLayer;
     @ViewChild(GridLayer) private _gridLayer: GridLayer;
@@ -127,11 +128,19 @@ export default class Diagram {
     onClick(event: MouseEvent) {
         let off = HTML.getOffset(this._diagram, event);
         this._behavior.handleClick(off.x, off.y, false);
+        
+        /* play click effect */
+        let effects = this._effects.nativeElement as HTMLDivElement;
+        if (effects && this.showClickEffect) {
+            HTML.playClickEffect(effects, off);
+        }
+
         return false;
     }
 
     /**
      * Keyboard event handler.
+     * 
      * @param event
      */
     @HostListener('keyup', ['$event'])
@@ -142,6 +151,7 @@ export default class Diagram {
 
     /**
      * Handle mouse wheel event.
+     * 
      * @param event
      */
     @HostListener('wheel', ['$event'])

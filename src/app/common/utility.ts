@@ -92,6 +92,29 @@ export default class HTMLUtil {
     }
 
     /**
+     * Adds an expanding dot to the given position.
+     * 
+     * @param element {HTMLElement}
+     * @param off {{x: number, y: number}}
+     */
+    static playClickEffect(element: HTMLElement, off: any, color?: string) {
+        let container = document.createElement('div');
+        container.style.top = off.y + "px";
+        container.style.left = off.x + "px";
+        container.style.position = "absolute";
+        let object = document.createElement('div');
+        object.style.width = "5px";
+        object.style.height = "5px";
+        object.style.backgroundColor = color || 'rgba(0,0,0, 0.2)';
+        object.style.animation = "grow .3s linear forwards";
+        object.style.borderRadius = "50%";
+        object.style.transform = "translate(-50%, -50%)";
+        container.appendChild(object);
+        element.appendChild(container);
+        setTimeout(() => container.remove(), 1000);
+    }
+
+    /**
      * Retrieves the relative offset for the given html element.
      * @param element
      * @param event

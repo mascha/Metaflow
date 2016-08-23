@@ -60,3 +60,20 @@
     left:0;
   }
 }
+
+@keyframes grow {
+    0% {
+        width: 5px;
+        height: 5px;
+    }
+    50% {
+        width: 15px;
+        height: 15px;
+        opacity: 1;
+    }
+    100% {
+        width: 25px;
+        height: 25px;
+        opacity: 0;
+    }
+}
