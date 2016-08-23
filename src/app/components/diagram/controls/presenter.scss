@@ -71,16 +71,15 @@ $presenter-radius: 4px;
   @include icon(before, '\f19f')
 }
 
-
 .omnibox {
   position: absolute;
-  left: $diagram-control-offset;
+  right: $diagram-control-offset;
   top: $diagram-control-offset;
   background-color: $presenter-body;
   box-shadow: $presenter-shadow;
   border-radius: $presenter-radius;
   width: 348px;
-  height: 36px;
+  height: 28px;
 
   div {
     transform: translateY(-50%);
