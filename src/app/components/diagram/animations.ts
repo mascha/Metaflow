@@ -76,7 +76,7 @@ export class Interpolator {
             targetY: (vertex.top + vertex.height / 2) * parent.scale,
             panZoom: diagram.zoomPanPreference,
             velocity: diagram.navigationVelocity,
-            targetWidth: vertex.width * 4 * vertex.parent.scale,
+            targetWidth: vertex.width * 16 * vertex.parent.scale,
         })
     }
 
