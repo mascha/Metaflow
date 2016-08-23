@@ -6,6 +6,7 @@
 
   .sheet-label {
     margin-bottom: 2px;
+    margin-left: 4px;
     font-size: 0.8rem;
     font-weight: bold;
     display: block;
@@ -29,7 +30,7 @@
     margin-bottom: 5px;
     font-size: .8rem;
     border: 1px solid #bbb;
-    border-radius: 3px;
+    // border-radius: 3px;
   }
 
   input[disabled] {
