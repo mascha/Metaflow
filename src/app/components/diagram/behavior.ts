@@ -6,7 +6,6 @@ import Diagram from './diagram';
 
 /**
  * All possible diagram events.
- * TODO make this more elegant!
  * 
  * @author Martin Schade
  * @since 1.0.0
@@ -58,8 +57,6 @@ export interface DiagramEvents {
      * Notify the state that is should terminate, but does not need to.
      */
     handleStop()
-
-    setModel(level: ViewGroup)
 }
 
 /**
@@ -115,6 +112,7 @@ export interface StateMachine {
 /**
  * The state machine for the diagramming view.
  * Simply delegates all events to the currently active state.
+ * 
  * @author Martin Schade
  * @since 1.0.0
  */
@@ -172,10 +170,6 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
 
     handleStop() {
         this.current.handleStop();
-    }
-
-    setModel(level: ViewGroup) {
-        this.current.setModel(level);
     }
 
     goto(state: string, params?: any) {
@@ -260,10 +254,6 @@ abstract class BaseState implements DiagramState {
     handleAbort() { /* ignore */ }
 
     handleStop() { /* ignore */ }
-
-    setModel(level: ViewGroup) {
-        // this.loadLevel(level);
-    }
 
     constructor(name: string, protected behavior: DiagramBehavior, protected diagram: Diagram) {
         this.name = name;
