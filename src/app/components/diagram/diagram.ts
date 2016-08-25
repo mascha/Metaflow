@@ -106,10 +106,6 @@ export default class Diagram {
         return this._platform.cachedGroups;
     }
 
-    /**
-     * On click event handler.
-     * @param event
-     */
     @HostListener('dblclick', ['$event'])
     private onDoubleClick(event: MouseEvent) {
         console.log('dblclick')
@@ -121,10 +117,6 @@ export default class Diagram {
         return false;
     }
 
-    /**
-     * On click event handler.
-     * @param event
-     */
     @HostListener('click', ['$event'])
     private onClick(event: MouseEvent) {
         console.log('click')
@@ -140,22 +132,12 @@ export default class Diagram {
         return false;
     }
 
-    /**
-     * Keyboard event handler.
-     * 
-     * @param event
-     */
     @HostListener('keyup', ['$event'])
     private onKeyUp(event: KeyboardEvent) {
         this._behavior.handleKey(event);
         return false;
     }
 
-    /**
-     * Handle mouse wheel event.
-     * 
-     * @param event
-     */
     @HostListener('wheel', ['$event'])
     private onScroll(event: MouseEvent) {
         let off = HTML.getOffset(this._diagram, event);
@@ -164,19 +146,12 @@ export default class Diagram {
         return false;
     }
 
-    /**
-     * Handle resize events.
-     */
     @HostListener('window:resize')
     private onResize() {
         const rect = this._diagram.getBoundingClientRect();
         this._camera.updateVisual(0, 0, rect.width, rect.height);
     }
 
-    /**
-     * Handle mouse down/touch events
-     * @param event
-     */
     @HostListener('mousedown', ['$event'])
     private onMouseDown(event: MouseEvent) {
         console.log('mdown')
@@ -185,10 +160,6 @@ export default class Diagram {
         HTML.block(event);
     }
 
-    /**
-     * Mouse movement.
-     * @param event
-     */
     @HostListener('mousemove', ['$event'])
     private onMouseMove(event: MouseEvent) {
         const pos = HTML.getOffset(this._diagram, event);
@@ -196,10 +167,6 @@ export default class Diagram {
         return false;
     }
 
-    /**
-     * Mouse up event.
-     * @param event
-     */
     @HostListener('mouseup', ['$event'])
     @HostListener('window:mouseup', ['$event'])
     private onMouseUp(event: MouseEvent) {
