@@ -111,7 +111,8 @@ export default class Diagram {
      * @param event
      */
     @HostListener('dblclick', ['$event'])
-    onDoubleClick(event: MouseEvent) {
+    private onDoubleClick(event: MouseEvent) {
+        console.log('dblclick')
         let off = HTML.getOffset(this._diagram, event);
         // this._behavior.handleClick(off.x, off.y, true);
         let n = Math.floor(this.model.contents.length * Math.random())
@@ -125,7 +126,8 @@ export default class Diagram {
      * @param event
      */
     @HostListener('click', ['$event'])
-    onClick(event: MouseEvent) {
+    private onClick(event: MouseEvent) {
+        console.log('click')
         let off = HTML.getOffset(this._diagram, event);
         this._behavior.handleClick(off.x, off.y, false);
         
@@ -144,7 +146,7 @@ export default class Diagram {
      * @param event
      */
     @HostListener('keyup', ['$event'])
-    onKeyUp(event: KeyboardEvent) {
+    private onKeyUp(event: KeyboardEvent) {
         this._behavior.handleKey(event);
         return false;
     }
@@ -155,7 +157,7 @@ export default class Diagram {
      * @param event
      */
     @HostListener('wheel', ['$event'])
-    onScroll(event: MouseEvent) {
+    private onScroll(event: MouseEvent) {
         let off = HTML.getOffset(this._diagram, event);
         let sca = HTML.normalizeWheel(event);
         this._behavior.handleZoom(off.x, off.y, -sca * 20);
@@ -166,7 +168,7 @@ export default class Diagram {
      * Handle resize events.
      */
     @HostListener('window:resize')
-    onResize() {
+    private onResize() {
         const rect = this._diagram.getBoundingClientRect();
         this._camera.updateVisual(0, 0, rect.width, rect.height);
     }
@@ -176,7 +178,8 @@ export default class Diagram {
      * @param event
      */
     @HostListener('mousedown', ['$event'])
-    onMouseDown(event: MouseEvent) {
+    private onMouseDown(event: MouseEvent) {
+        console.log('mdown')
         const pos = HTML.getOffset(this._diagram, event);
         this._behavior.handleMouseDown(pos.x, pos.y);
         HTML.block(event);
@@ -187,7 +190,7 @@ export default class Diagram {
      * @param event
      */
     @HostListener('mousemove', ['$event'])
-    onMouseMove(event: MouseEvent) {
+    private onMouseMove(event: MouseEvent) {
         const pos = HTML.getOffset(this._diagram, event);
         this._behavior.handleMouseMove(pos.x, pos.y);
         return false;
@@ -199,8 +202,8 @@ export default class Diagram {
      */
     @HostListener('mouseup', ['$event'])
     @HostListener('window:mouseup', ['$event'])
-    onMouseUp(event: MouseEvent) {
-        const pos = HTML.getOffset(this._diagram, event);
+    private onMouseUp(event: MouseEvent) {
+        let pos = HTML.getOffset(this._diagram, event);
         this._behavior.handleMouseUp(pos.x, pos.y);
         return false;
     }
@@ -208,7 +211,7 @@ export default class Diagram {
     /**
      * Assemble all canvas layers.
      */
-    public ngAfterViewInit() {
+    private ngAfterViewInit() {
         /* get html elements */
         this._diagram = this._element.nativeElement;
         let surface = this._nodeLayer.getElement();
