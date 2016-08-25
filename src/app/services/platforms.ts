@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {PlatformLayer} from "../common/platform";
+import {PlatformLayer} from "../components/diagram/layers";
 import {PixiLayer} from "../platform/pixi";
 
 /**
