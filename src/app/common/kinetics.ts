@@ -29,7 +29,7 @@ export default class Kinetics {
     set minimumSpeed(threshold: number) { this.maxDelay = threshold < 0 ? threshold : 0; }
 
     private maxDelay = 33; // <ms>
-    private minSpeed = 200/1000 // <pixels/second>
+    private minSpeed = 200/1000; // <pixels/second>
     private _speed = 0.0;
     private _angle = 0.0;
     private _smooth = 0.9;
