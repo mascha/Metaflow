@@ -1,6 +1,6 @@
 import {Camera} from "../common/camera";
 import {ViewGroup, ViewItem, ViewVertex} from "../common/viewmodel";
-import {PlatformLayer, ViewModelRenderer} from "../common/platform";
+import {PlatformLayer, ViewModelRenderer} from "../components/diagram/layers";
 import ShapeRenderer from './render';
 
 /**

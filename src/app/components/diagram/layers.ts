@@ -1,6 +1,6 @@
 import {Component, ElementRef, ViewChild, HostListener} from '@angular/core';
-import {ViewGroup} from "../../common/viewmodel";
-import {Camera} from "../../common/camera";
+import {ViewGroup, ViewItem, ViewVertex} from "../../common/viewmodel";
+import {Camera, CameraObserver} from "../../common/camera";
 import Grid from './grid';
 import Border from './border';
 
@@ -13,6 +13,44 @@ import Border from './border';
 export interface DiagramLayer {
     observe(camera: Camera);
 }
+
+
+/**
+ * A view model renderer.
+ *
+ * @author Martin Schade.
+ * @since 1.0.0
+ */
+export interface ViewModelRenderer<I, G> {
+
+    /**
+     * Render a view item.
+     */
+    renderItem(item: ViewItem): I;
+
+    /**
+     * Render a view group.
+     */
+    renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): G;
+
+    /**
+     *
+     */
+    attach(node: ViewVertex, group: ViewGroup)
+}
+
+/**
+ * Responsible for handling the platform dependent methods.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+export interface PlatformLayer extends CameraObserver {
+    cachedGroups: Array<ViewGroup>;
+    getCamera(): Camera;
+    setModel(model: ViewGroup)
+}
+
 
 /**
  * Grid layer component.
