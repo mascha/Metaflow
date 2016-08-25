@@ -70,6 +70,8 @@ export interface DiagramEvents {
  */
 export interface DiagramState extends DiagramEvents {
 
+    name: string;
+
     /**
      * Enter the state and execute it's initialization.
      * @param params Optional initialization parameters.
@@ -101,6 +103,12 @@ export interface StateMachine {
      * Reenter the current state with different or no parameters.
      */
     reenter(params?: any)
+
+    currentState(): string;
+
+    lastState(): string;
+
+    supportedStates(): Array<string>;
 }
 
 
@@ -113,8 +121,21 @@ export interface StateMachine {
 export default class DiagramBehavior implements StateMachine, DiagramEvents {
     
     private current: DiagramState;
+    private last: DiagramState;
     private states: any;
     private debug = false;
+
+    currentState(): string {
+        return this.current.name;
+    }
+
+    lastState(): string {
+        return this.last.name;
+    }
+
+    supportedStates(): Array<string> {
+        return ['idle', 'panning', 'animating'];
+    }
 
     handleNavigation(vertex: ViewVertex) {
         this.current.handleNavigation(vertex);
@@ -162,6 +183,7 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
             if (this.current) {
                 this.current.leaveState();
             }
+            this.last = this.current;
             this.current = newState;
             newState.enterState(params);
 
@@ -178,10 +200,6 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
         this.current.enterState(params);
     }
 
-    /**
-     * Assemble state machine.
-     * @param diagram Pass-through diagram reference.
-     */
     constructor(private diagram: Diagram) {
         this.states = {
             'idle': new Idle(this, diagram),
@@ -190,6 +208,7 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
         };
         /* Initial state */
         this.goto('idle', null);
+        this.lastState = this.states['idle'];
     }
 }
 
