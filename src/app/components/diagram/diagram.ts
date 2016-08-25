@@ -7,13 +7,11 @@ import DiagramBehavior from './behavior';
 import ModelService from "../../services/models";
 import PlatformService from "../../services/platforms";
 import Breadcrumbs from "./breadcrumbs/breadcrumbs";
-import {PlatformLayer} from "../../common/platform";
 import Overview from "./overview/overview";
 import Presenter from "./controls/presenter";
 import Loader from '../loader/loader';
 import {Observable} from "rxjs/Rx";
-import {GridLayer, BorderLayer, NodeLayer} from './layers';
-
+import {GridLayer, BorderLayer, NodeLayer, PlatformLayer} from './layers';
 
 /**
  * The diagram view component.
