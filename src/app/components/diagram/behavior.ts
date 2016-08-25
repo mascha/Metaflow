@@ -122,7 +122,8 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
     
     private current: DiagramState;
     private last: DiagramState;
-    private states: any;
+    private states: Array<DiagramState>;
+    private lookup: any;
     private debug = false;
 
     currentState(): string {
@@ -178,7 +179,7 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
     }
 
     goto(state: string, params?: any) {
-        let newState = this.states[state];
+        let newState = this.lookup[state];
         if (newState) {
             if (this.current) {
                 this.current.leaveState();
@@ -201,14 +202,19 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
     }
 
     constructor(private diagram: Diagram) {
-        this.states = {
-            'idle': new Idle(this, diagram),
-            'panning': new Panning(this, diagram),
-            'animating': new Animating(this, diagram)
-        };
+        this.lookup = Object.create(null);
+        this.states = [
+            new Idle('idle', this, diagram),
+            new Panning('panning', this, diagram),
+            new Animating('animating', this, diagram)
+        ];
+        this.states.forEach(it => {
+           this.lookup[it.name] = it;
+        });
+
         /* Initial state */
         this.goto('idle', null);
-        this.lastState = this.states['idle'];
+        this.lastState = this.lookup['idle'];
     }
 }
 
@@ -219,6 +225,7 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
  */
 abstract class BaseState implements DiagramState {
 
+    public name: string;
     protected camera: Camera;
 
     protected limits = {
@@ -258,7 +265,8 @@ abstract class BaseState implements DiagramState {
         // this.loadLevel(level);
     }
 
-    constructor(protected behavior: DiagramBehavior, protected diagram: Diagram) {
+    constructor(name: string, protected behavior: DiagramBehavior, protected diagram: Diagram) {
+        this.name = name;
         this.camera = diagram.camera;
     }
 }
