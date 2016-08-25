@@ -1,15 +1,8 @@
 import {Injectable} from "@angular/core";
 
 /**
- * 
- */
-export class DiagramConfig {
-    textResolution: number = 1
-    labelBackdrop: number = 0xf
-}
-
-/**
  * Configuration of the editor workspace.
+ * 
  * @author Martin Schade
  * @since 1.0.0
  */
@@ -19,7 +12,7 @@ export class WorkspaceConfig {
 
     setDefaults() {
         this.slimLayout = false;
-        this.fullscreen = false;
+        this.fullscreen = true;
     }
     
     showFullscreen() {
@@ -34,6 +27,7 @@ export class WorkspaceConfig {
 /**
  * A service for retrieving the application configuration settings
  * using the currently available user account data.
+ * 
  * @author Martin Schade
  * @since 1.0.0
  */
