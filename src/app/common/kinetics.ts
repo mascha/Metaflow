@@ -24,9 +24,12 @@ export default class Kinetics {
 
     get angle(): number { return this._angle; }
 
-    maximumDelay = 33; // <ms>
-    minimumSpeed = .2 // <pixel/ms>
+    set maximumDelay(threshold: number) { this.maxDelay = threshold < 0 ? threshold : 0; }
 
+    set minimumSpeed(threshold: number) { this.maxDelay = threshold < 0 ? threshold : 0; }
+
+    private maxDelay = 33; // <ms>
+    private minSpeed = 200/1000 // <pixels/second>
     private _speed = 0.0;
     private _angle = 0.0;
     private _smooth = 0.9;
@@ -68,14 +71,9 @@ export default class Kinetics {
      * @returns {boolean}
      */
     hasEnoughMomentum(): boolean {
-        if (!this._lastT) {
-            return false;
-        }
-        if (this._speed <= this.minimumSpeed) {
-            return false;
-        }
-        const minLimit = Date.now() - this.maximumDelay;
-        return (this._lastT >= minLimit);
+        if (!this._lastT) return false;
+        if (this._speed <= this.minSpeed) return false;
+        return (this._lastT > Date.now() - this.maxDelay);
     }
 
     /**
