@@ -2,9 +2,9 @@
 @import "../../../../style/theme";
 @import "../../../../style/variables";
 
-$presenter-body:#efefef;
-$presenter-shadow: 0 2px 4px rgba(0,0,0,0.2),0 -1px 0px rgba(0,0,0,0.02);
-$breadcrumbs-text-color: darken($icon-color,8);
+$presenter-body: #efefef;
+$presenter-shadow: none; // 0 2px 4px rgba(0,0,0,0.2),0 -1px 0px rgba(0,0,0,0.02);
+$breadcrumbs-text-color: lighten($icon-color,8);
 
 :host {
   position: absolute;
@@ -19,8 +19,8 @@ $breadcrumbs-text-color: darken($icon-color,8);
   height: 21px;
   line-height: 21px;
   background-color: $presenter-body;
-  border-radius: 3px;
-  padding: 3px 0 3px 4px;
+  border-radius: 2px;
+  padding: 3px 0 3px 8px;
   margin: 0;
 
   li {
