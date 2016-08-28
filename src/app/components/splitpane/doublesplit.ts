@@ -12,11 +12,11 @@ import HTML from "../../common/utility";
     styles: [require('./splitpane.scss')],
 })
 export default class DoubleSplit {
-    @ViewChild('left') left: ElementRef;
-    @ViewChild('divider') div: ElementRef;
-    @ViewChild('right') right: ElementRef;
+    @ViewChild('left') private left: ElementRef;
+    @ViewChild('divider') private div: ElementRef;
+    @ViewChild('right') private right: ElementRef;
     
-    @Input() horizontal = false;
+    @Input() private horizontal = false;
 
     private vertical = true;
     private visible = true;
@@ -64,10 +64,6 @@ export default class DoubleSplit {
         document.addEventListener('mouseup', this.upHandler, true);
     }
 
-    /**
-     * Readjust splitpane positions.
-     * @param l
-     */
     private readjust(l: number) {
         const renderer = this.renderer;
         let left = (l < 0) ? 0 : (l > 100) ? 100 : l;
