@@ -2,6 +2,8 @@ import {Camera} from '../../common/camera';
 import {ViewVertex} from '../../common/viewmodel';
 import Diagram from './diagram';
 
+const NAVIGATION_FACTOR = 1000;
+
 /**
  * Interpolator helper class, which encapsulates
  * requestAnimationFrame and onFinished callbacks.
@@ -18,10 +20,10 @@ export class Interpolator {
         if (this.active) {
             let f = (Date.now() - this.start) / this.duration;
             f = (f > 1) ? 1 : (f < 0) ? 0 : f;
-            if (f < 1 && this.active) {
+            if (f < 1) {
                 this.update(f);
                 this.frame = window.requestAnimationFrame(this.callback);
-            } else if (f >= 1 && this.onFinished) {
+            } else if (this.onFinished) {
                 this.onFinished();
                 this.onFinished = null;
             }
@@ -48,22 +50,21 @@ export class Interpolator {
         this.start = Date.now();
         this.frame = window.requestAnimationFrame(
             this.callback
-         );
+        );
     }
 
-    static throwCamera(params: ThrowConfig): Interpolator {
-        const cam = params.camera;
-        const dist = params.speed * params.duration;
-        const startX = cam.cameraX;
-        const startY = cam.cameraY;
-        const distX = dist * Math.cos(params.angle);
-        const distY = dist * Math.sin(params.angle);
+    static throwCamera(camera: Camera, speed: number, angle: number, duration: number): Interpolator {
+        const dist = speed * duration;
+        const startX = camera.cameraX;
+        const startY = camera.cameraY;
+        const distX = dist * Math.cos(angle);
+        const distY = dist * Math.sin(angle);
         return new Interpolator(f => {
             const t = f * (2 - f);
             const posX = startX + t * distX;
             const posY = startY + t * distY;
-            cam.moveTo(-posX, -posY);
-        }, params.duration);
+            camera.moveTo(-posX, -posY);
+        }, duration);
     }
 
 
@@ -83,14 +84,14 @@ export class Interpolator {
     /**
      * Pan the camera and center on the given world coordinates.
      */
-    static centerOnWorld(centerX: number, centerY: number, time: number, camera: Camera) : Interpolator {
+    static centerOnWorld(centerX: number, centerY: number, time: number, camera: Camera): Interpolator {
         const diffX = (centerX - camera.cameraX) / camera.scale;
         const diffY = (centerY - camera.cameraY) / camera.scale;
         return new Interpolator(f => {
             camera.moveTo(
                 - (camera.cameraX + diffX * f),
                 - (camera.cameraY + diffY * f)
-                );
+            );
         }, time);
     }
 
@@ -111,7 +112,7 @@ export class Interpolator {
 
         /* Check if path is too short */
         if (dU < 1e-8) {
-            const S = Math.log(eW/aW) / Math.SQRT2;
+            const S = Math.log(eW / aW) / Math.SQRT2;
             return new Interpolator(f => {
                 const t = f * (2 - f);
                 const tW = aW * Math.exp(Math.SQRT2 * S * t);
@@ -120,7 +121,7 @@ export class Interpolator {
                 const vZ = 2 * vW / tW;
                 const x = (aX + dX * f) * vZ;
                 const y = (aY + dY * f) * vZ;
-                camera.zoomAndMoveTo(x - vW,y - vH, vZ);
+                camera.zoomAndMoveTo(x - vW, y - vH, vZ);
             }, Math.sqrt(1 + S) * NAVIGATION_FACTOR / v);
         } else {
             const dZ = z * z * dU;
@@ -150,25 +151,16 @@ export class Interpolator {
     }
 
     constructor(private update: (f: number) => void,
-                private duration: number) {
+        private duration: number) {
         this.duration = duration || 1000;
     }
 }
 
-export interface ThrowConfig {
-    camera: Camera,
-    speed: number,
-    angle: number,
-    duration: number
-}
-
 export interface NavigateConfig {
-    targetX : number;
-    targetY : number;
-    panZoom : number;
+    targetX: number;
+    targetY: number;
+    panZoom: number;
     velocity: number;
-    camera : Camera;
+    camera: Camera;
     targetWidth: number;
 }
-
-const NAVIGATION_FACTOR = 1000;
