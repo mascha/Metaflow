@@ -452,12 +452,12 @@ class Panning extends BaseState {
         } else if (this.isKinetic()) {
             this.behavior.goto('animating', {
                 forced: false,
-                interpolator: Interpolator.throwCamera({
-                    speed: this.kinetics.speed,
-                    angle: this.kinetics.angle,
-                    camera: this.camera,
-                    duration: 333
-                })
+                interpolator: Interpolator.throwCamera(
+                    this.camera,
+                    this.kinetics.speed,
+                    this.kinetics.angle,
+                    333
+                )
             });
         } else {
             this.becomeIdle();
