@@ -180,6 +180,7 @@ export class PixiLayer implements PlatformLayer {
  *
  * TODO: Implement a LOD vs Text scaling loop
  * TODO: Combine with group caching etc.
+ * TODO: No scaling if animating / rate limiting
  *
  * @author Martin Schade
  * @since 1.0.0
@@ -196,21 +197,28 @@ export class PixiCamera extends Camera {
         this.overlayPosition.set(tX, tY);
     }
 
+    private lastCall = Date.now();
+
     protected scaleWorldTo(zoom: number, last: number) {
         this.worldScale.set(zoom, zoom);
         this.overlayScale.set(zoom, zoom);
 
-        /**
-         * TODO Iterate over visible children only
-         * TODO min max label scales
-         * TODO outsource to thread
-         */
-        let lbs = this.overlay.children;
-        let s = .5 / zoom;
-        // s = s <= 0.5 ? 0.5 : (s >= 2) ? 2 : s;
-        for (let i = 0, len = lbs.length; i < len; i++) {
-            let label = lbs[i] as PIXI.Text;
-            label.scale.set(s, s);
+        if (Date.now() - this.lastCall - 1000 / 60 > 0) {
+
+            /**
+             * TODO Iterate over visible children only
+             * TODO min max label scales
+             * TODO outsource to thread
+             */
+            let lbs = this.overlay.children;
+            let s = .5 / zoom;
+            // s = s <= 0.5 ? 0.5 : (s >= 2) ? 2 : s;
+            for (let i = 0, len = lbs.length; i < len; i++) {
+                let label = lbs[i] as PIXI.Text;
+                label.scale.set(s, s);
+            }
+
+            this.lastCall = Date.now();
         }
     }
 
