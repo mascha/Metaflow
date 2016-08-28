@@ -2,15 +2,15 @@
 @import "../../../../style/theme";
 @import "../../../../style/variables";
 
-$presenter-body:#efefef;
+$presenter-body: #efefef;
 $presenter-shadow: 0 2px 4px rgba(0,0,0,0.2),0 -1px 0px rgba(0,0,0,0.02);
-$presenter-radius: 4px;
+$presenter-radius: 2px;
 
 :host {
   @include fill();
 }
 
-.flat-button {
+.flat {
   font-weight: bold;
   line-height: 14px;
   margin: 0;
@@ -23,6 +23,7 @@ $presenter-radius: 4px;
   &:before {
     transition: color 400ms ease-out;
     color: $icon-color;
+    font-weight: 800;
   }
 
   &.vertical { 
@@ -47,7 +48,7 @@ $presenter-radius: 4px;
   font-size: 13px;
   white-space: nowrap;
   z-index: 11;
-  box-shadow: $presenter-shadow;
+  // box-shadow: $presenter-shadow;
   padding: 0 5px;
 
   &.vertical {
@@ -59,15 +60,15 @@ $presenter-radius: 4px;
   }
 }
 
-.presenter-play {
+.presenter-plus {
   @include icon(before, '\f415')
 }
 
-.presenter-next {
+.presenter-minus {
   @include icon(before, '\f374')
 }
 
-.presenter-forward {
+.presenter-fit {
   @include icon(before, '\f19f')
 }
 

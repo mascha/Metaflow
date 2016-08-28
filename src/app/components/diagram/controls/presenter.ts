@@ -4,7 +4,7 @@ import ConfigService from "../../../services/configs";
 import Breadcrumbs from '../breadcrumbs/breadcrumbs';
 
 /**
- * Diagramming overlay tools. 
+ * Diagramming overlay controls. 
  * 
  * @author Martin Schade    
  * @since 1.0.0
@@ -20,6 +20,18 @@ export default class Presenter {
     showMapControls = true;
     showOverview = true;
     showOmnibox = true;
+
+    onFitView() {
+
+    }
+
+    onZoomOut() {
+
+    }
+
+    onZoomIn() {
+        
+    }
 
     private workspace : WorkspaceConfig;
 

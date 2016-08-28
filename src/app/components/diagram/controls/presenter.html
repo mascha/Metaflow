@@ -1,7 +1,7 @@
 <section class="vertical presenter" [class.active]="showMapControls == true">
-  <div class="vertical flat-button presenter-play"></div>
-  <div class="vertical flat-button presenter-next"></div>
-  <div class="vertical flat-button presenter-forward"></div>
+  <div class="vertical flat presenter-plus" (click)="onZoomIn()"></div>
+  <div class="vertical flat presenter-minus" (click)="onZoomOut()"></div>
+  <div class="vertical flat presenter-fit" (click)="onFitView()"></div>
 </section>
 <section class="omnibox" *ngIf="workspace.fullscreen == true && showOmnibox == true">
   <div class="home"> </div>
