@@ -12,6 +12,10 @@ import ProjectService from "../../services/projects";
     styles: [require('./projectgrid.scss')]
 })
 export default class ProjectPage {
+
+    private projects: Array<string>;
     
-    constructor(private projects : ProjectService) {}
+    constructor(private service : ProjectService) {
+        this.projects = service.getProjects();
+    }
 }
