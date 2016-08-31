@@ -3,7 +3,7 @@
  */
 
 import {CameraObserver, Camera} from '../../common/camera';
-import {ViewVertex, ViewGroup} from "../../common/viewmodel";
+import {ViewVertex, ViewGroup, ViewEdge} from "../../common/viewmodel";
 
 /**
  * Interactive region border region. This class is responsible for projection
@@ -37,8 +37,10 @@ export default class Border implements CameraObserver {
     private border = 23;
     private middle = this.border * 0.5;
     private active = true;
-    private proxies: Array<ViewVertex>;
+    private proxies: Array<Proxy>;
     private scale = 1;
+
+    get borderWidth(): number { return this.border; }
 
     onViewResized(): void {
         this.updateCache();
@@ -54,8 +56,29 @@ export default class Border implements CameraObserver {
     }
 
     updateProxies(group: ViewGroup) {
-        this.proxies = group.contents;
+        if (!group) return;
         this.scale = group.scale;
+        let items = group.contents || [];
+        this.proxies = new Array<Proxy>(items.length);
+        for (let i = 0, len = items.length; i < len; i++) {
+            this.proxies[i] = new Proxy(items[i]);
+        }
+    }
+
+    showPreview(x: number, y: number): Array<ViewVertex> {
+        const ps = this.proxies;
+        if (ps && ps.length > 0) {
+            const tol = 6;
+            const result = [];
+            let hit = null;
+            for (let i = 0, l = ps.length; i < l; i++) {
+                hit = ps[i];
+                if (x > hit.pX - tol && x < hit.pX - tol && y > hit.pY - tol && y < hit.pY + tol) {
+                    result.push(hit);
+                }
+            }            
+            return result;
+        }
     }
 
     private draw() {
@@ -66,9 +89,6 @@ export default class Border implements CameraObserver {
         }
     }
 
-    /**
-     * Draw the interactive border region.
-     */
     private drawBorder(alpha: number) {
         if (alpha <= 0) return; 
         const brush = this.brush;
@@ -83,9 +103,6 @@ export default class Border implements CameraObserver {
         brush.clearRect(b, b, w - 2*b, h - 2*b);
     }
 
-    /**
-     * Draw all proxy items.
-     */
     private drawProxies() {
         const cam = this.camera;
         const scale = this.scale;
@@ -102,20 +119,24 @@ export default class Border implements CameraObserver {
         const a = this.halfW - this.middle;
         const b = this.halfH - this.middle;
         const c = this.brush;  
+        const halfH = this.halfH;
+        const halfW = this.halfW;
 
         c.fillStyle = 'darkgrey';     
         c.globalAlpha = 1.0;
 
         let proxies = this.proxies;
-        let len = proxies.length;
-        for (let j = 0; j < len; j++) {
-            let proxy = proxies[j];
-            let x = (proxy.left + proxy.width * .5) * scale;
-            let y = (proxy.top + proxy.height * .5) * scale;
+        let proxy = null;
+        for (let i = 0, l = proxies.length; i < l; i++) {
+            proxy = proxies[i];
+            let x = proxy.x * scale;
+            let y = proxy.y * scale;
 
             if (x > minX && x < wmX && y > minY && y < wmY) {
+                proxy.pX = -1000; proxy.pY = -1000;
                 continue; // ignore items within viewport
             } else if (x < miX || x > maX || y < miY || y > maY) {
+                proxy.pX = -1000; proxy.pY = -1000;
                 continue; // ignore items outside of interest
             }
 
@@ -127,8 +148,8 @@ export default class Border implements CameraObserver {
                 continue; // ignore items which are too far away
             }
 
-            const A = a*y;
-            const B = b*x;
+            const A = a * y;
+            const B = b * x;
             
             let pX = 0, pY = 0;
             if (Math.abs(A) <= Math.abs(B)) {
@@ -149,17 +170,16 @@ export default class Border implements CameraObserver {
                 }
             }
 
-            let drawX = Math.floor(this.halfW + pX - 8.0);
-            let drawY = Math.floor(this.halfH + pY - 8.0);
+            let drawX = Math.floor(halfW + pX - 8.0);
+            let drawY = Math.floor(halfH + pY - 8.0);
+            proxy.pX = drawX;
+            proxy.pY = drawY;
+            proxy.image = proxy.image || proxy.origin.style.cachedImage;
 
-            let cache = proxy.style.cachedImage;
-            c.drawImage(cache, drawX, drawY);
+            c.drawImage(proxy.image, drawX, drawY);
         }
     }
 
-    /*
-     * Clears the proxies layer.
-     */
     private clearProxies() {
         this.brush.clearRect(
             0.0, 0.0,
@@ -183,5 +203,29 @@ export default class Border implements CameraObserver {
     constructor(private camera: Camera, region: HTMLCanvasElement) {
         this.region = region;
         this.brush = region.getContext('2d');
+    }
+}
+
+/**
+ * Internal cache class used for speedily accessing
+ * links and projected coordinates within the border region.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+class Proxy {
+    x: number;
+    y: number;
+    pX: number;
+    pY: number;
+    image: HTMLCanvasElement;
+    cluster: number;
+    origin: ViewVertex;
+    links: ViewEdge[];
+
+    constructor(item: ViewVertex) {
+        this.origin = item;
+        this.x = item.left + item.width * 0.5;
+        this.y = item.top + item.height * 0.5;
     }
 }
