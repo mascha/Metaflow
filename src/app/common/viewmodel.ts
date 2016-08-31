@@ -83,7 +83,7 @@ export class ViewGroup extends ViewVertex {
      */
     remove(vertex: ViewVertex): boolean {
         let contents = this.contents;
-        if (!contents) { return false; }
+        if (!contents) return false; 
 
         const index = contents.indexOf(vertex);
         if (index > -1) {
@@ -112,12 +112,26 @@ export class ViewGroup extends ViewVertex {
 }
 
 /**
+ * A graph edge that connects a source element
+ * with it's target element.
+ * 
+ * @since 1.0.0
+ * @author Martin Schade
+ */
+export class ViewEdge {
+    source: ViewVertex;
+    target: ViewVertex;
+    style: Style;
+}
+
+/**
  * View model change types.
  *
  * @author Martin Schade
  * @since 1.0.0
  */
 export const enum ModelChange {
+
     /**
      * x,y,w,h changes
      */
@@ -134,17 +148,7 @@ export const enum ModelChange {
     ADD      = STYLING + 1,
 
     /**
-     * 
+     * A child has been removed.
      */
     REMOVE   = ADD + 1,
-
-    FILL     = REMOVE + 1,
-
-    STROKE   = FILL + 1,
-
-    SHAPE    = STROKE + 1,
-
-    LABEL    = SHAPE + 1,
-    
-    ZOOM     = LABEL + 1,
 }
