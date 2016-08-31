@@ -1,7 +1,6 @@
-<section class="fullscreen" *ngIf="workspace.fullscreen != true">
-  <navigation></navigation>
-  <workspace class="workspace">
-  </workspace>
+<section [ngSwitch]="workspace.fullscreen" class="fullscreen">
+    <navigation *ngSwitchDefault></navigation>
+    <workspace *ngSwitchDefault class="workspace"></workspace>
+  <diagram *ngSwitchCase="true">
+  </diagram>
 </section>
-<diagram class="fullscreen" *ngIf="workspace.fullscreen == true"></diagram> 
-<!--<timeline>-->
