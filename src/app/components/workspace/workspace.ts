@@ -17,7 +17,6 @@ import Explorer from "../toolwindows/explorer/explorer";
 @Component({
     selector: 'workspace',
     template: require('./workspace.html'),
-    styles: [require('./workspace.scss')],
     directives: [
         DoubleSplit, TripleSplit,
         Diagram, Sidebar,
