@@ -37,12 +37,12 @@ $breadcrumbs-text-color: lighten($icon-color,8);
       text-decoration: none;
       color: $breadcrumbs-text-color;
       font-family: sans-serif;
-      transition: color 200ms ease-out;
       display: inline-block;
       height: 21px;
       line-height: 21px;
       vertical-align: text-bottom;
-
+      transition: color 200ms ease-out;
+      
       &:hover {
         color: $icon-hover;
       }
