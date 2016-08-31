@@ -23,17 +23,17 @@ export default class ShapeRenderer {
   renderLabel(item: ViewVertex): any {
     let style = item.style;
     if (!style) return; // no style
-    let labels: any = style.labels;
+    let labels: any = style.labels as Label[];
     if (!labels) return; // no label
 
     /* check for multiple labels */
     if (labels.length) {
-
+      
     } else { // single label
         let label = labels as Label;
         let text = item.name;
+         
         let pixi = null;
-        
         if (!label.cache) {
           pixi =  {
             fill: label.color || 0x3d3834,
@@ -86,7 +86,10 @@ export default class ShapeRenderer {
       case ShapeType.HOURGLASS:
           ctx.moveTo(item.left, item.top);
           ctx.lineTo(item.left + item.width, item.top);
-          ctx.lineTo(item.left, item.top + item.height);
+          ctx.lineTo(item.left + item.width / 2, item.top + item.height / 2);
+          ctx.endFill().beginFill(fill);
+          ctx.moveTo(item.left, item.top + item.height);
+          ctx.lineTo(item.left + item.width / 2, item.top + item.height / 2);
           ctx.lineTo(item.left + item.width, item.top + item.height);
         break;
 
@@ -146,8 +149,13 @@ export default class ShapeRenderer {
       case ShapeType.HOURGLASS:
         ctx.beginPath();
         ctx.moveTo(2, 0);
+        ctx.lineTo(8, 8);
         ctx.lineTo(14, 0);
-        ctx.lineTo(2, 16);
+        ctx.closePath();
+        ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(2, 16);
+        ctx.lineTo(8, 8);
         ctx.lineTo(14, 16);
         ctx.closePath();
         ctx.fill();
@@ -180,6 +188,14 @@ export default class ShapeRenderer {
             this.renderShape(style, visual, item)
             item.visual = visual;
         }
+    }
+
+    createDefaultLabelStyle(): PIXI.TextStyle {
+      return {
+        stroke: 'white',
+        strokeThickness: 8,
+        lineJoin: 'round'
+      }
     }
 
     renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): any {
@@ -256,5 +272,5 @@ let Colors = {
     'lightgray': 0xD3D3D3,
     'lightgrey': 0xD3D3D3,
     'black': 0x000000,
-    'white' : 0xffffff,
+    'white' : 0xffffff
 }
