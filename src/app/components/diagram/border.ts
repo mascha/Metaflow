@@ -70,11 +70,11 @@ export default class Border implements CameraObserver {
         if (ps && ps.length > 0) {
             const tol = 6;
             const result = [];
-            let hit = null;
+            let hit : Proxy = null;
             for (let i = 0, l = ps.length; i < l; i++) {
                 hit = ps[i];
-                if (x > hit.pX - tol && x < hit.pX - tol && y > hit.pY - tol && y < hit.pY + tol) {
-                    result.push(hit);
+                if (hit.pX - tol < x && x < hit.pX + tol && hit.pY - tol < y && y < hit.pY + tol) {
+                    result.push(hit.origin);
                 }
             }            
             return result;
