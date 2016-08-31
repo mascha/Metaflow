@@ -4,6 +4,9 @@ import Diagram from './diagram';
 
 const NAVIGATION_FACTOR = 1000;
 
+const EASE_OUT = (f: number) => { return f * (2-f); };
+const EASE_IN_OUT = (f: number) => { return f * f * (3.0 - 2.0 * f); }
+
 /**
  * Interpolator helper class, which encapsulates
  * requestAnimationFrame and onFinished callbacks.
@@ -53,6 +56,21 @@ export class Interpolator {
         );
     }
 
+    /**
+     * Zoom in animation.
+     */
+    static zoomIn(camera: Camera, factor: number, duration: number) {
+        if (factor <= 0 || duration <= 0) return;
+        const start = camera.scale;
+        const end = start * factor;
+        const wX = camera.centerX;
+        const wY = camera.centerY;
+        return new Interpolator(f => {
+            const t = f * f * (3 - 2 * f);
+            camera.zoomToAbout(start + end * t, wX, wY);
+        }, duration || 300)
+    }
+
     static throwCamera(camera: Camera, speed: number, angle: number, duration: number): Interpolator {
         const dist = speed * duration;
         const startX = camera.cameraX;
@@ -64,7 +82,7 @@ export class Interpolator {
             const posX = startX + t * distX;
             const posY = startY + t * distY;
             camera.moveTo(-posX, -posY);
-        }, duration);
+        }, duration || 300);
     }
 
 
