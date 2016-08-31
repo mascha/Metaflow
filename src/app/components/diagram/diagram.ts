@@ -106,21 +106,22 @@ export default class Diagram {
 
     @HostListener('dblclick', ['$event'])
     private onDoubleClick(event: MouseEvent) {
-        console.log('dblclick')
         let off = HTML.getOffset(this._diagram, event);
-        // this._behavior.handleClick(off.x, off.y, true);
+        this._behavior.handleClick(off.x, off.y, true);
+        
+        /*
         let n = Math.floor(this.model.contents.length * Math.random())
         let random = this.model.contents[n];
         this._behavior.handleNavigation(random);
+        */
         return false;
     }
 
     @HostListener('click', ['$event'])
     private onClick(event: MouseEvent) {
-        console.log('click')
         let off = HTML.getOffset(this._diagram, event);
         this._behavior.handleClick(off.x, off.y, false);
-        
+
         /* play click effect */
         let effects = this._effects.nativeElement as HTMLDivElement;
         if (effects && this.showClickEffect) {
@@ -156,26 +157,39 @@ export default class Diagram {
         const pos = HTML.getOffset(this._diagram, event);
         this._behavior.handleMouseDown(pos.x, pos.y);
         HTML.block(event);
+        return false;
     }
 
     @HostListener('mousemove', ['$event'])
     private onMouseMove(event: MouseEvent) {
         const pos = HTML.getOffset(this._diagram, event);
         this._behavior.handleMouseMove(pos.x, pos.y);
-        return false;
+        return true;
     }
 
     @HostListener('mouseup', ['$event'])
-    @HostListener('window:mouseup', ['$event'])
+    // @HostListener('window:mouseup', ['$event'])
     private onMouseUp(event: MouseEvent) {
         let pos = HTML.getOffset(this._diagram, event);
         this._behavior.handleMouseUp(pos.x, pos.y);
         return false;
     }
 
-    /**
-     * Assemble all canvas layers.
-     */
+    @HostListener('fitView')
+    private onFitView() {
+        console.log('Fit to View');
+    } 
+
+    @HostListener('zoomIn') 
+    private onZoomIn() {
+        console.log('zoom in!');
+    }
+
+    @HostListener('zoomOut') 
+    private onZoomOut() {
+        console.log('zoom out!');
+    }
+
     private ngAfterViewInit() {
         /* get html elements */
         this._diagram = this._element.nativeElement;
@@ -219,10 +233,8 @@ export default class Diagram {
         /* load level data */
         this.model = this._models.getModel();
 
-        /* do initial rendering */
-        window.setTimeout(() => {
-            this.onResize();
-        }, 32)
+        /* push to back queue */
+        setTimeout(() => this.onResize(), 32)
     }
 
     constructor(private _platforms: PlatformService,
