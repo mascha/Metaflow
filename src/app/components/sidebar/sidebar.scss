@@ -41,6 +41,7 @@
   right: 8px;
   top: 6px;
   cursor: pointer;
+  transition: color 200ms ease-out;
 
   &:hover {
     @include icon(before, '\f156') {
@@ -50,6 +51,7 @@
 
   @include icon(before, '\f156') {
     color: $sidebar-header-icons;
+    transition: color 200ms ease-out;
   }
 }
 
@@ -67,6 +69,7 @@
   }
 
   @include icon(before, '\f1d8') {
+    transition: color 200ms ease-out;
     color: $sidebar-header-icons;
   }
 }
