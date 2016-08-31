@@ -9,7 +9,9 @@ export default class ProjectService {
     private projects = [
         'Market Adoption',
         'Changeovers',
-        'Stock Management'
+        'Stock Management',
+        'Project Management',
+        'Cost of Delay'
     ];
     
     public getProjects() {
