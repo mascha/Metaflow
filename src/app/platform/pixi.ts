@@ -1,6 +1,6 @@
 import {Camera} from "../common/camera";
 import {ViewGroup, ViewItem, ViewVertex} from "../common/viewmodel";
-import {PlatformLayer, ViewModelRenderer} from "../components/diagram/layers";
+import {PlatformLayer, ViewModelRenderer, Quality} from "../components/diagram/layers";
 import ShapeRenderer from './render';
 
 /**
@@ -20,8 +20,16 @@ export class PixiLayer implements PlatformLayer {
     private labels: PIXI.Container;
     private renderer: PIXI.SystemRenderer;
     private mapper: ShapeRenderer;
+    private quality: Quality;
+    private frames: number;
 
     cachedGroups: Array<ViewGroup>;
+
+    setQuality(quality: Quality) {
+        if (quality <= 0 || quality > 1) return;
+        this.quality = quality;
+        this.frames = 1000 / (60 * quality);
+    }
 
     getCamera(): Camera {
         return this.camera;
@@ -142,7 +150,6 @@ export class PixiLayer implements PlatformLayer {
     }
 
     constructor(element: HTMLCanvasElement) {
-        /* create root */
         this.scene = new PIXI.Container();
 
         /* overlays */
@@ -203,21 +210,16 @@ export class PixiCamera extends Camera {
         this.worldScale.set(zoom, zoom);
         this.overlayScale.set(zoom, zoom);
 
-        if (Date.now() - this.lastCall - 1000 / 60 > 0) {
-
-            /**
-             * TODO Iterate over visible children only
-             * TODO min max label scales
-             * TODO outsource to thread
-             */
+        /**
+         * animating + zoom out = no scale update!
+         */
+        if (Date.now() - this.lastCall > 1000 / 60) {
             let lbs = this.overlay.children;
             let s = .5 / zoom;
-            // s = s <= 0.5 ? 0.5 : (s >= 2) ? 2 : s;
             for (let i = 0, len = lbs.length; i < len; i++) {
                 let label = lbs[i] as PIXI.Text;
                 label.scale.set(s, s);
             }
-
             this.lastCall = Date.now();
         }
     }
