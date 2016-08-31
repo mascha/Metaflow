@@ -3,6 +3,7 @@ import {ViewGroup, ViewItem, ViewVertex} from "../../common/viewmodel";
 import {Camera, CameraObserver} from "../../common/camera";
 import Grid from './grid';
 import Border from './border';
+import HTML from '../../common/utility';
 
 /**
  * A diagram layer.
@@ -39,6 +40,16 @@ export interface ViewModelRenderer<I, G> {
     attach(node: ViewVertex, group: ViewGroup)
 }
 
+export const enum Quality {
+    EPIC = 1.0,
+    HIGH = 0.8,
+    MEDIUM = 0.6,
+    LOWER = 0.4,
+    LOW = 0.2,
+    LOWEST = 0
+}
+    
+
 /**
  * Responsible for handling the platform dependent methods.
  * 
@@ -46,8 +57,22 @@ export interface ViewModelRenderer<I, G> {
  * @since 1.0.0
  */
 export interface PlatformLayer extends CameraObserver {
+
     cachedGroups: Array<ViewGroup>;
+
+    /**
+     * Sets the amount of quality to accept.
+     */
+    setQuality(quality: Quality);
+
+    /**
+     * Retrieve the platform camera.
+     */
     getCamera(): Camera;
+    
+    /**
+     * Update and render model.
+     */
     setModel(model: ViewGroup)
 }
 
@@ -76,6 +101,7 @@ export class GridLayer implements DiagramLayer {
 
 /**
  * Grid layer component.
+ * 
  * @author Martin Schade
  * @since 1.0.0
  */
@@ -89,8 +115,15 @@ export class BorderLayer implements DiagramLayer {
     private border: Border;
 
     @HostListener('mousemove', ['$event']) 
-    public onMove(event: MouseEvent) {
-        // if (within border && hovers proxy) {}
+    private onMove(event: MouseEvent) {
+        let can = this.element.nativeElement as HTMLCanvasElement;
+        let pos = HTML.getOffset(can, event);
+        let ins = this.border.borderWidth;
+        let left = pos.x < ins, right = pos.x < can.width - ins;
+        let top = pos.y < ins, bottom = pos.y < can.height - ins;
+        if (top || left || bottom || right) {
+            this.border.showPreview(pos.x, pos.y);
+        }
     }
 
     public observe(camera: Camera) {
