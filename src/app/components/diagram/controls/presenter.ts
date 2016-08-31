@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, EventEmitter} from '@angular/core';
 import {WorkspaceConfig} from "../../../services/configs";
 import ConfigService from "../../../services/configs";
 import Breadcrumbs from '../breadcrumbs/breadcrumbs';
@@ -21,16 +21,18 @@ export default class Presenter {
     showOverview = true;
     showOmnibox = true;
 
-    onFitView() {
+    private events = new EventEmitter<string>();
 
+    onFitView() {
+        this.events.emit('fitView');
     }
 
     onZoomOut() {
-
+        this.events.emit('zoomOut');
     }
 
     onZoomIn() {
-        
+        this.events.emit('zoomIn');
     }
 
     private workspace : WorkspaceConfig;
