@@ -173,7 +173,7 @@ export default class ModelService {
 
         this.rateStyle = new Style();
         this.rateStyle.fill = 'goldenrod';
-        this.rateStyle.shape = new Shape(ShapeType.TRIANGLE);
+        this.rateStyle.shape = new Shape(ShapeType.HOURGLASS);
 
         let render = new ShapeRenderer();
         render.cacheShape(this.moduleStyle);
