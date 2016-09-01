@@ -55,42 +55,46 @@ export default class ShapeRenderer {
     let stroke = this.getColor(style.stroke);
 
     if (fill) ctx.beginFill(fill);
+
+    const l = item.left, t = item.top,
+          w = item.width, h = item.height;
     
     switch (style.shape.type) {
       case ShapeType.SQUARE, ShapeType.RECTANGLE:
-          ctx.drawRect(item.left, item.top, item.width, item.height);
+          ctx.drawRect(l, t, w, h);
         break;
 
       case ShapeType.CIRCLE:
-          let radius = item.width / 2;
-          ctx.drawCircle(item.left + radius, item.top + radius, item.width / 2);
+          let radius = w / 2;
+          ctx.drawCircle(l + radius, t + radius, w / 2);
         break;
 
       case ShapeType.DIAMOND: 
-          ctx.moveTo(item.left + item.width / 2, item.top);
-          ctx.lineTo(item.left + item.width, item.top + item.height / 2);
-          ctx.lineTo(item.left + item.width / 2, item.top + item.height);
-          ctx.lineTo(item.left, item.top + item.height / 2);
+          ctx.moveTo(l + w / 2, t);
+          ctx.lineTo(l + w, t + h / 2);
+          ctx.lineTo(l + w / 2, t + h);
+          ctx.lineTo(l, t + h / 2);
         break;
 
       case ShapeType.TRIANGLE:
-          ctx.moveTo(item.left + item.width / 2, item.top);
-          ctx.lineTo(item.left, item.top + item.height);
-          ctx.lineTo(item.left + item.width, item.top + item.height);
+          ctx.moveTo(l + w / 2, t);
+          ctx.lineTo(l, t + h);
+          ctx.lineTo(l + w, t + h);
         break;
 
       case ShapeType.ROUNDED:
-          ctx.drawRoundedRect(item.left, item.top, item.width, item.height, style.shape.a || 12);
+          let a = style.shape.a || 12;        
+          ctx.drawRoundedRect(l, t, w, h, a);
         break;
 
       case ShapeType.HOURGLASS:
-          ctx.moveTo(item.left, item.top);
-          ctx.lineTo(item.left + item.width, item.top);
-          ctx.lineTo(item.left + item.width / 2, item.top + item.height / 2);
+          ctx.moveTo(l, t);
+          ctx.lineTo(l + w, t);
+          ctx.lineTo(l + w / 2, t + h / 2);
           ctx.endFill().beginFill(fill);
-          ctx.moveTo(item.left, item.top + item.height);
-          ctx.lineTo(item.left + item.width / 2, item.top + item.height / 2);
-          ctx.lineTo(item.left + item.width, item.top + item.height);
+          ctx.moveTo(l, t + h);
+          ctx.lineTo(l + w / 2, t + h / 2);
+          ctx.lineTo(l + w, t + h);
         break;
 
       default: console.warn('Tried to render unknown shape class (' + style.shape.type + ')')
