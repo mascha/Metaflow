@@ -1,0 +1,79 @@
+$progress-bar-color: #f50;
+$progress-bar-maximum-color: #333;
+$progress-bar-fill: #ccc;
+
+:host {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 46px;
+    background-color: $progress-bar-fill;
+    z-index: 100;
+}
+
+.playbar-inner {
+    margin: 0 auto;
+    width: 1024px;
+}
+
+.playbar-main {
+    float: left;
+    margin: 0 40px 0 0;
+}
+
+.playbar-controls {
+    list-style: none;
+    padding: 0; 
+    margin: 0;
+
+    .control-item {
+        display: inline-block;
+        float: left;
+    }
+
+    button {
+        width: 32px;
+        height: 46px;
+        line-height: 46px;
+        cursor: pointer;
+        border: 0;
+        font: 0/0 a;
+        text-shadow: none;
+        color: transparent;
+        background-color: #ddd;
+    }
+}
+
+.playbar-timeline {
+    position: relative;
+    width: 487px;
+    transform: translateY(-50%);
+    top: 50%;
+}
+
+.playbar-progress-bar {
+    height: 1px;
+    background-color: $progress-bar-color;
+    transition: width 50ms;
+}
+
+.playbar-progress-drop {
+    width: 100%;
+    height: 1px;
+    background-color: darken($progress-bar-fill, 6);
+}
+
+.playbar-timeline-current {
+    width: 50px;
+    height: 46px;
+    color: $progress-bar-color;
+    text-align: right;
+}
+
+.playbar-timeline-maximum {
+    width: 50px;
+    height: 46px;
+    color: $progress-bar-maximum-color;
+    text-align: left;
+    cursor: pointer;
+}

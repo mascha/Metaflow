@@ -1,0 +1,33 @@
+<section div class="playbar-inner">
+    <ul class="playbar-controls">
+        <li class="control-item playbar-main">
+            <button class="lastControl control-item" title="Last event">Previous event</button>
+            <button class="playControl control-item" title="Start/Pause">Start/Pause</button>
+            <button class="lastControl control-item" title="Next evemt">Next event</button>
+        </li>
+        <li class="control-item playbar-timing">
+            <button title="Realtime Simulation" class="repeatControl sc-ir">Realtime Simulation</button>
+        </li>
+        <li class="control-item playbar-timeline">
+            <section class="playbar-timeline-current">
+                <span>{{currentTime}}</span>
+            </section>
+            <div class="playbar-timeline" role="progressbar">
+                <div class="playbar-progress-drop"></div>
+                <div class="playbar-progress-bar" style="width: 405px;"></div>
+            </div>
+            <div class="playbar-timeline-maximum">
+                <span>{{maximumTime}}</span>
+            </div>
+        </li>
+        <li class="control-item playbar-speed">
+            <div class="time-factor" data-level="10">
+                <div class="volume__sliderWrapper" role="slider">
+                    <div class="volume__sliderBackground"></div>
+                    <div class="volume__sliderProgress" style="height: 92px;"></div>
+                    <div class="volume__sliderHandle" style="top: 10px;"></div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</section>
