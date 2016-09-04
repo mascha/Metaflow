@@ -17,11 +17,15 @@ export class Shape {
     type: ShapeType;
     
     constructor(type?: ShapeType) {
-        this.type = type || ShapeType.CUSTOM;
+        this.type = type || ShapeType.NONE;
     }
 
     static RECTANGLE = new Shape(ShapeType.RECTANGLE);
     static TRIANGLE = new Shape(ShapeType.TRIANGLE);
+    static HOURGLASS = new Shape(ShapeType.HOURGLASS);
+    static EMPTY = new Shape(ShapeType.NONE);
+    static CIRCLE = new Shape(ShapeType.CIRCLE);
+    static ROUNDED = new Shape(ShapeType.ROUNDED);
 }
 
 /**
@@ -46,7 +50,7 @@ export class CompositeShape extends Shape {
  */
 export const enum ShapeType {
     NONE,        // No shape (none)
-    CUSTOM,      // Defined by user
+    CUSTOM,      // Defined by user, svg or whatever
     COMPOSITE,   // Consits of several shapes, Unused
     ICON,        // Is an icon, Unused
     SQUARE,      // Square shape (width)
@@ -59,5 +63,6 @@ export const enum ShapeType {
     PARALLELOID, // Parallelogram (width, height, skew)
     HOURGLASS,   // Hourglass shape (width, height)
     ARC,         // Open circle (radius, angle)
-    TRIANGLE     // Triangular shape (width, height)
+    TRIANGLE,    // Triangular shape (width, height)
+    RING         // Hollow ring shape (radius, innerRadius)
 }
