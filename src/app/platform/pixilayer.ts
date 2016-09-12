@@ -43,7 +43,11 @@ export class PixiLayer implements PlatformLayer {
         return hits;
     }
 
-    setModel(level: ViewGroup) {
+    observe(camera: Camera) {
+        /* NOP */
+    }
+
+    update(level: ViewGroup) {
         this.nodes.removeChildren();
         this.labels.removeChildren();
         let leafs = new PIXI.Graphics();
