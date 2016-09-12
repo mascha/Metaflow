@@ -21,6 +21,9 @@ export abstract class ViewVertex {
     isProxy(): boolean {
         return false;
     }
+
+    get centerX(): number { return this.left + this.width * 0.5; }
+    get centerY(): number { return this.top + this.height * 0.5; }
     
     constructor(public name: string, public left: number,
                 public top: number, public width: number,

@@ -105,20 +105,19 @@ export default class Diagram {
     @HostListener('dblclick', ['$event'])
     private onDoubleClick(event: MouseEvent) {
         let off = HTML.getOffset(this._diagram, event);
-        this._behavior.handleClick(off.x, off.y, true);
-        
-        /*
+        // this._behavior.handleClick(off.x, off.y, true);
+
         let n = Math.floor(this.model.contents.length * Math.random())
         let random = this.model.contents[n];
         this._behavior.handleNavigation(random);
-        */
+        
         return false;
     }
 
     @HostListener('click', ['$event'])
     private onClick(event: MouseEvent) {
         let off = HTML.getOffset(this._diagram, event);
-        this._behavior.handleClick(off.x, off.y, false);
+        // this._behavior.handleClick(off.x, off.y, false);
 
         /* play click effect */
         let effects = this._effects.nativeElement as HTMLDivElement;

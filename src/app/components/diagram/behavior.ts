@@ -91,7 +91,7 @@ export interface StateMachine {
 
     /**
      * Execute a state transition.
-     * @param state
+     * @param state The state to go to. An empty string will do nothing.
      * @param params
      */
     goto(state: string, params?: any)
@@ -101,10 +101,20 @@ export interface StateMachine {
      */
     reenter(params?: any)
 
+    /**
+     * Return the current state.
+     */
     currentState(): string;
 
+    /**
+     * Return the last state from history.
+     */
     lastState(): string;
 
+    /**
+     * Return the list of names which are
+     * supported by this state machine.
+     */
     supportedStates(): Array<string>;
 }
 
@@ -311,7 +321,7 @@ class Idle extends BaseState {
             });
         } else {
             this.behavior.goto('animating', {
-                interpolator: Animation.zoomIn(this.camera, 0.8, 260)
+                interpolator: Animation.navigateToItem(this.camera, this.diagram, this.diagram.model)
             });
             /*
                 TODO: Check if something was selected

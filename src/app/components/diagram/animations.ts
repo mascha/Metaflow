@@ -83,13 +83,15 @@ export class Animation {
     static navigateToItem(cam: Camera, diagram: Diagram, vertex: ViewVertex): Animation {
         let parent = vertex.parent;
         let scale = parent ? parent.scale : 1.0;
+        let adjust = parent ? 16 : 2;
+        let width = parent ? vertex.width * adjust * scale : vertex.width;
         return Animation.navigateTo({
                 camera: cam,
-                targetX: (vertex.left + vertex.width / 2) * scale,
-                targetY: (vertex.top + vertex.height / 2) * scale,
+                targetX: vertex.centerX * scale,
+                targetY: vertex.centerY * scale,
                 panZoom: diagram.zoomPanPreference,
                 velocity: diagram.navigationVelocity,
-                targetWidth: vertex.width * 16 * scale,
+                targetWidth: vertex.width * adjust * scale,
         });
     }
 
@@ -116,7 +118,6 @@ export class Animation {
         const z = params.panZoom;
         const v = params.velocity;
 
-        /* Check if path is too short */
         if (dU < 1e-8) {
             const S = Math.log(eW / aW) / Math.SQRT2;
             return new Animation(f => {
