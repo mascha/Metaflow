@@ -23,6 +23,8 @@ export default class TripleSplit {
     private leftVisible = true;
     private rightVisible = true;
     private primaryDrag: boolean;
+    private removeMove: Function;
+    private removeUp: Function;
 
     private moveHandler = (event: MouseEvent) => {
         let element = this.root.nativeElement;
@@ -33,8 +35,8 @@ export default class TripleSplit {
     };
 
     private upHandler = (event: MouseEvent) => {
-        document.removeEventListener('mousemove', this.moveHandler, true);
-        document.removeEventListener('mouseup', this.upHandler, true);
+        this.removeMove();
+        this.removeUp();
         HTML.block(event);
     };
 
@@ -49,8 +51,8 @@ export default class TripleSplit {
     }
 
     onMouseDown(event: MouseEvent, primaryDrag: boolean) {
-        document.addEventListener('mousemove', this.moveHandler, true);
-        document.addEventListener('mouseup', this.upHandler, true);
+        this.removeMove = this.renderer.listenGlobal('document', 'mousemove', this.moveHandler);
+        this.removeUp = this.renderer.listenGlobal('document', 'mouseup', this.upHandler);
         this.primaryDrag = primaryDrag;
         HTML.block(event);
     }
