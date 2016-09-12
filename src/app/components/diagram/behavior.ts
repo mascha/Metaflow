@@ -1,6 +1,6 @@
 import {Camera} from '../../common/camera';
 import {ViewGroup, ViewVertex} from '../../common/viewmodel';
-import {Interpolator} from './animations';
+import {Animation} from './animations';
 import Kinetics from '../../common/kinetics';
 import Diagram from './diagram';
 
@@ -284,7 +284,7 @@ class Idle extends BaseState {
 
     handleNavigation(vertex: ViewVertex) {
         this.behavior.goto('animating', { 
-            interpolator: Interpolator.navigateToItem(
+            interpolator: Animation.navigateToItem(
                 this.camera, this.diagram, vertex
             )});
     }
@@ -300,7 +300,7 @@ class Idle extends BaseState {
                         if none -> show click effect // navigateTo with current width // zoom in
             */
             this.behavior.goto('animating', {
-                interpolator: Interpolator.navigateTo({
+                interpolator: Animation.navigateTo({
                     targetX: this.camera.castRayX(x),
                     targetY: this.camera.castRayY(y),
                     velocity: this.diagram.navigationVelocity,
@@ -310,6 +310,9 @@ class Idle extends BaseState {
                 })
             });
         } else {
+            this.behavior.goto('animating', {
+                interpolator: Animation.zoomIn(this.camera, 0.8, 260)
+            });
             /*
                 TODO: Check if something was selected
                         if one -> show in explorer
@@ -440,7 +443,7 @@ class Panning extends BaseState {
                 const dx = this.calcDisplacement(true, wX, wW);
                 const dy = this.calcDisplacement(false, wY, wH);
                 this.behavior.goto('animating', {
-                    forced: false, interpolator: Interpolator.centerOnWorld(
+                    forced: false, interpolator: Animation.centerOnWorld(
                         wX + ca.projWidth / 2 - dx,
                         wY + ca.projHeight / 2 - dy,
                         300, this.camera
@@ -452,7 +455,7 @@ class Panning extends BaseState {
         } else if (this.isKinetic()) {
             this.behavior.goto('animating', {
                 forced: false,
-                interpolator: Interpolator.throwCamera(
+                interpolator: Animation.throwCamera(
                     this.camera,
                     this.kinetics.speed,
                     this.kinetics.angle,
@@ -475,40 +478,28 @@ class Panning extends BaseState {
     }
 
     private calcDisplacement(horizontal: boolean, min: number, max: number) {
-        let violation = this.violations, limit = this.limits;
-        let lower = horizontal ? violation.left : violation.top;
-        let upper = horizontal ? violation.top : violation.bottom;
+        let v = this.violations, limit = this.limits;
+        let lower = horizontal ? v.left : v.top;
+        let upper = horizontal ? v.top : v.bottom;
         let left = horizontal ? limit.left : limit.top;
         let right = horizontal ? limit.right : limit.bottom;
         return lower ? min - left : upper ? max - right : 0;
     }
 
-    /**
-     * Check wether banding rules apply.
-     */
     private isBanding(): boolean {
         let v = this.violations;
         return (this.diagram.rubberBanding && (v.left || v.right || v.bottom || v.top));
     }
 
-    /**
-     * Check wether kinetic rules apply.
-     */
     private isKinetic(): boolean {
         return (this.diagram.useKinetics && this.kinetics.hasEnoughMomentum());
     }
 
-    /**
-     * Calculate a damping factor from a limit violation.
-     */
     private damp(actual: number, limit: number): number {
         let ratio = Math.abs(actual / limit);
         return 1 + Math.log10(ratio || 1);
     }
 
-    /**
-     * Update the internal banding state.
-     */
     private updateBanding(horizontal: boolean, lower: boolean, value: boolean) {
         const violation = this.violations;
         if (horizontal) {
@@ -520,9 +511,6 @@ class Panning extends BaseState {
         }
     }
 
-    /**
-     * Returns the drag coordiante, accounting for damping/banding effects.
-     */
     private handleLimits(horizontal: boolean, drag: number): number {
         const cam = this.camera, limit = this.limits;
         const min = horizontal ? cam.worldX : cam.worldY;
@@ -565,7 +553,8 @@ class Panning extends BaseState {
  */
 export interface AnimationParams {
     forced: boolean;
-    interpolator: Interpolator;
+    interpolator: Animation;
+    easing: (number) => number;
 }
 
 /**
@@ -575,7 +564,7 @@ export interface AnimationParams {
 class Animating extends BaseState {
 
     private forceAnimation = false;
-    private animation: Interpolator;
+    private animation: Animation;
 
     handleZoom(x, y, f) {
         if (!this.forceAnimation) {
