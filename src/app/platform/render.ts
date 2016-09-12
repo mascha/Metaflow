@@ -55,6 +55,7 @@ export default class ShapeRenderer {
     let stroke = this.getColor(style.stroke);
 
     if (fill) ctx.beginFill(fill);
+    if (stroke) ctx.lineColor = stroke;
 
     const l = item.left, t = item.top,
           w = item.width, h = item.height;
@@ -88,12 +89,24 @@ export default class ShapeRenderer {
         break;
 
       case ShapeType.HOURGLASS:
+          let f = 0.5;
+          /*
+          let f = 0.2;
           ctx.moveTo(l, t);
           ctx.lineTo(l + w, t);
-          ctx.lineTo(l + w / 2, t + h / 2);
+          ctx.lineTo(l + w / 1.8, t + h / 2);
+          ctx.lineTo(l + w, t + h);
+          ctx.lineTo(l, t + h);
+          ctx.lineTo(l + w / 2.2, t + h / 2);
+          */
+          ctx.moveTo(l, t);
+          ctx.lineTo(l + w, t);
+          ctx.lineTo(l + w / (1.8), t + h / 2);
+          ctx.lineTo(l + w / (2.2), t + h / 2);
           ctx.endFill().beginFill(fill);
           ctx.moveTo(l, t + h);
-          ctx.lineTo(l + w / 2, t + h / 2);
+          ctx.lineTo(l + w / (2.2), t + h / 2);
+          ctx.lineTo(l + w / (1.8), t + h / 2);
           ctx.lineTo(l + w, t + h);
         break;
 
@@ -153,14 +166,11 @@ export default class ShapeRenderer {
       case ShapeType.HOURGLASS:
         ctx.beginPath();
         ctx.moveTo(2, 0);
-        ctx.lineTo(8, 8);
         ctx.lineTo(14, 0);
-        ctx.closePath();
-        ctx.fill();
-        ctx.beginPath();
-        ctx.moveTo(2, 16);
-        ctx.lineTo(8, 8);
+        ctx.lineTo(9, 8);
         ctx.lineTo(14, 16);
+        ctx.lineTo(2, 16);
+        ctx.lineTo(7, 8);
         ctx.closePath();
         ctx.fill();
         break;
