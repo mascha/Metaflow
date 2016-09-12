@@ -124,10 +124,16 @@ $left-shift: 40px;
     }
 
     a {
+      position: relative;
+      line-height: $navigation-height;
+
       @include icon(before,'\f06D') {
         color: $navigation-fill;
-        width: 100%;
+        position: absolute;
+        top: 50%;
+        //left: 50%;
         font-size: 32px;
+        transform: translateY(-50%);
       }
     }
   }
