@@ -2,6 +2,7 @@ import {Component, Input, EventEmitter, Output} from '@angular/core';
 
 /**
  * A pane with a title and content.
+ * 
  * @author Martin Schade
  * @since 1.0.0
  */
@@ -11,12 +12,11 @@ import {Component, Input, EventEmitter, Output} from '@angular/core';
     styles: [require('./sidebar.scss')],
 })
 export default class Sidebar {
-    @Input() title: string = "Header";
+    @Input() title = "Header";
     @Input() isPrimary: string;
-    @Input() titleVisible: boolean = true;
-    @Input() visible: boolean = true;
-
-    @Output('visibility') visibility = new EventEmitter<any>();
+    @Input() titleVisible = true;
+    @Input() visible = true;
+    @Output('visibility') private visibility = new EventEmitter<any>();
 
     isLoading: boolean = false;
 
