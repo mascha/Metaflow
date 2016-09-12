@@ -12,9 +12,18 @@ import HTML from '../../common/utility';
  * @since 1.0.0
  */
 export interface DiagramLayer {
-    observe(camera: Camera);
-}
 
+    /**
+     * A callback for registering camera movements.
+     */
+    observe(camera: Camera);
+
+    /**
+     * Update the internal or visual state with
+     * a new view model.
+     */
+    update(group: ViewGroup);
+}
 
 /**
  * A view model renderer.
@@ -35,11 +44,17 @@ export interface ViewModelRenderer<I, G> {
     renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): G;
 
     /**
-     *
+     * Attach node to scene.
      */
     attach(node: ViewVertex, group: ViewGroup)
 }
 
+/**
+ * Renderer quality hint.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
 export const enum Quality {
     EPIC = 1.0,
     HIGH = 0.8,
@@ -48,34 +63,19 @@ export const enum Quality {
     LOW = 0.2,
     LOWEST = 0
 }
-    
 
 /**
- * Responsible for handling the platform dependent methods.
+ * Do-nothing base implementation.
  * 
  * @author Martin Schade
  * @since 1.0.0
  */
-export interface PlatformLayer extends CameraObserver {
-
-    cachedGroups: Array<ViewGroup>;
-
-    /**
-     * Sets the amount of quality to accept.
-     */
-    setQuality(quality: Quality);
-
-    /**
-     * Retrieve the platform camera.
-     */
-    getCamera(): Camera;
+export class BaseLayer implements DiagramLayer {
     
-    /**
-     * Update and render model.
-     */
-    setModel(model: ViewGroup)
-}
+    public observe(camera: Camera) {}
 
+    public update(group: ViewGroup) {}
+}
 
 /**
  * Grid layer component.
@@ -87,12 +87,12 @@ export interface PlatformLayer extends CameraObserver {
     selector: 'grid-layer',
     template: `<canvas #gridLayer class="layer"></canvas>`
 })
-export class GridLayer implements DiagramLayer {
+export class GridLayer extends BaseLayer {
     @ViewChild('gridLayer') 
     private canvas: ElementRef;
     private grid: Grid;
 
-    observe(camera: Camera) {
+    public observe(camera: Camera) {
         let canvas = this.canvas.nativeElement;
         this.grid = new Grid(camera, canvas);
         camera.attachObserver(this.grid);
@@ -109,7 +109,7 @@ export class GridLayer implements DiagramLayer {
     selector: 'border-layer',
     template: '<canvas #borderLayer class="layer"></canvas>'
 })
-export class BorderLayer implements DiagramLayer {
+export class BorderLayer extends BaseLayer {
     @ViewChild('borderLayer') 
     private element: ElementRef;
     private border: Border;
@@ -119,8 +119,8 @@ export class BorderLayer implements DiagramLayer {
         let can = this.element.nativeElement as HTMLCanvasElement;
         let pos = HTML.getOffset(can, event);
         let ins = this.border.borderWidth;
-        let left = pos.x < ins, right = pos.x < can.width - ins;
-        let top = pos.y < ins, bottom = pos.y < can.height - ins;
+        let left = pos.x < ins, right = pos.x > can.width - ins;
+        let top = pos.y < ins, bottom = pos.y > can.height - ins;
         if (top || left || bottom || right) {
             this.border.showPreview(pos.x, pos.y);
         }
@@ -140,6 +140,27 @@ export class BorderLayer implements DiagramLayer {
 }
 
 /**
+ * Responsible for handling the platform dependent methods.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+export interface PlatformLayer extends CameraObserver, DiagramLayer {
+
+    cachedGroups: Array<ViewGroup>;
+
+    /**
+     * Sets the amount of quality to accept.
+     */
+    setQuality(quality: Quality);
+
+    /**
+     * Retrieve the platform camera.
+     */
+    getCamera(): Camera;
+}
+
+/**
  * Grid layer component.
  * 
  * @author Martin Schade
@@ -149,14 +170,10 @@ export class BorderLayer implements DiagramLayer {
     selector: 'node-layer',
     template: '<canvas #nodeLayer class="layer"></canvas>'
 })
-export class NodeLayer implements DiagramLayer {
+export class NodeLayer extends BaseLayer {
     @ViewChild('nodeLayer') 
     private element: ElementRef;
-
-    observe(camera: Camera) {
-        /* NOP */
-    }
-
+    
     getElement(): HTMLCanvasElement {
         return this.element.nativeElement;
     }
