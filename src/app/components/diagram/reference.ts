@@ -14,8 +14,10 @@ import Diagram from './diagram';
 class ReferenceManager {
     
     private camera: Camera;
-    private current: ViewGroup;
+    private scope: ViewGroup;
     private diagram: Diagram;
+
+    public getScope() { return this.scope; }
 
     /**
      * Switches the reference level to the parent level.
@@ -25,14 +27,14 @@ class ReferenceManager {
     private ascend() {
         if (!this.isRoot()) {
             let parent = this.getParent();
-            let current = this.current;
+            let scope = this.scope;
 
             let wX = this.camera.worldX;
             let wY = this.camera.worldY;
             let cS = this.camera.scale;
             let rS = cS / parent.scale;
-            let rX = (wX + current.left) * cS;
-            let rY = (wY + current.top) * cS;
+            let rX = (wX + scope.left) * cS;
+            let rY = (wY + scope.top) * cS;
 
             this.loadLevel(parent);
             this.camera.zoomAndMoveTo(rX, rY, rS);
@@ -43,10 +45,11 @@ class ReferenceManager {
      * Switches downTo from the reference level to the child level.
      * If the given level is not a child of the current one, nothing
      * will be done.
+     * 
      * @param target
      */
     private descendInto(target: ViewGroup) {
-        let current = this.current;
+        let current = this.scope;
         if (target && current && target.parent === current) {
             let wX = this.camera.worldX;
             let wY = this.camera.worldY;
@@ -69,10 +72,11 @@ class ReferenceManager {
      * TODO event emitting
      * TODO move level rendering away from UI
      * TODO dynamic descent based on LOD-area
+     * 
      * @param level
      */
     private loadLevel(level: ViewGroup) {
-        this.current = level;
+        this.scope = level;
         this.diagram.model = level;
         // this.limits.adjustTo(level);
     }
@@ -83,8 +87,8 @@ class ReferenceManager {
      *  - Acceleration structures, adaptive with item sizes
      *  - Only check visible objects of interest
      */
-    protected detectAndDoSwitch(): boolean {
-        if (!this.current) {
+    private detectAndDoSwitch(): boolean {
+        if (!this.scope) {
             return false;
         }
 
@@ -113,15 +117,15 @@ class ReferenceManager {
     }
 
     private isRoot(): boolean {
-        return (!this.current.parent);
+        return (!this.scope.parent);
     }
 
     private getParent(): ViewGroup {
-        return this.current.parent as ViewGroup;
+        return this.scope.parent as ViewGroup;
     }
 
     private isWithinChildGroup(group: ViewGroup): boolean {
-        let scale = this.current.scale;
+        let scale = this.scope.scale;
         let cam = this.camera;
         let pW = cam.projWidth;
         let pH = cam.projHeight;
