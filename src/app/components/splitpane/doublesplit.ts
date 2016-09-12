@@ -3,6 +3,7 @@ import HTML from "../../common/utility";
 
 /**
  * Simple split pane.
+ * 
  * @author Martin Schade
  * @since 1.0.0
  */
@@ -22,34 +23,36 @@ export default class DoubleSplit {
     private visible = true;
     private saved: number;
     private last: number;
+    private removeMove: Function;
+    private removeUp: Function;
 
     private moveHandler = (event: MouseEvent) => {
         let elem = this.root.nativeElement;
         let offs = HTML.getOffset(elem, event);
         let page = this.vertical ? offs.x : offs.y;
         let upper = this.vertical ? elem.offsetWidth : elem.offsetHeight;
-        if (!upper) { return; }
+        if (!upper) return; 
         page = ((page < 0)? 0 : ((page > upper) ? upper : page));
         let adjusted = Math.round(page/upper * 99);
         this.readjust(adjusted);
         HTML.block(event);
     };
 
-    private upHandler = (event: MouseEvent) => {
+    private upHandler = (event?: MouseEvent) => {
+        this.removeMove();
+        this.removeUp();
         HTML.block(event);
-        document.removeEventListener('mousemove', this.moveHandler, true);
-        document.removeEventListener('mouseup', this.upHandler, true);
     };
 
-    ngAfterViewInit() {
+    private ngAfterViewInit() {
         this.vertical = !this.horizontal;
         this.readjust(this.visible ? 69 : 100);
     }
 
     @HostListener('visibility', ['$event'])
     toggleVisibility(event: any) {
-        document.removeEventListener('mousemove', this.moveHandler, true);
-        document.removeEventListener('mouseup', this.upHandler, true);
+        if (this.removeMove) this.removeMove();
+        if (this.removeUp) this.removeUp();
         this.visible = !this.visible;
         if (this.visible) {
             this.readjust(this.saved || 69);
@@ -59,13 +62,14 @@ export default class DoubleSplit {
         }
     }
 
-    onMouseDown(event: MouseEvent) {
-        document.addEventListener('mousemove', this.moveHandler, true);
-        document.addEventListener('mouseup', this.upHandler, true);
+    private onMouseDown(event: MouseEvent) {
+        let r = this.renderer;
+        this.removeMove = r.listenGlobal('document', 'mousemove', this.moveHandler);
+        this.removeUp = r.listenGlobal('document', 'mouseup', this.upHandler);
     }
 
     private readjust(l: number) {
-        const renderer = this.renderer;
+        let renderer = this.renderer;
         let left = (l < 0) ? 0 : (l > 100) ? 100 : l;
         let doLeft = Math.abs(this.last - left) > 0;
 
