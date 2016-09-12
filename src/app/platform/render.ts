@@ -20,7 +20,7 @@ export default class ShapeRenderer {
     return Colors[color] || 0x000000;
   }
 
-  renderLabel(item: ViewVertex): any {
+  public renderLabel(item: ViewVertex): any {
     let style = item.style;
     if (!style) return; // no style
     let labels: any = style.labels as Label[];
@@ -28,29 +28,29 @@ export default class ShapeRenderer {
 
     /* check for multiple labels */
     if (labels.length) {
-      
+
     } else { // single label
-        let label = labels as Label;
-        let text = item.name;
-         
-        let pixi = null;
-        if (!label.cache) {
-          pixi =  {
-            fill: label.color || 0x3d3834,
-            stroke: label.backdrop || 'white',
-            strokeThickness: 8,
-            lineJoin: 'round'
-          };
+      let label = labels as Label;
+      let text = item.name;
 
-          label.cache = pixi;
-        }
+      let pixi = null;
+      if (!label.cache) {
+        pixi = {
+          fill: label.color || 0x3d3834,
+          stroke: label.backdrop || 'white',
+          strokeThickness: 8,
+          lineJoin: 'round'
+        };
 
-        let mapped = new PIXI.Text(text, pixi, 0.6);
-        item.labels = mapped;
+        label.cache = pixi;
+      }
+
+      let mapped = new PIXI.Text(text, pixi, 0.6);
+      item.labels = mapped;
     }
   }
 
-  renderShape(style: Style, ctx: PIXI.Graphics, item: ViewVertex) {
+  public renderShape(style: Style, ctx: PIXI.Graphics, item: ViewVertex) {
     let fill = this.getColor(style.fill);
     let stroke = this.getColor(style.stroke);
 
@@ -58,56 +58,56 @@ export default class ShapeRenderer {
     if (stroke) ctx.lineColor = stroke;
 
     const l = item.left, t = item.top,
-          w = item.width, h = item.height;
-    
+      w = item.width, h = item.height;
+
     switch (style.shape.type) {
       case ShapeType.SQUARE, ShapeType.RECTANGLE:
-          ctx.drawRect(l, t, w, h);
+        ctx.drawRect(l, t, w, h);
         break;
 
       case ShapeType.CIRCLE:
-          let radius = w / 2;
-          ctx.drawCircle(l + radius, t + radius, w / 2);
+        let radius = w / 2;
+        ctx.drawCircle(l + radius, t + radius, w / 2);
         break;
 
-      case ShapeType.DIAMOND: 
-          ctx.moveTo(l + w / 2, t);
-          ctx.lineTo(l + w, t + h / 2);
-          ctx.lineTo(l + w / 2, t + h);
-          ctx.lineTo(l, t + h / 2);
+      case ShapeType.DIAMOND:
+        ctx.moveTo(l + w / 2, t);
+        ctx.lineTo(l + w, t + h / 2);
+        ctx.lineTo(l + w / 2, t + h);
+        ctx.lineTo(l, t + h / 2);
         break;
 
       case ShapeType.TRIANGLE:
-          ctx.moveTo(l + w / 2, t);
-          ctx.lineTo(l, t + h);
-          ctx.lineTo(l + w, t + h);
+        ctx.moveTo(l + w / 2, t);
+        ctx.lineTo(l, t + h);
+        ctx.lineTo(l + w, t + h);
         break;
 
       case ShapeType.ROUNDED:
-          let a = style.shape.a || 12;        
-          ctx.drawRoundedRect(l, t, w, h, a);
+        let a = style.shape.a || 12;
+        ctx.drawRoundedRect(l, t, w, h, a);
         break;
 
       case ShapeType.HOURGLASS:
-          let f = 0.5;
-          /*
-          let f = 0.2;
-          ctx.moveTo(l, t);
-          ctx.lineTo(l + w, t);
-          ctx.lineTo(l + w / 1.8, t + h / 2);
-          ctx.lineTo(l + w, t + h);
-          ctx.lineTo(l, t + h);
-          ctx.lineTo(l + w / 2.2, t + h / 2);
-          */
-          ctx.moveTo(l, t);
-          ctx.lineTo(l + w, t);
-          ctx.lineTo(l + w / (1.8), t + h / 2);
-          ctx.lineTo(l + w / (2.2), t + h / 2);
-          ctx.endFill().beginFill(fill);
-          ctx.moveTo(l, t + h);
-          ctx.lineTo(l + w / (2.2), t + h / 2);
-          ctx.lineTo(l + w / (1.8), t + h / 2);
-          ctx.lineTo(l + w, t + h);
+        let f = 0.5;
+        /*
+        let f = 0.2;
+        ctx.moveTo(l, t);
+        ctx.lineTo(l + w, t);
+        ctx.lineTo(l + w / 1.8, t + h / 2);
+        ctx.lineTo(l + w, t + h);
+        ctx.lineTo(l, t + h);
+        ctx.lineTo(l + w / 2.2, t + h / 2);
+        */
+        ctx.moveTo(l, t);
+        ctx.lineTo(l + w, t);
+        ctx.lineTo(l + w / (1.8), t + h / 2);
+        ctx.lineTo(l + w / (2.2), t + h / 2);
+        ctx.endFill().beginFill(fill);
+        ctx.moveTo(l, t + h);
+        ctx.lineTo(l + w / (2.2), t + h / 2);
+        ctx.lineTo(l + w / (1.8), t + h / 2);
+        ctx.lineTo(l + w, t + h);
         break;
 
       default: console.warn('Tried to render unknown shape class (' + style.shape.type + ')')
@@ -117,7 +117,7 @@ export default class ShapeRenderer {
     if (fill) ctx.endFill();
   }
 
-  cacheShape(style: Style) {
+  public cacheShape(style: Style) {
     let canvas = document.createElement('canvas');
     canvas.width = 16;
     canvas.height = 16;
@@ -174,8 +174,8 @@ export default class ShapeRenderer {
         ctx.closePath();
         ctx.fill();
         break;
-      
-      case ShapeType.DIAMOND: 
+
+      case ShapeType.DIAMOND:
         ctx.beginPath();
         ctx.moveTo(8, 0);
         ctx.lineTo(16, 8);
@@ -193,82 +193,80 @@ export default class ShapeRenderer {
     style.cachedURL = canvas.toDataURL();
   }
 
-   renderItem(item: ViewItem, visual: any): any {
-        if (item.visual) {
-            return;
-        } else {
-            // let visual = new PIXI.Graphics();
-            let style = item.style;
-            this.renderShape(style, visual, item)
-            item.visual = visual;
-        }
+  public renderItem(item: ViewItem, visual: any): any {
+    if (item.visual) {
+      return;
+    } else {
+      // let visual = new PIXI.Graphics();
+      let style = item.style;
+      this.renderShape(style, visual, item)
+      item.visual = visual;
+    }
+  }
+
+  public createDefaultLabelStyle(): PIXI.TextStyle {
+    return {
+      stroke: 'white',
+      strokeThickness: 8,
+      lineJoin: 'round'
+    }
+  }
+
+  public renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): any {
+    if (group.visual) return;
+  
+    let root = new PIXI.Container();
+    root.width = group.width;
+    root.height = group.height;
+
+    if (!topLevel) {
+      root.position.set(group.left, group.top);
     }
 
-    createDefaultLabelStyle(): PIXI.TextStyle {
-      return {
-        stroke: 'white',
-        strokeThickness: 8,
-        lineJoin: 'round'
-      }
+    let shape = new PIXI.Graphics();
+
+    if (oblique) {
+      shape.beginFill(0xeeeeee);
+      shape.drawRoundedRect(0, 0, group.width, group.height, 12);
+      shape.endFill();
+    } else {
+      shape.lineStyle(16, 0xeeeeee);
+      shape.drawRoundedRect(0, 0, group.width, group.height, 12);
     }
 
-    renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): any {
-        if (group.visual) {
-            return;
-        }
-        
-        let root = new PIXI.Container();
-        root.width = group.width;
-        root.height = group.height;
+    let content = new PIXI.Container();
+    let inner = group.scale;
+    content.scale.set(inner, inner);
 
-        if (!topLevel) {
-            root.position.set(group.left, group.top);
-        }
+    root.addChild(shape);
+    root.addChild(content);
 
-        let shape = new PIXI.Graphics();
-
-        if (oblique) {
-            shape.beginFill(0xeeeeee);
-            shape.drawRoundedRect(0, 0, group.width, group.height, 12);
-            shape.endFill();
-        } else {
-            shape.lineStyle(16, 0xeeeeee);
-            shape.drawRoundedRect(0, 0, group.width, group.height, 12);
-        }
-
-        let content = new PIXI.Container();
-        let inner = group.scale;
-        content.scale.set(inner, inner);
-
-        root.addChild(shape);
-        root.addChild(content);
-
-        if (!topLevel && !oblique) {
-            // root.cacheAsBitmap = true;
-        }
-
-        group.visual = root;
+    if (!topLevel && !oblique) {
+      // root.cacheAsBitmap = true;
     }
 
-    attach(node: ViewVertex, group: ViewGroup) {
-        let child = node.visual;
-        if (!child) {
-            throw new Error('Node has no rendered visual');
-        }
+    group.visual = root;
+  }
 
-        let root = group.visual as PIXI.Container;
-        if (!root) {
-            throw new Error('Could not find renderer visual of the given group');
-        }
-
-        /* TODO fix this direct index access */
-        let content = root.children[1] as PIXI.Container;
-        if (!content) {
-            throw new Error('Could not find low level content container');
-        }
-
-        content.addChild(child);
+  attach(node: ViewVertex, group: ViewGroup) {
+    let child = node.visual;
+    if (!child) {
+      throw new Error('Node has no rendered visual');
     }
+
+    let root = group.visual as PIXI.Container;
+    if (!root) {
+      throw new Error('Could not find renderer visual of the given group');
+    }
+
+    /* TODO fix this direct index access */
+    let content = root.children[1] as PIXI.Container;
+    if (!content) {
+      throw new Error('Could not find low level content container');
+    }
+
+    content.addChild(child);
+  }
 }
 
 /**
@@ -278,13 +276,13 @@ export default class ShapeRenderer {
  * @since 1.0.0
  */
 const Colors = {
-    'cornflowerblue': 0x6495ED,
-    'mediumseagreen': 0x3CB371,
-    'goldenrod': 0xDAA520,
-    'darkgrey': 0xA9A9A9,
-    'darkgray': 0xA9A9A9,
-    'lightgray': 0xD3D3D3,
-    'lightgrey': 0xD3D3D3,
-    'black': 0x000000,
-    'white' : 0xffffff
+  'cornflowerblue': 0x6495ED,
+  'mediumseagreen': 0x3CB371,
+  'goldenrod': 0xDAA520,
+  'darkgrey': 0xA9A9A9,
+  'darkgray': 0xA9A9A9,
+  'lightgray': 0xD3D3D3,
+  'lightgrey': 0xD3D3D3,
+  'black': 0x000000,
+  'white': 0xffffff
 }
