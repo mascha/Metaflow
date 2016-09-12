@@ -1,4 +1,6 @@
 import {Component, ElementRef, ViewChild, HostListener} from '@angular/core';
+import {Observable} from "rxjs/Rx";
+import {GridLayer, BorderLayer, NodeLayer, PlatformLayer} from './layers';
 import {StateMachine, DiagramState, DiagramEvents} from "./behavior";
 import {Camera} from "../../common/camera";
 import {ViewGroup, ViewVertex} from "../../common/viewmodel";
@@ -10,17 +12,12 @@ import Breadcrumbs from "./breadcrumbs/breadcrumbs";
 import Overview from "./overview/overview";
 import Presenter from "./controls/presenter";
 import Loader from '../loader/loader';
-import {Observable} from "rxjs/Rx";
-import {GridLayer, BorderLayer, NodeLayer, PlatformLayer} from './layers';
 
 /**
  * The diagram view component.
  * 
- * TODO panning & zoom limits, reset animation
- * TODO edges
- * 
  * @author Martin Schade
- * @since 1.0.0
+ * @since 0.1.0-alpha
  */
 @Component({
     selector: 'diagram',
@@ -45,6 +42,7 @@ export default class Diagram {
     @ViewChild(GridLayer) private _gridLayer: GridLayer;
     @ViewChild(NodeLayer) private _nodeLayer: NodeLayer;
     @ViewChild('effectLayer') private _effects: ElementRef;
+    @ViewChild(Overview) private _overview: Overview;
 
     private _camera: Camera;
     private _behavior: DiagramEvents;
@@ -78,13 +76,13 @@ export default class Diagram {
     set model(group: ViewGroup) {
         this._model = group;
         if (this._platform) {
-            this._platform.setModel(group);
-        }
-        if (this._behavior) {
-            // this._behavior.setModel(group); TODO fix inifinite cycles!
+            this._platform.update(group);
         }
         if (this._borderLayer) {
             this._borderLayer.update(group);
+        }
+        if (this._overview) {
+            this._overview.update(group);
         }
     }
 
@@ -223,8 +221,11 @@ export default class Diagram {
             if (this._gridLayer) {
                 this._gridLayer.observe(this._camera);
             }
-            if (this._nodeLayer) {
-                this._camera.attachObserver(this._platform);
+            if (this._platform) {
+                this._platform.observe(this._camera);
+            }
+            if (this._overview) {
+                this._overview.observe(this._camera);
             }
         } else {
             throw new Error('Could not create diagram controller');
@@ -237,29 +238,11 @@ export default class Diagram {
         setTimeout(() => this.onResize(), 32)
     }
 
-    constructor(private _platforms: PlatformService,
+    constructor(
+        private _platforms: PlatformService,
         private _models: ModelService,
-        private _element: ElementRef) {
-    }
-}
-
-/**
- * Responsible for handling level transition events and detection.
- * @author Martin Schade
- * @since 1.0.0
- */
-class ReferenceManager {
-    private current: ViewGroup;
-}
-
-export class CanvasSelection extends Observable<Array<ViewVertex>> {
-    private items: ViewVertex[];
-
-    setSelection(items: ViewVertex[]) {
-        // TODO emit deselection
-        // update internals
-        // TODO emit selection
-    }
+        private _element: ElementRef)
+        { }
 }
 
 function minimax(min: number, value: number, max: number) {

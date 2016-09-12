@@ -1,6 +1,6 @@
-import {Camera} from "../common/camera";
-import {ViewGroup, ViewItem, ViewVertex} from "../common/viewmodel";
 import {PlatformLayer, ViewModelRenderer, Quality} from "../components/diagram/layers";
+import {ViewGroup, ViewItem, ViewVertex} from "../common/viewmodel";
+import {Camera} from "../common/camera";
 import ShapeRenderer from './render';
 
 /**
@@ -37,14 +37,12 @@ export class PixiLayer implements PlatformLayer {
 
     hitTest(worldX: number, worldY: number): Array<ViewVertex> {
         let hits = [];
-        
-        // perform hit test
 
         return hits;
     }
 
     observe(camera: Camera) {
-        /* NOP */
+        camera.attachObserver(this);
     }
 
     update(level: ViewGroup) {
