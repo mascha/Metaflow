@@ -277,7 +277,7 @@ export default class ShapeRenderer {
  * @author Martin Schade
  * @since 1.0.0
  */
-let Colors = {
+const Colors = {
     'cornflowerblue': 0x6495ED,
     'mediumseagreen': 0x3CB371,
     'goldenrod': 0xDAA520,
