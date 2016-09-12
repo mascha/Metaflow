@@ -14,3 +14,10 @@ $diagram-control-shadow: 0 2px 4px rgba(0,0,0,0.2),0 -1px 0px rgba(0,0,0,0.02) !
   background-color: $overview-fill;
   box-shadow: $diagram-control-shadow;
 }
+
+.layer {
+  position: absolute;
+  top: 0; left: 0;
+  bottom: 0;
+  right: 0;
+}

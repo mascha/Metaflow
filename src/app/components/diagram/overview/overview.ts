@@ -11,7 +11,7 @@ import {DiagramLayer} from '../layers';
  */
 @Component({
     selector: 'overview',
-    template: '<canvas #camera></canvas><canvas #nodes></canvas>',
+    template: require('./overview.html'),
     styles: [require('./overview.scss')]
 })
 export default class Overview implements DiagramLayer, CameraObserver {
@@ -33,7 +33,7 @@ export default class Overview implements DiagramLayer, CameraObserver {
     }
 
     public onViewResized() {
-        /* NOP */
+        this.redrawCamera();
     }
 
     public onPanChanged(posX: number, posY: number) {
@@ -45,10 +45,20 @@ export default class Overview implements DiagramLayer, CameraObserver {
     }
 
     private ngAfterViewInit() {
-        let canvas1 = (this.nodeCanvas.nativeElement as HTMLCanvasElement);
-        this.nodes = canvas1.getContext('2d');
-        let canvas2 = (this.camCanvas.nativeElement as HTMLCanvasElement);
-        this.cams = canvas2.getContext('2d');
+        let canvases = [
+            this.nodeCanvas,
+            this.camCanvas
+        ]
+        
+        canvases.forEach((it: any) => {
+            it.width = 128; 
+            it.height
+        });
+        
+        let brushes = canvases.map((it) => it.nativeElement as HTMLCanvasElement)
+         .map((it) => it.getContext('2d'))
+        this.nodes = brushes[0];
+        this.cams = brushes[1];
     }
 
     private redraw() {
@@ -61,15 +71,14 @@ export default class Overview implements DiagramLayer, CameraObserver {
         let c = p ? p.contents : null;
         let l = c ? c.length : 0;
         let x = 0, y = 0, w = 0, h = 0, i : ViewVertex = null,
-            mW = p.width, mH = p.height, DIM = 128;
+            s = p.scale, mW = p.width, mH = p.height, DIM = 128;
         while (l--) {
             i = c[l];
-            x = Math.round(i.left / mW) * DIM;
-            y = Math.round(i.top / mH) * DIM;
-            w = Math.round(i.width / mW) * DIM;
-            h = Math.round(i.height / mH) * DIM;
-            // if (w > 0 && h > 0) 
-            brush.fillRect(x, y, 1, 1);
+            x = Math.round(i.left / mW * s * DIM);
+            y = Math.round(i.top / mH * s * DIM);
+            w = Math.round(i.width / mW * s * DIM);
+            h = Math.round(i.height / mH * s * DIM);
+            if (w > 0 && h > 0) brush.fillRect(x, y, w, h);
         }
 
         this.redrawCamera();
@@ -81,12 +90,12 @@ export default class Overview implements DiagramLayer, CameraObserver {
         brush.clearRect(-1, -1, 500, 500);
         brush.fillStyle = 'cornflowerblue';
         brush.globalAlpha = 0.2;
-        let x = this.camera.castRayX(this.camera.cameraX);
-        let y = this.camera.castRayY(this.camera.cameraY);
-        let mW = this.group.width, mH = this.group.height, DIM = 128;
+        const DIM = 128;
+        let mW = this.group.width, 
+            mH = this.group.height;
         brush.fillRect(
-            x / mW * DIM, 
-            y / mH * DIM, 
+            this.camera.worldX / mW * DIM, 
+            this.camera.worldY / mH * DIM, 
             this.camera.projWidth / mW * DIM, 
             this.camera.projHeight / mH * DIM 
         );
