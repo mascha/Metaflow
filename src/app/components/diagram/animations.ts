@@ -4,17 +4,19 @@ import Diagram from './diagram';
 
 const NAVIGATION_FACTOR = 1000;
 
-const EASE_OUT = (f: number) => { return f * (2-f); };
-const EASE_IN_OUT = (f: number) => { return f * f * (3.0 - 2.0 * f); }
+export const EASE_OUT = (f: number) => { return f * (2 - f); };
+export const EASE_IN_OUT = (f: number) => { return f * f * (3 - 2 * f); }
+export const EASE_IN = (f: number) => { return f * f; }
+export const EASE_NONE = (f: number) => { return f; }
 
 /**
- * Interpolator helper class, which encapsulates
+ * Animation helper class, which encapsulates
  * requestAnimationFrame and onFinished callbacks.
  * 
  * @author Martin Schade
  * @since 1.0.0
  */
-export class Interpolator {
+export class Animation {
     public onFinished: () => void;
     private start: number;
     private frame: number;
@@ -23,6 +25,7 @@ export class Interpolator {
         if (this.active) {
             let f = (Date.now() - this.start) / this.duration;
             f = (f > 1) ? 1 : (f < 0) ? 0 : f;
+            f = this.interpolator ? this.interpolator(f) : f;
             if (f < 1) {
                 this.update(f);
                 this.frame = window.requestAnimationFrame(this.callback);
@@ -33,10 +36,7 @@ export class Interpolator {
         }
     }
 
-    /**
-     * Stop the animation
-     */
-    stop() {
+    public stop() {
         if (this.frame) {
             window.cancelAnimationFrame(this.frame);
         }
@@ -47,7 +47,7 @@ export class Interpolator {
         this.update = undefined;
     }
 
-    play() {
+    public play() {
         if (this.active) return;
         this.active = true;
         this.start = Date.now();
@@ -56,67 +56,55 @@ export class Interpolator {
         );
     }
 
-    /**
-     * Zoom in animation.
-     */
     static zoomIn(camera: Camera, factor: number, duration: number) {
         if (factor <= 0 || duration <= 0) return;
         const start = camera.scale;
         const end = start * factor;
         const wX = camera.centerX;
         const wY = camera.centerY;
-        return new Interpolator(f => {
-            const t = f * f * (3 - 2 * f);
-            camera.zoomToAbout(start + end * t, wX, wY);
-        }, duration || 300)
+        return new Animation(f => {
+            camera.zoomToAbout(start + end * f, wX, wY);
+        }, duration || 300, EASE_IN_OUT)
     }
 
-    static throwCamera(camera: Camera, speed: number, angle: number, duration: number): Interpolator {
+    static throwCamera(camera: Camera, speed: number, angle: number, duration: number): Animation {
         const dist = speed * duration;
         const startX = camera.cameraX;
         const startY = camera.cameraY;
         const distX = dist * Math.cos(angle);
         const distY = dist * Math.sin(angle);
-        return new Interpolator(f => {
-            const t = f * (2 - f);
-            const posX = startX + t * distX;
-            const posY = startY + t * distY;
+        return new Animation(f => {
+            const posX = startX + f * distX;
+            const posY = startY + f * distY;
             camera.moveTo(-posX, -posY);
-        }, duration || 300);
+        }, duration || 300, EASE_OUT);
     }
 
-
-    static navigateToItem(cam: Camera, diagram: Diagram, vertex: ViewVertex): Interpolator {
-        // TODO what if parent == null ? 
+    static navigateToItem(cam: Camera, diagram: Diagram, vertex: ViewVertex): Animation {
         let parent = vertex.parent;
-        return Interpolator.navigateTo({
-            camera: cam,
-            targetX: (vertex.left + vertex.width / 2) * parent.scale,
-            targetY: (vertex.top + vertex.height / 2) * parent.scale,
-            panZoom: diagram.zoomPanPreference,
-            velocity: diagram.navigationVelocity,
-            targetWidth: vertex.width * 16 * vertex.parent.scale,
-        })
+        let scale = parent ? parent.scale : 1.0;
+        return Animation.navigateTo({
+                camera: cam,
+                targetX: (vertex.left + vertex.width / 2) * scale,
+                targetY: (vertex.top + vertex.height / 2) * scale,
+                panZoom: diagram.zoomPanPreference,
+                velocity: diagram.navigationVelocity,
+                targetWidth: vertex.width * 16 * scale,
+        });
     }
 
-    /**
-     * Pan the camera and center on the given world coordinates.
-     */
-    static centerOnWorld(centerX: number, centerY: number, time: number, camera: Camera): Interpolator {
+    static centerOnWorld(centerX: number, centerY: number, duration: number, camera: Camera): Animation {
         const diffX = (centerX - camera.cameraX) / camera.scale;
         const diffY = (centerY - camera.cameraY) / camera.scale;
-        return new Interpolator(f => {
+        return new Animation(f => {
             camera.moveTo(
                 - (camera.cameraX + diffX * f),
                 - (camera.cameraY + diffY * f)
             );
-        }, time);
+        }, duration || 300, EASE_OUT);
     }
 
-    /**
-     * Navigate to the given center coordinates.
-     */
-    static navigateTo(params: NavigateConfig): Interpolator {
+    static navigateTo(params: NavigateConfig): Animation {
         const camera = params.camera;
         const aW = camera.projWidth;
         const aX = camera.centerX;
@@ -131,16 +119,17 @@ export class Interpolator {
         /* Check if path is too short */
         if (dU < 1e-8) {
             const S = Math.log(eW / aW) / Math.SQRT2;
-            return new Interpolator(f => {
-                const t = f * (2 - f);
-                const tW = aW * Math.exp(Math.SQRT2 * S * t);
+            return new Animation(f => {
+                const tW = aW * Math.exp(Math.SQRT2 * S * f);
                 const vW = camera.visualWidth / 2;
                 const vH = camera.visualHeight / 2;
                 const vZ = 2 * vW / tW;
                 const x = (aX + dX * f) * vZ;
                 const y = (aY + dY * f) * vZ;
                 camera.zoomAndMoveTo(x - vW, y - vH, vZ);
-            }, Math.sqrt(1 + S) * NAVIGATION_FACTOR / v);
+            }, 
+            Math.sqrt(1 + S) * NAVIGATION_FACTOR / v,
+            EASE_OUT);
         } else {
             const dZ = z * z * dU;
             const dA = eW * eW - aW * aW;
@@ -154,8 +143,8 @@ export class Interpolator {
             const sh = Math.sinh(r0);
             const S = (r1 - r0) / z;
             const m = aW / (z * z);
-            return new Interpolator(f => {
-                const s = f * (2 - f) * S;
+            return new Animation(f => {
+                const s = f * S;
                 const u = m * (Math.tanh(z * s + r0) * ch - sh);
                 const w = aW * ch / Math.cosh(z * s + r0);
                 const vW = camera.visualWidth / 2;
@@ -164,12 +153,17 @@ export class Interpolator {
                 const x = (aX + dX / dU * u) * vZ;
                 const y = (aY + dY / dU * u) * vZ;
                 camera.zoomAndMoveTo(x - vW, y - vH, vZ);
-            }, Math.sqrt(1 + S) * NAVIGATION_FACTOR / v);
+            }, 
+            Math.sqrt(1 + S) * NAVIGATION_FACTOR / v,
+            EASE_OUT);
         }
     }
 
-    constructor(private update: (f: number) => void,
-        private duration: number) {
+    constructor(
+        private update: (number) => void,
+        private duration: number,
+        private interpolator?: (number) => number) {
+        this.interpolator = interpolator || null;
         this.duration = duration || 1000;
     }
 }
