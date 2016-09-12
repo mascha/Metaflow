@@ -70,8 +70,8 @@ export default class ModelService {
     private createStock() {
         let item = new ViewItem(
             this.randomName(),
-            this.random() * 18000,
-            this.random() * 18000,
+            this.random() * 20000,
+            this.random() * 20000,
             192,
             108
         );
@@ -82,8 +82,8 @@ export default class ModelService {
     private createVariable() {
         let variable = new ViewItem(
             this.randomName(),
-            this.random() * 18000,
-            this.random() * 18000,
+            this.random() * 20000,
+            this.random() * 20000,
             32,
             32
         );
@@ -94,8 +94,8 @@ export default class ModelService {
     private createRate() {
         let variable = new ViewItem(
             this.randomName(),
-            this.random() * 18000,
-            this.random() * 18000,
+            this.random() * 20000,
+            this.random() * 20000,
             64,
             64
         );
@@ -106,8 +106,8 @@ export default class ModelService {
     private createModule() {
         let module = new ViewGroup(
             this.randomName(),
-            this.random() * 18000,
-            this.random() * 18000,
+            this.random() * 20000,
+            this.random() * 20000,
             300,
             260,
             1
