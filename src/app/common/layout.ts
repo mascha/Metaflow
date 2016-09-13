@@ -4,17 +4,17 @@ import {ViewGroup, ViewVertex} from './viewmodel';
  * General placement options.
  */
 export const enum Locality {
-    
+
     /**
      * Element takes place the space provided
      * by the parent element.
      */
-    INSIDE, 
-    
+    INSIDE,
+
     /**
      * Element may only be place on the border.
      */
-    BORDER, 
+    BORDER,
 }
 
 /**
