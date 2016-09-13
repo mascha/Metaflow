@@ -1,22 +1,33 @@
+import {ViewGroup, ViewVertex} from './viewmodel';
 
 /**
  * General placement options.
  */
-export const enum Placement {
-    INSIDE, BORDER, OUTSIDE
+export const enum Locality {
+    
+    /**
+     * Element takes place the space provided
+     * by the parent element.
+     */
+    INSIDE, 
+    
+    /**
+     * Element may only be place on the border.
+     */
+    BORDER, 
 }
 
 /**
- * Possible vertical positions.
+ * Possible vertical alignment.
  */
-export const enum Vertical {
+export const enum VerticalAlignment {
     TOP, MIDDLE, BOTTOM
 }
 
 /**
  * Possible horizontal positions.
  */
-export const enum Horizontal {
+export const enum HorizontalAlignment {
     LEFT, MIDDLE, RIGHT
 }
 
@@ -26,19 +37,40 @@ export const enum Horizontal {
  * @author Martin Schade
  * @since 1.0.0
  */
-export const enum PlacementFreedom {
+export const enum Freedom {
+
     /**
-     * Can be placed anywhere.
+     * Parent element is responsible for managing placement.
+     */
+    PARENT,
+
+    /**
+     * Element can be placed anywhere.
      */
     FREE,
 
     /**
-     * Can be placed anywhere on the border.  
-     */ 
-    SLIDING, 
-
-    /**
-     * Remains in place.
+     * Element remains in place.
      */
-    FIXED
+    FIXED,
+}
+
+/**
+ * Layout algorithm.
+ * 
+ * @author Martin Schade.
+ * @since 1.0.0
+ */
+export interface LayoutAlgorithm {
+    apply(group: ViewGroup)
+}
+
+/**
+ * Layout definition.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+export class Layout {
+    algorithm: LayoutAlgorithm;
 }
