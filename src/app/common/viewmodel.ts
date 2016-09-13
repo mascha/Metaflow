@@ -1,4 +1,5 @@
-import {Style} from "./styling";
+import {Style} from './styling';
+import {Layout} from './layout';
 
 /**
  * Base viewmodel class. 
@@ -22,8 +23,13 @@ export abstract class ViewVertex {
         return false;
     }
 
-    get centerX(): number { return this.left + this.width * 0.5; }
-    get centerY(): number { return this.top + this.height * 0.5; }
+    get centerX(): number { 
+        return this.left + this.width * .5; 
+    }
+    
+    get centerY(): number { 
+        return this.top + this.height * .5; 
+    }
     
     constructor(public name: string, public left: number,
                 public top: number, public width: number,
@@ -61,13 +67,15 @@ export class ViewProxy extends ViewVertex {
  * A view group acts as a styleable container
  * and decoration target for other view items.
  * 
+ * Furthermore it provides access to layouting facilities.
+ * 
  * @author Martin Schade
  * @since 1.0.0
  */
 export class ViewGroup extends ViewVertex {
 
-    isPortal: boolean = true;
     contents: Array<ViewVertex>;
+    layout: Layout;
 
     /**
      * Add a vertex to the group's contents.
@@ -94,7 +102,7 @@ export class ViewGroup extends ViewVertex {
             if (contents.length < 1) {
                 this.contents = undefined;
             }
-            this.emit(ModelChange.ADD, vertex);
+            this.emit(ModelChange.CHILD_ADD, vertex);
             return true;
         }
         
@@ -138,20 +146,20 @@ export const enum ModelChange {
     /**
      * x,y,w,h changes
      */
-    GEOMETRY = 0,
+    GEOMETRY,
 
     /**
      * A style or styleable property has changed.
      */
-    STYLING  = GEOMETRY + 1,
+    STYLING,
 
     /**
      * A child has been added.
      */
-    ADD      = STYLING + 1,
+    CHILD_ADD,
 
     /**
      * A child has been removed.
      */
-    REMOVE   = ADD + 1,
+    CHILD_REMOVE,
 }
