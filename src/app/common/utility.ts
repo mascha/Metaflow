@@ -93,6 +93,7 @@ export default class HTMLUtil {
 
     /**
      * Adds an expanding dot to the given position.
+     * Using css the animation can be 
      * 
      * @param element {HTMLElement}
      * @param off {{x: number, y: number}}
@@ -105,7 +106,7 @@ export default class HTMLUtil {
         let object = document.createElement('div');
         object.style.width = "5px";
         object.style.height = "5px";
-        object.style.backgroundColor = color || 'rgba(0,0,0, 0.2)';
+        object.style.backgroundColor = color || 'rgba(0, 0, 0, 0.2)';
         object.style.animation = "grow .3s linear forwards";
         object.style.borderRadius = "50%";
         object.style.transform = "translate(-50%, -50%)";
@@ -152,19 +153,21 @@ export default class HTMLUtil {
         evt.initUIEvent('resize', true, false, window, 0);
         window.dispatchEvent(evt);
     }
-}
 
-export class Text {
-    static approximateWidth(text: string): number {
-        let len = text.length;
-        let res = 0;
+    /**
+     * Offers a fast approximative text width based on estimated character widths.
+     */
+    static approximateTextWidth(text: string, fontSize: number): number {
+        let len = text.length, res = 0;
         for (let i = 0; i < len; i++) {
             switch (text[i]) {
-                case 'M', 'W': res += 12; break;
-                case 't', 'l', 'i': res += 8;
+                case 'M', 'W': res += 15; break;
+                case 'm', 'w': res += 12; break;
+                case 'I', 'i', 'l', 't', 'f': res += 4; break;
+                case 'r': res += 8; break;
                 default: res += 10; break;
             }
         }
-        return res;
+        return res * fontSize;
     }
 }
