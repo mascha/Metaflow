@@ -4,22 +4,6 @@ import {Style, GroupStyle} from '../common/styling';
 import {Shape, ShapeType} from '../common/shapes';
 import ShapeRenderer from '../platform/render';
 
-const seed = function(s) {
-    let m_w  = s;
-    let m_z  = 987654321;
-    let mask = 0xffffffff;
-
-    return function() {
-        m_z = (36969 * (m_z & 65535) + (m_z >> 16)) & mask;
-        m_w = (18000 * (m_w & 65535) + (m_w >> 16)) & mask;
-
-        var result = ((m_z << 16) + m_w) & mask;
-        result /= 4294967296;
-
-        return result + 0.5;
-    }
-};
-
 /**
  * Model provider service.
  *
@@ -31,8 +15,6 @@ export default class ModelService {
     
     private model: ViewGroup;
     private empty: ViewGroup;
-
-    private random = seed(123456);
 
     private names = [
         'Population',
@@ -70,8 +52,8 @@ export default class ModelService {
     private createStock() {
         let item = new ViewItem(
             this.randomName(),
-            this.random() * 20000,
-            this.random() * 20000,
+            Math.random() * 20000,
+            Math.random() * 20000,
             192,
             108
         );
@@ -82,8 +64,8 @@ export default class ModelService {
     private createVariable() {
         let variable = new ViewItem(
             this.randomName(),
-            this.random() * 20000,
-            this.random() * 20000,
+            Math.random() * 20000,
+            Math.random() * 20000,
             32,
             32
         );
@@ -94,8 +76,8 @@ export default class ModelService {
     private createRate() {
         let variable = new ViewItem(
             this.randomName(),
-            this.random() * 20000,
-            this.random() * 20000,
+            Math.random() * 20000,
+            Math.random() * 20000,
             64,
             64
         );
@@ -106,8 +88,8 @@ export default class ModelService {
     private createModule() {
         let module = new ViewGroup(
             this.randomName(),
-            this.random() * 20000,
-            this.random() * 20000,
+            Math.random() * 20000,
+            Math.random() * 20000,
             300,
             260,
             1
@@ -117,7 +99,7 @@ export default class ModelService {
     }
 
     private randomName() {
-        let n = Math.floor(this.random() * this.names.length);
+        let n = Math.floor(Math.random() * this.names.length);
         return this.names[n < 0 ? 0 : n]; 
     }
 
@@ -132,7 +114,7 @@ export default class ModelService {
 
             let j = 180;
             while (j) {
-                let rnd = this.random();
+                let rnd = Math.random();
                 let item;
                 if (rnd < .25) {
                     item = this.createStock();
