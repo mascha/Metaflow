@@ -1,5 +1,3 @@
-<section>
-    <div *ngFor="let project in projects">
-        <span>{{project}}<span>
-    </div>
+<section class="project-overview">
+    <project-card *ngFor="let project in projects" title="{{title}}"></project-card>
 </section>
