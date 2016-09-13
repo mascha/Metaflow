@@ -1,4 +1,4 @@
-import {Placement, Horizontal, Vertical} from './layout';
+import {Locality, HorizontalAlignment, VerticalAlignment} from './layout';
 import {Shape} from './shapes';
 
 /**
