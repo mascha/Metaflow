@@ -15,11 +15,11 @@ export abstract class ViewVertex {
     labels: any;
     style: Style; 
     
-    isLeaf(): boolean {
+    public isLeaf(): boolean {
         return true;
     }
 
-    isProxy(): boolean {
+    public isProxy(): boolean {
         return false;
     }
 
@@ -43,7 +43,7 @@ export abstract class ViewVertex {
  * @since 1.0.0
  */
 export class ViewItem extends ViewVertex {
-    style: Style;
+    
 }
 
 /**
@@ -58,7 +58,7 @@ export class ViewProxy extends ViewVertex {
     level: number;
     path: string;
     
-    isProxy(): boolean {
+    public isProxy(): boolean {
         return true;
     }
 }
@@ -81,7 +81,7 @@ export class ViewGroup extends ViewVertex {
      * Add a vertex to the group's contents.
      * @param vertex
      */
-    addContent(vertex: ViewVertex) {
+    public addContent(vertex: ViewVertex) {
         vertex.parent = this;
         this.contents = this.contents || [];
         this.contents.push(vertex);
@@ -92,7 +92,7 @@ export class ViewGroup extends ViewVertex {
      * @param vertex
      * @returns {boolean}
      */
-    remove(vertex: ViewVertex): boolean {
+    public remove(vertex: ViewVertex): boolean {
         let contents = this.contents;
         if (!contents) return false; 
 
@@ -109,7 +109,7 @@ export class ViewGroup extends ViewVertex {
         return false;
     }
 
-    isLeaf() {
+    public isLeaf() {
         return false;
     }
 
