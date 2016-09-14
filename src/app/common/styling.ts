@@ -133,13 +133,17 @@ export class Label {
     /**
      * Where this label is going to be placed.
      */
-    placement: Placement;
+    placement: Locality;
 
     /**
      * Vertical placement.
      */
-    vertical: Vertical;
-    horizontal: Horizontal;
+    vertical: VerticalAlignment;
+
+    /**
+     * Horizontal placement.
+     */
+    horizontal: HorizontalAlignment;
 
     /**
      * Text transform choice. Default is NONE.
