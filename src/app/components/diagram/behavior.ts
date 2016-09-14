@@ -273,6 +273,7 @@ abstract class BaseState implements DiagramState {
 
 /**
  * Idle state.
+ * 
  *  TODO hover effect
  *  TODO connection hover effect
  *  TODO click, the show info
@@ -280,6 +281,9 @@ abstract class BaseState implements DiagramState {
  *  TODO border hover effect
  *  TODO lenses (?)
  *  TODO hand off descent detection & level loading to worker
+ * 
+ * @author Martin Schade
+ * @since 0.6.0
  */
 class Idle extends BaseState {
 
@@ -374,6 +378,9 @@ class Idle extends BaseState {
  *  TODO kinetics
  *  TODO banding
  *  TODO limit changing on level switch
+ * 
+ * @author Martin Schade
+ * @since 0.6.1
  */
 class Panning extends BaseState {
 
@@ -436,12 +443,7 @@ class Panning extends BaseState {
             this.kinetics.update(dragX, dragY);
         }
 
-        const diffX = true; // Math.abs(limitX - dragX) > 1e-2;
-        const diffY = true; // Math.abs(limitY - dragY) > 1e-2;
-
-        if (diffX || diffY) {
-            this.camera.moveTo(limitX, limitY);
-        }
+        this.camera.moveTo(limitX, limitY);
     }
 
     handleMouseUp(x: number, y: number) {
