@@ -26,6 +26,7 @@ export class Shape {
     static EMPTY = new Shape(ShapeType.NONE);
     static CIRCLE = new Shape(ShapeType.CIRCLE);
     static ROUNDED = new Shape(ShapeType.ROUNDED);
+    static RING = new Shape(ShapeType.RING);
 }
 
 /**
