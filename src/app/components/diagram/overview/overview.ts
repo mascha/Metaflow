@@ -29,7 +29,7 @@ export default class Overview implements DiagramLayer, CameraObserver {
     
     public update(group: ViewGroup) {
         this.group = group;
-        this.redraw();
+        setTimeout(() => this.redraw());
     }
 
     public onViewResized() {
@@ -87,17 +87,26 @@ export default class Overview implements DiagramLayer, CameraObserver {
     private redrawCamera() {
         if (!this.group) return;
         let brush = this.cams;
+
         brush.clearRect(-1, -1, 500, 500);
         brush.fillStyle = 'cornflowerblue';
-        brush.globalAlpha = 0.2;
+        brush.globalAlpha = 0.4;
+
         const DIM = 128;
-        let mW = this.group.width, 
-            mH = this.group.height;
-        brush.fillRect(
-            this.camera.worldX / mW * DIM, 
-            this.camera.worldY / mH * DIM, 
-            this.camera.projWidth / mW * DIM, 
-            this.camera.projHeight / mH * DIM 
-        );
+        let mW = this.group.width; 
+        let mH = this.group.height;
+        let cX = this.camera.worldX / mW * DIM;
+        let cY = this.camera.worldY / mH * DIM;
+        let cW = this.camera.projWidth / mW * DIM;
+        let cH = this.camera.projHeight / mH * DIM;
+
+        brush.fillRect(cX, cY, cW, cH);
+
+        brush.fillStyle = 'cornflowerblue';
+        brush.globalAlpha = 1;
+        if (cX < 0) brush.fillRect(0, cY, 2, cH);
+        if (cX + cW > DIM) brush.fillRect(DIM - 2, cY, 2, cH);
+        if (cY < 0) brush.fillRect(cX, 0, cW, 2);
+        if (cY + cH > DIM) brush.fillRect(cX, DIM - 2, cW, 2);
     }
 }
