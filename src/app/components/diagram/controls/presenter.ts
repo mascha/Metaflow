@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {WorkspaceConfig} from "../../../services/configs";
 import ConfigService from "../../../services/configs";
-import Breadcrumbs from '../breadcrumbs/breadcrumbs';
 
 /**
  * Diagramming overlay controls. 
@@ -13,7 +12,6 @@ import Breadcrumbs from '../breadcrumbs/breadcrumbs';
     selector: 'presenter',
     styles: [require('./presenter.scss')],
     template: require('./presenter.html'),
-    directives: [Breadcrumbs]
 })
 export default class Presenter {
 

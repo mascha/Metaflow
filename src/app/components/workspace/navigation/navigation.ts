@@ -1,11 +1,15 @@
 import {Component} from '@angular/core';
-import {MenuBar} from "../menubar/menubar";
 
+/**
+ * Main navigation bar.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
 @Component({
     selector: 'navigation',
     styles: [require('./navigation.scss')],
     template: require('./navigation.html'),
-    directives: [MenuBar]
 })
 export default class Navigation {
     

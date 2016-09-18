@@ -5,6 +5,7 @@ import ModelService from "../../../services/models";
 
 /**
  * A breadcrumbs breadcrumbs bar.
+ * 
  * @author Martin Schade
  * @since 1.0.0
  */
@@ -39,14 +40,16 @@ export default class Breadcrumbs {
         this.placeholder = new ViewGroup("...", 0,0,0,0,1);
         this.placeholder.style = new Style();
         this.placeholder.style.cachedURL = "";
-        let model = models.getModel();
-        let subs = model.contents.filter((it, i, a) => !it.isLeaf())[0] as ViewGroup;
-        let down = new ViewGroup("Europe",0,0,0,0,1);
-        let down2 = new ViewGroup("Germany",0,0,0,0,1);
-        down.style = subs.style;
-        down2.style = subs.style;
-        subs.addContent(down);
-        down.addContent(down2);
-        this.setPath(down2);
+        
+        models.getModel().then((model) => {
+            let subs = model.contents.filter((it, i, a) => !it.isLeaf())[0] as ViewGroup;
+            let down = new ViewGroup("Europe",0,0,0,0,1);
+            let down2 = new ViewGroup("Germany",0,0,0,0,1);
+            down.style = subs.style;
+            down2.style = subs.style;
+            subs.addContent(down);
+            down.addContent(down2);
+            this.setPath(down2);
+        })
     }
 }

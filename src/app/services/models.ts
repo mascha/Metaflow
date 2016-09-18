@@ -4,49 +4,48 @@ import {Style, GroupStyle} from '../common/styling';
 import {Shape, ShapeType} from '../common/shapes';
 import ShapeRenderer from '../platform/render';
 
+const NAMES = [
+    'Population',
+    'Market Size',
+    'Price',
+    'Stock',
+    'Work in Progress',
+    'Deliverables',
+    'Workforce',
+    'Customers',
+    'Prospects',
+    'Market Growth',
+    'Ramp Up',
+    'Projects',
+    'Delayed Shippings',
+    'Processed',
+    'Inventory',
+    'Unfinished Parts',
+    'Spare Parts',
+    'Sales Volume',
+    'Level',
+    'Persons'
+]
+
 /**
  * Model provider service.
  *
  * @author Martin Schade
  * @since 1.0.0
  */
-@Injectable()
-export default class ModelService {
+@Injectable() export default class ModelService {
     
     private model: ViewGroup;
     private empty: ViewGroup;
-
-    private names = [
-        'Population',
-        'Market Size',
-        'Price',
-        'Stock',
-        'Work in Progress',
-        'Deliverables',
-        'Workforce',
-        'Customers',
-        'Prospects',
-        'Market Growth',
-        'Ramp Up',
-        'Projects',
-        'Delayed Shippings',
-        'Processed',
-        'Inventory',
-        'Unfinished Parts', 
-        'Spare Parts',
-        'Sales Volume',
-        'Level',
-        'Persons'
-    ]
 
     private variableStyle: Style;
     private rateStyle: Style;
     private stockStyle: Style;
     private moduleStyle: GroupStyle;
 
-    getModel(): ViewGroup {
+    getModel(): Promise<ViewGroup> {
         this.model = this.model || this.createDebugModel();
-        return this.model;
+        return Promise.resolve(this.model);
     }
 
     private createStock() {
@@ -99,8 +98,8 @@ export default class ModelService {
     }
 
     private randomName() {
-        let n = Math.floor(Math.random() * this.names.length);
-        return this.names[n < 0 ? 0 : n]; 
+        let n = Math.floor(Math.random() * NAMES.length);
+        return NAMES[n < 0 ? 0 : n]; 
     }
 
     private createDebugModel(): ViewGroup {

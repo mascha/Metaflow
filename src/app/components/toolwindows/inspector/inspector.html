@@ -1,11 +1,11 @@
 <section class="inspector-categories">
   <div><span></span><span class="rightEdge"></span></div>
   <span #props class="inspector-category left" [class.active]="categoryIndex == 1"
-    (click)="onSelect($event, 1)">Edit</span>
+    (click)="onSelect(1)">Edit</span>
   <span #styles class="inspector-category center" [class.active]="categoryIndex == 2"
-        (click)="onSelect($event, 2)">Style</span>
+        (click)="onSelect(2)">Style</span>
   <span #notes class="inspector-category right" [class.active]="categoryIndex == 3"
-        (click)="onSelect($event, 3)">Notes</span>
+        (click)="onSelect(3)">Notes</span>
 </section>
 <section class="inspector-content">
   <div class="inspector-overlay" *ngIf="selection == null">

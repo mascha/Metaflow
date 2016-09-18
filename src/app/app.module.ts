@@ -1,0 +1,40 @@
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+
+/* Components */
+import Application  from './application';
+import Timeline from "./components/timeline/timeline";
+import Loader from './components/loader/loader';
+
+/* Services */
+import PlatformService from "./services/platforms";
+import ModelService from "./services/models";
+import PaletteRegistry from "./services/palettes";
+import ConfigService from "./services/configs";
+import ProjectService from "./services/projects";
+
+/**
+ * Main entrypoint for the application.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+@NgModule({
+  bootstrap: [Application],
+  imports: [BrowserModule],
+  providers: [
+    PlatformService, 
+    ModelService,
+    PaletteRegistry,
+    ConfigService,
+    ProjectService
+  ],
+  declarations: [
+    Application, 
+    Timeline,
+    Loader
+  ],
+})
+export default class AppModule {
+  
+}

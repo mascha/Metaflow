@@ -161,9 +161,15 @@ export default class HTMLUtil {
         let len = text.length, res = 0;
         for (let i = 0; i < len; i++) {
             switch (text[i]) {
-                case 'M', 'W': res += 15; break;
-                case 'm', 'w': res += 12; break;
-                case 'I', 'i', 'l', 't', 'f': res += 4; break;
+                case 'W': res += 15; break;
+                case 'W': res += 15; break;
+                case 'm': res += 12; break;
+                case 'w': res += 12; break;
+                case 'I': res += 4; break;
+                case 'i': res += 4; break;
+                case 'l': res += 4; break;
+                case 't': res += 4; break;
+                case 'f': res += 4; break;
                 case 'r': res += 8; break;
                 default: res += 10; break;
             }

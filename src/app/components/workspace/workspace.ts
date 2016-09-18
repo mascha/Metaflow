@@ -1,27 +1,18 @@
 import {Component, ViewChild} from "@angular/core";
 import {WorkspaceConfig, default as ConfigService} from "../../services/configs";
-import Diagram from "../diagram/diagram";
-import Sidebar from "../sidebar/sidebar";
-import DoubleSplit from "../splitpane/doublesplit";
-import TripleSplit from "../splitpane/triplesplit";
-import Palette from "../toolwindows/palette/palette";
-import Dataview from "../toolwindows/data/dataview";
-import Inspector from "../toolwindows/inspector/inspector";
-import Explorer from "../toolwindows/explorer/explorer";
+
+import DoubleSplit from "./splitpane/doublesplit";
+import TripleSplit from "./splitpane/triplesplit";
 
 /**
  * Workspace component.
+ * 
  * @author Martin Schade
  * @since 1.0.0
  */
 @Component({
     selector: 'workspace',
     template: require('./workspace.html'),
-    directives: [
-        DoubleSplit, TripleSplit,
-        Diagram, Sidebar,
-        Inspector, Palette, Dataview, Explorer
-    ],
 })
 export default class Workspace {
     

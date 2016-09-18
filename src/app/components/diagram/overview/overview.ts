@@ -29,7 +29,7 @@ export default class Overview implements DiagramLayer, CameraObserver {
     
     public update(group: ViewGroup) {
         this.group = group;
-        setTimeout(() => this.redraw());
+        this.redraw();
     }
 
     public onViewResized() {
@@ -99,7 +99,6 @@ export default class Overview implements DiagramLayer, CameraObserver {
         let cY = this.camera.worldY / mH * DIM;
         let cW = this.camera.projWidth / mW * DIM;
         let cH = this.camera.projHeight / mH * DIM;
-
         brush.fillRect(cX, cY, cW, cH);
 
         brush.fillStyle = 'cornflowerblue';

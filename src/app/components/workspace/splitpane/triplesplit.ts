@@ -1,5 +1,5 @@
 import {Component, ElementRef, ViewChild, Renderer} from "@angular/core";
-import HTML from "../../common/utility";
+import HTML from "../../../common/utility";
 
 /**
  * Three column split pane.

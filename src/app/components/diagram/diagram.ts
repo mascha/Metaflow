@@ -1,17 +1,22 @@
 import {Component, ElementRef, ViewChild, HostListener} from '@angular/core';
-import {Observable} from "rxjs/Rx";
-import {GridLayer, BorderLayer, NodeLayer, PlatformLayer} from './layers';
-import {StateMachine, DiagramState, DiagramEvents} from "./behavior";
-import {Camera} from "../../common/camera";
 import {ViewGroup, ViewVertex} from "../../common/viewmodel";
+import {Camera} from "../../common/camera";
 import HTML from "../../common/utility";
+
+/* Controller */
+import {StateMachine, DiagramState, DiagramEvents} from "./behavior";
 import DiagramBehavior from './behavior';
-import ModelService from "../../services/models";
-import PlatformService from "../../services/platforms";
-import Breadcrumbs from "./breadcrumbs/breadcrumbs";
+
+/* Components */
 import Overview from "./overview/overview";
 import Presenter from "./controls/presenter";
 import Loader from '../loader/loader';
+import {GridLayer, BorderLayer, NodeLayer, PlatformLayer} from './layers';
+
+/* Services */
+import ModelService from "../../services/models";
+import PlatformService from "../../services/platforms";
+
 
 /**
  * The diagram view component.
@@ -23,11 +28,6 @@ import Loader from '../loader/loader';
     selector: 'diagram',
     template: require('./diagram.html'),
     styles: [require('./diagram.scss')],
-    directives: [
-        GridLayer, NodeLayer, BorderLayer,
-        Breadcrumbs, Presenter, Overview,
-        Loader
-    ]
 })
 export default class Diagram {
     animatedZoom = false;
@@ -43,6 +43,7 @@ export default class Diagram {
     @ViewChild(NodeLayer) private _nodeLayer: NodeLayer;
     @ViewChild('effectLayer') private _effects: ElementRef;
     @ViewChild(Overview) private _overview: Overview;
+    @ViewChild(Presenter) private _controls: Presenter;
 
     private _camera: Camera;
     private _behavior: DiagramEvents;
@@ -52,6 +53,11 @@ export default class Diagram {
     private _diagram: HTMLElement;
     private _model: ViewGroup;
     private _platform: PlatformLayer;
+    private _layerSet = Object.create(null);
+
+    getLayer(layer: string) {
+        return this._layerSet[layer];
+    }
 
     get camera(): Camera {
         return this._camera;
@@ -230,11 +236,20 @@ export default class Diagram {
             throw new Error('Could not create diagram controller');
         }
 
-        /* load level data */
-        this.model = this._models.getModel();
+        [
+            'grid', this._gridLayer,
+            'diagram', this._nodeLayer,
+            'border', this._borderLayer,
+            'effects', this._effects,
+            'controls', this._controls,
+            'overview', this._overview
+        ].reduce((l: string, r: any) => this._layerSet[l] = r);
 
-        /* push to back queue */
-        setTimeout(() => this.onResize(), 32)
+         /* load level data */
+        this._models.getModel().then((model) => {
+            this.model = model; // use setter to update model
+            this.onResize()
+        });
     }
 
     constructor(

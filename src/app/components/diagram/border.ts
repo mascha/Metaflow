@@ -221,9 +221,14 @@ class Proxy {
     origin: ViewVertex;
     links: ViewEdge[];
 
-    constructor(item: ViewVertex) {
+    public reuse(item: ViewVertex) {
         this.origin = item;
         this.x = item.left + item.width * .5;
         this.y = item.top + item.height * .5;
+        this.image = item.style.cachedImage;
+    }
+
+    constructor(item: ViewVertex) {
+        this.reuse(item);
     }
 }

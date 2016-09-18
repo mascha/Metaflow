@@ -105,7 +105,6 @@ export class ViewGroup extends ViewVertex {
             this.emit(ModelChange.CHILD_ADD, vertex);
             return true;
         }
-        
         return false;
     }
 
@@ -118,7 +117,7 @@ export class ViewGroup extends ViewVertex {
     }
 
     constructor(name: string, x: number, y: number, w: number, h: number, public scale: number) {
-        super(name,x,y,w,h);
+        super(name, x, y, w, h);
     }
 }
 

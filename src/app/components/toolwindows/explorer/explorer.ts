@@ -23,7 +23,6 @@ export default class Explorer {
             let parent = this.level.parent;
             if (parent && !this.isLocked) {
                 this.updateLevel(parent);
-                this.updateDisabled();
             }
         }
     }
@@ -32,17 +31,12 @@ export default class Explorer {
         return (this.level && this.level.parent);
     }
 
-    private updateDisabled() {
-        this.isDisabled = !this.canGoUpwards();
-    }
-
     private updateLevel(level: ViewGroup) {
         this.level = level;
         this.contents = this.level.contents;
     }
 
     constructor(private models : ModelService) {
-        this.updateLevel(models.getModel());
-        this.updateDisabled();
+        models.getModel().then((model) => this.updateLevel(model));
     }
 }

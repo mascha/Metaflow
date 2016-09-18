@@ -90,15 +90,6 @@ export default class ShapeRenderer {
 
       case ShapeType.HOURGLASS:
         let f = 0.5;
-        /*
-        let f = 0.2;
-        ctx.moveTo(l, t);
-        ctx.lineTo(l + w, t);
-        ctx.lineTo(l + w / 1.8, t + h / 2);
-        ctx.lineTo(l + w, t + h);
-        ctx.lineTo(l, t + h);
-        ctx.lineTo(l + w / 2.2, t + h / 2);
-        */
         ctx.moveTo(l, t);
         ctx.lineTo(l + w, t);
         ctx.lineTo(l + w / (1.8), t + h / 2);
