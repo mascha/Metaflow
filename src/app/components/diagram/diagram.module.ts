@@ -20,4 +20,4 @@ import Breadcrumbs from './breadcrumbs/breadcrumbs'
     ],
     providers: [],
 })
-export class DiagramModule { }
+export default class DiagramModule { }
