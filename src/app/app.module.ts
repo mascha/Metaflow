@@ -29,7 +29,7 @@ import ProjectService from "./services/projects";
     WorkspaceModule,
     DiagramModule,
     BrowserModule
-    ],
+  ],
   providers: [
     PlatformService, 
     ModelService,

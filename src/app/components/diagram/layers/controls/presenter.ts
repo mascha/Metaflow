@@ -14,27 +14,9 @@ import ConfigService from "../../../services/configs";
     template: require('./presenter.html'),
 })
 export default class Presenter {
-
-    showMapControls = true;
-    showOverview = true;
-    showOmnibox = true;
-
-    @Output('fitView') private fitview = new EventEmitter<string>();
-    @Output('zoomIn') private zoomout = new EventEmitter<string>();
-    @Output('zoomOut') private zoomin = new EventEmitter<string>();
-
-    private onFitView() {
-        this.fitview.emit('fitView');
-    }
-
-    private onZoomOut() {
-        this.zoomout.emit('zoomOut');
-    }
-
-    private onZoomIn() {
-        this.zoomin.emit('zoomIn');
-    }
-
+    private showMapControls = true;
+    private showOverview = true;
+    private showOmnibox = true;
     private workspace : WorkspaceConfig;
 
     constructor(config: ConfigService) {

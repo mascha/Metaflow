@@ -1,7 +1,8 @@
 <grid-layer class="grid layer"></grid-layer>
 <node-layer class="node layer"></node-layer>
 <border-layer class="border layer"></border-layer>
-<div #effectLayer class="layer"></div>
+<effect-layer class="layer"></effect-layer>
 <presenter></presenter>
 <breadcrumbs></breadcrumbs>
 <overview></overview>
+<loader *ngIf="_isLoading == true" message="Loading model ..."></loader>

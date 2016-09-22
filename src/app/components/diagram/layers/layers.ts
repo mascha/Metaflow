@@ -100,6 +100,67 @@ export class GridLayer extends BaseLayer {
 }
 
 /**
+ * Effect layer component.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+@Component({
+    selector: 'effect-layer',
+    template: require('./effects.html'),
+    styles: [require('./effects.scss')]
+})
+export class EffectLayer extends BaseLayer {
+    @ViewChild('effects') private surface: ElementRef;
+    @ViewChild('misc') private misc: ElementRef;
+
+    private canvas: HTMLCanvasElement;
+    private brush: CanvasRenderingContext2D;
+
+    /**
+     * Draws an panning overlay effect.
+     */
+    public drawLimits(left: number, top: number, right: number, bottom: number) {
+        let brush = this.brush;
+        let height = this.canvas.height, width = this.canvas.width;
+        brush.fillRect(0, 0, height, width);
+        brush.clearRect(left, top, width - right, height - bottom);
+    }
+
+    /**
+     * Adds an expanding dot to the given position. 
+     * Add an grow animation to your css file.
+     */
+    public playClickEffect(position: any, color?: string) {
+        let element = this.misc.nativeElement;
+        if (!element) return;
+
+        let container = document.createElement('div');
+        container.style.top = position.y + "px";
+        container.style.left = position.x + "px";
+        container.style.position = "absolute";
+        let object = document.createElement('div');
+        object.style.width = "5px";
+        object.style.height = "5px";
+        object.style.backgroundColor = color || 'rgba(0, 0, 0, 0.2)';
+        object.style.animation = "grow .3s linear forwards";
+        object.style.borderRadius = "50%";
+        object.style.transform = "translate(-50%, -50%)";
+        container.appendChild(object);
+        element.appendChild(container);
+        setTimeout(() => container.remove(), 1000);
+    }
+
+    public observe(camera: Camera) {
+        let canvas = this.surface.nativeElement as HTMLCanvasElement;
+        let brush = canvas.getContext("2d");
+        brush.fillStyle = "black";
+        brush.globalAlpha = 0.2;
+    }
+}
+
+
+/**
  * Grid layer component.
  * 
  * @author Martin Schade

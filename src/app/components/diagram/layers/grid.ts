@@ -33,15 +33,7 @@ export default class Grid implements CameraObserver {
         this.redraw();
     }
 
-    /**
-     * Draw the grid dependent on location and scale.
-     * 
-     * @param worldX
-     * @param worldY
-     * @param worldW
-     * @param worldH
-     */
-    drawGrid(worldX: number, worldY: number, worldW: number, worldH: number) {
+    private drawGrid(worldX: number, worldY: number, worldW: number, worldH: number) {
         const space = this.spacing / this._camera.scale;
         const scale = Math.log(space) / - Math.log(this.base);
         const min = Math.floor(scale) + 1;
@@ -58,8 +50,8 @@ export default class Grid implements CameraObserver {
             const context = this._context;
             const period = Math.pow(b, -level);
             const amplit = Math.pow(b, -level + scale);
-            const normal = 2.0 * Math.atan(this._brightness * amplit) / Math.PI;
-            const alpha = (normal > 1.0) ? 1.0 : (normal < 0.0) ? 0.0 : normal;
+            const normal = 2 * Math.atan(this._brightness * amplit) / Math.PI;
+            const alpha = (normal > 1) ? 1 : (normal < 0) ? 0 : normal;
             const starX = Math.floor(worldX / period);
             const starY = Math.floor(worldY / period);
             const stopX = Math.ceil((worldX + worldW) / period);
@@ -76,7 +68,7 @@ export default class Grid implements CameraObserver {
 
             for (let y = starY; y <= stopY; y++) {
                 const projY = Math.round(cy + cZ * (y * period)) + 0.5;
-                context.moveTo(0.0, projY);
+                context.moveTo(0, projY);
                 context.lineTo(vW, projY);
             }
 
@@ -85,10 +77,8 @@ export default class Grid implements CameraObserver {
     }
 
     private redraw() {
-        if (!this._active) {
-            return;
-        }
-        this.clearGrid();
+        if (!this._active) return;
+        this._context.clearRect(0,0,this._canvas.width,this._canvas.height);
         this._context.strokeStyle = 'lightgray';
         this._context.lineWidth = 1.0;
         const x = this._camera.worldX;
@@ -96,17 +86,6 @@ export default class Grid implements CameraObserver {
         const w = this._camera.projWidth;
         const h = this._camera.projHeight;
         this.drawGrid(x, y, w, h);
-    }
-
-    /*
-     * Clears the grid from canvas.
-     */
-    private clearGrid() {
-        this._context.clearRect(
-            0.0, 0.0,
-            this._canvas.width,
-            this._canvas.height
-        );
     }
 
     constructor(camera: Camera, canvas: HTMLCanvasElement) {

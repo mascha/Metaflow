@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild, HostListener} from '@angular/core';
+import {Component, ElementRef, ViewChild, HostListener, ViewChildren} from '@angular/core';
 import {ViewGroup, ViewVertex} from "../../common/viewmodel";
 import {Camera} from "../../common/camera";
 import HTML from "../../common/utility";
@@ -6,17 +6,15 @@ import HTML from "../../common/utility";
 /* Controller */
 import {StateMachine, DiagramState, DiagramEvents} from "./behavior";
 import DiagramBehavior from './behavior';
+import ReferenceManager from './reference';
 
 /* Components */
-import Overview from "./overview/overview";
-import Presenter from "./controls/presenter";
 import Loader from '../loader/loader';
-import {GridLayer, BorderLayer, NodeLayer, PlatformLayer} from './layers';
+import {DiagramLayer, NodeLayer, PlatformLayer} from './layers/layers';
 
 /* Services */
 import ModelService from "../../services/models";
 import PlatformService from "../../services/platforms";
-
 
 /**
  * The diagram view component.
@@ -32,18 +30,14 @@ import PlatformService from "../../services/platforms";
 export default class Diagram {
     animatedZoom = false;
     animatedNavigation = true;
-    frames = 60;
     rubberBanding = false;
     respectLimits = false;
     useKinetics = true;
     showClickEffect = true;
+    reference: ReferenceManager;
 
-    @ViewChild(BorderLayer) private _borderLayer: BorderLayer;
-    @ViewChild(GridLayer) private _gridLayer: GridLayer;
     @ViewChild(NodeLayer) private _nodeLayer: NodeLayer;
-    @ViewChild('effectLayer') private _effects: ElementRef;
-    @ViewChild(Overview) private _overview: Overview;
-    @ViewChild(Presenter) private _controls: Presenter;
+    @ViewChildren('') private _layers: Array<DiagramLayer>
 
     private _camera: Camera;
     private _behavior: DiagramEvents;
@@ -53,11 +47,7 @@ export default class Diagram {
     private _diagram: HTMLElement;
     private _model: ViewGroup;
     private _platform: PlatformLayer;
-    private _layerSet = Object.create(null);
-
-    getLayer(layer: string) {
-        return this._layerSet[layer];
-    }
+    private _isLoading = false;
 
     get camera(): Camera {
         return this._camera;
@@ -81,15 +71,7 @@ export default class Diagram {
 
     set model(group: ViewGroup) {
         this._model = group;
-        if (this._platform) {
-            this._platform.update(group);
-        }
-        if (this._borderLayer) {
-            this._borderLayer.update(group);
-        }
-        if (this._overview) {
-            this._overview.update(group);
-        }
+        this._layers.forEach(it => it.update(group))
     }
 
     get model(): ViewGroup {
@@ -108,29 +90,31 @@ export default class Diagram {
         return this._platform.cachedGroups;
     }
 
+    private dispatchEvent(event: string, obj: MouseEvent) {
+        let off = HTML.getOffset(this._diagram, obj);
+        let lay = this._layers;
+        let len = lay.length;
+        let ret = false;
+        /*
+        while (!ret && len--) {
+            lay[len].handleEvent(event, obj)
+        }
+
+        if (!ret) this._behavior.handle(event, obj);
+        */
+    }
+
     @HostListener('dblclick', ['$event'])
     private onDoubleClick(event: MouseEvent) {
         let off = HTML.getOffset(this._diagram, event);
-        // this._behavior.handleClick(off.x, off.y, true);
-
-        let n = Math.floor(this.model.contents.length * Math.random())
-        let random = this.model.contents[n];
-        this._behavior.handleNavigation(random);
-        
+        this._behavior.handleClick(off.x, off.y, true);  
         return false;
     }
 
     @HostListener('click', ['$event'])
     private onClick(event: MouseEvent) {
         let off = HTML.getOffset(this._diagram, event);
-        // this._behavior.handleClick(off.x, off.y, false);
-
-        /* play click effect */
-        let effects = this._effects.nativeElement as HTMLDivElement;
-        if (effects && this.showClickEffect) {
-            HTML.playClickEffect(effects, off);
-        }
-
+        this._behavior.handleClick(off.x, off.y, false);
         return false;
     }
 
@@ -156,7 +140,6 @@ export default class Diagram {
 
     @HostListener('mousedown', ['$event'])
     private onMouseDown(event: MouseEvent) {
-        console.log('mdown')
         const pos = HTML.getOffset(this._diagram, event);
         this._behavior.handleMouseDown(pos.x, pos.y);
         HTML.block(event);
@@ -177,86 +160,32 @@ export default class Diagram {
         this._behavior.handleMouseUp(pos.x, pos.y);
         return false;
     }
-
-    @HostListener('fitView')
-    private onFitView() {
-        console.log('Fit to View');
-    } 
-
-    @HostListener('zoomIn') 
-    private onZoomIn() {
-        console.log('zoom in!');
-    }
-
-    @HostListener('zoomOut') 
-    private onZoomOut() {
-        console.log('zoom out!');
-    }
-
+    
     private ngAfterViewInit() {
-        /* get html elements */
         this._diagram = this._element.nativeElement;
         let surface = this._nodeLayer.getElement();
 
-        /* retrieve rendering platform */
         if (this._diagram) {
-            this._platform = this._platforms.getPlatform(surface);
+            this._platforms.initializePlatform(surface).then(it => {
+                this._platform = it;
+                this._camera = it.getCamera();
+                this._behavior = new DiagramBehavior(this);
+                this._layers.forEach(it => it.observe(this._camera));
+                this._isLoading = true;
+                this._models.getModel().then(model => {
+                    this.model = model; // use setter to update model
+                    this.onResize()
+                });
+            });
         } else {
             throw new Error('Could not find diagram DOM element');
         }
-
-        /* link behavior state machine*/
-        if (this._platform) {
-            this._camera = this._platform.getCamera();
-        } else {
-            throw Error('Could not create rendering platform');
-        }
-
-        if (this._camera) {
-            this._behavior = new DiagramBehavior(this);
-        } else {
-            throw new Error('Could not create camera instance');
-        }
-
-        /* attach all layers */
-        if (this._behavior) {
-            if (this._borderLayer) {
-                this._borderLayer.observe(this._camera);
-            }
-            if (this._gridLayer) {
-                this._gridLayer.observe(this._camera);
-            }
-            if (this._platform) {
-                this._platform.observe(this._camera);
-            }
-            if (this._overview) {
-                this._overview.observe(this._camera);
-            }
-        } else {
-            throw new Error('Could not create diagram controller');
-        }
-
-        [
-            'grid', this._gridLayer,
-            'diagram', this._nodeLayer,
-            'border', this._borderLayer,
-            'effects', this._effects,
-            'controls', this._controls,
-            'overview', this._overview
-        ].reduce((l: string, r: any) => this._layerSet[l] = r);
-
-         /* load level data */
-        this._models.getModel().then((model) => {
-            this.model = model; // use setter to update model
-            this.onResize()
-        });
     }
 
     constructor(
         private _platforms: PlatformService,
         private _models: ModelService,
-        private _element: ElementRef)
-        { }
+        private _element: ElementRef) { }
 }
 
 function minimax(min: number, value: number, max: number) {

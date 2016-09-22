@@ -44,13 +44,10 @@ export class ForceBasedLayout implements LayoutAlgorithm {
         
         /* calculate positions */
         var layout = new Springy.Layout.ForceDirected(
-            mapped,
-            400.0, // Spring stiffness
-            400.0, // Node repulsion
-            0.5    // Damping
+            mapped, 400, 400, 0.5
         );
 
-        /* iterate until solution is  found */
+        /* iterate until solution is found */
         while (layout.totalEnergy() < 0.01) {
             layout.tick(0.03);
         }
@@ -58,7 +55,8 @@ export class ForceBasedLayout implements LayoutAlgorithm {
         /* reapply positions */
         let c = group.contents;
         let m = mapped.nodePoints;
-        for(let i = 0, l = m.length; i<l; i++) {
+        let l = m.length;
+        for(let i = 0; i < l; i++) {
             let source = c[i];
             let target = m[i];
             source.left = target.x;

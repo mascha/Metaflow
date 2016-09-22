@@ -14,7 +14,7 @@ export default class ProjectService {
         'Cost of Delay'
     ];
     
-    public getProjects() {
-        return this.projects;
+    public getProjects(): Promise<Array<string>> {
+        return Promise.resolve(this.projects);
     }
 }

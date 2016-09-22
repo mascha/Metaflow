@@ -1,6 +1,5 @@
-import {Camera} from '../../common/camera';
-import {ViewVertex} from '../../common/viewmodel';
-import Diagram from './diagram';
+import {Camera} from './camera';
+import {ViewVertex} from './viewmodel';
 
 const NAVIGATION_FACTOR = 1000;
 
@@ -80,7 +79,7 @@ export class Animation {
         }, duration || 300, EASE_OUT);
     }
 
-    static navigateToItem(cam: Camera, diagram: Diagram, vertex: ViewVertex): Animation {
+    static navigateToItem(cam: Camera, zoomPanPreference: number, navigationVelocity: number, vertex: ViewVertex): Animation {
         let parent = vertex.parent;
         let scale = parent ? parent.scale : 1.0;
         let adjust = parent ? 16 : 2;
@@ -89,8 +88,8 @@ export class Animation {
                 camera: cam,
                 targetX: vertex.centerX * scale,
                 targetY: vertex.centerY * scale,
-                panZoom: diagram.zoomPanPreference,
-                velocity: diagram.navigationVelocity,
+                panZoom: zoomPanPreference,
+                velocity: navigationVelocity,
                 targetWidth: vertex.width * adjust * scale,
         });
     }

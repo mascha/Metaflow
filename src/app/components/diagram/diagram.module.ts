@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 
-import Overview from "./overview/overview";
-import Presenter from "./controls/presenter";
-import Breadcrumbs from './breadcrumbs/breadcrumbs'
+import {GridLayer, BorderLayer, NodeLayer, PlatformLayer, EffectLayer} from './layers/layers';
+import Overview from "./layers/overview/overview";
+import Presenter from "./layers/controls/presenter";
+import Breadcrumbs from './layers/breadcrumbs/breadcrumbs';
 
 /**
  * Diagram module.
@@ -17,6 +18,10 @@ import Breadcrumbs from './breadcrumbs/breadcrumbs'
         Breadcrumbs, 
         Presenter, 
         Overview, 
+        EffectLayer, 
+        NodeLayer,
+        BorderLayer,
+        GridLayer
     ],
     providers: [],
 })

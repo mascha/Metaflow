@@ -11,13 +11,29 @@ import Diagram from './diagram';
  * @author Martin Schade
  * @since 1.0.0
  */
-class ReferenceManager {
+export default class ReferenceManager {
     
     private camera: Camera;
     private scope: ViewGroup;
     private diagram: Diagram;
+    private limits: ClientRect;
+
+    public getLimits(): ClientRect {
+        return this.limits;
+    }
 
     public getScope() { return this.scope; }
+
+    private adjustLimits(level: ViewGroup) {
+        let adjustW = level.width * 0.9;
+        let adjustH = level.height * 0.9;
+        this.limits.right = level.left + level.width + adjustW;
+        this.limits.left = level.left - adjustW;
+        this.limits.top = level.top - adjustH;
+        this.limits.bottom = level.top + level.height + adjustH; 
+        this.limits.width = level.width;
+        this.limits.height = level.height;
+    }
 
     /**
      * Switches the reference level to the parent level.
@@ -28,16 +44,17 @@ class ReferenceManager {
         if (!this.isRoot()) {
             let parent = this.getParent();
             let scope = this.scope;
+            let cam = this.camera;
 
-            let wX = this.camera.worldX;
-            let wY = this.camera.worldY;
-            let cS = this.camera.scale;
+            let wX = cam.worldX;
+            let wY = cam.worldY;
+            let cS = cam.scale;
             let rS = cS / parent.scale;
             let rX = (wX + scope.left) * cS;
             let rY = (wY + scope.top) * cS;
 
             this.loadLevel(parent);
-            this.camera.zoomAndMoveTo(rX, rY, rS);
+            cam.zoomAndMoveTo(rX, rY, rS);
         }
     }
 
@@ -78,7 +95,7 @@ class ReferenceManager {
     private loadLevel(level: ViewGroup) {
         this.scope = level;
         this.diagram.model = level;
-        // this.limits.adjustTo(level);
+        this.adjustLimits(level);
     }
 
     /*

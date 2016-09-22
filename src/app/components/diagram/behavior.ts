@@ -384,19 +384,16 @@ class Idle extends BaseState {
  */
 class Panning extends BaseState {
 
-    protected violations = {
-        left: false,
-   	    right: false,
-        bottom: false,
-        top: false,
-    }
-
     protected anchorX = 0.0;
     protected anchorY = 0.0;
     protected pressedX = 0.0;
     protected pressedY = 0.0;
-
     protected kinetics: Kinetics;
+
+    private left = false;
+   	private right = false;
+    private bottom = false;
+    private top = false;
 
     enterState(params?: any) {
         this.kinetics = this.kinetics || new Kinetics();
@@ -415,10 +412,7 @@ class Panning extends BaseState {
         this.anchorY = 0.0;
         this.pressedX = 0.0;
         this.pressedY = 0.0;
-        this.violations.left = false;
-        this.violations.right = false;
-        this.violations.bottom = false;
-        this.violations.top = false;
+        this.resetViolations();
     }
 
     handleMouseDown(x: number, y: number) {
@@ -479,6 +473,13 @@ class Panning extends BaseState {
         }
     }
 
+    private resetViolations() {
+        this.left = false;
+        this.right = false;
+        this.bottom = false;
+        this.top = false;
+    }
+
     private adjustLimit(level: ViewGroup) {
         let limits = this.limits;
         const widthSpan = 0.9 * level.width;
@@ -490,7 +491,7 @@ class Panning extends BaseState {
     }
 
     private calcDisplacement(horizontal: boolean, min: number, max: number) {
-        let v = this.violations, limit = this.limits;
+        let v = this, limit = this.limits;
         let lower = horizontal ? v.left : v.top;
         let upper = horizontal ? v.top : v.bottom;
         let left = horizontal ? limit.left : limit.top;
@@ -499,7 +500,7 @@ class Panning extends BaseState {
     }
 
     private isBanding(): boolean {
-        let v = this.violations;
+        let v = this;
         return (this.diagram.rubberBanding && (v.left || v.right || v.bottom || v.top));
     }
 
@@ -513,13 +514,12 @@ class Panning extends BaseState {
     }
 
     private updateBanding(horizontal: boolean, lower: boolean, value: boolean) {
-        const violation = this.violations;
         if (horizontal) {
-            if (lower) { violation.left = value; }
-            else { violation.right = value; }
+            if (lower) { this.left = value; }
+            else { this.right = value; }
         } else {
-            if (lower) { violation.top = value; }
-            else { violation.bottom = value; }
+            if (lower) { this.top = value; }
+            else { this.bottom = value; }
         }
     }
 
