@@ -10,7 +10,8 @@ import ReferenceManager from './reference';
 
 /* Components */
 import Loader from '../loader/loader';
-import {DiagramLayer, NodeLayer, PlatformLayer} from './layers/layers';
+import {DiagramLayer, PlatformLayer} from '../../common/layer';
+import {NodeLayer} from './layers/layers';
 
 /* Services */
 import ModelService from "../../services/models";
@@ -84,10 +85,6 @@ export default class Diagram {
 
     set navigationVelocity(value: number) {
         this._velocity = minimax(.01, value, 3);
-    }
-
-    get cachedGroups(): Array<ViewGroup> {
-        return this._platform.cachedGroups;
     }
 
     private dispatchEvent(event: string, obj: MouseEvent) {

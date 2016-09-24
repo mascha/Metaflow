@@ -1,4 +1,4 @@
-import {CameraObserver, Camera} from '../../common/camera';
+import {CameraObserver, Camera} from '../../../common/camera';
 
 /**
  * The grid layer is the lowest of all layers. It'scale job is to paint the background of the editor canvas,

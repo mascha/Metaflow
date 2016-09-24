@@ -1,9 +1,6 @@
-/*
- * Copyright (C) Martin Schade, 2015-2016. All rights reserved.
- */
 
-import {CameraObserver, Camera} from '../../common/camera';
-import {ViewVertex, ViewGroup, ViewEdge} from "../../common/viewmodel";
+import {CameraObserver, Camera} from '../../../common/camera';
+import {ViewVertex, ViewGroup, ViewEdge} from "../../../common/viewmodel";
 
 /**
  * Interactive region border region. This class is responsible for projection

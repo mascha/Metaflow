@@ -1,81 +1,10 @@
 import {Component, ElementRef, ViewChild, HostListener} from '@angular/core';
-import {ViewGroup, ViewItem, ViewVertex} from "../../common/viewmodel";
-import {Camera, CameraObserver} from "../../common/camera";
+import {ViewGroup, ViewItem, ViewVertex} from "../../../common/viewmodel";
+import {Camera, CameraObserver} from "../../../common/camera";
+import {PlatformLayer, DiagramLayer, Quality} from '../../../common/layer';
 import Grid from './grid';
 import Border from './border';
-import HTML from '../../common/utility';
-
-/**
- * A diagram layer.
- * 
- * @author Martin Schade
- * @since 1.0.0
- */
-export interface DiagramLayer {
-
-    /**
-     * A callback for registering camera movements.
-     */
-    observe(camera: Camera);
-
-    /**
-     * Update the internal or visual state with
-     * a new view model.
-     */
-    update(group: ViewGroup);
-}
-
-/**
- * A view model renderer.
- *
- * @author Martin Schade.
- * @since 1.0.0
- */
-export interface ViewModelRenderer<I, G> {
-
-    /**
-     * Render a view item.
-     */
-    renderItem(item: ViewItem): I;
-
-    /**
-     * Render a view group.
-     */
-    renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): G;
-
-    /**
-     * Attach node to scene.
-     */
-    attach(node: ViewVertex, group: ViewGroup)
-}
-
-/**
- * Renderer quality hint.
- * 
- * @author Martin Schade
- * @since 1.0.0
- */
-export const enum Quality {
-    EPIC = 1.0,
-    HIGH = 0.8,
-    MEDIUM = 0.6,
-    LOWER = 0.4,
-    LOW = 0.2,
-    LOWEST = 0
-}
-
-/**
- * Do-nothing base implementation.
- * 
- * @author Martin Schade
- * @since 1.0.0
- */
-export class BaseLayer implements DiagramLayer {
-    
-    public observe(camera: Camera) {}
-
-    public update(group: ViewGroup) {}
-}
+import HTML from '../../../common/utility';
 
 /**
  * Grid layer component.
@@ -87,10 +16,14 @@ export class BaseLayer implements DiagramLayer {
     selector: 'grid-layer',
     template: `<canvas #gridLayer class="layer"></canvas>`
 })
-export class GridLayer extends BaseLayer {
+export class GridLayer implements DiagramLayer {
     @ViewChild('gridLayer') 
     private canvas: ElementRef;
     private grid: Grid;
+
+    public update(group: ViewGroup) {
+        /* NOP */
+    }
 
     public observe(camera: Camera) {
         let canvas = this.canvas.nativeElement;
@@ -110,7 +43,7 @@ export class GridLayer extends BaseLayer {
     template: require('./effects.html'),
     styles: [require('./effects.scss')]
 })
-export class EffectLayer extends BaseLayer {
+export class EffectLayer implements DiagramLayer {
     @ViewChild('effects') private surface: ElementRef;
     @ViewChild('misc') private misc: ElementRef;
 
@@ -151,6 +84,10 @@ export class EffectLayer extends BaseLayer {
         setTimeout(() => container.remove(), 1000);
     }
 
+    public update(group: ViewGroup) {
+        /* NOP */
+    }
+
     public observe(camera: Camera) {
         let canvas = this.surface.nativeElement as HTMLCanvasElement;
         let brush = canvas.getContext("2d");
@@ -170,7 +107,7 @@ export class EffectLayer extends BaseLayer {
     selector: 'border-layer',
     template: '<canvas #borderLayer class="layer"></canvas>'
 })
-export class BorderLayer extends BaseLayer {
+export class BorderLayer implements DiagramLayer {
     @ViewChild('borderLayer') 
     private element: ElementRef;
     private border: Border;
@@ -231,9 +168,12 @@ export interface PlatformLayer extends CameraObserver, DiagramLayer {
     selector: 'node-layer',
     template: '<canvas #nodeLayer class="layer"></canvas>'
 })
-export class NodeLayer extends BaseLayer {
+export class NodeLayer implements DiagramLayer {
     @ViewChild('nodeLayer') 
     private element: ElementRef;
+
+    public update(group: ViewGroup) { /* NOP */ }
+    public observe(camera: Camera) { /* NOP */ }
     
     getElement(): HTMLCanvasElement {
         return this.element.nativeElement;

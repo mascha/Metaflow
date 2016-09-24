@@ -1,5 +1,6 @@
 import {Style} from './styling';
 import {Layout} from './layout';
+import {Camera} from './camera';
 
 /**
  * Base viewmodel class. 
@@ -161,4 +162,48 @@ export const enum ModelChange {
      * A child has been removed.
      */
     CHILD_REMOVE,
+}
+
+/**
+ * A diagram layer.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+export interface DiagramLayer {
+
+    /**
+     * A callback for registering camera movements.
+     */
+    observe(camera: Camera);
+
+    /**
+     * Update the internal or visual state with
+     * a new view model.
+     */
+    update(group: ViewGroup);
+}
+
+/**
+ * A view model renderer.
+ *
+ * @author Martin Schade.
+ * @since 1.0.0
+ */
+export interface ViewModelRenderer<I, G> {
+
+    /**
+     * Render a view item.
+     */
+    renderItem(item: ViewItem): I;
+
+    /**
+     * Render a view group.
+     */
+    renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): G;
+
+    /**
+     * Attach node to scene.
+     */
+    attach(node: ViewVertex, group: ViewGroup)
 }

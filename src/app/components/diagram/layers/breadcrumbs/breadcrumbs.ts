@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
-import {ViewGroup, ViewVertex} from "../../../common/viewmodel";
-import {Style} from "../../../common/styling";
-import ModelService from "../../../services/models";
+import {ViewGroup, ViewVertex} from "../../../../common/viewmodel";
+import {Style} from "../../../../common/styling";
+import ModelService from "../../../../services/models";
 
 /**
  * A breadcrumbs breadcrumbs bar.

@@ -1,7 +1,7 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
-import {ViewGroup, ViewVertex} from '../../../common/viewmodel';
-import {Camera, CameraObserver} from '../../../common/camera';
-import {DiagramLayer} from '../layers';
+import {ViewGroup, ViewVertex} from '../../../../common/viewmodel';
+import {Camera, CameraObserver} from '../../../../common/camera';
+import {DiagramLayer} from '../../../../common/layer';
 
 /**
  * Birds-eye overview component.
@@ -55,8 +55,9 @@ export default class Overview implements DiagramLayer, CameraObserver {
             it.height
         });
         
-        let brushes = canvases.map((it) => it.nativeElement as HTMLCanvasElement)
-         .map((it) => it.getContext('2d'))
+        let brushes = canvases
+            .map((it) => it.nativeElement as HTMLCanvasElement)
+            .map((it) => it.getContext('2d'))
         this.nodes = brushes[0];
         this.cams = brushes[1];
     }

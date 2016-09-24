@@ -1,6 +1,6 @@
-import {PlatformLayer, ViewModelRenderer, Quality} from "../components/diagram/layers";
+import {PlatformLayer, ViewModelRenderer, Quality} from "../common/layer";
 import {ViewGroup, ViewItem, ViewVertex} from "../common/viewmodel";
-import {Camera} from "../common/camera";
+import {Camera, CameraObserver} from "../common/camera";
 import ShapeRenderer from './render';
 
 /**
@@ -9,7 +9,7 @@ import ShapeRenderer from './render';
  * @author Martin Schade
  * @since 1.0.0
  */
-export class PixiLayer implements PlatformLayer {
+export class PixiLayer implements PlatformLayer, CameraObserver {
 
     private camera: PixiCamera;
     private scene: PIXI.Container;

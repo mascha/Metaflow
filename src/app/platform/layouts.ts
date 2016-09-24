@@ -23,15 +23,15 @@ export class ConstraintLayout implements LayoutAlgorithm {
  */
 export class ForceBasedLayout implements LayoutAlgorithm {
     
-    private mapToSpringy(group: ViewGroup): Springy.Graph {
-        let result = new Springy.Graph();
+    private mapToSpringy(group: ViewGroup): any {
+        let result = {};
         let c = group.contents;
         for(let i = 0, l = c.length; i<l; i++) {
-            result.addNode(i.toString());
+            // result.addNode(i.toString());
             if (Math.random() > 0.5) {
                 let source = i.toString();
                 let target = Math.floor(Math.random() * l).toString();
-                result.addEdge(source, target);
+                // result.addEdge(source, target);
                 console.log('added edge from ' + i.toString() + ' to ' + target)
             }
         }
@@ -42,10 +42,11 @@ export class ForceBasedLayout implements LayoutAlgorithm {
         /* construct wrapper graph */
         let mapped = this.mapToSpringy(group);
         
-        /* calculate positions */
+        let layout: any;
+        /* calculate positions 
         var layout = new Springy.Layout.ForceDirected(
             mapped, 400, 400, 0.5
-        );
+        ); */
 
         /* iterate until solution is found */
         while (layout.totalEnergy() < 0.01) {

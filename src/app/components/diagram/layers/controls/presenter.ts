@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Output} from '@angular/core';
-import {WorkspaceConfig} from "../../../services/configs";
-import ConfigService from "../../../services/configs";
+import {WorkspaceConfig} from "../../../../services/configs";
+import ConfigService from "../../../../services/configs";
 
 /**
  * Diagramming overlay controls. 
