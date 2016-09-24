@@ -14,7 +14,7 @@ import {Component, Input, EventEmitter, Output} from '@angular/core';
 export default class Sidebar {
     @Input() title = "Header";
     @Input() isPrimary: string;
-    @Input() titleVisible = true;
+    @Input() showHeader = true;
     @Input() visible = true;
     @Output('visibility') private visibility = new EventEmitter<any>();
 

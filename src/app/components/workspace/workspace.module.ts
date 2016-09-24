@@ -1,4 +1,7 @@
-import { NgModule } from '@angular/core';
+import { NgModule} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ToolWindowModule } from '../toolwindows/toolwindows.module';
+import { DiagramModule } from '../diagram/diagram.module';
 
 import SideBar from './sidebar/sidebar';
 import DoubleSplit from "./splitpane/doublesplit";
@@ -16,9 +19,24 @@ import Toolbar from "./toolbar/toolbar";
  * @since 1.0.0
  */
 @NgModule({
-    imports: [],
-    exports: [],
-    declarations: [SideBar,],
+    imports: [
+        CommonModule,
+        ToolWindowModule,
+        DiagramModule
+    ],
+    exports: [
+        Workspace, 
+        Navigation
+    ],
+    declarations: [
+        SideBar, 
+        Toolbar, 
+        MenuBar, 
+        Workspace,
+        DoubleSplit,
+        TripleSplit,
+        Navigation
+    ],
     providers: [],
 })
-export default class WorkspaceModule { }
+export class WorkspaceModule { }

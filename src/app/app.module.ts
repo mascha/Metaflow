@@ -2,13 +2,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 /* Modules */
-import DiagramModule from './components/diagram/diagram.module';
-import WorkspaceModule from './components/workspace/workspace.module';
+import { DiagramModule } from './components/diagram/diagram.module';
+import { WorkspaceModule } from './components/workspace/workspace.module';
 
 /* Components */
 import Application  from './application';
-import Timeline from "./components/timeline/timeline";
-import Loader from './components/loader/loader';
 
 /* Services */
 import PlatformService from "./services/platforms";
@@ -38,9 +36,7 @@ import ProjectService from "./services/projects";
     ProjectService
   ],
   declarations: [
-    Application, 
-    Timeline,
-    Loader
+    Application
   ],
 })
 export default class AppModule {

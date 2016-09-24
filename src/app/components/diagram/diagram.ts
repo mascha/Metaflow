@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild, HostListener, ViewChildren} from '@angular/core';
+import {Component, ElementRef, ViewChild, HostListener, ViewChildren, QueryList} from '@angular/core';
 import {ViewGroup, ViewVertex} from "../../common/viewmodel";
 import {Camera} from "../../common/camera";
 import HTML from "../../common/utility";
@@ -38,7 +38,7 @@ export default class Diagram {
     reference: ReferenceManager;
 
     @ViewChild(NodeLayer) private _nodeLayer: NodeLayer;
-    @ViewChildren('') private _layers: Array<DiagramLayer>
+    @ViewChildren(Component) private _layers: QueryList<DiagramLayer>
 
     private _camera: Camera;
     private _behavior: DiagramEvents;
@@ -167,6 +167,7 @@ export default class Diagram {
                 this._platform = it;
                 this._camera = it.getCamera();
                 this._behavior = new DiagramBehavior(this);
+                console.log(this._layers);
                 this._layers.forEach(it => it.observe(this._camera));
                 this._isLoading = true;
                 this._models.getModel().then(model => {

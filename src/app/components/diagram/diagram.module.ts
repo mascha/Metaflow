@@ -1,9 +1,11 @@
-import { NgModule } from '@angular/core';
-
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {LoaderModule} from '../loader/loader.module';
 import {GridLayer, BorderLayer, NodeLayer, PlatformLayer, EffectLayer} from './layers/layers';
 import Overview from "./layers/overview/overview";
 import Presenter from "./layers/controls/presenter";
 import Breadcrumbs from './layers/breadcrumbs/breadcrumbs';
+import Diagram from './diagram';
 
 /**
  * Diagram module.
@@ -12,8 +14,8 @@ import Breadcrumbs from './layers/breadcrumbs/breadcrumbs';
  * @since 1.0.0
  */
 @NgModule({
-    imports: [],
-    exports: [],
+    imports: [CommonModule, LoaderModule],
+    exports: [ Diagram ],
     declarations: [
         Breadcrumbs, 
         Presenter, 
@@ -21,8 +23,9 @@ import Breadcrumbs from './layers/breadcrumbs/breadcrumbs';
         EffectLayer, 
         NodeLayer,
         BorderLayer,
-        GridLayer
+        GridLayer,
+        Diagram
     ],
     providers: [],
 })
-export default class DiagramModule { }
+export class DiagramModule { }

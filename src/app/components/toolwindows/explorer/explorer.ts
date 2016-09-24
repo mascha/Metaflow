@@ -13,10 +13,10 @@ import ModelService from "../../../services/models";
     styles: [require('./explorer.scss')]
 })
 export default class Explorer {
-    contents = [];
-    level: ViewGroup;
-    isLocked = false;
-    isDisabled = false;
+    private contents = [];
+    private level: ViewGroup;
+    private isLocked = false;
+    private isDisabled = false;
 
     goUpwards() {
         if (this.canGoUpwards()) {

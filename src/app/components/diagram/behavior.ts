@@ -1,6 +1,6 @@
 import {Camera} from '../../common/camera';
 import {ViewGroup, ViewVertex} from '../../common/viewmodel';
-import {Animation} from './animations';
+import {Animation} from '../../common/animations';
 import Kinetics from '../../common/kinetics';
 import Diagram from './diagram';
 
@@ -299,7 +299,10 @@ class Idle extends BaseState {
     handleNavigation(vertex: ViewVertex) {
         this.behavior.goto('animating', { 
             interpolator: Animation.navigateToItem(
-                this.camera, this.diagram, vertex
+                this.camera, 
+                this.diagram.zoomPanPreference, 
+                this.diagram.navigationVelocity, 
+                vertex
             )});
     }
 
@@ -325,7 +328,11 @@ class Idle extends BaseState {
             });
         } else {
             this.behavior.goto('animating', {
-                interpolator: Animation.navigateToItem(this.camera, this.diagram, this.diagram.model)
+                interpolator: Animation.navigateToItem(
+                    this.camera, 
+                    this.diagram.zoomPanPreference, 
+                    this.diagram.navigationVelocity,
+                    this.diagram.model)
             });
             /*
                 TODO: Check if something was selected

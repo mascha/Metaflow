@@ -17,6 +17,7 @@ export default class ReferenceManager {
     private scope: ViewGroup;
     private diagram: Diagram;
     private limits: ClientRect;
+    private cachedGroups: Array<ViewGroup>;
 
     public getLimits(): ClientRect {
         return this.limits;
@@ -24,7 +25,8 @@ export default class ReferenceManager {
 
     public getScope() { return this.scope; }
 
-    private adjustLimits(level: ViewGroup) {
+    private adjustLimits() {
+        let level = this.scope;
         let adjustW = level.width * 0.9;
         let adjustH = level.height * 0.9;
         this.limits.right = level.left + level.width + adjustW;
@@ -35,6 +37,10 @@ export default class ReferenceManager {
         this.limits.height = level.height;
     }
 
+    private cacheGroups() {
+        this.cachedGroups = [];
+    }
+
     /**
      * Switches the reference level to the parent level.
      * If no parent is present, nothing will be done and the
@@ -42,7 +48,7 @@ export default class ReferenceManager {
      */
     private ascend() {
         if (!this.isRoot()) {
-            let parent = this.getParent();
+            let parent = this.scope.parent;
             let scope = this.scope;
             let cam = this.camera;
 
@@ -95,7 +101,8 @@ export default class ReferenceManager {
     private loadLevel(level: ViewGroup) {
         this.scope = level;
         this.diagram.model = level;
-        this.adjustLimits(level);
+        this.cacheGroups();
+        this.adjustLimits();
     }
 
     /*
@@ -105,9 +112,7 @@ export default class ReferenceManager {
      *  - Only check visible objects of interest
      */
     private detectAndDoSwitch(): boolean {
-        if (!this.scope) {
-            return false;
-        }
+        if (!this.scope) return false;
 
         if (!this.isRoot()) {
             if (this.isOutsideParent()) {
@@ -116,10 +121,8 @@ export default class ReferenceManager {
             }
         }
 
-        let groups = this.diagram.cachedGroups;
-        if (!groups) {
-            return false;
-        }
+        let groups = this.cachedGroups;
+        if (!groups) return false;
 
         let len = groups.length;
         for (let i = 0; i < len; i++) {
@@ -135,10 +138,6 @@ export default class ReferenceManager {
 
     private isRoot(): boolean {
         return (!this.scope.parent);
-    }
-
-    private getParent(): ViewGroup {
-        return this.scope.parent as ViewGroup;
     }
 
     private isWithinChildGroup(group: ViewGroup): boolean {
@@ -158,7 +157,7 @@ export default class ReferenceManager {
     }
 
     private isOutsideParent(): boolean {
-        let parent = this.getParent();
+        let parent = this.scope.parent;
         let cam = this.camera;
         let adjust = 0.6;
         let driftH = parent.width * adjust;
