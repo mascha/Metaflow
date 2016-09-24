@@ -16,22 +16,7 @@ import TripleSplit from "./splitpane/triplesplit";
 })
 export default class Workspace {
     
-    workspace: WorkspaceConfig;
-    
-    @ViewChild(TripleSplit) triple: TripleSplit;
-    @ViewChild(DoubleSplit) double: DoubleSplit;
-    
-    togglePrimary(event: any) {
-        this.triple.toggleVisibility(event, true);
-    }
-
-    toggleSecondary(event: any) {
-        this.triple.toggleVisibility(event, false);
-    }
-
-    toggleTernary(event: any) {
-        this.double.toggleVisibility(event);
-    }
+    private workspace: WorkspaceConfig;
     
     constructor(private config: ConfigService) {
         this.workspace = config.getWorkspaceConfig();

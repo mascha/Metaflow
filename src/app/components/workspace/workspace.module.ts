@@ -10,7 +10,6 @@ import TripleSplit from "./splitpane/triplesplit";
 import MenuBar from "./menubar/menubar";
 import Navigation from "./navigation/navigation";
 import Workspace from "./workspace";
-import Toolbar from "./toolbar/toolbar";
 
 /**
  * Workspace module.
@@ -30,7 +29,6 @@ import Toolbar from "./toolbar/toolbar";
     ],
     declarations: [
         SideBar, 
-        Toolbar, 
         MenuBar, 
         Workspace,
         DoubleSplit,

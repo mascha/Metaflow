@@ -12,10 +12,9 @@ import {Component, Input, EventEmitter, Output} from '@angular/core';
     styles: [require('./sidebar.scss')],
 })
 export default class Sidebar {
-    @Input() title = "Header";
-    @Input() isPrimary: string;
-    @Input() showHeader = true;
-    @Input() visible = true;
+    @Input() private title = "Toolwindow";
+    @Input() private isPrimary: string;
+    @Input() private visible = true;
     @Output('visibility') private visibility = new EventEmitter<any>();
 
     isLoading: boolean = false;

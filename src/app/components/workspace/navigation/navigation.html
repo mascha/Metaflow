@@ -1,10 +1,9 @@
-<section class="branding" [class.show-branding]="showBranding == true">
-  <a href="#" title="Go back to projects"></a>
+<section class="branding" [class.show-branding]="showBranding">
 </section>
-<section class="navigation-upper" (click)="onFavoriteClick()" [class.show-branding]="showBranding == true">
+<section class="navigation-upper" (click)="onFavoriteClick()" [class.show-branding]="showBranding">
   <h2 class="navigation-title" [class.starred]="favorite">{{projectName}}</h2>
 </section>
-<section class="navigation-lower" [class.show-branding]="showBranding == true">
+<section class="navigation-lower" [class.show-branding]="showBranding">
   <menu-bar>
   </menu-bar>
 </section>

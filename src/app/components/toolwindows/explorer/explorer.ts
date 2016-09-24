@@ -14,13 +14,14 @@ import ModelService from "../../../services/models";
 })
 export default class Explorer {
     private contents = [];
-    private level: ViewGroup;
+    private scope: ViewGroup;
     private isLocked = false;
     private isDisabled = false;
+    private levelName: string;
 
     goUpwards() {
         if (this.canGoUpwards()) {
-            let parent = this.level.parent;
+            let parent = this.scope.parent;
             if (parent && !this.isLocked) {
                 this.updateLevel(parent);
             }
@@ -28,12 +29,13 @@ export default class Explorer {
     }
 
     private canGoUpwards() {
-        return (this.level && this.level.parent);
+        return (this.scope && this.scope.parent);
     }
 
     private updateLevel(level: ViewGroup) {
-        this.level = level;
-        this.contents = this.level.contents;
+        this.scope = level;
+        this.levelName = level? level.name : '';
+        this.contents = level? level.contents : [];
     }
 
     constructor(private models : ModelService) {

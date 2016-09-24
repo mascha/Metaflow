@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild, HostListener, ViewChildren, QueryList} from '@angular/core';
+import {Component, ElementRef, ViewChild, HostListener} from '@angular/core';
 import {ViewGroup, ViewVertex} from "../../common/viewmodel";
 import {Camera} from "../../common/camera";
 import HTML from "../../common/utility";
@@ -11,7 +11,10 @@ import ReferenceManager from './reference';
 /* Components */
 import Loader from '../loader/loader';
 import {DiagramLayer, PlatformLayer} from '../../common/layer';
-import {NodeLayer} from './layers/layers';
+import {NodeLayer, BorderLayer, GridLayer, EffectLayer} from './layers/layers';
+import Overview from './layers/overview/overview';
+import Presenter from './layers/controls/presenter';
+import BreadCrumbs from './layers/breadcrumbs/breadcrumbs';
 
 /* Services */
 import ModelService from "../../services/models";
@@ -38,7 +41,13 @@ export default class Diagram {
     reference: ReferenceManager;
 
     @ViewChild(NodeLayer) private _nodeLayer: NodeLayer;
-    @ViewChildren(Component) private _layers: QueryList<DiagramLayer>
+    @ViewChild(Overview) private _breadcrumbs: BreadCrumbs;
+    @ViewChild(Overview) private _overview: Overview;
+    @ViewChild(Overview) private _controls: Presenter;
+    @ViewChild(BorderLayer) private _border: BorderLayer;
+    @ViewChild(GridLayer) private _grid: GridLayer;
+
+    private _layers: DiagramLayer[];
 
     private _camera: Camera;
     private _behavior: DiagramEvents;
@@ -48,7 +57,6 @@ export default class Diagram {
     private _diagram: HTMLElement;
     private _model: ViewGroup;
     private _platform: PlatformLayer;
-    private _isLoading = false;
 
     get camera(): Camera {
         return this._camera;
@@ -92,19 +100,13 @@ export default class Diagram {
         let lay = this._layers;
         let len = lay.length;
         let ret = false;
-        /*
-        while (!ret && len--) {
-            lay[len].handleEvent(event, obj)
-        }
-
-        if (!ret) this._behavior.handle(event, obj);
-        */
+        /* pass event through all layers until handled */
     }
 
     @HostListener('dblclick', ['$event'])
     private onDoubleClick(event: MouseEvent) {
         let off = HTML.getOffset(this._diagram, event);
-        this._behavior.handleClick(off.x, off.y, true);  
+        this._behavior.handleClick(off.x, off.y, true);
         return false;
     }
 
@@ -157,23 +159,28 @@ export default class Diagram {
         this._behavior.handleMouseUp(pos.x, pos.y);
         return false;
     }
-    
+
     private ngAfterViewInit() {
-        this._diagram = this._element.nativeElement;
-        let surface = this._nodeLayer.getElement();
+        this._diagram = this._surface.nativeElement;
+        let draw = this._nodeLayer.getElement();
+
+        this._layers = [
+            this._grid,
+            this._nodeLayer,
+            this._border,
+            this._controls,
+            this._breadcrumbs,
+            this._overview
+        ];
 
         if (this._diagram) {
-            this._platforms.initializePlatform(surface).then(it => {
-                this._platform = it;
-                this._camera = it.getCamera();
-                this._behavior = new DiagramBehavior(this);
-                console.log(this._layers);
-                this._layers.forEach(it => it.observe(this._camera));
-                this._isLoading = true;
-                this._models.getModel().then(model => {
-                    this.model = model; // use setter to update model
-                    this.onResize()
-                });
+            this._platform = this._platforms.initializePlatform(draw);
+            this._camera = this._platform.getCamera();
+            this._behavior = new DiagramBehavior(this);
+            this._layers.forEach(it => it.observe(this._camera));
+            this._models.getModel().then(model => {
+                this.model = model; // use setter to update model
+                this.onResize()
             });
         } else {
             throw new Error('Could not find diagram DOM element');
@@ -183,7 +190,7 @@ export default class Diagram {
     constructor(
         private _platforms: PlatformService,
         private _models: ModelService,
-        private _element: ElementRef) { }
+        private _surface: ElementRef) { }
 }
 
 function minimax(min: number, value: number, max: number) {

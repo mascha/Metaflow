@@ -17,7 +17,7 @@ export default class PlatformService {
      * @param element A html canvas element. Currently only canvas is supported.
      * @returns {PlatformLayer}
      */
-    initializePlatform(element: HTMLCanvasElement): Promise<PlatformLayer> {
-        return Promise.resolve(new PixiLayer(element));
+    initializePlatform(element: HTMLCanvasElement): PlatformLayer {
+        return new PixiLayer(element);
     }
 }

@@ -25,6 +25,8 @@ export default class DoubleSplit {
     private last: number;
     private removeMove: Function;
     private removeUp: Function;
+    
+    private primaryPosition
 
     private moveHandler = (event: MouseEvent) => {
         let elem = this.root.nativeElement;

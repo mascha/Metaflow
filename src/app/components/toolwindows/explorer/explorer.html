@@ -1,6 +1,6 @@
 <section class="project-header">
   <div (click)="goUpwards()" class="upwards"></div>
-  <span class="project-reference">{{level.name}}</span>
+  <span class="project-reference">{{scope ? scope.name : 'Empty'}}</span>
 </section>
 <section class="project-entities fade-in">
   <div *ngFor="let node of contents" class="entity-cell">

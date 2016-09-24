@@ -3,6 +3,7 @@ import HTML from "../../../common/utility";
 
 /**
  * Three column split pane.
+ * 
  * @author Martin Schade
  * @since 1.0.0
  */
