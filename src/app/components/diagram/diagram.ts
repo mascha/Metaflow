@@ -1,17 +1,17 @@
-import {Component, ElementRef, ViewChild, HostListener} from '@angular/core';
-import {ViewGroup, ViewVertex} from "../../common/viewmodel";
-import {Camera} from "../../common/camera";
+import { Component, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { ViewGroup, ViewVertex, Model } from "../../common/viewmodel";
+import { Camera } from "../../common/camera";
 import HTML from "../../common/utility";
 
 /* Controller */
-import {StateMachine, DiagramState, DiagramEvents} from "./behavior";
+import { StateMachine, DiagramState, DiagramEvents } from "./behavior";
 import DiagramBehavior from './behavior';
-import ReferenceManager from './reference';
+import Reference from './reference';
 
 /* Components */
 import Loader from '../loader/loader';
-import {DiagramLayer, PlatformLayer} from '../../common/layer';
-import {NodeLayer, BorderLayer, GridLayer, EffectLayer} from './layers/layers';
+import { Layer, PlatformLayer, Diagram } from '../../common/layer';
+import { BorderLayer, GridLayer, EffectLayer } from './layers/layers';
 import Overview from './layers/overview/overview';
 import Presenter from './layers/controls/presenter';
 import BreadCrumbs from './layers/breadcrumbs/breadcrumbs';
@@ -19,6 +19,8 @@ import BreadCrumbs from './layers/breadcrumbs/breadcrumbs';
 /* Services */
 import ModelService from "../../services/models";
 import PlatformService from "../../services/platforms";
+
+import { BehaviorSubject, Observable, Subject } from "rxjs/Rx";
 
 /**
  * The diagram view component.
@@ -31,31 +33,30 @@ import PlatformService from "../../services/platforms";
     template: require('./diagram.html'),
     styles: [require('./diagram.scss')],
 })
-export default class Diagram {
+export default class DiagramImpl implements Diagram {
     animatedZoom = false;
     animatedNavigation = true;
     rubberBanding = false;
     respectLimits = false;
     useKinetics = true;
     showClickEffect = true;
-    reference: ReferenceManager;
+    scope: Reference;
 
-    @ViewChild(NodeLayer) private _nodeLayer: NodeLayer;
+    @ViewChild('NodeLayer') private _nodeLayer: ElementRef;
     @ViewChild(Overview) private _breadcrumbs: BreadCrumbs;
     @ViewChild(Overview) private _overview: Overview;
     @ViewChild(Overview) private _controls: Presenter;
     @ViewChild(BorderLayer) private _border: BorderLayer;
     @ViewChild(GridLayer) private _grid: GridLayer;
 
-    private _layers: DiagramLayer[];
-
+    private _layers: Layer[];
     private _camera: Camera;
     private _behavior: DiagramEvents;
     private _inertiaDecay = 0.05;
     private _zoomPan = 1.99;
     private _velocity = .9;
     private _diagram: HTMLElement;
-    private _model: ViewGroup;
+    private _model: BehaviorSubject<Model>;
     private _platform: PlatformLayer;
 
     get camera(): Camera {
@@ -78,12 +79,7 @@ export default class Diagram {
         this._zoomPan = minimax(.01, value, 2);
     }
 
-    set model(group: ViewGroup) {
-        this._model = group;
-        this._layers.forEach(it => it.update(group))
-    }
-
-    get model(): ViewGroup {
+    get model(): Observable<Model> {
         return this._model;
     }
 
@@ -162,24 +158,23 @@ export default class Diagram {
 
     private ngAfterViewInit() {
         this._diagram = this._surface.nativeElement;
-        let draw = this._nodeLayer.getElement();
-
-        this._layers = [
-            this._grid,
-            this._nodeLayer,
-            this._border,
-            this._controls,
-            this._breadcrumbs,
-            this._overview
-        ];
+        let draw = this._nodeLayer.nativeElement;
 
         if (this._diagram) {
             this._platform = this._platforms.initializePlatform(draw);
+            this._layers = [
+                this._grid,
+                this._platform,
+                this._border,
+                this._controls,
+                this._breadcrumbs,
+                this._overview
+            ];
             this._camera = this._platform.getCamera();
             this._behavior = new DiagramBehavior(this);
-            this._layers.forEach(it => it.observe(this._camera));
+            this._layers.forEach(it => it.initialize(this));
             this._models.getModel().then(model => {
-                this.model = model; // use setter to update model
+                this._model.next(model)
                 this.onResize()
             });
         } else {

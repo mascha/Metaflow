@@ -1,9 +1,8 @@
 import {Component, Input} from '@angular/core';
 import {ViewGroup, ViewVertex} from "../../../../common/viewmodel";
 import {Style} from "../../../../common/styling";
+import {Diagram, Layer} from "../../../../common/layer";
 import ModelService from "../../../../services/models";
-import {DiagramLayer} from "../../../../common/layer";
-import {Camera} from "../../../../common/camera";
 
 /**
  * A breadcrumbs breadcrumbs bar.
@@ -16,13 +15,16 @@ import {Camera} from "../../../../common/camera";
     styles: [require('./breadcrumbs.scss')],
     template: require('./breadcrumbs.html'),
 })
-export default class Breadcrumbs implements DiagramLayer {
+export default class Breadcrumbs implements Layer {
     private segments: Array<ViewGroup>;
     private placeholder: ViewGroup;
+    private maximumSegments = 4;
 
-    @Input() private maximumSegments = 4;
+    initialize(diagram: Diagram) {
+        diagram.scope.subscribe(it => this.update(it));
+    }
 
-    update(level: ViewGroup) {
+    private update(level: ViewGroup) {
         let segments = [];
 
         while (level) {
@@ -35,10 +37,6 @@ export default class Breadcrumbs implements DiagramLayer {
         } else {
             this.segments = segments.reverse();
         }
-    }
-
-    observe(camera: Camera) {
-        /* NOP */
     }
 
     constructor() {

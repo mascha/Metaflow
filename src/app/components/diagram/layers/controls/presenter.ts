@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {WorkspaceConfig} from "../../../../services/configs";
 import ConfigService from "../../../../services/configs";
-import {DiagramLayer} from "../../../../common/layer";
+import {Layer, Diagram} from "../../../../common/layer";
 import {ViewGroup} from "../../../../common/viewmodel";
 import {Camera} from "../../../../common/camera";
 /**
@@ -15,18 +15,14 @@ import {Camera} from "../../../../common/camera";
     styles: [require('./presenter.scss')],
     template: require('./presenter.html'),
 })
-export default class Presenter implements DiagramLayer {
-    private showMapControls = true;
-    private showOverview = true;
-    private showOmnibox = true;
+export default class Presenter implements Layer {
+    private showControls = true;
     private workspace : WorkspaceConfig;
     
-    update(group: ViewGroup) {
-
-    }
-
-    observe(camera: Camera) {
-
+    initialize(diagram: Diagram) {
+        diagram.model.subscribe(it => {
+            this.showControls = (it && it.root) ? true : false;
+        });
     }
 
     constructor(config: ConfigService) {

@@ -207,3 +207,20 @@ export interface ViewModelRenderer<I, G> {
      */
     attach(node: ViewVertex, group: ViewGroup)
 }
+
+/**
+ * Main entry point for elements and viewpoints;
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+export class Model {
+    readonly statistics: ModelStatistics;
+
+    constructor(readonly name: string, readonly root: ViewGroup) {}
+}
+
+export interface ModelStatistics {
+    readonly elementCount: number;
+    readonly sizeInMemory: number;
+}

@@ -2,7 +2,7 @@ import {Camera} from '../../common/camera';
 import {ViewGroup, ViewVertex} from '../../common/viewmodel';
 import {Animation} from '../../common/animations';
 import Kinetics from '../../common/kinetics';
-import Diagram from './diagram';
+import DiagramImpl from './diagram';
 
 /**
  * All possible diagram events.
@@ -205,7 +205,7 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
         this.current.enterState(params);
     }
 
-    constructor(private diagram: Diagram) {
+    constructor(private diagram: DiagramImpl) {
         this.lookup = Object.create(null);
         this.states = [
             new Idle('idle', this, diagram),
@@ -265,7 +265,7 @@ abstract class BaseState implements DiagramState {
 
     handleStop() { /* ignore */ }
 
-    constructor(name: string, protected behavior: DiagramBehavior, protected diagram: Diagram) {
+    constructor(name: string, protected behavior: DiagramBehavior, protected diagram: DiagramImpl) {
         this.name = name;
         this.camera = diagram.camera;
     }
@@ -329,10 +329,10 @@ class Idle extends BaseState {
         } else {
             this.behavior.goto('animating', {
                 interpolator: Animation.navigateToItem(
-                    this.camera, 
+                    this.diagram.camera, 
                     this.diagram.zoomPanPreference, 
                     this.diagram.navigationVelocity,
-                    this.diagram.model)
+                    this.diagram.scope.scope.getValue())
             });
             /*
                 TODO: Check if something was selected

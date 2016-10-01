@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {ViewGroup, ViewItem} from "../common/viewmodel";
+import {ViewGroup, ViewItem, Model} from "../common/viewmodel";
 import {Style, GroupStyle} from '../common/styling';
 import {Shape, ShapeType} from '../common/shapes';
 import ShapeRenderer from '../platform/render';
@@ -43,9 +43,9 @@ const NAMES = [
     private stockStyle: Style;
     private moduleStyle: GroupStyle;
 
-    getModel(): Promise<ViewGroup> {
+    getModel(): Promise<Model> {
         this.model = this.model || this.createDebugModel();
-        return Promise.resolve(this.model);
+        return Promise.resolve(new Model("Debug", this.model));
     }
 
     private createStock() {

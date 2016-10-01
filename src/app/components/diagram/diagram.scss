@@ -19,11 +19,6 @@
   bottom: 0;
 }
 
-.grid {
-  color: $grid-lines;
-  background-color: $grid-fill;
-}
-
 .overlay {
   z-index: 100;
   background-color: lighten($navigation-fill, $amount: 6);

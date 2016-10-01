@@ -1,6 +1,7 @@
 import {Camera} from '../../common/camera';
 import {ViewGroup} from '../../common/viewmodel';
-import Diagram from './diagram';
+import {Diagram, Scope} from '../../common/layer';
+import {BehaviorSubject, Observable, Subject} from "rxjs/Rx";
 
 /**
  * ReferenceManager.
@@ -11,34 +12,25 @@ import Diagram from './diagram';
  * @author Martin Schade
  * @since 1.0.0
  */
-export default class ReferenceManager {
-    
-    private camera: Camera;
-    private scope: ViewGroup;
-    private diagram: Diagram;
-    private limits: ClientRect;
-    private cachedGroups: Array<ViewGroup>;
+export default class ScopeImpl extends BehaviorSubject<ViewGroup> implements Scope {
+    private _camera: Camera;
+    private _limits: ClientRect;
+    private _cachedGroups: Array<ViewGroup>;
+    private _parent?: ViewGroup;
+    private _current?: ViewGroup;
+    readonly limits: ClientRect;
 
-    public getLimits(): ClientRect {
-        return this.limits;
-    }
-
-    public getScope() { return this.scope; }
-
-    private adjustLimits() {
-        let level = this.scope;
+    private adjustLimits(level: ViewGroup) {
         let adjustW = level.width * 0.9;
         let adjustH = level.height * 0.9;
-        this.limits.right = level.left + level.width + adjustW;
-        this.limits.left = level.left - adjustW;
-        this.limits.top = level.top - adjustH;
-        this.limits.bottom = level.top + level.height + adjustH; 
-        this.limits.width = level.width;
-        this.limits.height = level.height;
+        this._limits.right = level.left + level.width + adjustW;
+        this._limits.left = level.left - adjustW;
+        this._limits.top = level.top - adjustH;
+        this._limits.bottom = level.top + level.height + adjustH; 
     }
 
-    private cacheGroups() {
-        this.cachedGroups = [];
+    private cacheGroups(level?: ViewGroup) {
+        this._cachedGroups = level ? level.contents.filter(it => !it.isLeaf()) as ViewGroup[] : [];
     }
 
     /**
@@ -47,18 +39,16 @@ export default class ReferenceManager {
      * camera stays the same.
      */
     private ascend() {
-        if (!this.isRoot()) {
-            let parent = this.scope.parent;
-            let scope = this.scope;
-            let cam = this.camera;
-
+        if (!this._parent) {
+            let parent = this._parent;
+            let scope = this._current;
+            let cam = this._camera;
             let wX = cam.worldX;
             let wY = cam.worldY;
             let cS = cam.scale;
             let rS = cS / parent.scale;
             let rX = (wX + scope.left) * cS;
             let rY = (wY + scope.top) * cS;
-
             this.loadLevel(parent);
             cam.zoomAndMoveTo(rX, rY, rS);
         }
@@ -72,17 +62,16 @@ export default class ReferenceManager {
      * @param target
      */
     private descendInto(target: ViewGroup) {
-        let current = this.scope;
+        let current = this._current, cam = this._diagram.camera;
         if (target && current && target.parent === current) {
-            let wX = this.camera.worldX;
-            let wY = this.camera.worldY;
-            let cS = this.camera.scale;
+            let wX = cam.worldX;
+            let wY = cam.worldY;
+            let cS = cam.scale;
             let rX = (wX - target.left * current.scale) * cS;
             let rY = (wY - target.top * current.scale) * cS;
             let rS = (cS * current.scale);
-
             this.loadLevel(target);
-            this.camera.zoomAndMoveTo(rX, rY, rS);
+            cam.zoomAndMoveTo(rX, rY, rS);
         }
     }
 
@@ -98,11 +87,13 @@ export default class ReferenceManager {
      * 
      * @param level
      */
-    private loadLevel(level: ViewGroup) {
-        this.scope = level;
-        this.diagram.model = level;
-        this.cacheGroups();
-        this.adjustLimits();
+    private loadLevel(level?: ViewGroup) {
+        if (!level) return;
+        this._current = level;
+        this._parent = level.parent;
+        this.cacheGroups(level);
+        this.adjustLimits(level);
+        this.next(level);
     }
 
     /*
@@ -112,16 +103,16 @@ export default class ReferenceManager {
      *  - Only check visible objects of interest
      */
     private detectAndDoSwitch(): boolean {
-        if (!this.scope) return false;
+        if (!this._current) return false;
 
-        if (!this.isRoot()) {
+        if (!this._parent) {
             if (this.isOutsideParent()) {
                 this.ascend();
                 return true;
             }
         }
 
-        let groups = this.cachedGroups;
+        let groups = this._cachedGroups;
         if (!groups) return false;
 
         let len = groups.length;
@@ -136,13 +127,9 @@ export default class ReferenceManager {
         return false;
     }
 
-    private isRoot(): boolean {
-        return (!this.scope.parent);
-    }
-
     private isWithinChildGroup(group: ViewGroup): boolean {
-        let scale = this.scope.scale;
-        let cam = this.camera;
+        let scale = this._current.scale;
+        let cam = this._camera;
         let pW = cam.projWidth;
         let pH = cam.projHeight;
         let wX = cam.worldX;
@@ -157,8 +144,8 @@ export default class ReferenceManager {
     }
 
     private isOutsideParent(): boolean {
-        let parent = this.scope.parent;
-        let cam = this.camera;
+        let parent = this._parent;
+        let cam = this._camera;
         let adjust = 0.6;
         let driftH = parent.width * adjust;
         let driftV = parent.height * adjust;
@@ -166,5 +153,11 @@ export default class ReferenceManager {
             cam.worldY < parent.top - driftV &&
             cam.projWidth > parent.width + driftH &&
             cam.projHeight > parent.height + driftV);
+    }
+
+    constructor(private _diagram: Diagram) {
+        super(null);
+        this._camera = _diagram.camera;
+        _diagram.model.subscribe(it => this.loadLevel(it.root));
     }
 }

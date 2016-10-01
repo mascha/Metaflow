@@ -1,7 +1,7 @@
 import {Component, ElementRef, ViewChild, HostListener} from '@angular/core';
 import {ViewGroup, ViewItem, ViewVertex} from "../../../common/viewmodel";
 import {Camera, CameraObserver} from "../../../common/camera";
-import {PlatformLayer, DiagramLayer, Quality} from '../../../common/layer';
+import {PlatformLayer, Layer, Quality, Diagram} from '../../../common/layer';
 import Grid from './grid';
 import Border from './border';
 import HTML from '../../../common/utility';
@@ -16,19 +16,15 @@ import HTML from '../../../common/utility';
     selector: 'grid-layer',
     template: `<canvas #gridLayer class="layer"></canvas>`
 })
-export class GridLayer implements DiagramLayer {
+export class GridLayer implements Layer {
     @ViewChild('gridLayer') 
     private canvas: ElementRef;
     private grid: Grid;
 
-    public update(group: ViewGroup) {
-        /* NOP */
-    }
-
-    public observe(camera: Camera) {
+    public initialize(diagram: Diagram) {
         let canvas = this.canvas.nativeElement;
-        this.grid = new Grid(camera, canvas);
-        camera.attachObserver(this.grid);
+        this.grid = new Grid(diagram.camera, canvas);
+        diagram.camera.attachObserver(this.grid);
     }
 }
 
@@ -43,7 +39,7 @@ export class GridLayer implements DiagramLayer {
     template: require('./effects.html'),
     styles: [require('./effects.scss')]
 })
-export class EffectLayer implements DiagramLayer {
+export class EffectLayer implements Layer {
     @ViewChild('effects') private surface: ElementRef;
     @ViewChild('misc') private misc: ElementRef;
 
@@ -84,11 +80,7 @@ export class EffectLayer implements DiagramLayer {
         setTimeout(() => container.remove(), 1000);
     }
 
-    public update(group: ViewGroup) {
-        /* NOP */
-    }
-
-    public observe(camera: Camera) {
+    public initialize(diagram: Diagram) {
         let canvas = this.surface.nativeElement as HTMLCanvasElement;
         let brush = canvas.getContext("2d");
         brush.fillStyle = "black";
@@ -107,7 +99,7 @@ export class EffectLayer implements DiagramLayer {
     selector: 'border-layer',
     template: '<canvas #borderLayer class="layer"></canvas>'
 })
-export class BorderLayer implements DiagramLayer {
+export class BorderLayer implements Layer {
     @ViewChild('borderLayer') 
     private element: ElementRef;
     private border: Border;
@@ -124,10 +116,11 @@ export class BorderLayer implements DiagramLayer {
         }
     }
 
-    public observe(camera: Camera) {
+    public initialize(diagram: Diagram) {
         let element = this.element.nativeElement;
-        this.border = new Border(camera, element);
-        camera.attachObserver(this.border);
+        this.border = new Border(diagram.camera, element);
+        diagram.camera.attachObserver(this.border);
+        diagram.scope.scope.subs
     }
 
     public update(group: ViewGroup) {
@@ -143,7 +136,7 @@ export class BorderLayer implements DiagramLayer {
  * @author Martin Schade
  * @since 1.0.0
  */
-export interface PlatformLayer extends CameraObserver, DiagramLayer {
+export interface PlatformLayer extends CameraObserver, Layer {
 
     cachedGroups: Array<ViewGroup>;
 
@@ -156,26 +149,4 @@ export interface PlatformLayer extends CameraObserver, DiagramLayer {
      * Retrieve the platform camera.
      */
     getCamera(): Camera;
-}
-
-/**
- * Grid layer component.
- * 
- * @author Martin Schade
- * @since 1.0.0
- */
-@Component({
-    selector: 'node-layer',
-    template: '<canvas #nodeLayer class="layer"></canvas>'
-})
-export class NodeLayer implements DiagramLayer {
-    @ViewChild('nodeLayer') 
-    private element: ElementRef;
-
-    public update(group: ViewGroup) { /* NOP */ }
-    public observe(camera: Camera) { /* NOP */ }
-    
-    getElement(): HTMLCanvasElement {
-        return this.element.nativeElement;
-    }
 }

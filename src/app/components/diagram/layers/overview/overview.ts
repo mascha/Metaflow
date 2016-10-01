@@ -1,7 +1,7 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {ViewGroup, ViewVertex} from '../../../../common/viewmodel';
 import {Camera, CameraObserver} from '../../../../common/camera';
-import {DiagramLayer} from '../../../../common/layer';
+import {Layer, Diagram} from '../../../../common/layer';
 
 /**
  * Birds-eye overview component.
@@ -14,7 +14,7 @@ import {DiagramLayer} from '../../../../common/layer';
     template: require('./overview.html'),
     styles: [require('./overview.scss')]
 })
-export default class Overview implements DiagramLayer, CameraObserver {
+export default class Overview implements Layer, CameraObserver {
     @ViewChild('camera') private camCanvas: ElementRef;
     @ViewChild('nodes') private nodeCanvas: ElementRef;
     private nodes: CanvasRenderingContext2D;
@@ -22,16 +22,12 @@ export default class Overview implements DiagramLayer, CameraObserver {
     private camera: Camera;
     private group: ViewGroup;
 
-    public observe(camera: Camera) {
-        this.camera = camera;
-        camera.attachObserver(this);
+    public initialize(diagram: Diagram) {
+        this.camera = diagram.camera;
+        diagram.camera.attachObserver(this);
+        diagram.scope.subscribe
     }
     
-    public update(group: ViewGroup) {
-        this.group = group;
-        this.redraw();
-    }
-
     public onViewResized() {
         this.redrawCamera();
     }

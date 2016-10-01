@@ -8,3 +8,4 @@ import '@angular/http';
 // Other
 import 'pixi.js';
 import 'springy';
+import 'rxjs/Rx';

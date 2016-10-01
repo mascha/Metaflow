@@ -1,5 +1,18 @@
-import {ViewGroup, ViewItem, ViewVertex} from './viewmodel';
+import {ViewGroup, ViewItem, ViewVertex, Model} from './viewmodel';
 import {Camera} from './camera';
+import {Observable} from "rxjs/Rx";
+
+/**
+ * Diagram interface definition.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+export interface Diagram {
+    readonly camera: Camera;
+    readonly model: Observable<Model>;
+    readonly scope: Scope;
+} 
 
 /**
  * Renderer quality hint.
@@ -22,7 +35,7 @@ export const enum Quality {
  * @author Martin Schade
  * @since 1.0.0
  */
-export interface PlatformLayer {
+export interface PlatformLayer extends Layer {
     setQuality(quality: Quality); 
     getCamera(): Camera;
 }
@@ -33,18 +46,12 @@ export interface PlatformLayer {
  * @author Martin Schade
  * @since 1.0.0
  */
-export interface DiagramLayer {
+export interface Layer {
 
     /**
-     * A callback for registering camera movements.
+     * A callback for registering observables after the diagram has been created.
      */
-    observe(camera: Camera);
-
-    /**
-     * Update the internal or visual state with
-     * a new view model.
-     */
-    update(group: ViewGroup);
+    initialize(diagram: Diagram);
 }
 
 /**
@@ -69,4 +76,11 @@ export interface ViewModelRenderer<I, G> {
      * Attach node to scene.
      */
     attach(node: ViewVertex, group: ViewGroup)
+}
+
+/**
+ * 
+ */
+export interface Scope extends Observable<ViewGroup> {
+    readonly limits: ClientRect;
 }
