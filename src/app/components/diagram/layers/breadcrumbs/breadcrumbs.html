@@ -1,6 +1,9 @@
 <ol class="navigation">
+  <li>
+    <a href="user/22242616/models/{{modelName}}">{{modelName}}</a>
+  </li>
   <li *ngFor="let segment of segments">
-    <img src="{{segment.style.cachedURL}}">
+    <img [src]="segment.style.cachedURL">
     <a href="#">
       {{segment.name}}
     </a>

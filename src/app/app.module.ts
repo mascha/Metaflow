@@ -22,9 +22,11 @@ import ProjectService from "./services/projects";
  * @since 1.0.0
  */
 @NgModule({
-  bootstrap: [Application],
+  bootstrap: [
+    Application
+  ],
   imports: [
-    WorkspaceModule,
+    // WorkspaceModule,
     DiagramModule,
     BrowserModule
   ],
@@ -39,6 +41,4 @@ import ProjectService from "./services/projects";
     Application
   ],
 })
-export default class AppModule {
-  
-}
+export default class AppModule {}

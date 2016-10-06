@@ -1,4 +1,5 @@
 import {ViewGroup, ViewItem, ViewVertex, Model} from './viewmodel';
+import {Selection} from './selection';
 import {Camera} from './camera';
 import {Observable} from "rxjs/Rx";
 
@@ -12,7 +13,30 @@ export interface Diagram {
     readonly camera: Camera;
     readonly model: Observable<Model>;
     readonly scope: Scope;
+    readonly selection: Selection<ViewVertex>;
 } 
+
+/**
+ * Responsible for handling the platform dependent methods.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+export interface RenderLayer extends Layer {
+
+    cachedGroups: Array<ViewGroup>;
+
+    /**
+     * Sets the amount of quality to accept.
+     */
+    setQuality(quality: Quality);
+
+    /**
+     * Retrieve the platform camera.
+     */
+    getCamera(): Camera;
+}
+
 
 /**
  * Renderer quality hint.
@@ -35,7 +59,7 @@ export const enum Quality {
  * @author Martin Schade
  * @since 1.0.0
  */
-export interface PlatformLayer extends Layer {
+export interface RenderLayer extends Layer {
     setQuality(quality: Quality); 
     getCamera(): Camera;
 }
@@ -79,8 +103,15 @@ export interface ViewModelRenderer<I, G> {
 }
 
 /**
+ * Diagram scope.
  * 
+ * Is responsible for maintaining the current level of reference, which is
+ * a cursor within the viewmodel tree, allowing for lazy loading and infinite zooming.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
  */
 export interface Scope extends Observable<ViewGroup> {
     readonly limits: ClientRect;
+    readonly current: ViewGroup;
 }

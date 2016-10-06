@@ -1,7 +1,7 @@
 import {Component, ElementRef, ViewChild, HostListener} from '@angular/core';
 import {ViewGroup, ViewItem, ViewVertex} from "../../../common/viewmodel";
 import {Camera, CameraObserver} from "../../../common/camera";
-import {PlatformLayer, Layer, Quality, Diagram} from '../../../common/layer';
+import {RenderLayer, Layer, Quality, Diagram} from '../../../common/layer';
 import Grid from './grid';
 import Border from './border';
 import HTML from '../../../common/utility';
@@ -23,7 +23,7 @@ export class GridLayer implements Layer {
 
     public initialize(diagram: Diagram) {
         let canvas = this.canvas.nativeElement;
-        this.grid = new Grid(diagram.camera, canvas);
+        this.grid = new Grid(diagram, canvas);
         diagram.camera.attachObserver(this.grid);
     }
 }
@@ -90,7 +90,7 @@ export class EffectLayer implements Layer {
 
 
 /**
- * Grid layer component.
+ * Border layer component.
  * 
  * @author Martin Schade
  * @since 1.0.0
@@ -120,33 +120,6 @@ export class BorderLayer implements Layer {
         let element = this.element.nativeElement;
         this.border = new Border(diagram.camera, element);
         diagram.camera.attachObserver(this.border);
-        diagram.scope.scope.subs
+        diagram.scope.subscribe(it => this.border.updateProxies(it));
     }
-
-    public update(group: ViewGroup) {
-        if (this.border) {
-            this.border.updateProxies(group);
-        }
-    }
-}
-
-/**
- * Responsible for handling the platform dependent methods.
- * 
- * @author Martin Schade
- * @since 1.0.0
- */
-export interface PlatformLayer extends CameraObserver, Layer {
-
-    cachedGroups: Array<ViewGroup>;
-
-    /**
-     * Sets the amount of quality to accept.
-     */
-    setQuality(quality: Quality);
-
-    /**
-     * Retrieve the platform camera.
-     */
-    getCamera(): Camera;
 }

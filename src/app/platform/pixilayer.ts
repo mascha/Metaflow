@@ -1,4 +1,4 @@
-import {PlatformLayer, ViewModelRenderer, Quality} from "../common/layer";
+import {RenderLayer, ViewModelRenderer, Quality, Diagram} from "../common/layer";
 import {ViewGroup, ViewItem, ViewVertex} from "../common/viewmodel";
 import {Camera, CameraObserver} from "../common/camera";
 import ShapeRenderer from './render';
@@ -9,7 +9,7 @@ import ShapeRenderer from './render';
  * @author Martin Schade
  * @since 1.0.0
  */
-export class PixiLayer implements PlatformLayer, CameraObserver {
+export class PixiLayer implements RenderLayer, CameraObserver {
 
     private camera: PixiCamera;
     private scene: PIXI.Container;
@@ -41,11 +41,7 @@ export class PixiLayer implements PlatformLayer, CameraObserver {
         return hits;
     }
 
-    observe(camera: Camera) {
-        camera.attachObserver(this);
-    }
-
-    update(level: ViewGroup) {
+    private update(level: ViewGroup) {
         this.nodes.removeChildren();
         this.labels.removeChildren();
         let leafs = new PIXI.Graphics();
@@ -145,6 +141,11 @@ export class PixiLayer implements PlatformLayer, CameraObserver {
      */
     onZoomChanged(zoom: number) {
         this.renderer.render(this.scene);
+    }
+
+    public initialize(diagram: Diagram) {
+        diagram.camera.attachObserver(this);
+        diagram.scope.subscribe(it => this.update(it));
     }
 
     private attachNode(level: ViewGroup) {

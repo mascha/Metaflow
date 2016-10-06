@@ -327,12 +327,14 @@ class Idle extends BaseState {
                 })
             });
         } else {
+            if (!this.diagram.scope.current) return;
+            
             this.behavior.goto('animating', {
                 interpolator: Animation.navigateToItem(
                     this.diagram.camera, 
                     this.diagram.zoomPanPreference, 
                     this.diagram.navigationVelocity,
-                    this.diagram.scope.scope.getValue())
+                    this.diagram.scope.current)
             });
             /*
                 TODO: Check if something was selected

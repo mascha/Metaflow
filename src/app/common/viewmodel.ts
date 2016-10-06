@@ -215,6 +215,7 @@ export interface ViewModelRenderer<I, G> {
  * @since 1.0.0
  */
 export class Model {
+    
     readonly statistics: ModelStatistics;
 
     constructor(readonly name: string, readonly root: ViewGroup) {}
@@ -223,4 +224,5 @@ export class Model {
 export interface ModelStatistics {
     readonly elementCount: number;
     readonly sizeInMemory: number;
+    readonly portalCount: number;
 }

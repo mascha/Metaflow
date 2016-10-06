@@ -4,7 +4,7 @@ import {Diagram, Scope} from '../../common/layer';
 import {BehaviorSubject, Observable, Subject} from "rxjs/Rx";
 
 /**
- * ReferenceManager.
+ * Diagram scope implementation.
  * 
  * Is responsible for maintaining the current level of reference, which is
  * a cursor within the viewmodel tree, allowing for lazy loading and infinite zooming.
@@ -12,13 +12,15 @@ import {BehaviorSubject, Observable, Subject} from "rxjs/Rx";
  * @author Martin Schade
  * @since 1.0.0
  */
-export default class ScopeImpl extends BehaviorSubject<ViewGroup> implements Scope {
+export default class ScopeImpl extends Subject<ViewGroup> implements Scope {
     private _camera: Camera;
     private _limits: ClientRect;
     private _cachedGroups: Array<ViewGroup>;
     private _parent?: ViewGroup;
     private _current?: ViewGroup;
     readonly limits: ClientRect;
+
+    get current(): ViewGroup { return this._current };
 
     private adjustLimits(level: ViewGroup) {
         let adjustW = level.width * 0.9;
@@ -62,7 +64,7 @@ export default class ScopeImpl extends BehaviorSubject<ViewGroup> implements Sco
      * @param target
      */
     private descendInto(target: ViewGroup) {
-        let current = this._current, cam = this._diagram.camera;
+        let current = this._current, cam = this.diagram.camera;
         if (target && current && target.parent === current) {
             let wX = cam.worldX;
             let wY = cam.worldY;
@@ -155,9 +157,12 @@ export default class ScopeImpl extends BehaviorSubject<ViewGroup> implements Sco
             cam.projHeight > parent.height + driftV);
     }
 
-    constructor(private _diagram: Diagram) {
-        super(null);
-        this._camera = _diagram.camera;
-        _diagram.model.subscribe(it => this.loadLevel(it.root));
+    constructor(private diagram: Diagram) {
+        super();
+        this._limits = { left: 2000, right: 2000, top: -2000, bottom: 2000, width: 4000, height: 4000 }
+        this._camera = diagram.camera;
+        diagram.model.subscribe(it => {
+            if (it && it.root) this.loadLevel(it.root);
+        });
     }
 }

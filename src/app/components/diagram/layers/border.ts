@@ -177,11 +177,8 @@ export default class Border implements CameraObserver {
     }
 
     private clearProxies() {
-        this.brush.clearRect(
-            0.0, 0.0,
-            this.region.width,
-            this.region.height
-        );
+        let r = this.region;
+        this.brush.clearRect(0, 0, r.width, r.height);
     }
 
     private updateCache() {

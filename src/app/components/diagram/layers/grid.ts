@@ -1,4 +1,5 @@
 import {CameraObserver, Camera} from '../../../common/camera';
+import {Diagram} from '../../../common/layer';
 
 /**
  * The grid layer is the lowest of all layers. It'scale job is to paint the background of the editor canvas,
@@ -88,8 +89,8 @@ export default class Grid implements CameraObserver {
         this.drawGrid(x, y, w, h);
     }
 
-    constructor(camera: Camera, canvas: HTMLCanvasElement) {
-        this._camera = camera;
+    constructor(diagram: Diagram, canvas: HTMLCanvasElement) {
+        this._camera = diagram.camera;
         this._canvas = canvas;
         this._context = canvas.getContext('2d');
     }

@@ -1,16 +1,17 @@
 import { Component, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { ViewGroup, ViewVertex, Model } from "../../common/viewmodel";
+import { Layer, RenderLayer, Diagram, Scope } from '../../common/layer';
 import { Camera } from "../../common/camera";
+import { Selection} from '../../common/selection';
 import HTML from "../../common/utility";
 
 /* Controller */
 import { StateMachine, DiagramState, DiagramEvents } from "./behavior";
 import DiagramBehavior from './behavior';
-import Reference from './reference';
+import ScopeImpl from './reference';
 
 /* Components */
 import Loader from '../loader/loader';
-import { Layer, PlatformLayer, Diagram } from '../../common/layer';
 import { BorderLayer, GridLayer, EffectLayer } from './layers/layers';
 import Overview from './layers/overview/overview';
 import Presenter from './layers/controls/presenter';
@@ -20,6 +21,7 @@ import BreadCrumbs from './layers/breadcrumbs/breadcrumbs';
 import ModelService from "../../services/models";
 import PlatformService from "../../services/platforms";
 
+/* reactives */
 import { BehaviorSubject, Observable, Subject } from "rxjs/Rx";
 
 /**
@@ -34,14 +36,6 @@ import { BehaviorSubject, Observable, Subject } from "rxjs/Rx";
     styles: [require('./diagram.scss')],
 })
 export default class DiagramImpl implements Diagram {
-    animatedZoom = false;
-    animatedNavigation = true;
-    rubberBanding = false;
-    respectLimits = false;
-    useKinetics = true;
-    showClickEffect = true;
-    scope: Reference;
-
     @ViewChild('NodeLayer') private _nodeLayer: ElementRef;
     @ViewChild(Overview) private _breadcrumbs: BreadCrumbs;
     @ViewChild(Overview) private _overview: Overview;
@@ -49,6 +43,7 @@ export default class DiagramImpl implements Diagram {
     @ViewChild(BorderLayer) private _border: BorderLayer;
     @ViewChild(GridLayer) private _grid: GridLayer;
 
+    private _scope: Scope;
     private _layers: Layer[];
     private _camera: Camera;
     private _behavior: DiagramEvents;
@@ -56,8 +51,22 @@ export default class DiagramImpl implements Diagram {
     private _zoomPan = 1.99;
     private _velocity = .9;
     private _diagram: HTMLElement;
-    private _model: BehaviorSubject<Model>;
-    private _platform: PlatformLayer;
+    private _model= new BehaviorSubject<Model>(null);
+    private _platform: RenderLayer;
+
+    animatedZoom = false;
+    animatedNavigation = true;
+    rubberBanding = false;
+    respectLimits = false;
+    useKinetics = true;
+    showClickEffect = true;
+
+    readonly selection = new Selection<ViewVertex>();
+
+    get scope(): Scope {
+        return this._scope;
+    }
+
 
     get camera(): Camera {
         return this._camera;
@@ -158,10 +167,11 @@ export default class DiagramImpl implements Diagram {
 
     private ngAfterViewInit() {
         this._diagram = this._surface.nativeElement;
-        let draw = this._nodeLayer.nativeElement;
 
         if (this._diagram) {
-            this._platform = this._platforms.initializePlatform(draw);
+            this._platform = this._platforms.initializeRenderer(
+                this._nodeLayer.nativeElement
+            );
             this._layers = [
                 this._grid,
                 this._platform,
@@ -171,11 +181,12 @@ export default class DiagramImpl implements Diagram {
                 this._overview
             ];
             this._camera = this._platform.getCamera();
+            this._scope = new ScopeImpl(this);
             this._behavior = new DiagramBehavior(this);
             this._layers.forEach(it => it.initialize(this));
             this._models.getModel().then(model => {
                 this._model.next(model)
-                this.onResize()
+                setTimeout(() => this.onResize());
             });
         } else {
             throw new Error('Could not find diagram DOM element');

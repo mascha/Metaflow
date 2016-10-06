@@ -25,7 +25,7 @@ export default class Overview implements Layer, CameraObserver {
     public initialize(diagram: Diagram) {
         this.camera = diagram.camera;
         diagram.camera.attachObserver(this);
-        diagram.scope.subscribe
+        diagram.scope.subscribe(it => this.updateGroup(it));
     }
     
     public onViewResized() {
@@ -56,6 +56,12 @@ export default class Overview implements Layer, CameraObserver {
             .map((it) => it.getContext('2d'))
         this.nodes = brushes[0];
         this.cams = brushes[1];
+    }
+    
+    private updateGroup(group?: ViewGroup) {
+        if (!group) return;
+        this.group = group;
+        this.redraw();
     }
 
     private redraw() {

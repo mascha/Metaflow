@@ -1,9 +1,11 @@
-import {Component} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {ViewGroup} from "../../../common/viewmodel";
+import {Diagram} from "../../../common/layer";
 import ModelService from "../../../services/models";
 
 /**
  * A project navigator/explorer.
+ * 
  * @author Martin Schade
  * @since 1.0.0
  */
@@ -19,7 +21,7 @@ export default class Explorer {
     private isDisabled = false;
     private levelName: string;
 
-    goUpwards() {
+    private goUpwards() {
         if (this.canGoUpwards()) {
             let parent = this.scope.parent;
             if (parent && !this.isLocked) {
@@ -38,7 +40,7 @@ export default class Explorer {
         this.contents = level? level.contents : [];
     }
 
-    constructor(private models : ModelService) {
-        models.getModel().then((model) => this.updateLevel(model));
+    constructor(@Inject('diagram') private diagram: Diagram) {
+        diagram.scope.subscribe(it => this.updateLevel(it));
     }
 }

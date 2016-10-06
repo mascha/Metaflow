@@ -16,22 +16,19 @@ export interface SelectionObserver<T> {
  * @since 1.0.0
  */
 export class Selection<T> {
-    private items = [];
+    readonly items = [];
     private obs = new Array<SelectionObserver<T>>();
 
-    getSelectedElements(): T[] {
+    public getSelectedElements(): T[] {
         return this.items;
     }
 
-    subscribe(observer: SelectionObserver<T>) {
-        if (!observer) return;
-        this.obs.push(observer);
+    public isEmpty(): boolean {
+        return (this.items && this.items.length > 0);
     }
 
-    setElements(items: T[]) {
-        this.items = items;
-        for(let i = 0, j = this.obs, l = j.length; i < l; i++) {
-            j[i].onSelectionUpdate(this)
-        }
+    public subscribe(observer: SelectionObserver<T>) {
+        if (!observer) return;
+        this.obs.push(observer);
     }
 }

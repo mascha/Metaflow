@@ -1,15 +1,11 @@
 <section class="inspector-categories">
-  <div><span></span><span class="rightEdge"></span></div>
-  <span #props class="inspector-category left" [class.active]="categoryIndex == 1"
-    (click)="onSelect(1)">Edit</span>
-  <span #styles class="inspector-category center" [class.active]="categoryIndex == 2"
-        (click)="onSelect(2)">Style</span>
-  <span #notes class="inspector-category right" [class.active]="categoryIndex == 3"
-        (click)="onSelect(3)">Notes</span>
+  <span #props class="inspector-category left" [class.active]="categoryIndex == 1" (click)="onSelect(1)">Edit</span>
+  <span #styles class="inspector-category center" [class.active]="categoryIndex == 2" (click)="onSelect(2)">Style</span>
+  <span #notes class="inspector-category right" [class.active]="categoryIndex == 3" (click)="onSelect(3)">Notes</span>
 </section>
 <section class="inspector-content">
   <div class="inspector-overlay" *ngIf="selection == null">
     <h3>{{overlayMessage}}</h3>
   </div>
-  <property-sheet *ngIf="categoryIndex == 1 && selection != null"></property-sheet>
+  <property-sheet *ngIf="categoryIndex == 1 && !selection.isEmpty()"></property-sheet>
 </section>
