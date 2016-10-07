@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, ViewChild, AfterViewInit} from '@angular/core';
 import {ViewGroup, ViewVertex} from '../../../../common/viewmodel';
 import {Camera, CameraObserver} from '../../../../common/camera';
 import {Layer, Diagram} from '../../../../common/layer';
@@ -14,7 +14,7 @@ import {Layer, Diagram} from '../../../../common/layer';
     template: require('./overview.html'),
     styles: [require('./overview.scss')]
 })
-export default class Overview implements Layer, CameraObserver {
+export default class Overview implements Layer, CameraObserver, AfterViewInit {
     @ViewChild('camera') private camCanvas: ElementRef;
     @ViewChild('nodes') private nodeCanvas: ElementRef;
     private nodes: CanvasRenderingContext2D;
@@ -40,20 +40,20 @@ export default class Overview implements Layer, CameraObserver {
         this.redrawCamera();
     }
 
-    private ngAfterViewInit() {
+    public ngAfterViewInit() {
         let canvases = [
             this.nodeCanvas,
             this.camCanvas
-        ]
+        ];
         
         canvases.forEach((it: any) => {
             it.width = 128; 
-            it.height
+            it.height = 128;
         });
         
         let brushes = canvases
             .map((it) => it.nativeElement as HTMLCanvasElement)
-            .map((it) => it.getContext('2d'))
+            .map((it) => it.getContext('2d'));
         this.nodes = brushes[0];
         this.cams = brushes[1];
     }
@@ -93,6 +93,7 @@ export default class Overview implements Layer, CameraObserver {
 
         brush.clearRect(-1, -1, 500, 500);
         brush.fillStyle = 'cornflowerblue';
+        brush.strokeStyle = 'royalblue';
         brush.globalAlpha = 0.4;
 
         const DIM = 128;
@@ -103,8 +104,8 @@ export default class Overview implements Layer, CameraObserver {
         let cW = this.camera.projWidth / mW * DIM;
         let cH = this.camera.projHeight / mH * DIM;
         brush.fillRect(cX, cY, cW, cH);
+        brush.strokeRect(cX, cY, cW, cH);
 
-        brush.fillStyle = 'cornflowerblue';
         brush.globalAlpha = 1;
         if (cX < 0) brush.fillRect(0, cY, 2, cH);
         if (cX + cW > DIM) brush.fillRect(DIM - 2, cY, 2, cH);

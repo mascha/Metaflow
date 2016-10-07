@@ -4,9 +4,9 @@ import {ViewVertex} from './viewmodel';
 const NAVIGATION_FACTOR = 1000;
 
 export const EASE_OUT = (f: number) => { return f * (2 - f); };
-export const EASE_IN_OUT = (f: number) => { return f * f * (3 - 2 * f); }
-export const EASE_IN = (f: number) => { return f * f; }
-export const EASE_NONE = (f: number) => { return f; }
+export const EASE_IN_OUT = (f: number) => { return f * f * (3 - 2 * f); };
+export const EASE_IN = (f: number) => { return f * f; };
+export const EASE_NONE = (f: number) => { return f; };
 
 /**
  * Animation helper class, which encapsulates
@@ -61,9 +61,7 @@ export class Animation {
         const end = start * factor;
         const wX = camera.centerX;
         const wY = camera.centerY;
-        return new Animation(f => {
-            camera.zoomToAbout(start + end * f, wX, wY);
-        }, duration || 300, EASE_IN_OUT)
+        return new Animation(f => camera.zoomToAbout(start + end * f, wX, wY), duration || 300, EASE_IN_OUT);
     }
 
     static throwCamera(camera: Camera, speed: number, angle: number, duration: number): Animation {

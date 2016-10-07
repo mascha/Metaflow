@@ -1,7 +1,7 @@
 import {Camera} from '../../common/camera';
 import {ViewGroup} from '../../common/viewmodel';
 import {Diagram, Scope} from '../../common/layer';
-import {BehaviorSubject, Observable, Subject} from "rxjs/Rx";
+import {Subject} from "rxjs/Rx";
 
 /**
  * Diagram scope implementation.
@@ -20,7 +20,7 @@ export default class ScopeImpl extends Subject<ViewGroup> implements Scope {
     private _current?: ViewGroup;
     readonly limits: ClientRect;
 
-    get current(): ViewGroup { return this._current };
+    get current(): ViewGroup { return this._current; };
 
     private adjustLimits(level: ViewGroup) {
         let adjustW = level.width * 0.9;
@@ -159,7 +159,7 @@ export default class ScopeImpl extends Subject<ViewGroup> implements Scope {
 
     constructor(private diagram: Diagram) {
         super();
-        this._limits = { left: 2000, right: 2000, top: -2000, bottom: 2000, width: 4000, height: 4000 }
+        this._limits = { left: 2000, right: 2000, top: -2000, bottom: 2000, width: 4000, height: 4000 };
         this._camera = diagram.camera;
         diagram.model.subscribe(it => {
             if (it && it.root) this.loadLevel(it.root);

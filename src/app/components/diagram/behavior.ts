@@ -15,48 +15,48 @@ export interface DiagramEvents {
     /**
      * Handle a target event.
      */
-    handleNavigation(vertex: ViewVertex)
+    handleNavigation(vertex: ViewVertex);
 
     /**
      * Handle a single/double click.
      */
-    handleClick(x: number, y: number, double: boolean)
+    handleClick(x: number, y: number, double: boolean);
 
     /**
      * 
      */
-    handleMouseDown(x: number, y: number)
+    handleMouseDown(x: number, y: number);
 
     /**
      * 
      */
-    handleMouseMove(x: number, y: number)
+    handleMouseMove(x: number, y: number);
 
     /**
      * 
      */
-    handleMouseUp(x: number, y: number)
+    handleMouseUp(x: number, y: number);
 
     /**
      * 
      */
-    handleZoom(x: number, y: number, f: number)
+    handleZoom(x: number, y: number, f: number);
 
     /**
      * Handle a key event.
      */
-    handleKey(event: KeyboardEvent)
+    handleKey(event: KeyboardEvent);
 
     /**
      * Force the immediate cancellation of the current's states acitivites.
      * Mainly used for recovery of the state machinery.
      */
-    handleAbort()
+    handleAbort();
 
     /**
      * Notify the state that is should terminate, but does not need to.
      */
-    handleStop()
+    handleStop();
 }
 
 /**
@@ -73,12 +73,12 @@ export interface DiagramState extends DiagramEvents {
      * Enter the state and execute it's initialization.
      * @param params Optional initialization parameters.
      */
-    enterState(params?: any)
+    enterState(params?: any);
  
     /**
      * Exit the current state and perform cleanup.
      */
-    leaveState()
+    leaveState();
 }
 
 /**
@@ -94,12 +94,12 @@ export interface StateMachine {
      * @param state The state to go to. An empty string will do nothing.
      * @param params
      */
-    goto(state: string, params?: any)
+    goto(state: string, params?: any);
 
     /**
      * Reenter the current state with different or no parameters.
      */
-    reenter(params?: any)
+    reenter(params?: any);
 
     /**
      * Return the current state.
@@ -237,7 +237,7 @@ abstract class BaseState implements DiagramState {
         top: -800,
         right: 2800,
         bottom: 2800
-    }
+    };
 
     protected becomeIdle() {
         this.behavior.goto('idle');
@@ -524,11 +524,17 @@ class Panning extends BaseState {
 
     private updateBanding(horizontal: boolean, lower: boolean, value: boolean) {
         if (horizontal) {
-            if (lower) { this.left = value; }
-            else { this.right = value; }
+            if (lower) { 
+                this.left = value; 
+            } else { 
+                this.right = value;
+            }
         } else {
-            if (lower) { this.top = value; }
-            else { this.bottom = value; }
+            if (lower) { 
+                this.top = value; 
+            } else { 
+                this.bottom = value; 
+            }
         }
     }
 

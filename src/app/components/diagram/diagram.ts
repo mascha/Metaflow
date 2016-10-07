@@ -1,18 +1,18 @@
 import { Component, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { ViewGroup, ViewVertex, Model } from "../../common/viewmodel";
+import { ViewVertex, Model } from "../../common/viewmodel";
 import { Layer, RenderLayer, Diagram, Scope } from '../../common/layer';
 import { Camera } from "../../common/camera";
 import { Selection} from '../../common/selection';
 import HTML from "../../common/utility";
 
 /* Controller */
-import { StateMachine, DiagramState, DiagramEvents } from "./behavior";
+import { DiagramState, DiagramEvents } from "./behavior";
 import DiagramBehavior from './behavior';
 import ScopeImpl from './reference';
 
 /* Components */
 import Loader from '../loader/loader';
-import { BorderLayer, GridLayer, EffectLayer } from './layers/layers';
+import { BorderLayer, GridLayer } from './layers/layers';
 import Overview from './layers/overview/overview';
 import Presenter from './layers/controls/presenter';
 import BreadCrumbs from './layers/breadcrumbs/breadcrumbs';
@@ -22,7 +22,7 @@ import ModelService from "../../services/models";
 import PlatformService from "../../services/platforms";
 
 /* reactives */
-import { BehaviorSubject, Observable, Subject } from "rxjs/Rx";
+import { Observable, Subject } from "rxjs/Rx";
 
 /**
  * The diagram view component.
@@ -51,7 +51,7 @@ export default class DiagramImpl implements Diagram {
     private _zoomPan = 1.99;
     private _velocity = .9;
     private _diagram: HTMLElement;
-    private _model= new BehaviorSubject<Model>(null);
+    private _model = new Subject<Model>();
     private _platform: RenderLayer;
 
     animatedZoom = false;
@@ -66,7 +66,6 @@ export default class DiagramImpl implements Diagram {
     get scope(): Scope {
         return this._scope;
     }
-
 
     get camera(): Camera {
         return this._camera;

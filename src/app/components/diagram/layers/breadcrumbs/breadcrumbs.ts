@@ -4,6 +4,8 @@ import {Style} from "../../../../common/styling";
 import {Diagram, Layer} from "../../../../common/layer";
 import ModelService from "../../../../services/models";
 
+const DEFAULT = "Empty";
+
 /**
  * A breadcrumbs bar.
  * 
@@ -17,24 +19,24 @@ import ModelService from "../../../../services/models";
 })
 export default class Breadcrumbs implements Layer {
     private segments: Array<String>;
-    private modelName = "Empty";
+    private model: Model;
     private placeholder: ViewGroup;
     private maximumSegments = 4;
+    private rootPath = "/users/{id}/{model-id}/@x@y@z~1.5434"
 
-    initialize(diagram: Diagram) {
-        diagram.model.subscribe(it => this.modelName = it.name);
+    public initialize(diagram: Diagram) {
         diagram.scope.subscribe(it => this.updateSegments(it));
     }
 
-    private updateName(model?: Model) {
-        if (model) this.modelName = model.name;
+    private truncate(s: string, n: number, useWordBoundary: boolean){
+        let isTooLong = (s.length > n),
+        s_ = isTooLong ? s.substr(0, n - 1) : s;
+        s_ = (useWordBoundary && isTooLong) ? s_.substr(0,s_.lastIndexOf(' ')) : s_;
+        return  isTooLong ? s_ + '...' : s_;
     }
 
     private updateSegments(level?: ViewGroup) {
-        if (!level) return;
-
         let segments = [];
-
         while (level) {
             segments.push(level);
             level = level.parent;

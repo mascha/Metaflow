@@ -5,8 +5,17 @@
  * @since 1.0.0
  */
 export interface SelectionObserver<T> {
-    onSelectionBegin(selection: Selection<T>)
-    onSelectionUpdate(selection: Selection<T>)
+
+    /**
+     * Called when selection starts. Should finish quickly.
+     */
+    onSelectionBegin(selection: Selection<T>);
+
+    /**
+     * Called when selection was updated, i.e when 
+     * elements are added to the selection array.
+     */
+    onSelectionUpdate(selection: Selection<T>);
 }
 
 /**
@@ -19,12 +28,8 @@ export class Selection<T> {
     readonly items = [];
     private obs = new Array<SelectionObserver<T>>();
 
-    public getSelectedElements(): T[] {
-        return this.items;
-    }
-
     public isEmpty(): boolean {
-        return (this.items && this.items.length > 0);
+        return (this.items.length > 0);
     }
 
     public subscribe(observer: SelectionObserver<T>) {
