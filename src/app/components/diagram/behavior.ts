@@ -308,14 +308,6 @@ class Idle extends BaseState {
 
     handleClick(x: number, y: number, double: boolean) {
         if (double) {
-            /*
-                TODO: Check if border or diagram
-                TODO: Check if something was double-clicked
-                TODO: If nothing, check for nearest items within radius
-                        if one -> zoom in
-                        if many -> show selection for zooming
-                        if none -> show click effect // navigateTo with current width // zoom in
-            */
             this.behavior.goto('animating', {
                 interpolator: Animation.navigateTo({
                     targetX: this.camera.castRayX(x),
@@ -326,9 +318,7 @@ class Idle extends BaseState {
                     camera: this.camera
                 })
             });
-        } else {
-            if (!this.diagram.scope.current) return;
-            
+        } else if (this.diagram.scope.current) {       
             this.behavior.goto('animating', {
                 interpolator: Animation.navigateToItem(
                     this.diagram.camera, 
@@ -336,12 +326,6 @@ class Idle extends BaseState {
                     this.diagram.navigationVelocity,
                     this.diagram.scope.current)
             });
-            /*
-                TODO: Check if something was selected
-                        if one -> show in explorer
-                        if many -> overlaps ? show selection within radius
-                TODO: Check if border or diagram
-            */
         }
     }
 
@@ -373,9 +357,6 @@ class Idle extends BaseState {
         }
     }
 
-    /**
-     * TODO change target width to level specific width scale.
-     */
     private getAppropriateScale(level?: ViewGroup): number {
         return 1000;
     }
@@ -392,7 +373,6 @@ class Idle extends BaseState {
  * @since 0.6.1
  */
 class Panning extends BaseState {
-
     protected anchorX = 0.0;
     protected anchorY = 0.0;
     protected pressedX = 0.0;
@@ -417,10 +397,10 @@ class Panning extends BaseState {
 
     leaveState() {
         this.kinetics.reset();
-        this.anchorX = 0.0;
-        this.anchorY = 0.0;
-        this.pressedX = 0.0;
-        this.pressedY = 0.0;
+        this.anchorX = 0;
+        this.anchorY = 0;
+        this.pressedX = 0;
+        this.pressedY = 0;
         this.resetViolations();
     }
 
@@ -509,8 +489,7 @@ class Panning extends BaseState {
     }
 
     private isBanding(): boolean {
-        let v = this;
-        return (this.diagram.rubberBanding && (v.left || v.right || v.bottom || v.top));
+        return (this.diagram.rubberBanding && (this.left || this.right || this.bottom || this.top));
     }
 
     private isKinetic(): boolean {

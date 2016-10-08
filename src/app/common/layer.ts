@@ -24,17 +24,9 @@ export interface Diagram {
  */
 export interface RenderLayer extends Layer {
 
-    cachedGroups: Array<ViewGroup>;
-
-    /**
-     * Sets the amount of quality to accept.
-     */
     setQuality(quality: Quality);
 
-    /**
-     * Retrieve the platform camera.
-     */
-    getCamera(): Camera;
+    readonly camera: Camera;
 }
 
 

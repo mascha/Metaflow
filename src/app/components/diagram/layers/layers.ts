@@ -24,7 +24,7 @@ export class GridLayer implements Layer {
     public initialize(diagram: Diagram) {
         let canvas = this.canvas.nativeElement;
         this.grid = new Grid(diagram, canvas);
-        diagram.camera.attachObserver(this.grid);
+        diagram.camera.subscribe(this.grid);
     }
 }
 
@@ -119,7 +119,7 @@ export class BorderLayer implements Layer {
     public initialize(diagram: Diagram) {
         let element = this.element.nativeElement;
         this.border = new Border(diagram.camera, element);
-        diagram.camera.attachObserver(this.border);
+        diagram.camera.subscribe(this.border);
         diagram.scope.subscribe(it => this.border.updateProxies(it));
     }
 }

@@ -104,7 +104,7 @@ export abstract class Camera {
     /**
      * Attach a observer to this camera.
      */
-    attachObserver(observer:CameraObserver) {
+    subscribe(observer:CameraObserver) {
         this.obs.push(observer);
     }
 
@@ -210,10 +210,7 @@ export abstract class Camera {
         this.camY = -posY;
 
         this.scaleWorldTo(zoom, last);
-        this.translateWorldTo(
-            -posX, 
-            -posY
-        );
+        this.translateWorldTo(-posX, -posY);
         
         this.updateCache();
         let obs = this.obs;

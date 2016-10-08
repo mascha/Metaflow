@@ -10,8 +10,7 @@ import ShapeRenderer from './render';
  * @since 1.0.0
  */
 export class PixiLayer implements RenderLayer, CameraObserver {
-
-    private camera: PixiCamera;
+    readonly camera: PixiCamera;
     private scene: PIXI.Container;
     private nodes: PIXI.Container;
     private world: PIXI.Container;
@@ -22,17 +21,12 @@ export class PixiLayer implements RenderLayer, CameraObserver {
     private mapper: ShapeRenderer;
     private quality: Quality;
     private frames: number;
-
-    cachedGroups: Array<ViewGroup>;
+    private cachedGroups: ViewGroup[];
 
     setQuality(quality: Quality) {
         if (quality <= 0 || quality > 1) return;
         this.quality = quality;
         this.frames = 1000 / (60 * quality);
-    }
-
-    getCamera(): Camera {
-        return this.camera;
     }
 
     hitTest(worldX: number, worldY: number): Array<ViewVertex> {
@@ -144,7 +138,7 @@ export class PixiLayer implements RenderLayer, CameraObserver {
     }
 
     public initialize(diagram: Diagram) {
-        diagram.camera.attachObserver(this);
+        diagram.camera.subscribe(this);
         diagram.scope.subscribe(it => this.update(it));
     }
 

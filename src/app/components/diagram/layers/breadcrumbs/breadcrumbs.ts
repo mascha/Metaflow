@@ -4,8 +4,6 @@ import {Style} from "../../../../common/styling";
 import {Diagram, Layer} from "../../../../common/layer";
 import ModelService from "../../../../services/models";
 
-const DEFAULT = "Empty";
-
 /**
  * A breadcrumbs bar.
  * 
@@ -37,6 +35,7 @@ export default class Breadcrumbs implements Layer {
 
     private updateSegments(level?: ViewGroup) {
         let segments = [];
+
         while (level) {
             segments.push(level);
             level = level.parent;

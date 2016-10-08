@@ -24,7 +24,7 @@ export default class Overview implements Layer, CameraObserver, AfterViewInit {
 
     public initialize(diagram: Diagram) {
         this.camera = diagram.camera;
-        diagram.camera.attachObserver(this);
+        diagram.camera.subscribe(this);
         diagram.scope.subscribe(it => this.updateGroup(it));
     }
     
