@@ -10,7 +10,7 @@ import ShapeRenderer from './render';
  * @since 1.0.0
  */
 export class PixiLayer implements RenderLayer, CameraObserver {
-    readonly camera: PixiCamera;
+    readonly camera: Camera;
     private scene: PIXI.Container;
     private nodes: PIXI.Container;
     private world: PIXI.Container;
@@ -22,6 +22,10 @@ export class PixiLayer implements RenderLayer, CameraObserver {
     private quality: Quality;
     private frames: number;
     private cachedGroups: ViewGroup[];
+
+    getCamera(): Camera {
+        return this.camera;
+    }
 
     setQuality(quality: Quality) {
         if (quality <= 0 || quality > 1) return;
@@ -170,7 +174,7 @@ export class PixiLayer implements RenderLayer, CameraObserver {
         this.camera = new PixiCamera(this.world, this.overlay);
         this.mapper = new ShapeRenderer();
 
-        this.renderer = new PIXI.CanvasRenderer(500, 500, {
+        this.renderer = new PIXI.WebGLRenderer(500, 500, {
             antialias: true,
             transparent: true,
             resolution: 1.0,
@@ -210,15 +214,15 @@ export class PixiCamera extends Camera {
         /**
          * animating + zoom out = no scale update!
          */
-        if (Date.now() - this.lastCall > 1000 / 60) {
+        // if (Date.now() - this.lastCall > 1000 / 60) {
             let lbs = this.overlay.children;
             let s = .5 / zoom;
             for (let i = 0, len = lbs.length; i < len; i++) {
                 let label = lbs[i] as PIXI.Text;
                 label.scale.set(s, s);
             }
-            this.lastCall = Date.now();
-        }
+          //  this.lastCall = Date.now();
+        //}
     }
 
     constructor(private world: PIXI.Container, 

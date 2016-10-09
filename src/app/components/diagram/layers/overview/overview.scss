@@ -1,7 +1,5 @@
 @import "../../../../../style/variables";
-
-$overview-fill:  #efefef;  // rgba(#efefef, 0.8) !default;
-$diagram-control-shadow: 0 2px 4px rgba(0,0,0,0.2),0 -1px 0px rgba(0,0,0,0.02) !default;
+@import "../../../../../style/theme";
 
 :host {
   position: absolute;
@@ -11,8 +9,8 @@ $diagram-control-shadow: 0 2px 4px rgba(0,0,0,0.2),0 -1px 0px rgba(0,0,0,0.02) !
   height: 128px;
   overflow: hidden;
   border-radius: 4px;
-  background-color: $overview-fill;
-  box-shadow: $diagram-control-shadow;
+  background-color: $presenter-body;
+  box-shadow: $presenter-shadow;
 }
 
 .layer {

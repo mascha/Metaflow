@@ -2,10 +2,6 @@
 @import "../../../../../style/theme";
 @import "../../../../../style/variables";
 
-$presenter-body: #efefef;
-$presenter-shadow: 0 2px 4px rgba(0,0,0,0.2),0 -1px 0px rgba(0,0,0,0.02);
-$presenter-radius: 2px;
-
 :host {
   @include fill();
 }
@@ -48,13 +44,14 @@ $presenter-radius: 2px;
   font-size: 13px;
   white-space: nowrap;
   z-index: 11;
-  // box-shadow: $presenter-shadow;
+  box-shadow: $presenter-shadow;
   padding: 0 5px;
 
   &.vertical {
     padding: 2px 2px;
   }
 
+  opacity: 0; 
   &.active {
     opacity: 1;
   }
