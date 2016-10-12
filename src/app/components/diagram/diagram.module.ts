@@ -6,6 +6,8 @@ import Overview from "./layers/overview/overview";
 import Presenter from "./layers/controls/presenter";
 import Breadcrumbs from './layers/breadcrumbs/breadcrumbs';
 import DiagramImpl from './diagram';
+import ScopeImpl from './reference';
+
 
 /**
  * Diagram module.

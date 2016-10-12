@@ -184,7 +184,7 @@ export default class DiagramImpl implements Diagram {
             this._behavior = new DiagramBehavior(this);
             this._layers.forEach(it => it.initialize(this));
             this._models.getModel().then(model => {
-                this._model.next(model)
+                this._model.next(model);
                 setTimeout(() => this.onResize());
             });
         } else {

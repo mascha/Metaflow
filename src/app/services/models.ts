@@ -35,7 +35,7 @@ const NAMES = [
  */
 @Injectable() export default class ModelService {
     
-    private model: ViewGroup;
+    private model: Model;
     private empty: ViewGroup;
 
     private variableStyle: Style;
@@ -44,8 +44,8 @@ const NAMES = [
     private moduleStyle: GroupStyle;
 
     getModel(): Promise<Model> {
-        this.model = this.model || this.createDebugModel();
-        return Promise.resolve(new Model("Debug", this.model));
+        this.model = this.model || new Model("Debug Model", this.createDebugModel());
+        return new Promise(promise => setTimeout(promise, 1500)).then(() => this.model)
     }
 
     private createStock() {
