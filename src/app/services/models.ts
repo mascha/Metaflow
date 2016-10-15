@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {ViewGroup, ViewItem, Model} from "../common/viewmodel";
-import {Style, GroupStyle} from '../common/styling';
+import {Style, GroupStyle, Label} from '../common/styling';
 import {Shape, ShapeType} from '../common/shapes';
 import ShapeRenderer from '../platform/render';
 
@@ -143,14 +143,20 @@ const NAMES = [
         this.moduleStyle.shape = new Shape(ShapeType.ROUNDED);
         this.moduleStyle.shape.a = 6;
         this.moduleStyle.fill = 'darkgrey';
+        this.moduleStyle.labels = new Label();
+        this.moduleStyle.labels.color = 'cornflowerblue';
         
         this.variableStyle = new Style();
         this.variableStyle.fill = 'mediumseagreen';
         this.variableStyle.shape = new Shape(ShapeType.CIRCLE);
+        this.variableStyle.labels = new Label();
+        this.variableStyle.labels.color = 'mediumseagreen';
 
         this.stockStyle = new Style();
-        this.stockStyle.fill = 'cornflowerblue';
+        this.stockStyle.fill = 'salmon';
         this.stockStyle.shape = new Shape(ShapeType.RECTANGLE);
+        this.stockStyle.labels = new Label();
+        this.stockStyle.labels.color = 'salmon';
 
         this.rateStyle = new Style();
         this.rateStyle.fill = 'goldenrod';

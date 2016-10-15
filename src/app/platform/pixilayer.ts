@@ -52,35 +52,9 @@ export class PixiLayer implements RenderLayer, CameraObserver {
         this.cachedGroups = [];
         let contents = level.contents;
         let length = contents.length;
-        
-        let leafStyle : PIXI.TextStyle = { 
-            fill: 0x3d3834,
-            stroke: 'white',
-            strokeThickness: 8,
-            lineJoin: 'round'
-        }
-
-        let groupStyle : PIXI.TextStyle = { 
-            fill: 0x3367d6,
-            stroke: 'white',
-            strokeThickness: 8,
-            lineJoin: 'round'
-        }
-
         for (let i = 0; i < length; i++) {
             let item = contents[i];
-            let itemLabel: PIXI.Text; 
-
             if (!item.isLeaf()) {
-                itemLabel = new PIXI.Text(item.name, groupStyle, 0.6);
-                itemLabel.pivot.set(
-                    itemLabel.text.length * 6, 12
-                );
-                itemLabel.position.set(
-                    (item.left + item.width / 2 - itemLabel.text.length * 3) * level.scale,
-                    (item.top + item.height / 2 - 15) * level.scale
-                );
-
                 let itm = item as ViewGroup;
                 this.cachedGroups.push(itm);
                 if (itm.contents && itm.contents.length > 0) {
@@ -97,17 +71,12 @@ export class PixiLayer implements RenderLayer, CameraObserver {
                 } else {
                     mapper.renderGroup(itm, false, true);
                 }
-            } else if (item.isLeaf()) {
-                itemLabel = new PIXI.Text(item.name, leafStyle, 0.6);
-                itemLabel.pivot.set(14, 6);
-                itemLabel.position.set(
-                    (item.left + item.width * 1.1) * level.scale,
-                    (item.top + item.height / 2) * level.scale
-                );
+            } else {
                 mapper.renderItem(item as ViewItem, leafs);
             }
 
-            this.labels.addChild(itemLabel);
+            mapper.renderLabel(item);
+            if (item.labels) this.labels.addChild(item.labels);
             mapper.attach(item, level);
         }
         this.attachNode(level);

@@ -1,5 +1,6 @@
 import {Style, Label} from '../common/styling';
 import {Shape, ShapeType} from '../common/shapes';
+import {Locality, HorizontalAlignment, VerticalAlignment} from '../common/layout';
 import {ViewVertex, ViewGroup, ViewItem} from '../common/viewmodel';
 
 /**
@@ -23,30 +24,89 @@ export default class ShapeRenderer {
   public renderLabel(item: ViewVertex): any {
     let style = item.style;
     if (!style) return; // no style
-    let labels: any = style.labels as Label[];
+    let labels: any = style.labels;
     if (!labels) return; // no label
+
+    let scale = item.parent ? item.parent.scale : 1;
 
     /* check for multiple labels */
     if (labels.length) {
+      labels = labels as Label[];
 
     } else { // single label
       let label = labels as Label;
       let text = item.name;
 
-      let pixi = null;
-      if (!label.cache) {
-        pixi = {
+      label.cache = label.cache || {
           fill: label.color || 0x3d3834,
           stroke: label.backdrop || 'white',
           strokeThickness: 8,
           lineJoin: 'round'
-        };
+      };
 
-        label.cache = pixi;
+      let mapped = new PIXI.Text(text, label.cache, 0.6);
+      item.labels = mapped;
+
+      let x = 0, y = 0, pX = 0, pY = 0;
+
+      switch (label.placement) {
+        case Locality.INSIDE:  
+          switch (label.vertical) {
+            case VerticalAlignment.TOP: 
+              pY = 0.0;
+              y = item.top; 
+            break;
+
+            case VerticalAlignment.MIDDLE: 
+              pY = 0.5; 
+              y = item.top + item.height / 2; 
+            break; 
+
+            case VerticalAlignment.BOTTOM: 
+              pY = 1.0; 
+              y = item.top + item.height; 
+            break;
+            
+            default: 
+              console.log(`Encountered unknown vertical alignment option (${label.vertical})`); 
+            break;
+          }
+
+          switch (label.horizontal) {
+            case HorizontalAlignment.LEFT: 
+              x = item.left; 
+            break;
+            
+            case HorizontalAlignment.CENTER: 
+              pX = 0.5; 
+              x = item.left + item.width / 2 - mapped.width / 2; 
+            break;
+            
+            case HorizontalAlignment.RIGHT: 
+              pX = 1.0;
+              x = item.left + item.width - mapped.width; 
+            break;
+
+            default: 
+              console.log(`Encountered unknown vertical alignment option (${label.vertical})`); 
+            break;
+          }
+
+          break;
+      
+        case Locality.BORDER:
+          break;
+
+        case Locality.OUTSIDE:
+          break;
+
+        default:
+            console.log(`Encountered unknown placement option in label (${label.placement})`);
+          break;
       }
 
-      let mapped = new PIXI.Text(text, pixi, 0.6);
-      item.labels = mapped;
+      mapped.position.set(x * scale, y * scale);
+      mapped.pivot.set(pX * scale, pY * scale);
     }
   }
 
@@ -220,7 +280,7 @@ export default class ShapeRenderer {
       shape.beginFill(0xeeeeee);
       shape.drawRoundedRect(0, 0, group.width, group.height, 12);
       shape.endFill();
-    } else {
+    } else if (!topLevel) {
       shape.lineStyle(16, 0xeeeeee);
       shape.drawRoundedRect(0, 0, group.width, group.height, 12);
     }
@@ -269,6 +329,8 @@ export default class ShapeRenderer {
 const Colors = {
   'cornflowerblue': 0x6495ED,
   'mediumseagreen': 0x3CB371,
+  'salmon': 0xFFA07A,
+  'red': 0xFF0000,
   'goldenrod': 0xDAA520,
   'darkgrey': 0xA9A9A9,
   'darkgray': 0xA9A9A9,

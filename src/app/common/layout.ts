@@ -2,6 +2,9 @@ import {ViewGroup, ViewVertex} from './viewmodel';
 
 /**
  * General placement options.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
  */
 export const enum Locality {
 
@@ -15,6 +18,11 @@ export const enum Locality {
      * Element may only be place on the border.
      */
     BORDER,
+
+    /**
+     * 
+     */
+    OUTSIDE
 }
 
 /**
@@ -28,7 +36,7 @@ export const enum VerticalAlignment {
  * Possible horizontal positions.
  */
 export const enum HorizontalAlignment {
-    LEFT, MIDDLE, RIGHT
+    LEFT, CENTER, RIGHT
 }
 
 /**
@@ -53,6 +61,19 @@ export const enum Freedom {
      * Element remains in place.
      */
     FIXED,
+}
+
+/**
+ * Describes all possible text orientations
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+export const enum TextAlignment {
+    FLOAT_LEFT,
+    FLOAT_RIGHT,
+    CENTER,
+    JUSTIFIED
 }
 
 /**

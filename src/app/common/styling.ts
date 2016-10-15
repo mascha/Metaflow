@@ -116,7 +116,7 @@ export class Label {
     /**
      * Text color.
      */
-    color: number;
+    color: number | string;
     
     /**
      * Color of the text backdrop. Useful for
@@ -133,17 +133,17 @@ export class Label {
     /**
      * Where this label is going to be placed.
      */
-    placement: Locality;
+    placement: Locality = Locality.INSIDE;
 
     /**
      * Vertical placement.
      */
-    vertical: VerticalAlignment;
+    vertical: VerticalAlignment = VerticalAlignment.MIDDLE;
 
     /**
      * Horizontal placement.
      */
-    horizontal: HorizontalAlignment;
+    horizontal: HorizontalAlignment = HorizontalAlignment.CENTER;
 
     /**
      * Text transform choice. Default is NONE.
