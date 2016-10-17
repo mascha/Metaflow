@@ -25,6 +25,18 @@ export default class Presenter implements Layer {
         });
     }
 
+    private onZoomIn(event: MouseEvent) {
+        
+    }
+
+    private onZoomOut(event: MouseEvent) {
+
+    }
+
+    private onFitIn(event: MouseEvent) {
+
+    }
+
     constructor(config: ConfigService) {
         this.workspace = config.getWorkspaceConfig();
     }

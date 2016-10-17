@@ -37,9 +37,9 @@ import { Observable, Subject } from "rxjs/Rx";
 })
 export default class DiagramImpl implements Diagram {
     @ViewChild('NodeLayer') private _nodeLayer: ElementRef;
-    @ViewChild(Overview) private _breadcrumbs: BreadCrumbs;
+    @ViewChild(BreadCrumbs) private _breadcrumbs: BreadCrumbs;
     @ViewChild(Overview) private _overview: Overview;
-    @ViewChild(Overview) private _controls: Presenter;
+    @ViewChild(Presenter) private _controls: Presenter;
     @ViewChild(BorderLayer) private _border: BorderLayer;
     @ViewChild(GridLayer) private _grid: GridLayer;
 

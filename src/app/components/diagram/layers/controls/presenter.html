@@ -1,7 +1,7 @@
 <section class="vertical presenter" [class.active]="showControls">
-  <div class="vertical flat presenter-plus" (click)="onZoomIn()"></div>
-  <div class="vertical flat presenter-minus" (click)="onZoomOut()"></div>
-  <div class="vertical flat presenter-fit" (click)="onFitView()"></div>
+  <div class="vertical flat presenter-plus" (click)="onZoomIn($event)"></div>
+  <div class="vertical flat presenter-minus" (click)="onZoomOut($event)"></div>
+  <div class="vertical flat presenter-fit" (click)="onFitView($event)"></div>
 </section>
 <section class="omnibox" *ngIf="showControls">
   <div class="home"> </div>
