@@ -29,11 +29,10 @@ export default class ShapeRenderer {
 
     let scale = item.parent ? item.parent.scale : 1;
 
-    /* check for multiple labels */
     if (labels.length) {
       labels = labels as Label[];
 
-    } else { // single label
+    } else {
       let label = labels as Label;
       let text = item.name;
 
@@ -53,13 +52,12 @@ export default class ShapeRenderer {
         case Locality.INSIDE:  
           switch (label.vertical) {
             case VerticalAlignment.TOP: 
-              pY = 0.0;
               y = item.top; 
             break;
 
             case VerticalAlignment.MIDDLE: 
               pY = 0.5; 
-              y = item.top + item.height / 2; 
+              y = item.top + (item.height - mapped.height) / 2; 
             break; 
 
             case VerticalAlignment.BOTTOM: 
@@ -67,29 +65,26 @@ export default class ShapeRenderer {
               y = item.top + item.height; 
             break;
             
-            default: 
-              console.log(`Encountered unknown vertical alignment option (${label.vertical})`); 
-            break;
+            default: break;
           }
 
           switch (label.horizontal) {
             case HorizontalAlignment.LEFT: 
               x = item.left; 
-            break;
+              break;
             
             case HorizontalAlignment.CENTER: 
               pX = 0.5; 
-              x = item.left + item.width / 2 - mapped.width / 2; 
-            break;
+              x = item.left + (item.width - mapped.width) / 2; 
+              break;
             
             case HorizontalAlignment.RIGHT: 
               pX = 1.0;
-              x = item.left + item.width - mapped.width; 
-            break;
+              x = item.left + (item.width - mapped.width); 
+              break;
 
-            default: 
-              console.log(`Encountered unknown vertical alignment option (${label.vertical})`); 
-            break;
+            default:
+              break;
           }
 
           break;
@@ -100,8 +95,7 @@ export default class ShapeRenderer {
         case Locality.OUTSIDE:
           break;
 
-        default:
-            console.log(`Encountered unknown placement option in label (${label.placement})`);
+        default: 
           break;
       }
 
@@ -118,7 +112,7 @@ export default class ShapeRenderer {
     if (stroke) ctx.lineColor = stroke;
 
     const l = item.left, t = item.top,
-      w = item.width, h = item.height;
+          w = item.width, h = item.height;
 
     switch (style.shape.type) {
       case ShapeType.SQUARE, ShapeType.RECTANGLE:
