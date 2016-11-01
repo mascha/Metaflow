@@ -58,5 +58,5 @@ $palette-icons: #272C33 !default;
 $presenter-icon-hover: white !default;
 $presenter-icon: #cecece !default;
 $presenter-body: #efefef !default;
-$presenter-shadow: 0 2px 4px rgba(0,0,0,0.2),0 -1px 0px rgba(0,0,0,0.02);
+$presenter-shadow: none !default; // 0 2px 4px rgba(0,0,0,0.2),0 -1px 0px rgba(0,0,0,0.02);
 $presenter-radius: none !default;
