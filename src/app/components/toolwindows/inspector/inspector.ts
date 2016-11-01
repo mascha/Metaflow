@@ -18,24 +18,17 @@ import {Diagram} from "../../../common/layer";
 export default class Inspector implements SelectionObserver<ViewVertex> {
     private categoryIndex = 1;
     private overlayMessage = 'No selection';
+    private selection = false;
 
     public onSelectionBegin(selection: Selection<ViewVertex>) {
         this.overlayMessage = "Beginning selection";
     }
 
     public onSelectionUpdate(selection: Selection<ViewVertex>) {
-        this.overlayMessage = selection.isEmpty() ? "Nothing selected" : `Selected ${selection.items.length} items`;
+        this.overlayMessage = selection.empty ? "Nothing selected" : `Selected ${selection.items.length} items`;
     }
 
     private onSelect(index: number) {
-        if (index < 1 || index > 3) {
-            return;
-        } else {
-            this.categoryIndex = index;
-        }
-    }
-
-    constructor(@Inject('diagram') diagram: Diagram) {
-        diagram.selection.subscribe(this);
+        this.categoryIndex = (index < 1) ? 1 : (index > 3) ? 3 : index;
     }
 }

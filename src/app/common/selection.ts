@@ -28,8 +28,8 @@ export class Selection<T> {
     readonly items = [];
     private obs = new Array<SelectionObserver<T>>();
 
-    public isEmpty(): boolean {
-        return (this.items.length > 0);
+    get empty(): boolean {
+        return (this.items && this.items.length > 0)
     }
 
     public subscribe(observer: SelectionObserver<T>) {

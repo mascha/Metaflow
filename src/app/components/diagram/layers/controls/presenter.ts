@@ -1,6 +1,4 @@
 import {Component, EventEmitter, Output} from '@angular/core';
-import {WorkspaceConfig} from "../../../../services/configs";
-import ConfigService from "../../../../services/configs";
 import {Layer, Diagram} from "../../../../common/layer";
 import {ViewGroup} from "../../../../common/viewmodel";
 import {Camera} from "../../../../common/camera";
@@ -17,7 +15,6 @@ import {Camera} from "../../../../common/camera";
 })
 export default class Presenter implements Layer {
     private showControls = true;
-    private workspace : WorkspaceConfig;
     
     initialize(diagram: Diagram) {
         diagram.model.subscribe(it => {
@@ -35,9 +32,5 @@ export default class Presenter implements Layer {
 
     private onFitIn(event: MouseEvent) {
 
-    }
-
-    constructor(config: ConfigService) {
-        this.workspace = config.getWorkspaceConfig();
     }
 }

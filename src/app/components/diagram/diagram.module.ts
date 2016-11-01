@@ -6,7 +6,6 @@ import Overview from "./layers/overview/overview";
 import Presenter from "./layers/controls/presenter";
 import Breadcrumbs from './layers/breadcrumbs/breadcrumbs';
 import DiagramImpl from './diagram';
-import ScopeImpl from './reference';
 
 
 /**
@@ -16,8 +15,13 @@ import ScopeImpl from './reference';
  * @since 1.0.0
  */
 @NgModule({
-    imports: [ CommonModule, LoaderModule],
-    exports: [ DiagramImpl ],
+    imports: [ 
+        CommonModule, 
+        LoaderModule
+    ],
+    exports: [ 
+        DiagramImpl
+    ],
     declarations: [
         Breadcrumbs, 
         Presenter, 

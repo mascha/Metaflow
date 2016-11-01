@@ -20,10 +20,9 @@ export default class Breadcrumbs implements Layer {
     private model: Model;
     private placeholder: ViewGroup;
     private maximumSegments = 4;
-    private rootPath = "/users/${id}/${model-id}/@x@y@z~1.5434"
+    private rootPath = "/users/${id}/${model-id}/@x@y@z1.5434"
 
     public initialize(diagram: Diagram) {
-        console.log('initialize breadcrumbs');
         diagram.scope.subscribe(it => this.updateSegments(it));
     }
 

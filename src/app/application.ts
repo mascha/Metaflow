@@ -1,6 +1,4 @@
-import {Component} from '@angular/core';
-import ConfigService from "./services/configs";
-import {WorkspaceConfig} from "./services/configs";
+import { Component } from '@angular/core';
 
 require('../style/globals.scss');
 
@@ -17,13 +15,9 @@ require('../style/globals.scss');
 })
 export default class Application {
 
- private workspace: WorkspaceConfig;
+  private fullscreen = false;
 
- ngAfterViewInit() {
-      document.title = this.config.getName();
- }
-  
- constructor(private config: ConfigService) {
-   this.workspace = config.getWorkspaceConfig();
+  ngAfterViewInit() {
+    document.title = "Metalogic";
   }
 }

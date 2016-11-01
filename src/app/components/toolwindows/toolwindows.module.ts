@@ -13,7 +13,9 @@ import PropertySheet from './inspector/propertysheet/propertysheet';
  * @since 1.0.0
  */
 @NgModule({
-    imports: [CommonModule],
+    imports: [
+        CommonModule
+    ],
     exports: [
         Inspector,
         Palette,

@@ -1,4 +1,6 @@
-import {Component, ViewChild} from "@angular/core";
+import {Component, ViewChild, Inject} from "@angular/core";
+import {Diagram} from '../../common/layer';
+
 
 /**
  * Workspace component.
@@ -12,4 +14,6 @@ import {Component, ViewChild} from "@angular/core";
 })
 export default class Workspace {
     private slimLayout = true;
+
+    @Inject('diagram') diagram: Diagram;
 }

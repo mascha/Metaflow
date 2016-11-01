@@ -24,8 +24,7 @@ import Workspace from "./workspace";
         DiagramModule
     ],
     exports: [
-        Workspace, 
-        Navigation
+        Workspace
     ],
     declarations: [
         SideBar, 
@@ -33,8 +32,10 @@ import Workspace from "./workspace";
         Workspace,
         DoubleSplit,
         TripleSplit,
-        Navigation
+        Navigation,
+        Workspace
     ],
-    providers: [],
+    providers: [
+    ]
 })
 export class WorkspaceModule { }

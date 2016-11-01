@@ -107,20 +107,6 @@ export default class DiagramImpl implements Diagram {
         /* pass event through all layers until handled */
     }
 
-    @HostListener('dblclick', ['$event'])
-    private onDoubleClick(event: MouseEvent) {
-        let off = HTML.getOffset(this._diagram, event);
-        this._behavior.handleClick(off.x, off.y, true);
-        return false;
-    }
-
-    @HostListener('click', ['$event'])
-    private onClick(event: MouseEvent) {
-        let off = HTML.getOffset(this._diagram, event);
-        this._behavior.handleClick(off.x, off.y, false);
-        return false;
-    }
-
     @HostListener('keyup', ['$event'])
     private onKeyUp(event: KeyboardEvent) {
         this._behavior.handleKey(event);

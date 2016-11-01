@@ -40,7 +40,7 @@ export default class Explorer {
         this.contents = level? level.contents : [];
     }
 
-    constructor(@Inject('diagram') private diagram: Diagram) {
-        diagram.scope.subscribe(it => this.updateLevel(it));
+    constructor() {
+         
     }
 }

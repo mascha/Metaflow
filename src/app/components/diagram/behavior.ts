@@ -67,7 +67,7 @@ export interface DiagramEvents {
  */
 export interface DiagramState extends DiagramEvents {
 
-    name: string;
+    readonly name: string;
 
     /**
      * Enter the state and execute it's initialization.
@@ -191,13 +191,7 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
             this.last = this.current;
             this.current = newState;
             newState.enterState(params);
-
-            if (this.debug) {
-                console.log('diagram state: ' + state);
-            }
-        } else if (this.debug) {
-            console.log(`diagram state '${state}' not found`);
-        }
+        } 
     }
 
     reenter(params?: any) {
@@ -212,12 +206,10 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
             new Panning('panning', this, diagram),
             new Animating('animating', this, diagram)
         ];
-        this.states.forEach(it => {
-           this.lookup[it.name] = it;
-        });
+        this.states.forEach(it => this.lookup[it.name] = it);
 
         /* Initial state */
-        this.goto('idle', null);
+        this.goto('idle');
         this.lastState = this.lookup['idle'];
     }
 }

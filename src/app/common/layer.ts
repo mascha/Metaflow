@@ -23,9 +23,7 @@ export interface Diagram {
  * @since 1.0.0
  */
 export interface RenderLayer extends Layer {
-
     setQuality(quality: Quality);
-
     readonly camera: Camera;
 }
 

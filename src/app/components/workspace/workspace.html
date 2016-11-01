@@ -1,17 +1,18 @@
 <triple-split *ngIf="slimLayout">
-    <sidebar left title="Project" isPrimary="true" (visibility)="togglePrimary($event)">
+    <sidebar left title="Project" isPrimary="true">
       <explorer></explorer>
     </sidebar>
     <double-split center horizontal="true">
       <diagram left></diagram>
-      <sidebar right title="Simulation" (visibility)="toggleTernary($event)">
+      <sidebar right title="Simulation">
         <dataview></dataview>
       </sidebar>
     </double-split>
-    <sidebar right title="Inspector" isPrimary="false" (visibility)="toggleSecondary($event)">
+    <sidebar right title="Inspector" isPrimary="false">
       <inspector></inspector>
     </sidebar>
 </triple-split>
+<!--
 <double-split *ngIf="slimLayout" horizontal="true">
   <triple-split left>
     <sidebar left title="Project" isPrimary="true" (visibility)="togglePrimary($event)">
@@ -25,4 +26,4 @@
   <sidebar right title="Simulation" (visibility)="toggleTernary($event)">
     <dataview></dataview>
   </sidebar>
-</double-split>
+</double-split> -->
