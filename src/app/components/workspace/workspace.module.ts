@@ -11,6 +11,8 @@ import MenuBar from "./menubar/menubar";
 import Navigation from "./navigation/navigation";
 import Workspace from "./workspace";
 
+import {Dialog} from '../dialog/dialog';
+
 /**
  * Workspace module.
  * 
@@ -27,6 +29,7 @@ import Workspace from "./workspace";
         Workspace
     ],
     declarations: [
+        Dialog,
         SideBar, 
         MenuBar, 
         Workspace,
