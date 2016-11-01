@@ -28,7 +28,7 @@ export class PixiLayer implements RenderLayer, CameraObserver {
     }
 
     setQuality(quality: Quality) {
-        if (quality <= 0 || quality > 1) return;
+        if (quality < 0 || quality > 1) return;
         this.quality = quality;
         this.frames = 1000 / (60 * quality);
     }
@@ -124,7 +124,13 @@ export class PixiLayer implements RenderLayer, CameraObserver {
 
         /* overlays */
         // this.overlay = new PIXI.Container();
-        this.labels = new PIXI.Container();
+        this.labels = new PIXI.ParticleContainer(2000, {
+            scale: true,
+            position: true,
+            rotation: false,
+            uvs: false,
+            alpha: false,
+        });
         this.overlay = this.labels;
 
         /* worlds */

@@ -119,16 +119,16 @@ export class Label {
     color: number | string;
     
     /**
-     * Color of the text backdrop. Useful for
+     * Color of the text halo. Useful for
      * making labels stand out on maps.
      */
-    backdrop: number;
+    haloColor: number = 0xffffff;
 
     /**
      * Wether this label should be displayed
-     * with a higher   
+     * with a higher font weight. 
      */
-    bold: boolean;
+    bold: boolean = false;
 
     /**
      * Where this label is going to be placed.
@@ -148,12 +148,12 @@ export class Label {
     /**
      * Text transform choice. Default is NONE.
      */
-    transform: TextTransform;
+    transform: TextTransform = TextTransform.NONE;
 
     /**
      * Text alignment.
      */
-    alignment: TextAlignment;
+    alignment: TextAlignment = TextAlignment.CENTER;
 
     /**
      * The cached platform type.

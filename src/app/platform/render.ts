@@ -38,8 +38,8 @@ export default class ShapeRenderer {
 
       label.cache = label.cache || {
           fill: label.color || 0x3d3834,
-          stroke: label.backdrop || 'white',
-          strokeThickness: 8,
+          stroke: label.haloColor || 'white',
+          strokeThickness: 4,
           lineJoin: 'round'
       };
 
@@ -49,19 +49,22 @@ export default class ShapeRenderer {
       let x = 0, y = 0, pX = 0, pY = 0;
 
       switch (label.placement) {
+
+        /* INSIDE */
         case Locality.INSIDE:  
           switch (label.vertical) {
             case VerticalAlignment.TOP: 
+              pY = 0.1;
               y = item.top; 
             break;
 
             case VerticalAlignment.MIDDLE: 
-              pY = 0.5; 
-              y = item.top + (item.height - mapped.height) / 2; 
+              pY = 0.5;
+              y = item.top + item.height / 2; 
             break; 
 
             case VerticalAlignment.BOTTOM: 
-              pY = 1.0; 
+              pY = 0.9;
               y = item.top + item.height; 
             break;
             
@@ -70,17 +73,18 @@ export default class ShapeRenderer {
 
           switch (label.horizontal) {
             case HorizontalAlignment.LEFT: 
+              pX = 0.0;
               x = item.left; 
               break;
             
             case HorizontalAlignment.CENTER: 
-              pX = 0.5; 
-              x = item.left + (item.width - mapped.width) / 2; 
+              pX = 0.5;
+              x = item.left + item.width / 2; 
               break;
             
             case HorizontalAlignment.RIGHT: 
               pX = 1.0;
-              x = item.left + (item.width - mapped.width); 
+              x = item.left + item.width; 
               break;
 
             default:
@@ -89,10 +93,52 @@ export default class ShapeRenderer {
 
           break;
       
+        /* BORDER */
         case Locality.BORDER:
+        
           break;
 
+        /* OUTSIDE */
         case Locality.OUTSIDE:
+          switch (label.vertical) {
+            case VerticalAlignment.TOP: 
+              pY = 1.1;
+              y = item.top; 
+            break;
+
+            case VerticalAlignment.MIDDLE: 
+              pY = 0.5;
+              y = item.top + item.height / 2; 
+            break; 
+
+            case VerticalAlignment.BOTTOM: 
+              pY = -0.1;
+              y = item.top + item.height; 
+            break;
+            
+            default: 
+            break;
+          }
+
+          switch (label.horizontal) {
+            case HorizontalAlignment.LEFT: 
+              pX = 1.1;
+              x = item.left; 
+              break;
+            
+            case HorizontalAlignment.CENTER: 
+              pX = 0.5;
+              x = item.left + item.width / 2; 
+              break;
+            
+            case HorizontalAlignment.RIGHT: 
+              pX = -0.1;
+              x = item.left + item.width; 
+              break;
+
+            default:
+              break;
+          }
           break;
 
         default: 
@@ -100,7 +146,7 @@ export default class ShapeRenderer {
       }
 
       mapped.position.set(x * scale, y * scale);
-      mapped.pivot.set(pX * scale, pY * scale);
+      mapped.anchor.set(pX, pY);
     }
   }
 
@@ -252,7 +298,7 @@ export default class ShapeRenderer {
   public createDefaultLabelStyle(): PIXI.TextStyle {
     return {
       stroke: 'white',
-      strokeThickness: 8,
+      strokeThickness: 2,
       lineJoin: 'round'
     }
   }

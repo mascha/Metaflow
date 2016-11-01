@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {ViewGroup, ViewItem, Model} from "../common/viewmodel";
 import {Style, GroupStyle, Label} from '../common/styling';
 import {Shape, ShapeType} from '../common/shapes';
+import {VerticalAlignment, HorizontalAlignment, Locality} from '../common/layout';
 import ShapeRenderer from '../platform/render';
 
 const NAMES = [
@@ -150,18 +151,24 @@ const NAMES = [
         this.variableStyle.fill = 'mediumseagreen';
         this.variableStyle.shape = new Shape(ShapeType.CIRCLE);
         this.variableStyle.labels = new Label();
+        this.variableStyle.labels.horizontal = HorizontalAlignment.RIGHT;
+        this.variableStyle.labels.placement = Locality.OUTSIDE;
         this.variableStyle.labels.color = 'mediumseagreen';
 
         this.stockStyle = new Style();
         this.stockStyle.fill = 'salmon';
         this.stockStyle.shape = new Shape(ShapeType.RECTANGLE);
         this.stockStyle.labels = new Label();
+        this.stockStyle.labels.vertical = VerticalAlignment.BOTTOM;
+        this.stockStyle.labels.placement = Locality.OUTSIDE;
         this.stockStyle.labels.color = 'salmon';
 
         this.rateStyle = new Style();
         this.rateStyle.fill = 'goldenrod';
         this.rateStyle.shape = new Shape(ShapeType.HOURGLASS);
         this.rateStyle.labels = new Label();
+        this.rateStyle.labels.vertical = VerticalAlignment.TOP;
+        this.rateStyle.labels.placement = Locality.OUTSIDE;
         this.rateStyle.labels.color = 'goldenrod';
 
         let render = new ShapeRenderer();
