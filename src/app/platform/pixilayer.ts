@@ -124,13 +124,13 @@ export class PixiLayer implements RenderLayer, CameraObserver {
 
         /* overlays */
         // this.overlay = new PIXI.Container();
-        this.labels = new PIXI.ParticleContainer(2000, {
+        this.labels = new PIXI.Container(); /*new PIXI.ParticleContainer(2000, {
             scale: true,
             position: true,
             rotation: false,
             uvs: false,
             alpha: false,
-        });
+        });*/
         this.overlay = this.labels;
 
         /* worlds */

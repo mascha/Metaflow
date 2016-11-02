@@ -12,31 +12,59 @@ export const enum Locality {
      * Element takes place the space provided
      * by the parent element.
      */
-    INSIDE,
+    INSIDE = -1,
 
     /**
-     * Element may only be place on the border.
+     * Element may only be placed on the border.
      */
-    BORDER,
+    BORDER = 0,
 
     /**
-     * 
+     * Outside of the element.
      */
-    OUTSIDE
+    OUTSIDE = 1
 }
 
 /**
  * Possible vertical alignment.
  */
 export const enum VerticalAlignment {
-    TOP, MIDDLE, BOTTOM
+
+    /**
+     * 
+     */
+    TOP = -1,
+    
+    /**
+     * 
+     */
+    MIDDLE = 0,
+    
+    /**
+     * 
+     */
+    BOTTOM = 1
 }
 
 /**
  * Possible horizontal positions.
  */
 export const enum HorizontalAlignment {
-    LEFT, CENTER, RIGHT
+    
+    /**
+     * Leftmost position.
+     */
+    LEFT = -1,
+    
+    /**
+     * Centered horizontally.
+     */
+    CENTER = 0, 
+
+    /**
+     * Rightmost position.
+     */
+    RIGHT = 1
 }
 
 /**

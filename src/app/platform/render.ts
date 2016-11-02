@@ -46,104 +46,12 @@ export default class ShapeRenderer {
       let mapped = new PIXI.Text(text, label.cache, 0.6);
       item.labels = mapped;
 
-      let x = 0, y = 0, pX = 0, pY = 0;
+      let x = item.left + (1 + label.horizontal) * item.width / 2, 
+          y = item.top + (1 + label.vertical) * item.height / 2, 
+          pX = 0.5 + 0.5 * label.horizontal * label.placement, 
+          pY = 0.5 + 0.5 * label.vertical * label.placement;
 
-      switch (label.placement) {
-
-        /* INSIDE */
-        case Locality.INSIDE:  
-          switch (label.vertical) {
-            case VerticalAlignment.TOP: 
-              pY = 0.1;
-              y = item.top; 
-            break;
-
-            case VerticalAlignment.MIDDLE: 
-              pY = 0.5;
-              y = item.top + item.height / 2; 
-            break; 
-
-            case VerticalAlignment.BOTTOM: 
-              pY = 0.9;
-              y = item.top + item.height; 
-            break;
-            
-            default: break;
-          }
-
-          switch (label.horizontal) {
-            case HorizontalAlignment.LEFT: 
-              pX = 0.0;
-              x = item.left; 
-              break;
-            
-            case HorizontalAlignment.CENTER: 
-              pX = 0.5;
-              x = item.left + item.width / 2; 
-              break;
-            
-            case HorizontalAlignment.RIGHT: 
-              pX = 1.0;
-              x = item.left + item.width; 
-              break;
-
-            default:
-              break;
-          }
-
-          break;
-      
-        /* BORDER */
-        case Locality.BORDER:
-        
-          break;
-
-        /* OUTSIDE */
-        case Locality.OUTSIDE:
-          switch (label.vertical) {
-            case VerticalAlignment.TOP: 
-              pY = 1.1;
-              y = item.top; 
-            break;
-
-            case VerticalAlignment.MIDDLE: 
-              pY = 0.5;
-              y = item.top + item.height / 2; 
-            break; 
-
-            case VerticalAlignment.BOTTOM: 
-              pY = -0.1;
-              y = item.top + item.height; 
-            break;
-            
-            default: 
-            break;
-          }
-
-          switch (label.horizontal) {
-            case HorizontalAlignment.LEFT: 
-              pX = 1.1;
-              x = item.left; 
-              break;
-            
-            case HorizontalAlignment.CENTER: 
-              pX = 0.5;
-              x = item.left + item.width / 2; 
-              break;
-            
-            case HorizontalAlignment.RIGHT: 
-              pX = -0.1;
-              x = item.left + item.width; 
-              break;
-
-            default:
-              break;
-          }
-          break;
-
-        default: 
-          break;
-      }
+      console.log(`${label.placement} @ ${label.horizontal}, ${label.vertical} : ${pX} / ${pY}`);
 
       mapped.position.set(x * scale, y * scale);
       mapped.anchor.set(pX, pY);

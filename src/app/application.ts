@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 
 require('../style/globals.scss');
 
@@ -13,7 +13,7 @@ require('../style/globals.scss');
   styles: [require('./application.scss')],
   template: require('./application.html')
 })
-export default class Application {
+export default class Application implements AfterViewInit {
 
   private fullscreen = false;
 

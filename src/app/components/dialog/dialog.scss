@@ -6,16 +6,35 @@
     width: 100%;
     height: 100%;
     background: #000;
-    opacity: 0.3;
+    opacity: 0.8;
 }
 
 .modal-container {
-    z-index: 10;
+    z-index: 1001;
     position: absolute;
     top: 0px;
     left: 0px;
     width: 100%;
     height: 100%;
+}
+
+.modal-content-header {
+    margin: 25px 20px 24px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.modal-content-banner {
+    background-color: #66BB6A;   
+    color: #fff;
+    min-height: 40px;
+    padding: 15px 20px;
+
+    h1 {
+        font-size: 16px;
+        font-weight: 500;
+        margin-top: 0;
+    }
 }
 
 .modal-border {
@@ -30,10 +49,9 @@
 .modal-pane {
     position: absolute;
     display: block;
-    transition-property: undefined;
-    transition-duration: 400ms, 400ms, 400ms, 400ms;
-    top: 180px;
-    left: 329px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     height: 614px;
     width: 660px;
 }
