@@ -16,26 +16,26 @@ export default class Palette {
     private categories: Array<any>;
     private components: Array<any>;
     private selected: string;
-    private dimmed = false;
+    private dimmed = true;
     private timer: any;
 
-    @ViewChild('icons') icons: ElementRef;
-    @ViewChild('select') select: ElementRef;
-    @ViewChild('overlay') overlay: ElementRef;
+    @ViewChild('icons') private icons: ElementRef;
+    @ViewChild('select') private select: ElementRef;
+    @ViewChild('overlay') private overlay: ElementRef;
 
-    onIconsMove() {
+    private onIconsMove() {
         this.reset();
     }
 
-    onIconsEnter() {
+    private onIconsEnter() {
         this.startTimer();
     }
 
-    onIconsLeave() {
+    private onIconsLeave() {
         this.reset();
     }
     
-    onSelect(event: MouseEvent) {
+    private onSelect(event: MouseEvent) {
         let index = this.eventIndex(event);
         if (this.isValidIndex(index)) {
             this.selectItem(index);
@@ -43,7 +43,7 @@ export default class Palette {
         }
     }
 
-    onOverlayClick(event: MouseEvent) {
+    private onOverlayClick(event: MouseEvent) {
         let index = this.eventIndex(event);
         if (!this.isValidIndex(index)) {
             this.selectItem(index);
@@ -52,7 +52,7 @@ export default class Palette {
     }
 
     @HostListener('mouseleave') 
-    onHostLeave() {
+    private onHostLeave() {
         this.reset();
         return false;
     }
@@ -91,8 +91,7 @@ export default class Palette {
     }
 
     private isValidIndex(index: number) {
-        if (!this.categories) { return false; }
-        return (index >= 0 && index < this.categories.length);
+        return (index >= 0 && this.categories && index < this.categories.length);
     }
 
     private eventIndex(event: MouseEvent): number {

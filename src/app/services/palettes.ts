@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {Category} from '../common/concrete';
 
 /**
  * Provides an entry point for retrieving all
@@ -87,7 +88,7 @@ export default class PaletteRegistry {
         }
     ];
 
-    getCategories(): Array<any> {
+    getCategories(): Array<Category> {
         return this.categories;
     }
 

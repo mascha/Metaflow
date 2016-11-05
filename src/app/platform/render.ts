@@ -46,12 +46,11 @@ export default class ShapeRenderer {
       let mapped = new PIXI.Text(text, label.cache, 0.6);
       item.labels = mapped;
 
-      let x = item.left + (1 + label.horizontal) * item.width / 2, 
-          y = item.top + (1 + label.vertical) * item.height / 2, 
-          pX = 0.5 + 0.5 * label.horizontal * label.placement, 
-          pY = 0.5 + 0.5 * label.vertical * label.placement;
 
-      console.log(`${label.placement} @ ${label.horizontal}, ${label.vertical} : ${pX} / ${pY}`);
+      let x = item.left + 0.5 * (1 + label.horizontal) * item.width,
+          y = item.top  + 0.5 * (1 + label.vertical) * item.height, 
+          pX = 0.5 * (1 - label.horizontal * label.placement), 
+          pY = 0.5 * (1 - label.vertical * label.placement);
 
       mapped.position.set(x * scale, y * scale);
       mapped.anchor.set(pX, pY);

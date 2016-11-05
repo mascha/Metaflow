@@ -46,6 +46,7 @@
   z-index: 11;
   box-shadow: $presenter-shadow;
   padding: 0 5px;
+  border: 1px solid darken($presenter-body, 6);
 
   &.vertical {
     padding: 2px 2px;

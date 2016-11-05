@@ -186,18 +186,17 @@ export class PixiCamera extends Camera {
         this.worldScale.set(zoom, zoom);
         this.overlayScale.set(zoom, zoom);
 
-        /**
-         * animating + zoom out = no scale update!
-         */
-        // if (Date.now() - this.lastCall > 1000 / 60) {
-            let lbs = this.overlay.children;
-            let s = .5 / zoom;
+        let baseScale = 0.8;
+
+        if (Date.now() - this.lastCall > 1000 / 45) {
+            let lbs = this.overlay.children as PIXI.Text[];
+            let s = baseScale / zoom;
             for (let i = 0, len = lbs.length; i < len; i++) {
-                let label = lbs[i] as PIXI.Text;
+                let label = lbs[i]
                 label.scale.set(s, s);
             }
-          //  this.lastCall = Date.now();
-        //}
+            this.lastCall = Date.now();
+        }
     }
 
     constructor(private world: PIXI.Container, 

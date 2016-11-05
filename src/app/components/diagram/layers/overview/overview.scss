@@ -11,6 +11,7 @@
   border-radius: $presenter-radius;
   background-color: $presenter-body;
   box-shadow: $presenter-shadow;
+  border: 1px solid darken($presenter-body, 12);
 }
 
 .layer {

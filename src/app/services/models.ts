@@ -52,8 +52,8 @@ const NAMES = [
     private createStock() {
         let item = new ViewItem(
             this.randomName(),
-            Math.random() * 20000,
-            Math.random() * 20000,
+            this.random() * 20000,
+            this.random() * 20000,
             192,
             108
         );
@@ -64,8 +64,8 @@ const NAMES = [
     private createVariable() {
         let variable = new ViewItem(
             this.randomName(),
-            Math.random() * 20000,
-            Math.random() * 20000,
+            this.random() * 20000,
+            this.random() * 20000,
             32,
             32
         );
@@ -76,8 +76,8 @@ const NAMES = [
     private createRate() {
         let variable = new ViewItem(
             this.randomName(),
-            Math.random() * 20000,
-            Math.random() * 20000,
+            this.random() * 20000,
+            this.random() * 20000,
             64,
             64
         );
@@ -88,8 +88,8 @@ const NAMES = [
     private createModule() {
         let module = new ViewGroup(
             this.randomName(),
-            Math.random() * 20000,
-            Math.random() * 20000,
+            this.random() * 20000,
+            this.random() * 20000,
             300,
             260,
             1
@@ -136,6 +136,10 @@ const NAMES = [
             o = group;
         }
         return root;
+    }
+
+    private random(): number {
+        return Math.sqrt(Math.random() * Math.random());
     }
 
     constructor() {

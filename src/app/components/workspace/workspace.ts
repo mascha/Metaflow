@@ -1,7 +1,6 @@
 import {Component, ViewChild, Inject} from "@angular/core";
 import {Diagram} from '../../common/layer';
 
-
 /**
  * Workspace component.
  * 

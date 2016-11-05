@@ -24,6 +24,14 @@ export class Mapping {
     readonly type: MapType;
 }
 
+export class Category {
+    constructor(
+        readonly name: string,
+        readonly components: Array<any>
+    ) {}
+}
+
+
 /**
  * Enumeration of all possible mapping types.
  * 

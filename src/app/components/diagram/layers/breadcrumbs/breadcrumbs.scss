@@ -10,6 +10,7 @@ $breadcrumbs-text-color: lighten($icon-color,8);
   top: $diagram-control-offset;
   left: $diagram-control-offset;
   box-shadow: $presenter-shadow;
+  border: 1px solid darken($presenter-body, 6);
 }
 
 .navigation {
