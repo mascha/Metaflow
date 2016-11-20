@@ -28,7 +28,7 @@ export const enum Locality {
 /**
  * Possible vertical alignment.
  */
-export const enum VerticalAlignment {
+export const enum Vertical {
 
     /**
      * 
@@ -49,7 +49,7 @@ export const enum VerticalAlignment {
 /**
  * Possible horizontal positions.
  */
-export const enum HorizontalAlignment {
+export const enum Horizontal {
     
     /**
      * Leftmost position.

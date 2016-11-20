@@ -1,7 +1,7 @@
 import {RenderLayer, ViewModelRenderer, Quality, Diagram} from "../common/layer";
 import {ViewGroup, ViewItem, ViewVertex} from "../common/viewmodel";
 import {Camera, CameraObserver} from "../common/camera";
-import ShapeRenderer from './render';
+import {XText, Mapper} from './render';
 
 /**
  * Implements a pixi.js graph layer system.
@@ -18,7 +18,7 @@ export class PixiLayer implements RenderLayer, CameraObserver {
     private edges: PIXI.Container;
     private labels: PIXI.Container;
     private renderer: PIXI.SystemRenderer;
-    private mapper: ShapeRenderer;
+    private mapper: Mapper;
     private quality: Quality;
     private frames: number;
     private cachedGroups: ViewGroup[];
@@ -75,14 +75,14 @@ export class PixiLayer implements RenderLayer, CameraObserver {
                 mapper.renderItem(item as ViewItem, leafs);
             }
 
-            mapper.renderLabel(item);
+            mapper.renderLabels(item);
             if (item.labels) this.labels.addChild(item.labels);
             mapper.attach(item, level);
         }
         this.attachNode(level);
     }
 
-    /**
+    /** 
      * Simply issue drawing commands.
      */
     onViewResized() {
@@ -147,7 +147,7 @@ export class PixiLayer implements RenderLayer, CameraObserver {
         this.scene.addChild(this.overlay);
 
         this.camera = new PixiCamera(this.world, this.overlay);
-        this.mapper = new ShapeRenderer();
+        this.mapper = new Mapper();
 
         this.renderer = new PIXI.WebGLRenderer(500, 500, {
             antialias: true,
@@ -186,17 +186,16 @@ export class PixiCamera extends Camera {
         this.worldScale.set(zoom, zoom);
         this.overlayScale.set(zoom, zoom);
 
-        let baseScale = 0.8;
-
-        if (Date.now() - this.lastCall > 1000 / 45) {
-            let lbs = this.overlay.children as PIXI.Text[];
-            let s = baseScale / zoom;
+        //if (Date.now() - this.lastCall > 1000 / 45) {
+            let lbs = this.overlay.children as XText[];
             for (let i = 0, len = lbs.length; i < len; i++) {
-                let label = lbs[i]
+                let label = lbs[i];
+                let s = label.baseScale / zoom;
+                s = (s < label.lowerScale) ? label.lowerScale : (s > label.upperScale) ? label.upperScale : s;
                 label.scale.set(s, s);
             }
             this.lastCall = Date.now();
-        }
+        //}
     }
 
     constructor(private world: PIXI.Container, 

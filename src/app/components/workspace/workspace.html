@@ -1,3 +1,4 @@
+
 <triple-split *ngIf="slimLayout">
     <sidebar left title="Project" isPrimary="true">
       <explorer></explorer>
@@ -9,10 +10,12 @@
       </sidebar>
     </double-split>
     <sidebar right title="Inspector" isPrimary="false">
-      <palette></palette>
+      <inspector></inspector>
     </sidebar>
 </triple-split> 
-<!--
+
+<!-- <playbar></playbar>
+<diagram></diagram>
 <double-split *ngIf="slimLayout" horizontal="true">
   <triple-split left>
     <sidebar left title="Project" isPrimary="true" (visibility)="togglePrimary($event)">

@@ -4,7 +4,7 @@
 
 :host {
   @include fillh();
-  background-color: $sidebar-main;
+  // background-color: $sidebar-main;
 }
 
 .sidebar-header {
@@ -15,7 +15,7 @@
   left: 0; right: 0;
   overflow: hidden;
   min-height: 18px;
-  background-color: $sidebar-header;
+  // background-color: $sidebar-header;
   z-index: 12;
 
   .sidebar-header-title {

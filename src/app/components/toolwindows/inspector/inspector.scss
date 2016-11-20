@@ -13,7 +13,7 @@ $inspector-content-fill: white;
 
 .inspector-categories {
   @include topHeight($inspector-categories-height);
-  background-color: $inspector-categories-fill;
+  // background-color: $inspector-categories-fill;
   display: inline;
 
   .inspector-category {

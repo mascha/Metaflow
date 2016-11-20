@@ -11,8 +11,8 @@ import { Component } from '@angular/core';
     template: require('./playbar.html'),
     styles: [require('./playbar.scss')]
 })
-export default class Playbar {
-
+export class Playbar {
     private currentTime: string = '3:08';
     private maximumTime: string = '∞';
+    private currentProgress: string = "25%";
 }

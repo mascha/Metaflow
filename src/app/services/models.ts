@@ -1,16 +1,17 @@
 import {Injectable} from "@angular/core";
-import {ViewGroup, ViewItem, Model} from "../common/viewmodel";
+import {ViewGroup, ViewItem, Model, ViewVertex} from "../common/viewmodel";
 import {Style, GroupStyle, Label} from '../common/styling';
 import {Shape, ShapeType} from '../common/shapes';
-import {VerticalAlignment, HorizontalAlignment, Locality} from '../common/layout';
-import ShapeRenderer from '../platform/render';
+import {Vertical, Horizontal, Locality} from '../common/layout';
+import {Mapper} from '../platform/render';
 
 const NAMES = [
     'Population',
     'Market Size',
     'Price',
     'Stock',
-    'Work in Progress',
+    'Very very very long\n Name',
+    'Work in\nProgress',
     'Deliverables',
     'Workforce',
     'Customers',
@@ -46,7 +47,7 @@ const NAMES = [
 
     getModel(): Promise<Model> {
         this.model = this.model || new Model("Debug Model", this.createDebugModel());
-        return new Promise(promise => setTimeout(promise, 1500)).then(() => this.model)
+        return new Promise(promise => setTimeout(promise, 500)).then(() => this.model)
     }
 
     private createStock() {
@@ -105,28 +106,33 @@ const NAMES = [
 
     private createDebugModel(): ViewGroup {
         let MAX = 3;
-        let i = MAX;
+        let level = MAX;
         let o : ViewGroup = null;
         let root: ViewGroup = null;
-        while (i--) {
-            let group = new ViewGroup(`Level #${MAX - i}`, 2000, 2000, 2000, 2000, 0.1);
+        while (level--) {
+            let group = new ViewGroup(`Level #${MAX - level}`, 2000, 2000, 2000, 2000, 0.1);
             group.style = this.moduleStyle;
 
-            let j = 180;
-            while (j) {
+            let entity = 180;
+            while (entity) {
                 let rnd = Math.random();
                 let item;
                 if (rnd < .25) {
                     item = this.createStock();
-                } else if (rnd < .5) {
-                    item = this.createVariable();
                 } else if (rnd < .75) {
-                    item = this.createModule();
-                } else {
+                    item = this.createVariable();
+                } else if (rnd < .90) {
                     item = this.createRate();
+                } else {
+                    item = this.createModule();
                 }
+
                 group.addContent(item);
-                j--;
+
+                let neighbor = this.findConnection(item, group.contents, 1000);
+                // item.addLink(neighbor);
+
+                entity--;
             }
             if (o) {
                 o.addContent(group);
@@ -142,6 +148,17 @@ const NAMES = [
         return Math.sqrt(Math.random() * Math.random());
     }
 
+    private findConnection(item: ViewVertex, siblings: ViewVertex[], distance: number): ViewVertex {
+        siblings.forEach(element => {
+            let dX = item.centerX - element.centerX;
+            let dY = item.centerY - element.centerY;
+            if (item !== element && Math.sqrt(dX*dX + dX*dY) <= distance && Math.random() > 0.75) {
+                return element;   
+            }
+        });
+        return null;
+    }
+
     constructor() {
         this.moduleStyle = new GroupStyle();
         this.moduleStyle.actsAsPortal = true;
@@ -149,33 +166,37 @@ const NAMES = [
         this.moduleStyle.shape.a = 6;
         this.moduleStyle.fill = 'darkgrey';
         this.moduleStyle.labels = new Label();
+        this.moduleStyle.labels.setScaling(.2, .7, 1.2);
         this.moduleStyle.labels.color = 'cornflowerblue';
         
         this.variableStyle = new Style();
         this.variableStyle.fill = 'mediumseagreen';
         this.variableStyle.shape = new Shape(ShapeType.CIRCLE);
         this.variableStyle.labels = new Label();
-        this.variableStyle.labels.horizontal = HorizontalAlignment.RIGHT;
+        this.variableStyle.labels.horizontal = Horizontal.RIGHT;
         this.variableStyle.labels.placement = Locality.OUTSIDE;
+        this.variableStyle.labels.setScaling(.05, .6, .6);
         this.variableStyle.labels.color = 'mediumseagreen';
 
         this.stockStyle = new Style();
         this.stockStyle.fill = 'salmon';
         this.stockStyle.shape = new Shape(ShapeType.RECTANGLE);
         this.stockStyle.labels = new Label();
-        this.stockStyle.labels.vertical = VerticalAlignment.BOTTOM;
+        this.stockStyle.labels.vertical = Vertical.TOP;
         this.stockStyle.labels.placement = Locality.OUTSIDE;
+        this.stockStyle.labels.setScaling(.1, .6, .9);
         this.stockStyle.labels.color = 'salmon';
 
         this.rateStyle = new Style();
         this.rateStyle.fill = 'goldenrod';
         this.rateStyle.shape = new Shape(ShapeType.HOURGLASS);
         this.rateStyle.labels = new Label();
-        this.rateStyle.labels.vertical = VerticalAlignment.TOP;
+        this.rateStyle.labels.vertical = Vertical.TOP;
         this.rateStyle.labels.placement = Locality.OUTSIDE;
+        this.rateStyle.labels.setScaling(.1, .6, .8);
         this.rateStyle.labels.color = 'goldenrod';
 
-        let render = new ShapeRenderer();
+        let render = new Mapper();
         render.cacheShape(this.moduleStyle);
         render.cacheShape(this.stockStyle);
         render.cacheShape(this.variableStyle);

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Category} from '../common/concrete';
+import {Category} from '../common/language';
 
 /**
  * Provides an entry point for retrieving all

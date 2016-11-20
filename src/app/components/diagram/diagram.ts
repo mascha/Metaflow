@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, ElementRef, ViewChild, HostListener, Renderer } from '@angular/core';
 import { ViewVertex, Model } from "../../common/viewmodel";
 import { Layer, RenderLayer, Diagram, Scope } from '../../common/layer';
 import { Camera } from "../../common/camera";
@@ -55,10 +55,15 @@ export default class DiagramImpl implements Diagram {
     private _platform: RenderLayer;
 
     animatedZoom = false;
+
     animatedNavigation = true;
+    
     rubberBanding = false;
+    
     respectLimits = false;
+    
     useKinetics = true;
+    
     showClickEffect = true;
 
     readonly selection = new Selection<ViewVertex>();
@@ -181,7 +186,8 @@ export default class DiagramImpl implements Diagram {
     constructor(
         private _platforms: PlatformService,
         private _models: ModelService,
-        private _surface: ElementRef) { }
+        private _surface: ElementRef,
+        private renderer: Renderer) {}
 }
 
 function minimax(min: number, value: number, max: number) {

@@ -57,7 +57,7 @@ export default class Kinetics {
             this.velX = (1 - s) * vx + s * this.velX;
             this.velY = (1 - s) * vy + s * this.velY;
             this._angle = Math.atan2(this.velY, this.velX);
-            this._speed = Math.hypot(this.velX, this.velY);
+            this._speed = Math.sqrt(this.velX*this.velX + this.velY*this.velY);
         }
 
         this._lastX = x;

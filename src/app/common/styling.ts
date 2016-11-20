@@ -1,4 +1,4 @@
-import {Locality, HorizontalAlignment, VerticalAlignment} from './layout';
+import {Locality, Horizontal, Vertical} from './layout';
 import {Shape} from './shapes';
 
 /**
@@ -11,16 +11,51 @@ import {Shape} from './shapes';
  * @since 1.0.0
  */
 export class Style {
-    private parent : Style;
 
+    /**
+     * Filling color of the shape.
+     */
     fill: number | string;
+
+    /**
+     * Stroke/border color of the shape.
+     */
     stroke: number | string;
-    opacity: number;
+
+    /**
+     * Width of the border stroke.
+     */
     borderWidth: number;
+
+    /**
+     * How visible the shape is.
+     */
+    opacity: number;
+
+    /**
+     * Specifies the distance from the border
+     * where items can be placed.
+     */
     margin: number;
+
+    /**
+     * Label definitions.
+     */
     labels: Label | Label[];
+
+    /**
+     * Shape descriptor.
+     */
     shape: Shape;
+
+    /**
+     * 
+     */
     defaultWidth: number;
+
+    /**
+     * 
+     */
     defaultHeight: number;
 
     /**
@@ -46,12 +81,15 @@ export class Style {
      */
     static fork(style: Style): Style {
         if (!style) return style;
-        let result = new Style()
-        return null;
+        return new Style(style);
     }
 
     private hasMultipleLabels(): boolean {
         return (this.labels && this.labels.constructor === Array);
+    }
+
+    constructor(private shadowed?: Style) {
+
     }
 }
 
@@ -89,23 +127,23 @@ export class Label {
      * The lowest zoom level for which this
      * label is visible.
      */
-    lowerZoom: number;
+    lowerScale: number = 0.01;
 
     /**
      * The highest zoom level for which this 
      * label is visible.
      */
-    upperZoom: number;
+    upperScale: number = 3.0;
     
     /**
      * Priority used for visibility tie breaking.
      */
-    priority: number;
+    priority: number = 1.0;
 
     /**
      * The normal scale of the label.
      */
-    baseScale: number;
+    baseScale: number = 1.0;
 
     /**
      * If all else fails, this is the 
@@ -138,12 +176,12 @@ export class Label {
     /**
      * Vertical placement.
      */
-    vertical: VerticalAlignment = VerticalAlignment.MIDDLE;
+    vertical: Vertical = Vertical.MIDDLE;
 
     /**
      * Horizontal placement.
      */
-    horizontal: HorizontalAlignment = HorizontalAlignment.CENTER;
+    horizontal: Horizontal = Horizontal.CENTER;
 
     /**
      * Text transform choice. Default is NONE.
@@ -159,6 +197,15 @@ export class Label {
      * The cached platform type.
      */
     cache: any;
+
+    /**
+     * 
+     */
+    setScaling(lower: number, base: number, upper: number) {
+        this.lowerScale = lower;
+        this.upperScale = upper;
+        this.baseScale = base;
+    }
 }
 
 /**

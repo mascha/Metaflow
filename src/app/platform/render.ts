@@ -1,7 +1,7 @@
-import {Style, Label} from '../common/styling';
-import {Shape, ShapeType} from '../common/shapes';
-import {Locality, HorizontalAlignment, VerticalAlignment} from '../common/layout';
-import {ViewVertex, ViewGroup, ViewItem} from '../common/viewmodel';
+import { Style, Label, TextTransform } from '../common/styling';
+import { Shape, ShapeType } from '../common/shapes';
+import { Locality, Horizontal, Vertical } from '../common/layout';
+import { ViewVertex, ViewGroup, ViewItem } from '../common/viewmodel';
 
 /**
  * Class responsible for rendering style shapes
@@ -10,7 +10,7 @@ import {ViewVertex, ViewGroup, ViewItem} from '../common/viewmodel';
  * @author Martin Schade
  * @since 1.0.0
  */
-export default class ShapeRenderer {
+export class Mapper {
 
   private images = Object.create(null);
   private urls = Object.create(null);
@@ -21,7 +21,46 @@ export default class ShapeRenderer {
     return Colors[color] || 0x000000;
   }
 
-  public renderLabel(item: ViewVertex): any {
+  private renderText(item: ViewVertex, label: Label): string {
+    let text = item.name;
+    let regex = /\b\w/g;
+    switch (label.transform) {
+      case TextTransform.LOWERCASE: text = text.toLowerCase(); break;
+      case TextTransform.UPPERCASE: text = text.toUpperCase(); break;
+      case TextTransform.CAPITALIZE: text = text.toLowerCase().replace(regex, l => l.toUpperCase()); break;
+    }
+    return text;
+  }
+
+  private renderLabel(label: Label, item: ViewVertex, scale: number): XText {
+      let text = this.renderText(item, label);
+
+      label.cache = label.cache || {
+        fill: label.color || 0x3d3834,
+        stroke: label.haloColor || 'white',
+        strokeThickness: 4,
+        lineJoin: 'round'
+      };
+
+      let mapped = new XText(text, label.cache, 0.6);
+      mapped.baseScale = label.baseScale;
+      mapped.lowerScale = label.lowerScale;
+      mapped.upperScale = label.upperScale;
+      item.labels = mapped;
+
+      let x = item.left + 0.5 * (1 + label.horizontal) * item.width,
+        y = item.top + 0.5 * (1 + label.vertical) * item.height,
+        pX = 0.5 * (1 - label.horizontal * label.placement),
+        pY = 0.5 * (1 - label.vertical * label.placement);
+
+      mapped.scale.set(label.baseScale, label.baseScale);
+      mapped.position.set(x * scale, y * scale);
+      mapped.anchor.set(pX, pY);
+      
+      return mapped;
+  }
+
+  public renderLabels(item: ViewVertex): any {
     let style = item.style;
     if (!style) return; // no style
     let labels: any = style.labels;
@@ -34,26 +73,7 @@ export default class ShapeRenderer {
 
     } else {
       let label = labels as Label;
-      let text = item.name;
-
-      label.cache = label.cache || {
-          fill: label.color || 0x3d3834,
-          stroke: label.haloColor || 'white',
-          strokeThickness: 4,
-          lineJoin: 'round'
-      };
-
-      let mapped = new PIXI.Text(text, label.cache, 0.6);
-      item.labels = mapped;
-
-
-      let x = item.left + 0.5 * (1 + label.horizontal) * item.width,
-          y = item.top  + 0.5 * (1 + label.vertical) * item.height, 
-          pX = 0.5 * (1 - label.horizontal * label.placement), 
-          pY = 0.5 * (1 - label.vertical * label.placement);
-
-      mapped.position.set(x * scale, y * scale);
-      mapped.anchor.set(pX, pY);
+      item.labels = this.renderLabel(label, item, scale);
     }
   }
 
@@ -65,7 +85,7 @@ export default class ShapeRenderer {
     if (stroke) ctx.lineColor = stroke;
 
     const l = item.left, t = item.top,
-          w = item.width, h = item.height;
+      w = item.width, h = item.height;
 
     switch (style.shape.type) {
       case ShapeType.SQUARE, ShapeType.RECTANGLE:
@@ -116,6 +136,7 @@ export default class ShapeRenderer {
   }
 
   public cacheShape(style: Style) {
+    if (style.cachedImage) return;
     let canvas = document.createElement('canvas');
     canvas.width = 16;
     canvas.height = 16;
@@ -202,18 +223,10 @@ export default class ShapeRenderer {
     }
   }
 
-  public createDefaultLabelStyle(): PIXI.TextStyle {
-    return {
-      stroke: 'white',
-      strokeThickness: 2,
-      lineJoin: 'round'
-    }
-  }
-
   public renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): any {
     if (group.visual) return;
-  
-    let root = new PIXI.Container();
+
+    let root = new XContainer();
     root.width = group.width;
     root.height = group.height;
 
@@ -222,6 +235,7 @@ export default class ShapeRenderer {
     }
 
     let shape = new PIXI.Graphics();
+    root.shape = shape;
 
     if (oblique) {
       shape.beginFill(0xeeeeee);
@@ -232,15 +246,15 @@ export default class ShapeRenderer {
       shape.drawRoundedRect(0, 0, group.width, group.height, 12);
     }
 
-    let content = new PIXI.Container();
     let inner = group.scale;
-    content.scale.set(inner, inner);
+    root.content = new PIXI.Container();
+    root.content.scale.set(inner, inner);
 
-    root.addChild(shape);
-    root.addChild(content);
+    root.addChild(root.shape);
+    root.addChild(root.content);
 
     if (!topLevel && !oblique) {
-      // root.cacheAsBitmap = true;
+      root.cacheAsBitmap = true;
     }
 
     group.visual = root;
@@ -252,13 +266,13 @@ export default class ShapeRenderer {
       throw new Error('Node has no rendered visual');
     }
 
-    let root = group.visual as PIXI.Container;
+    let root = group.visual as XContainer;
     if (!root) {
       throw new Error('Could not find renderer visual of the given group');
     }
 
     /* TODO fix this direct index access */
-    let content = root.children[1] as PIXI.Container;
+    let content = root.content;
     if (!content) {
       throw new Error('Could not find low level content container');
     }
@@ -266,6 +280,23 @@ export default class ShapeRenderer {
     content.addChild(child);
   }
 }
+
+export class NodeRenderer {
+
+}
+
+export class EdgeRenderer {
+
+}
+
+export class LabelRenderer {
+
+}
+
+export class ShapeRenderer {
+
+}
+
 
 /**
  * Named color lookup dictionary
@@ -285,4 +316,25 @@ const Colors = {
   'lightgrey': 0xD3D3D3,
   'black': 0x000000,
   'white': 0xffffff
+}
+
+/**
+ * Helper class for maintaining backlinks to the
+ * originating label definition.
+ */
+export class XText extends PIXI.Text {
+    lowerScale: number;
+    baseScale: number;
+    upperScale: number;
+    origin: Label;
+}
+
+/**
+ * Helper class for maintaining backlinks to the
+ * originating group node.
+ */
+export class XContainer extends PIXI.Container {
+    origin: ViewGroup;
+    shape: PIXI.Graphics;
+    content: PIXI.Container; 
 }

@@ -1,4 +1,4 @@
-$progress-bar-color: #f50;
+$progress-bar-color: cornflowerblue;
 $progress-bar-maximum-color: #333;
 $progress-bar-fill: #ccc;
 
@@ -9,6 +9,7 @@ $progress-bar-fill: #ccc;
     height: 46px;
     background-color: $progress-bar-fill;
     z-index: 100;
+    opacity: 0.8;
 }
 
 .playbar-inner {
@@ -44,36 +45,60 @@ $progress-bar-fill: #ccc;
     }
 }
 
-.playbar-timeline {
+.playbar-timeline-container {
     position: relative;
     width: 487px;
+    height: 46px;
+}
+
+.playbar-timeline {
+    position: absolute;
+    left: 50px;
+    right: 50px;
     transform: translateY(-50%);
     top: 50%;
+    margin: 0 6px;
+ }
+
+.playbar-timing {
+    margin-right: 20px;
+}
+
+.playbar-timeline-current {
+    color: $progress-bar-color;
+    text-align: right;
+    width: 50px;
+    height: 46px;
+    line-height: 46px;
+
+    span {
+        font-size: 11px;
+    }
+}
+
+.playbar-timeline-maximum {
+    color: $progress-bar-maximum-color;
+    text-align: left;
+    cursor: pointer;
+    width: 50px;
+    height: 46px;
+    line-height: 46px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
 }
 
 .playbar-progress-bar {
     height: 1px;
     background-color: $progress-bar-color;
-    transition: width 50ms;
+    transition: width 100ms;
+    position: relative;
+    top:-1px;
 }
 
 .playbar-progress-drop {
     width: 100%;
     height: 1px;
     background-color: darken($progress-bar-fill, 6);
-}
-
-.playbar-timeline-current {
-    width: 50px;
-    height: 46px;
-    color: $progress-bar-color;
-    text-align: right;
-}
-
-.playbar-timeline-maximum {
-    width: 50px;
-    height: 46px;
-    color: $progress-bar-maximum-color;
-    text-align: left;
-    cursor: pointer;
 }

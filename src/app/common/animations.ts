@@ -65,7 +65,7 @@ export class Animation {
     }
 
     static throwCamera(camera: Camera, speed: number, angle: number, duration: number): Animation {
-        const dist = speed * duration;
+        const dist = Math.sqrt(speed) * duration;
         const startX = camera.cameraX;
         const startY = camera.cameraY;
         const distX = dist * Math.cos(angle);
@@ -79,7 +79,7 @@ export class Animation {
 
     static navigateToItem(cam: Camera, zoomPanPreference: number, navigationVelocity: number, vertex: ViewVertex): Animation {
         let parent = vertex.parent;
-        let scale = parent ? parent.scale : 1.0;
+        let scale = parent ? parent.scale : 1;
         let adjust = parent ? 16 : 2;
         let width = parent ? vertex.width * adjust * scale : vertex.width;
         return Animation.navigateTo({

@@ -6,15 +6,15 @@
             <button class="lastControl control-item" title="Next evemt">Next event</button>
         </li>
         <li class="control-item playbar-timing">
-            <button title="Realtime Simulation" class="repeatControl sc-ir">Realtime Simulation</button>
+            <button title="Realtime Simulation" class="repeatControl">Realtime Simulation</button>
         </li>
-        <li class="control-item playbar-timeline">
-            <section class="playbar-timeline-current">
+        <li class="control-item playbar-timeline-container">
+            <div class="playbar-timeline-current">
                 <span>{{currentTime}}</span>
-            </section>
+            </div>
             <div class="playbar-timeline" role="progressbar">
                 <div class="playbar-progress-drop"></div>
-                <div class="playbar-progress-bar" style="width: 405px;"></div>
+                <div class="playbar-progress-bar" [style.width]="currentProgress"></div>
             </div>
             <div class="playbar-timeline-maximum">
                 <span>{{maximumTime}}</span>
@@ -28,6 +28,9 @@
                     <div class="volume__sliderHandle" style="top: 10px;"></div>
                 </div>
             </div>
+        </li>
+        <li class="control-item playbar-timing">
+           <button title="Realtime Simulation" class="repeatControl">Realtime Simulation</button>
         </li>
     </ul>
 </section>

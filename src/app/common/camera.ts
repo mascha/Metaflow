@@ -43,7 +43,7 @@ export interface CameraObserver {
  * @author Martin Schade
  */
 export abstract class Camera {
-    
+
     get cameraX(): number {
         return this.camX;
     }
@@ -104,7 +104,7 @@ export abstract class Camera {
     /**
      * Attach a observer to this camera.
      */
-    subscribe(observer:CameraObserver) {
+    subscribe(observer: CameraObserver) {
         this.obs.push(observer);
     }
 
@@ -138,7 +138,7 @@ export abstract class Camera {
      * Transform world coordinates into the camera space.
      * @param worldY
      */
-    inverseRayY(worldY:number) {
+    inverseRayY(worldY: number) {
         return this.camY + this.zoom * worldY;
     }
 
@@ -150,7 +150,7 @@ export abstract class Camera {
      */
     zoomToAbout(zoom: number, worldX: number, worldY: number) {
         if (zoom <= 0) { return; }
-        
+
         const last = this.zoom;
         this.zoom = zoom;
         const diff = zoom - last;
@@ -178,7 +178,7 @@ export abstract class Camera {
     public moveTo(positionX: number, positionY: number) {
         this.camX = -positionX;
         this.camY = -positionY;
-        
+
         this.translateWorldTo(
             -positionX,
             -positionY
@@ -211,7 +211,7 @@ export abstract class Camera {
 
         this.scaleWorldTo(zoom, last);
         this.translateWorldTo(-posX, -posY);
-        
+
         this.updateCache();
         let obs = this.obs;
         let len = obs.length;
@@ -227,7 +227,7 @@ export abstract class Camera {
         this.viewX = viewX; this.viewY = viewY;
         this.viewW = viewW; this.viewH = viewH;
         this.updateCache();
-        
+
         let obs = this.obs;
         let len = obs.length;
         for (let i = 0; i < len; i++) {
@@ -235,9 +235,9 @@ export abstract class Camera {
         }
     }
 
-    protected abstract translateWorldTo(tX: number, tY: number):void
+    protected abstract translateWorldTo(tX: number, tY: number): void
 
-    protected abstract scaleWorldTo(zoom: number, last: number):void
+    protected abstract scaleWorldTo(zoom: number, last: number): void
 
     private updateCache() {
         const zoom = this.zoom;
@@ -277,16 +277,16 @@ export class ViewFrame {
      * @param camera
      * @returns {ViewFrame}
      */
-    static fromCamera(camera:Camera):ViewFrame {
+    static fromCamera(camera: Camera): ViewFrame {
         let x = camera.worldX;
         let y = camera.worldY;
         let w = camera.visualWidth / camera.scale;
         return new ViewFrame(x, y, (w < 0.0 || !w) ? 1.0 : w);
     }
 
-    constructor(private _x:number,
-                private _y:number,
-                private _w:number) {
+    constructor(private _x: number,
+        private _y: number,
+        private _w: number) {
     }
 }
 
