@@ -213,12 +213,12 @@ class Proxy {
     image: HTMLCanvasElement;
     cluster: number;
     origin: ViewVertex;
-    links: ViewEdge[];
+    links: ViewEdge<any>[];
 
     public reuse(item: ViewVertex) {
         this.origin = item;
-        this.x = item.left + item.width * .5;
-        this.y = item.top + item.height * .5;
+        this.x = item.centerX
+        this.y = item.centerY
         this.image = item.style.cachedImage;
     }
 

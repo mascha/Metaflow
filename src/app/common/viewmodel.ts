@@ -11,7 +11,7 @@ import {Camera} from './camera';
  * @since 1.0.0
  */
 export abstract class ViewVertex {
-    parent: ViewGroup;
+    parent?: ViewGroup;
     visual: any;
     labels: any;
     style: Style; 
@@ -129,10 +129,11 @@ export class ViewGroup extends ViewVertex {
  * @since 1.0.0
  * @author Martin Schade
  */
-export class ViewEdge {
+export class ViewEdge<T> {
     source: ViewVertex;
     target: ViewVertex;
     style: Style;
+    cache: T;
 }
 
 /**
@@ -144,9 +145,14 @@ export class ViewEdge {
 export const enum ModelChange {
 
     /**
-     * x,y,w,h changes
+     * x,y,w,h,a,b changes
      */
     GEOMETRY,
+
+    /**
+     * The color has changed.
+     */
+    FILL,
 
     /**
      * A style or styleable property has changed.
@@ -182,30 +188,6 @@ export interface DiagramLayer {
      * a new view model.
      */
     update(group: ViewGroup);
-}
-
-/**
- * A view model renderer.
- *
- * @author Martin Schade.
- * @since 1.0.0
- */
-export interface ViewModelRenderer<I, G> {
-
-    /**
-     * Render a view item.
-     */
-    renderItem(item: ViewItem): I;
-
-    /**
-     * Render a view group.
-     */
-    renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): G;
-
-    /**
-     * Attach node to scene.
-     */
-    attach(node: ViewVertex, group: ViewGroup)
 }
 
 /**

@@ -42,7 +42,7 @@ export class Mapper {
         lineJoin: 'round'
       };
 
-      let mapped = new XText(text, label.cache, 0.6);
+      let mapped = new XText(text, label.cache, 0.1);
       mapped.baseScale = label.baseScale;
       mapped.lowerScale = label.lowerScale;
       mapped.upperScale = label.upperScale;
@@ -88,7 +88,8 @@ export class Mapper {
       w = item.width, h = item.height;
 
     switch (style.shape.type) {
-      case ShapeType.SQUARE, ShapeType.RECTANGLE:
+      case ShapeType.SQUARE, 
+           ShapeType.RECTANGLE:
         ctx.drawRect(l, t, w, h);
         break;
 
