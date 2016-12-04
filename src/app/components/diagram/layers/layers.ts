@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild, HostListener} from '@angular/core';
+import {Component, ElementRef, ViewChild, HostListener, Input} from '@angular/core';
 import {ViewGroup, ViewItem, ViewVertex} from "../../../common/viewmodel";
 import {Camera, CameraObserver} from "../../../common/camera";
 import {RenderLayer, Layer, Quality, Diagram} from '../../../common/layer';
@@ -117,9 +117,11 @@ export class BorderLayer implements Layer {
     }
 
     public initialize(diagram: Diagram) {
+        /*
         let element = this.element.nativeElement;
         this.border = new Border(diagram.camera, element);
         diagram.camera.subscribe(this.border);
         diagram.scope.subscribe(it => this.border.updateProxies(it));
+        */
     }
 }

@@ -1,10 +1,11 @@
 @import "../../../../style/mixins";
+@import "../../../../style/theme";
 
 $inspector-categories-height: 28px;
-$inspector-categories-fill: #E6E6E6;
+$inspector-categories-fill: $sidebar-header;
 $inspector-category-fill: transparent;
 $inspector-category-hover: darken($inspector-categories-fill, 6);
-$inspector-content-fill: white;
+$inspector-content-fill: $sidebar-main;
 
 :host {
   @include fillh();
@@ -33,7 +34,7 @@ $inspector-content-fill: white;
     transition: background .15s ease-in, border-color .15s ease-in;
     padding-bottom: 2px;
     border-top: 2px solid transparent;
-    background-color: $inspector-category-fill;
+    background-color: $sidebar-header;
 
     &:hover {
       background-color: $inspector-category-hover;
@@ -53,6 +54,7 @@ $inspector-content-fill: white;
 
     &.active {
       background-color: $inspector-content-fill;
+      color: white;
       
       &.left {
         border-top-color: cornflowerblue;

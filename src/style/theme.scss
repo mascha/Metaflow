@@ -1,20 +1,21 @@
 /* Icons and glyphs */
 $icon-hover: #212637 !default;
-$icon-color: #999999 !default;
-$icon-color-dark: #0e2231;
+$icon-color: #A9A9A9 !default;
+$icon-color-dark: #0e2231 !default;
 
 /* Tool sidebar design */
-$sidebar-header: #dddddd !default;
-$sidebar-header-title: #4d4d4d !default;
-$sidebar-main: white !default;
+$sidebar-header: #2A303D !default;
+$sidebar-header-title: #A9A9A9 !default;
+$sidebar-main: #383F4E !default;
 $sidebar-cards: false !default;
 $sidebar-header-icons: $icon-color !default;
 $sidebar-header-icons-hover: $icon-hover !default;
+$sidebar-border: #1D222C;
 
 /* Splitpane design */
-$splitpane-divider: #dddddd !default;
+$splitpane-divider: #1D222C !default;
 $splitpane-divider-hover: #999999 !default;
-$splitpane-content: #eeeeee !default;
+$splitpane-content: $sidebar-main !default;
 $splitpane-divider-handle: #aaaaaa !default;
 $splitpane-divider-handle-hover: #3165AE !default;
 $splitpane-divider-handle-color: white !default;
@@ -47,9 +48,6 @@ $leftbar-logo: #212637 !default;
 $grid-lines: lightgray !default;
 $grid-fill: white !default;
 
-/* Interactive border */
-$border-fill: rgba(lightgray, 0.95) !default;
-
 /* Palette */
 $palette-component: #3F4652 !default;
 $palette-icons: #272C33 !default;
@@ -57,6 +55,9 @@ $palette-icons: #272C33 !default;
 /* Canvas controls */
 $presenter-icon-hover: white !default;
 $presenter-icon: #cecece !default;
-$presenter-body: #efefef !default;
+$presenter-body: $sidebar-main !default;
 $presenter-shadow: none !default; // 0 2px 4px rgba(0,0,0,0.2),0 -1px 0px rgba(0,0,0,0.02);
 $presenter-radius: none !default;
+
+$diagram-background: #2A303D;
+

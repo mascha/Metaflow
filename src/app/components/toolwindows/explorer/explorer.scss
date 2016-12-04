@@ -4,8 +4,9 @@
 
 $project-cell-height: 21px;
 $project-header-height: 28px;
-$project-header-fill: #efefef;
-$project-upwards-fill: #eeeeee;
+$project-header-fill: $sidebar-main;
+$project-upwards-fill: $sidebar-header;
+$project-content-fill: $sidebar-main;
 
 :host {
   @include fill;
@@ -38,10 +39,10 @@ $project-upwards-fill: #eeeeee;
   top: $project-header-height;
   bottom: 0;
   left:0;
-  right: 5px;
-  overflow: scroll;
+  right: 1px;
+  // overflow: scroll;
   overflow-x: hidden;
-  background-color: white;
+  background-color: $project-content-fill;
 
   .entity-icon {
     padding: 2.5px 4px 0 4px;

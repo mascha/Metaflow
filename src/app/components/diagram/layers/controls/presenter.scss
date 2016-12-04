@@ -76,10 +76,10 @@
   top: $diagram-control-offset;
   background-color: $presenter-body;
   box-shadow: $presenter-shadow;
+  border: 1px solid darken($presenter-body, 12);
   border-radius: $presenter-radius;
   width: 348px;
   height: 28px;
-  border: 1px solid darken($presenter-body, 6);
 
   div {
     transform: translateY(-50%);

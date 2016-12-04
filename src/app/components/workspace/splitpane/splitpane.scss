@@ -55,7 +55,7 @@ $splitpane-divider-width: 5px !default;
   &.vertical {
     top: 0;
     bottom: 0;
-    width: 5px;
+    width: 1px;
 
     &:before {
       padding-top: 16px;
@@ -70,7 +70,7 @@ $splitpane-divider-width: 5px !default;
   &.horizontal {
     left: 0;
     right: 0;
-    height: 5px;
+    height: 1px;
 
     &:before {
       padding-left: 16px;
@@ -82,7 +82,7 @@ $splitpane-divider-width: 5px !default;
   }
 
   &.left {
-    margin-left: -5px;
+    margin-left: -1px;
   }
 
   &.right {

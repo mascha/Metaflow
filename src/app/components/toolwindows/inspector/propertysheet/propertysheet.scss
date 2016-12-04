@@ -1,4 +1,5 @@
 @import "../../../../../style/mixins";
+@import "../../../../../style/theme";
 
 .sheet-property {
   height: 58px;
@@ -29,8 +30,10 @@
     padding: 4px;
     margin-bottom: 5px;
     font-size: .8rem;
-    border: 1px solid #bbb;
-    // border-radius: 3px;
+    border: 1px solid $sidebar-border;
+    border-radius: 3px;
+    background-color: $sidebar-header;
+    color: white;
   }
 
   input[disabled] {

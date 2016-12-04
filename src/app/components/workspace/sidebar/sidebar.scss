@@ -2,9 +2,10 @@
 @import "../../../../style/mixins";
 @import "../../../../style/variables";
 
+$sidebar-header-height: 38px;
+
 :host {
   @include fillh();
-  // background-color: $sidebar-main;
 }
 
 .sidebar-header {
@@ -15,18 +16,15 @@
   left: 0; right: 0;
   overflow: hidden;
   min-height: 18px;
-  // background-color: $sidebar-header;
   z-index: 12;
+  background-color: $sidebar-header;
 
   .sidebar-header-title {
     margin-top: -2px;
-    margin-bottom: 0;
-    text-decoration: none;
     font-size: 16px;
     font-weight: bold;
     text-align: left;
     text-overflow: ellipsis;
-    line-height: 1.2em;
     color: $sidebar-header-title;
     user-select: none;
   }

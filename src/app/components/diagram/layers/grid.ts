@@ -80,7 +80,7 @@ export default class Grid implements CameraObserver {
     private redraw() {
         if (!this._active) return;
         this._context.clearRect(0,0,this._canvas.width,this._canvas.height);
-        this._context.strokeStyle = 'lightgray';
+        this._context.strokeStyle = 'cornflowerblue';
         this._context.lineWidth = 1.0;
         const x = this._camera.worldX;
         const y = this._camera.worldY;

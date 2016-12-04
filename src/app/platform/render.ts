@@ -37,9 +37,9 @@ export class Mapper {
 
       label.cache = label.cache || {
         fill: label.color || 0x3d3834,
-        stroke: label.haloColor || 'white',
-        strokeThickness: 4,
-        lineJoin: 'round'
+        // stroke: label.haloColor || 'white',
+        // strokeThickness: 4,
+        // lineJoin: 'round'
       };
 
       let mapped = new XText(text, label.cache, 0.1);
