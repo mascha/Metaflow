@@ -18,6 +18,14 @@ export default class Grid implements CameraObserver {
     private _canvas: HTMLCanvasElement;
     private _camera: Camera;
 
+    get active() { 
+        return this._active; 
+    }
+
+    set active(active: boolean) {
+        this._active = active; 
+    }
+
     onViewResized() {
         const newWidth = this._camera.visualWidth;
         const newHeight = this._camera.visualHeight;
@@ -51,7 +59,7 @@ export default class Grid implements CameraObserver {
             const context = this._context;
             const period = Math.pow(b, -level);
             const amplit = Math.pow(b, -level + scale);
-            const normal = 2 * Math.atan(this._brightness * amplit) / Math.PI;
+            const normal = Math.atan(this._brightness * amplit) / Math.PI;
             const alpha = (normal > 1) ? 1 : (normal < 0) ? 0 : normal;
             const starX = Math.floor(worldX / period);
             const starY = Math.floor(worldY / period);

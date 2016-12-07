@@ -40,7 +40,9 @@ export default class Explorer {
         this.contents = level? level.contents : [];
     }
 
-    constructor() {
-         
+    constructor(models: ModelService) {
+         models.getModel().then((model) => {
+             this.updateLevel(model.root);
+         });
     }
 }

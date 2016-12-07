@@ -13,6 +13,8 @@ import ModelService from "./services/models";
 import PaletteRegistry from "./services/palettes";
 import ProjectService from "./services/projects";
 
+import {Settings} from './settings';
+
 /**
  * Main entrypoint for the application.
  * 
@@ -31,7 +33,8 @@ import ProjectService from "./services/projects";
     PlatformService, 
     ModelService,
     PaletteRegistry,
-    ProjectService
+    ProjectService,
+    Settings
   ],
   declarations: [
     Application

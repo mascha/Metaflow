@@ -1,7 +1,7 @@
-import {RenderLayer, ViewModelRenderer, Quality, Diagram} from "../common/layer";
-import {ViewGroup, ViewItem, ViewVertex} from "../common/viewmodel";
-import {Camera, CameraObserver} from "../common/camera";
-import {XText, Mapper} from './render';
+import { RenderLayer, ViewModelRenderer, Quality, Diagram } from "../common/layer";
+import { ViewGroup, ViewItem, ViewVertex } from "../common/viewmodel";
+import { Camera, CameraObserver } from "../common/camera";
+import { XText, Mapper } from './render';
 
 /**
  * Implements a pixi.js graph layer system.
@@ -10,13 +10,41 @@ import {XText, Mapper} from './render';
  * @since 1.0.0
  */
 export class PixiLayer implements RenderLayer, CameraObserver {
+    
     readonly camera: Camera;
+
+    /**
+     * The full scene to be drawn.
+     */
     private scene: PIXI.Container;
+    
+    /**
+     * All node shapes.
+     */
     private nodes: PIXI.Container;
+
+    /**
+     * 
+     */
     private world: PIXI.Container;
+
+    /**
+     * 
+     */
     private overlay: PIXI.Container;
+
+    /**
+     * 
+     */
     private edges: PIXI.Container;
+
+    /**
+     * 
+     */
     private labels: PIXI.Container;
+
+    private active = true;
+
     private renderer: PIXI.SystemRenderer;
     private mapper: Mapper;
     private quality: Quality;
@@ -33,6 +61,14 @@ export class PixiLayer implements RenderLayer, CameraObserver {
         this.frames = 1000 / (60 * quality);
     }
 
+    setActive(active: boolean) {
+
+    }
+
+    isActive() {
+        return true;
+    }
+    
     hitTest(worldX: number, worldY: number): Array<ViewVertex> {
         let hits = [];
 
@@ -90,7 +126,7 @@ export class PixiLayer implements RenderLayer, CameraObserver {
         let width = this.camera.visualWidth;
         let height = this.camera.visualHeight;
         renderer.resize(width, height);
-        renderer.render(this.scene);
+        if (this.active) renderer.render(this.scene);
     }
 
     /**
@@ -99,7 +135,7 @@ export class PixiLayer implements RenderLayer, CameraObserver {
      * @param posY
      */
     onPanChanged(posX: number, posY: number) {
-        this.renderer.render(this.scene);
+        if (this.active) this.renderer.render(this.scene);
     }
 
     /**
@@ -107,10 +143,10 @@ export class PixiLayer implements RenderLayer, CameraObserver {
      * @param zoom
      */
     onZoomChanged(zoom: number) {
-        this.renderer.render(this.scene);
+        if (this.active) this.renderer.render(this.scene);
     }
 
-    public initialize(diagram: Diagram) {
+    initialize(diagram: Diagram) {
         diagram.camera.subscribe(this);
         diagram.scope.subscribe(it => this.update(it));
     }
@@ -149,7 +185,7 @@ export class PixiLayer implements RenderLayer, CameraObserver {
         this.camera = new PixiCamera(this.world, this.overlay);
         this.mapper = new Mapper();
 
-        this.renderer = new PIXI.WebGLRenderer(500, 500, {
+        this.renderer = new PIXI.WebGLRenderer(element.width, element.height, {
             antialias: true,
             transparent: true,
             resolution: 1.0,
@@ -180,26 +216,21 @@ export class PixiCamera extends Camera {
         this.overlayPosition.set(tX, tY);
     }
 
-    private lastCall = Date.now();
-
     protected scaleWorldTo(zoom: number, last: number) {
         this.worldScale.set(zoom, zoom);
         this.overlayScale.set(zoom, zoom);
 
-        //if (Date.now() - this.lastCall > 1000 / 45) {
-            let lbs = this.overlay.children as XText[];
-            for (let i = 0, len = lbs.length; i < len; i++) {
-                let label = lbs[i];
-                let s = label.baseScale / zoom;
-                s = (s < label.lowerScale) ? label.lowerScale : (s > label.upperScale) ? label.upperScale : s;
-                label.scale.set(s, s);
-            }
-            this.lastCall = Date.now();
-        //}
+        let lbs = this.overlay.children as XText[];
+        for (let i = 0, len = lbs.length; i < len; i++) {
+            let label = lbs[i];
+            let s = label.baseScale / zoom;
+            s = (s < label.lowerScale) ? label.lowerScale : (s > label.upperScale) ? label.upperScale : s;
+            label.scale.set(s, s);
+        }
     }
 
-    constructor(private world: PIXI.Container, 
-                private overlay: PIXI.Container) {
+    constructor(private world: PIXI.Container,
+        private overlay: PIXI.Container) {
         super();
     }
 }

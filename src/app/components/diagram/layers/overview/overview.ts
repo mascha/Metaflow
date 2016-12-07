@@ -21,26 +21,35 @@ export default class Overview implements Layer, CameraObserver, AfterViewInit {
     private cams: CanvasRenderingContext2D;
     private camera: Camera;
     private group: ViewGroup;
+    private active: boolean = true;
 
-    public initialize(diagram: Diagram) {
+    initialize(diagram: Diagram) {
         this.camera = diagram.camera;
         diagram.camera.subscribe(this);
         diagram.scope.subscribe(it => this.updateGroup(it));
     }
+
+    setActive(active: boolean) {
+        this.active = active;
+    }
+
+    isActive() {
+        return this.active;
+    }
     
-    public onViewResized() {
+    onViewResized() {
         this.redrawCamera();
     }
 
-    public onPanChanged(posX: number, posY: number) {
+    onPanChanged(posX: number, posY: number) {
         this.redrawCamera();
     }
 
-    public onZoomChanged(zoom: number) {
+    onZoomChanged(zoom: number) {
         this.redrawCamera();
     }
 
-    public ngAfterViewInit() {
+    ngAfterViewInit() {
         let canvases = [
             this.nodeCanvas,
             this.camCanvas

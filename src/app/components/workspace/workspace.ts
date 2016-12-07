@@ -13,6 +13,4 @@ import {Diagram} from '../../common/layer';
 })
 export default class Workspace {
     private slimLayout = true;
-
-    @Inject('diagram') diagram: Diagram;
 }

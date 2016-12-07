@@ -21,7 +21,15 @@ export class GridLayer implements Layer {
     private canvas: ElementRef;
     private grid: Grid;
 
-    public initialize(diagram: Diagram) {
+    setActive(active: boolean) {
+        this.grid.active = active;
+    }
+
+    isActive(): boolean {
+        return this.grid.active;
+    }
+    
+    initialize(diagram: Diagram) {
         let canvas = this.canvas.nativeElement;
         this.grid = new Grid(diagram, canvas);
         diagram.camera.subscribe(this.grid);
@@ -45,6 +53,14 @@ export class EffectLayer implements Layer {
 
     private canvas: HTMLCanvasElement;
     private brush: CanvasRenderingContext2D;
+
+    setActive(active: boolean) {
+
+    }
+
+    isActive(): boolean {
+        return true;
+    }
 
     /**
      * Draws an panning overlay effect.
@@ -103,6 +119,14 @@ export class BorderLayer implements Layer {
     @ViewChild('borderLayer') 
     private element: ElementRef;
     private border: Border;
+
+    setActive(active: boolean) {
+        this.border.active = active;
+    }
+
+    isActive(): boolean {
+        return this.border.active;
+    }
 
     @HostListener('mousemove', ['$event']) 
     private onMove(event: MouseEvent) {

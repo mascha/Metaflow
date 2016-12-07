@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {NgModule, ElementRef} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {LoaderModule} from '../loader/loader.module';
 import {GridLayer, BorderLayer, EffectLayer} from './layers/layers';

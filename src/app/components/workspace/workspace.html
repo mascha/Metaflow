@@ -1,4 +1,9 @@
 
+<navigation></navigation>
+
+<iconbar #toolsLeft vertical="true" position="left"></iconbar>
+<iconbar #toolsRight vertical="true" position="right"></iconbar>
+
 <triple-split *ngIf="slimLayout">
     <sidebar left title="Project" isPrimary="true">
       <explorer></explorer>
@@ -14,7 +19,10 @@
     </sidebar>
 </triple-split> 
 
-<!-- <playbar></playbar>
+<iconbar #toolsBottom vertical="false" position="bottom"></iconbar>
+
+<!--
+<playbar></playbar>
 <diagram></diagram>
 <double-split *ngIf="slimLayout" horizontal="true">
   <triple-split left>

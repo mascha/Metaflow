@@ -7,7 +7,7 @@
  */
 export interface CameraObserver {
     onViewResized();
-    onPanChanged(posX: number, posY: number);
+    onPanChanged(x: number, y: number);
     onZoomChanged(zoom: number);
 }
 

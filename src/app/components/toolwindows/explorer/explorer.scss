@@ -4,7 +4,7 @@
 
 $project-cell-height: 21px;
 $project-header-height: 28px;
-$project-header-fill: $sidebar-main;
+$project-header-fill: lighten($sidebar-header, 3);
 $project-upwards-fill: $sidebar-header;
 $project-content-fill: $sidebar-main;
 
@@ -39,8 +39,8 @@ $project-content-fill: $sidebar-main;
   top: $project-header-height;
   bottom: 0;
   left:0;
-  right: 1px;
-  // overflow: scroll;
+  right: -17px;
+  padding: 4px 0; 
   overflow-x: hidden;
   background-color: $project-content-fill;
 
@@ -59,7 +59,12 @@ $project-content-fill: $sidebar-main;
   width: 100%;
   height: $project-cell-height;
   line-height: $project-cell-height;
-  font-weight: bold;
   display: inline-block;
   cursor: default;
+  font-size: 0.8rem;
+  color: #dddddd;
+
+  &:hover span {
+    color: cornflowerblue;
+  }
 }

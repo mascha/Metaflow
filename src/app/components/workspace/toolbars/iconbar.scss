@@ -1,0 +1,38 @@
+
+:host {
+    position: relative;
+}
+
+.toolbar {
+    position: absolute;
+    background-color: red;
+
+    .vertical {
+        width: 21px;
+        padding: 12px 0;
+    }
+
+    .horizontal {
+        height: 21px;
+        padding: 0 12px;
+        
+    }
+
+    .left {
+        left: 0;
+        top: 0;
+        bottom: 0;
+    }
+
+    .bottom {
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+
+    .right {
+        right: 0;
+        bottom: 0;
+        top: 0;
+    }
+}

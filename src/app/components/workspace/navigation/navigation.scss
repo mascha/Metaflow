@@ -5,7 +5,10 @@
 $left-shift: 40px;
 
 :host {
-  @include topHeight($navigation-height);
+  position: absolute;
+  top: 0;
+  height: $navigation-height;
+  width: 100%;
 
   background-color: $navigation-fill;
   user-select: none;

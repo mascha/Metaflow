@@ -13,6 +13,7 @@ import Workspace from "./workspace";
 
 import {Dialog} from '../dialog/dialog';
 import {Playbar} from './playbar/playbar';
+import {Iconbar} from './toolbars/iconbar';
 
 /**
  * Workspace module.
@@ -38,7 +39,8 @@ import {Playbar} from './playbar/playbar';
         DoubleSplit,
         TripleSplit,
         Navigation,
-        Workspace
+        Workspace, 
+        Iconbar
     ],
     providers: [
     ]

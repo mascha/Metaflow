@@ -32,7 +32,7 @@ export default class Border implements CameraObserver {
     private maxH   = 0;
     private border = 23;
     private middle = this.border * 0.5;
-    private active = true;
+    active = true;
     private proxies: Array<Proxy>;
     private scale = 1;
 

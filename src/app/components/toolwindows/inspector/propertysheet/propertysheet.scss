@@ -1,6 +1,10 @@
 @import "../../../../../style/mixins";
 @import "../../../../../style/theme";
 
+$text-color: #dddddd;
+$text-locked: #aaaaaa;
+$text-disabled: darken($text-locked, 24);
+
 .sheet-property {
   height: 58px;
   margin-bottom: 6px;
@@ -17,7 +21,7 @@
 
     &.locked {
       @include icon(after, '\f33E') {
-        color: #aaaaaa;
+        color: $text-locked;
         font-size: 12px;
       }
     }
@@ -33,10 +37,11 @@
     border: 1px solid $sidebar-border;
     border-radius: 3px;
     background-color: $sidebar-header;
-    color: white;
+    color: $text-color;
   }
 
   input[disabled] {
     cursor: not-allowed;
+    color: $text-disabled;
   }
 }

@@ -11,7 +11,17 @@ import {Observable} from "rxjs/Rx";
  */
 export interface Diagram {
     readonly camera: Camera;
+
+    /**
+     * The currently active model, if any.
+     * Setting a new model will reset the diagram.
+     */
     readonly model: Observable<Model>;
+
+    /**
+     * The currently active scope of the diagran. Always a 
+     * subset of the current model. Null if model is null.
+     */
     readonly scope: Scope;
     readonly selection: Selection<ViewVertex>;
 } 
@@ -66,6 +76,16 @@ export interface Layer {
      * A callback for registering observables after the diagram has been created.
      */
     initialize(diagram: Diagram);
+
+    /**
+     * Make layer active or not.
+     */
+    setActive(active: boolean);
+
+    /**
+     * Check wether the layer is current active. 
+     */
+    isActive(): boolean;
 }
 
 /**

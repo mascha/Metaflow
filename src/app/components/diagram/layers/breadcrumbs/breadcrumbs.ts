@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, Renderer} from '@angular/core';
 import {ViewGroup, ViewVertex, Model} from "../../../../common/viewmodel";
 import {Style} from "../../../../common/styling";
 import {Diagram, Layer} from "../../../../common/layer";
@@ -22,8 +22,16 @@ export default class Breadcrumbs implements Layer {
     private maximumSegments = 4;
     private rootPath = "/users/${id}/${model-id}/@x@y@z1.5434"
 
-    public initialize(diagram: Diagram) {
+    initialize(diagram: Diagram) {
         diagram.scope.subscribe(it => this.updateSegments(it));
+    }
+
+    setActive(active: boolean) {
+
+    }
+
+    isActive(): boolean {
+        return true;
     }
 
     private updateSegments(level?: ViewGroup) {

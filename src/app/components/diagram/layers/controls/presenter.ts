@@ -22,6 +22,14 @@ export default class Presenter implements Layer {
         });
     }
 
+    setActive(active: boolean) {
+
+    }
+
+    isActive() {
+        return true;
+    }
+
     private onZoomIn(event: MouseEvent) {
         
     }

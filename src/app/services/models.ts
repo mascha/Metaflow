@@ -10,7 +10,7 @@ const NAMES = [
     'Market Size',
     'Price',
     'Stock',
-    'Very very very long\n Name',
+    'Very long name',
     'Work in\nProgress',
     'Deliverables',
     'Workforce',
@@ -129,8 +129,8 @@ const NAMES = [
 
                 group.addContent(item);
 
-                let neighbor = this.findConnection(item, group.contents, 1000);
-                // item.addLink(neighbor);
+                let neighbor = this.findConnection(item, group.contents, 4000);
+                //console.log((item ? item.name : "NULL") + ' -> ' + (neighbor ? neighbor.name: "NULL"));
 
                 entity--;
             }
@@ -149,13 +149,14 @@ const NAMES = [
     }
 
     private findConnection(item: ViewVertex, siblings: ViewVertex[], distance: number): ViewVertex {
-        siblings.forEach(element => {
-            let dX = item.centerX - element.centerX;
-            let dY = item.centerY - element.centerY;
-            if (item !== element && Math.sqrt(dX*dX + dX*dY) <= distance && Math.random() > 0.75) {
-                return element;   
+        for (let sibling of siblings) {
+            let dX = item.centerX - sibling.centerX;
+            let dY = item.centerY - sibling.centerY;
+            if (Math.sqrt(dX*dX + dX*dY) <= distance && sibling !== item) {
+                return sibling;   
             }
-        });
+        }
+
         return null;
     }
 
@@ -175,7 +176,7 @@ const NAMES = [
         this.variableStyle.labels = new Label();
         this.variableStyle.labels.horizontal = Horizontal.RIGHT;
         this.variableStyle.labels.placement = Locality.OUTSIDE;
-        this.variableStyle.labels.setScaling(.05, .6, .6);
+        this.variableStyle.labels.setScaling(.05, .5, .6);
         this.variableStyle.labels.color = 'mediumseagreen';
 
         this.stockStyle = new Style();
