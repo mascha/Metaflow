@@ -16,9 +16,12 @@ import {Diagram} from "../../../common/layer";
     styles: [require('./inspector.scss')]
 })
 export default class Inspector implements SelectionObserver<ViewVertex> {
-    private categoryIndex = 1;
-    private overlayMessage = 'No selection';
-    private selection = false;
+    categoryIndex = 1;
+    overlayMessage = 'No selection';
+    
+    selection = {
+        empty: false
+    }
 
     public onSelectionBegin(selection: Selection<ViewVertex>) {
         this.overlayMessage = "Beginning selection";

@@ -12,19 +12,15 @@ export class Iconbar {
     @Input() vertical: boolean;
     @Input() primary: boolean;
 
+    selectedItem: any;
+
     items = [
-        { label: 'Project' },
-        { label: 'Issues' },
-        { label: 'Inspector' } 
-    ]
-}
+        { label: 'Project', tool: null },
+        { label: 'Issues', tool: null },
+        { label: 'Inspector', tool: null } 
+    ];
 
-/**
- * Icon item with selection status.
- */
-class IconItem {
-    @Input() label: string = "NONE";
-    @Input() icon: string = "";
-
-    selected = false;
-}
+    constructor() {
+        this.selectedItem = this.items[0];
+    }
+} 

@@ -226,8 +226,14 @@ export class PixiCamera extends Camera {
         for (let i = 0, len = lbs.length; i < len; i++) {
             let label = lbs[i];
             let s = label.baseScale / zoom;
-            label.scale.set(s, s);
-            label.visible = (s < label.upperScale)
+            let v = s < label.upperScale;
+            if (v) {
+                let m = (s - label.lowerScale) / (label.upperScale - label.lowerScale);
+                // m = m < 0 ? 0 : m > 1 ? 1 : 0;
+                label.alpha = Math.E * Math.exp(-1/(1 - m * m));
+                label.scale.set(s, s);
+            }
+            label.visible = v;
         }
     }
 

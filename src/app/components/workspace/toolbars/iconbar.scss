@@ -2,12 +2,15 @@
 
 $item-selected: #1E222A;
 $item-fill: transparent;
-$item-hovered: rgba($item-selected, 0.2);
+$item-hovered: rgba($item-selected, 0.4);
+$item-text-selected: white;
+$item-text-hovered: white;
 $toolbar-fill: #323946;
 $toolbar-border: #262C37; 
 
 .toolbar {
     position: absolute;
+    overflow: hidden;
     background-color: $toolbar-fill;
 
     &.vertical {
@@ -71,7 +74,12 @@ $toolbar-border: #262C37;
 
         &:hover {
             background-color: $item-hovered;
-            color: white;
+            color: $item-text-hovered;
+        }
+
+        &.selected {
+            color: $item-text-selected;
+            background-color: $item-selected;
         }
     }
 }

@@ -60,9 +60,10 @@ $project-content-fill: $sidebar-main;
   height: $project-cell-height;
   line-height: $project-cell-height;
   display: inline-block;
-  cursor: default;
+  cursor: pointer;
   font-size: 0.8rem;
   color: #dddddd;
+  // transition: color ease-in 2000ms;
 
   &:hover span {
     color: cornflowerblue;
