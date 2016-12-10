@@ -6,7 +6,7 @@
 
 <triple-split *ngIf="slimLayout" class="content">
     <sidebar left title="Project" isPrimary="true">
-      <explorer></explorer>
+      <explorer explorer></explorer>
     </sidebar>
     <double-split center horizontal="true">
       <diagram left></diagram>
@@ -14,8 +14,9 @@
         <dataview></dataview>
       </sidebar>
     </double-split>
-    <sidebar right title="Inspector" isPrimary="false">
-      <inspector></inspector>
+    <sidebar right [title]="toolsRight.selectedItem.title" isPrimary="false">
+      <inspector inspector *ngIf="toolsRight.selectedItem === inspector"></inspector>
+      <palette palette *ngIf="toolsRight.selectedItem === palette"></palette>
     </sidebar>
 </triple-split> 
 

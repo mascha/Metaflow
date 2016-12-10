@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ToolWindowModule } from '../toolwindows/toolwindows.module';
 import { DiagramModule } from '../diagram/diagram.module';
 
-import SideBar from './sidebar/sidebar';
+import {Sidebar} from './sidebar/sidebar';
 import DoubleSplit from "./splitpane/doublesplit";
 import TripleSplit from "./splitpane/triplesplit";
 
@@ -33,7 +33,7 @@ import {Iconbar} from './toolbars/iconbar';
     declarations: [
         Playbar,
         Dialog,
-        SideBar, 
+        Sidebar, 
         MenuBar, 
         Workspace,
         DoubleSplit,

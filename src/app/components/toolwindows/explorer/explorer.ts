@@ -1,6 +1,7 @@
 import {Component, Inject} from '@angular/core';
 import {ViewGroup} from "../../../common/viewmodel";
 import {Diagram} from "../../../common/layer";
+import {ToolWindow} from "../toolwindow"
 import ModelService from "../../../services/models";
 
 /**
@@ -14,12 +15,13 @@ import ModelService from "../../../services/models";
     template: require('./explorer.html'),
     styles: [require('./explorer.scss')]
 })
-export default class Explorer {
-    private contents = [];
-    private scope: ViewGroup;
-    private isLocked = false;
-    private isDisabled = false;
-    private levelName: string;
+export class Explorer implements ToolWindow {
+    title = "Explorer";
+    contents = [];
+    scope: ViewGroup;
+    isLocked = false;
+    isDisabled = false;
+    levelName: string;
 
     private goUpwards() {
         if (this.canGoUpwards()) {

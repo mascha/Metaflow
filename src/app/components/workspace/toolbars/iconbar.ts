@@ -14,11 +14,11 @@ export class Iconbar {
 
     selectedItem: any;
 
-    items = [
-        { label: 'Project', tool: null },
-        { label: 'Issues', tool: null },
-        { label: 'Inspector', tool: null } 
-    ];
+    items: any[] = [];
+
+    onItemClicked(item: any) {
+        this.selectedItem = item;
+    }
 
     constructor() {
         this.selectedItem = this.items[0];

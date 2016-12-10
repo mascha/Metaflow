@@ -11,8 +11,8 @@ import {Component, Input, EventEmitter, Output} from '@angular/core';
     template: require('./sidebar.html'),
     styles: [require('./sidebar.scss')],
 })
-export default class Sidebar {
-    @Input() title = "Toolwindow";
+export class Sidebar {
+    @Input() title = "TITLE";
     @Input() isPrimary: string;
     @Input() visible = true;
     @Output('visibility') visibility = new EventEmitter<any>();

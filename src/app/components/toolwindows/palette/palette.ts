@@ -1,6 +1,7 @@
 import {Component, ViewChild, ElementRef, Renderer, HostListener} from '@angular/core';
 import PaletteRegistry from "../../../services/palettes";
 import HTMLUtil from "../../../common/utility";
+import {ToolWindow} from "../toolwindow";
 
 /**
  * A component palette.
@@ -12,16 +13,17 @@ import HTMLUtil from "../../../common/utility";
     template: require('./palette.html'),
     styles: [require('./palette.scss')],
 })
-export default class Palette {
+export default class Palette implements ToolWindow {
+    title = "Palette";
     categories: Array<any>;
     components: Array<any>;
     selected: string;
     dimmed = true;
     timer: any;
 
-    @ViewChild('icons') private icons: ElementRef;
-    @ViewChild('select') private select: ElementRef;
-    @ViewChild('overlay') private overlay: ElementRef;
+    @ViewChild('icons') icons: ElementRef;
+    @ViewChild('select') select: ElementRef;
+    @ViewChild('overlay') overlay: ElementRef;
 
     private onIconsMove() {
         this.reset();

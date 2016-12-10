@@ -2,6 +2,7 @@ import {Component, ElementRef, ViewChild, Inject} from '@angular/core';
 import {Selection, SelectionObserver} from "../../../common/selection";
 import {ViewVertex} from "../../../common/viewmodel";
 import {Diagram} from "../../../common/layer";
+import {ToolWindow} from "../toolwindow";
 
 
 /**
@@ -15,9 +16,10 @@ import {Diagram} from "../../../common/layer";
     template: require('./inspector.html'),
     styles: [require('./inspector.scss')]
 })
-export default class Inspector implements SelectionObserver<ViewVertex> {
+export class Inspector implements SelectionObserver<ViewVertex>, ToolWindow {
     categoryIndex = 1;
     overlayMessage = 'No selection';
+    title = "Inspector";
     
     selection = {
         empty: false
