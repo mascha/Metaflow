@@ -12,12 +12,12 @@ import {Component} from '@angular/core';
     template: require('./navigation.html'),
 })
 export default class Navigation {
-    private projectName = "Diffusion Model";
-    private favorite = false;
-    private showBranding = true;
-    private userName = 'Martin Schade';
+    projectName = "Diffusion Model";
+    favorite = false;
+    showBranding = true;
+    userName = 'Martin Schade';
 
-    private onFavoriteClick() {
+    onFavoriteClick() {
         this.favorite = !this.favorite;
     }
 }

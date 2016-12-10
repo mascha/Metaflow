@@ -3,6 +3,7 @@
 @import "../../../../../style/variables";
 
 $breadcrumbs-text-color: lighten($icon-color,8);
+$breadcrumbs-text-selected: white;
 
 :host {
   position: absolute;
@@ -10,7 +11,7 @@ $breadcrumbs-text-color: lighten($icon-color,8);
   top: $diagram-control-offset;
   left: $diagram-control-offset;
   box-shadow: $presenter-shadow;
-   border: 1px solid darken($presenter-body, 12);
+  border: 1px solid darken($presenter-body, 12);
 }
 
 .navigation {
@@ -60,6 +61,7 @@ $breadcrumbs-text-color: lighten($icon-color,8);
 
     &:last-child {
       font-weight: bold;
+      color: $breadcrumbs-text-selected;
     }
   }
 }

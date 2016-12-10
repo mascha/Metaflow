@@ -1,10 +1,10 @@
 
 <navigation></navigation>
 
-<iconbar #toolsLeft vertical="true" position="left"></iconbar>
-<iconbar #toolsRight vertical="true" position="right"></iconbar>
+<iconbar #toolsLeft vertical="true" primary="true"></iconbar>
+<iconbar #toolsRight vertical="true" primary="false"></iconbar>
 
-<triple-split *ngIf="slimLayout">
+<triple-split *ngIf="slimLayout" class="content">
     <sidebar left title="Project" isPrimary="true">
       <explorer></explorer>
     </sidebar>
@@ -19,7 +19,7 @@
     </sidebar>
 </triple-split> 
 
-<iconbar #toolsBottom vertical="false" position="bottom"></iconbar>
+<iconbar #toolsBottom vertical="false"></iconbar>
 
 <!--
 <playbar></playbar>

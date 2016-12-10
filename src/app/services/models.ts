@@ -167,7 +167,7 @@ const NAMES = [
         this.moduleStyle.shape.a = 6;
         this.moduleStyle.fill = 'darkgrey';
         this.moduleStyle.labels = new Label();
-        this.moduleStyle.labels.setScaling(.2, .7, 1.2);
+        this.moduleStyle.labels.setScaling(.2, .7, 1.6);
         this.moduleStyle.labels.color = 'cornflowerblue';
         
         this.variableStyle = new Style();
@@ -185,7 +185,7 @@ const NAMES = [
         this.stockStyle.labels = new Label();
         this.stockStyle.labels.vertical = Vertical.TOP;
         this.stockStyle.labels.placement = Locality.OUTSIDE;
-        this.stockStyle.labels.setScaling(.1, .6, .9);
+        this.stockStyle.labels.setScaling(.1, .6, 1);
         this.stockStyle.labels.color = 'salmon';
 
         this.rateStyle = new Style();

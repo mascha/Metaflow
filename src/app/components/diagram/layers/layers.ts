@@ -80,11 +80,11 @@ export class EffectLayer implements Layer {
         let element = this.misc.nativeElement;
         if (!element) return;
 
-        let container = document.createElement('div');
+        let container = document.createElement('div') as any;
         container.style.top = position.y + "px";
         container.style.left = position.x + "px";
         container.style.position = "absolute";
-        let object = document.createElement('div');
+        let object = document.createElement('div')as any;
         object.style.width = "5px";
         object.style.height = "5px";
         object.style.backgroundColor = color || 'rgba(0, 0, 0, 0.2)';
@@ -141,11 +141,9 @@ export class BorderLayer implements Layer {
     }
 
     public initialize(diagram: Diagram) {
-        /*
         let element = this.element.nativeElement;
         this.border = new Border(diagram.camera, element);
         diagram.camera.subscribe(this.border);
         diagram.scope.subscribe(it => this.border.updateProxies(it));
-        */
     }
 }

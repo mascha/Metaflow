@@ -94,7 +94,8 @@ export class PixiLayer implements RenderLayer, CameraObserver {
                 let itm = item as ViewGroup;
                 this.cachedGroups.push(itm);
                 if (itm.contents && itm.contents.length > 0) {
-                    mapper.renderGroup(itm, false, false);
+                    mapper.renderGroup(itm, false, true);
+                    /*
                     let subleafs = new PIXI.Graphics();
                     itm.contents.forEach(it => {
                         if (!it.isLeaf()) {
@@ -104,6 +105,7 @@ export class PixiLayer implements RenderLayer, CameraObserver {
                         }
                         mapper.attach(it, itm);
                     });
+                    */
                 } else {
                     mapper.renderGroup(itm, false, true);
                 }
@@ -224,12 +226,13 @@ export class PixiCamera extends Camera {
         for (let i = 0, len = lbs.length; i < len; i++) {
             let label = lbs[i];
             let s = label.baseScale / zoom;
-            s = (s < label.lowerScale) ? label.lowerScale : (s > label.upperScale) ? label.upperScale : s;
             label.scale.set(s, s);
+            label.visible = (s < label.upperScale)
         }
     }
 
-    constructor(private world: PIXI.Container,
+    constructor(
+        private world: PIXI.Container,
         private overlay: PIXI.Container) {
         super();
     }

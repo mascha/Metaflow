@@ -70,7 +70,9 @@ $splitpane-divider-width: 5px !default;
   &.horizontal {
     left: 0;
     right: 0;
-    height: 1px;
+    height: 5px;
+    border-top: 1px solid $splitpane-divider;
+    background-color: transparent;
 
     &:before {
       padding-left: 16px;

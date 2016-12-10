@@ -1,38 +1,77 @@
+@import "../../../../style/mixins";
 
-:host {
-    position: relative;
-}
+$item-selected: #1E222A;
+$item-fill: transparent;
+$item-hovered: rgba($item-selected, 0.2);
+$toolbar-fill: #323946;
+$toolbar-border: #262C37; 
 
 .toolbar {
     position: absolute;
-    background-color: red;
+    background-color: $toolbar-fill;
 
-    .vertical {
+    &.vertical {
         width: 21px;
-        padding: 12px 0;
+        padding: 0 0;
+
+        .toolbar-item {
+            height: 72px;
+            width: 72px;
+        }
     }
 
-    .horizontal {
+    &.horizontal {
         height: 21px;
-        padding: 0 12px;
+        padding: 0 20px;
         
+        .toolbar-item {
+            display: inline-block;
+            padding: 0 16px;
+        }
     }
 
-    .left {
+    &.left {
         left: 0;
         top: 0;
         bottom: 0;
+        border-right: solid 1px $toolbar-border;
+
+        .toolbar-item {
+            transform: rotate(-90deg);
+        }
     }
 
-    .bottom {
+    &.bottom {
         bottom: 0;
         left: 0;
         right: 0;
+        border-top: solid 1px $toolbar-border;
     }
 
-    .right {
+    &.right {
         right: 0;
         bottom: 0;
         top: 0;
+        border-left: solid 1px $toolbar-border;
+
+        .toolbar-item {
+            transform: rotate(90deg) translateY(-20px);
+            transform-origin: top left;
+        }
+    }
+
+    .toolbar-item {
+        line-height: 21px;
+        cursor: pointer;
+        background-color: $item-fill;
+        font-size: 11px;
+        font-weight: bold;
+        text-align: center;
+        transition: background ease-in 150ms, color ease-in 150ms;
+
+        &:hover {
+            background-color: $item-hovered;
+            color: white;
+        }
     }
 }

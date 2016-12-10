@@ -10,7 +10,8 @@ import {Diagram} from '../../common/layer';
 @Component({
     selector: 'workspace',
     template: require('./workspace.html'),
+    styles: [require('./workspace.scss')]
 })
 export default class Workspace {
-    private slimLayout = true;
+    slimLayout = true;
 }

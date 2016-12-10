@@ -13,11 +13,11 @@ import HTMLUtil from "../../../common/utility";
     styles: [require('./palette.scss')],
 })
 export default class Palette {
-    private categories: Array<any>;
-    private components: Array<any>;
-    private selected: string;
-    private dimmed = true;
-    private timer: any;
+    categories: Array<any>;
+    components: Array<any>;
+    selected: string;
+    dimmed = true;
+    timer: any;
 
     @ViewChild('icons') private icons: ElementRef;
     @ViewChild('select') private select: ElementRef;

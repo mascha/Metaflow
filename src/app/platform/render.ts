@@ -138,7 +138,7 @@ export class Mapper {
 
   public cacheShape(style: Style) {
     if (style.cachedImage) return;
-    let canvas = document.createElement('canvas');
+    let canvas = document.createElement('canvas') as any;
     canvas.width = 16;
     canvas.height = 16;
 
