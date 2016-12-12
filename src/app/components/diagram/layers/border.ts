@@ -80,7 +80,7 @@ export default class Border implements CameraObserver {
     private draw() {
         if (this.active && this.proxies) {
             this.clearProxies();
-            this.drawBorder(0);
+            this.drawBorder(0.1);
             this.drawProxies();
         }
     }

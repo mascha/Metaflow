@@ -3,12 +3,12 @@
 @import "../../../../style/mixins";
 
 $palette-component: $sidebar-main;
-$palette-icons: darken($sidebar-main, 16);
+$palette-icons: darken($sidebar-main, 6);
 $palette-icons-glyph: darken($navigation-fill ,6);;
 $palette-icons-span-adjust: 4px;
-$palette-component-entry-hover: #dddddd;
-$palette-component-entry: #eeeeee;
-$palette-labels: rgba(white, 0.85);
+$palette-component-entry-hover: darken($sidebar-header, 6);
+$palette-component-entry: $sidebar-header;
+$palette-labels: rgba(black, 0.7);
 
 :host {
   position: absolute;
@@ -122,9 +122,9 @@ $palette-labels: rgba(white, 0.85);
   overflow-x: hidden;
   top:0;
   bottom:0;
-  left:0;
+  left:-17px;
   right:$icon-bar-width;
-  padding: 6px 6px 6px 0;
+  padding: 3px 6px 6px 6px;
   background-color: $palette-component;
 
   direction: rtl;
@@ -141,15 +141,16 @@ $palette-labels: rgba(white, 0.85);
     height: 70px;
     margin: 4px;
     text-align: center;
+    font-size: 14px;
+    vertical-align: baseline;
     line-height: 70px;
     border-radius: 3px;
     cursor: default;
     user-select: none;
-    transition: all .15s linear;
+    transition: background-color .15s ease-in;
 
     &:hover {
       background-color: $palette-component-entry-hover;
-      transform: scale(1.1);
     }
   }
 }

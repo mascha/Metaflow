@@ -14,7 +14,7 @@ import {Component} from '@angular/core';
 export default class Navigation {
     projectName = "Diffusion Model";
     favorite = false;
-    showBranding = true;
+    showBranding = false;
     userName = 'Martin Schade';
 
     onFavoriteClick() {

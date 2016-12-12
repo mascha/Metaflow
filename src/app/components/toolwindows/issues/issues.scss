@@ -1,0 +1,69 @@
+@import "../../../../style/variables";
+@import "../../../../style/theme";
+@import "../../../../style/mixins";
+
+$project-cell-height: 21px;
+$project-header-height: 28px;
+$project-header-fill: lighten($sidebar-header, 3);
+$project-upwards-fill: $sidebar-header;
+$project-content-fill: $sidebar-main;
+
+:host {
+  @include fill;
+  background-color: $palette-icons;
+  user-select: none;
+}
+
+.project-entities {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left:0;
+  right: -17px;
+  padding: 4px 0; 
+  overflow-x: hidden;
+  background-color: $project-content-fill;
+
+  .entity-icon {
+    padding: 2.5px 4px 0 4px;
+  }
+
+  span {
+    display: inline-block;
+    vertical-align: text-bottom;
+  }
+}
+
+.entity-cell {
+  padding-left: 6px;
+  width: 100%;
+  height: $project-cell-height;
+  line-height: $project-cell-height;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: #dddddd;
+  // transition: color ease-in 2000ms;
+
+  &:hover span {
+    color: cornflowerblue;
+  }
+}
+
+.warning {
+  @include icon(before, '\F026') {
+    color: goldenrod;
+    left: 50%;
+    top: 50%;
+    height: 100%;
+  }
+}
+
+.error {
+  @include icon(before, '\F029') {
+    color: orangered;
+    left: 50%;
+    top: 50%;
+    height: 100%;
+  }
+}

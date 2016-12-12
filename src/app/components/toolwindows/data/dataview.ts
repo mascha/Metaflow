@@ -1,4 +1,6 @@
 import {Component, ElementRef, HostListener} from '@angular/core';
+import {ToolWindow} from '../toolwindow';
+import {Diagram} from "../../../common/layer";
 
 // let Plotly = require('plotly.js');
 
@@ -12,7 +14,9 @@ import {Component, ElementRef, HostListener} from '@angular/core';
     styles: [require('./dataview.scss')],
     template: `<div id="plot" class="plot"></div>`
 })
-export default class Dataview {
+export default class Dataview implements ToolWindow {
+
+    readonly title = "Analytics";
 
     static linspace(a,b,n) {
         if(typeof n === "undefined") n = Math.max(Math.round(b-a)+1,1);
@@ -27,7 +31,12 @@ export default class Dataview {
         return Math.random() * (max - min) + min;
     }
 
+    initialize(diagram: Diagram) {
+        
+    }
+
     ngAfterViewInit() {
+        /*
         let boxNumber = 30;
         let boxColor = [];
         let allColors = Dataview.linspace(0, 360, boxNumber);
@@ -83,6 +92,7 @@ export default class Dataview {
         };
 
         // Plotly.newPlot('plot', data, layout, {displayModeBar: false});
+        */
     }
 
     @HostListener('window:resize')

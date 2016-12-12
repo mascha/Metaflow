@@ -1,3 +1,5 @@
+import {Diagram} from '../../common/layer'
+
 /**
  * A toolwindow.
  * 
@@ -6,4 +8,6 @@
  */
 export interface ToolWindow {
     readonly title: string;
+
+    initialize(diagram: Diagram) 
 }

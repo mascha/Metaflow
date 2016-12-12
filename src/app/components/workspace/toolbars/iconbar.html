@@ -1,5 +1,5 @@
 <section class="toolbar {{vertical == 'true' ? (primary == 'true' ? 'vertical left' : 'vertical right') : 'horizontal bottom'}}">
     <div *ngFor="let item of items" class="toolbar-item" [class.selected]="selectedItem === item" (click)="onItemClicked(item)">
-        <span>{{item.title}}</span>
+        <span>{{item.title || ""}}</span>
     </div>
 </section>

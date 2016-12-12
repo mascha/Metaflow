@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, AfterViewInit } from '@angular/core';
 
 /**
  * 
@@ -8,16 +8,20 @@ import { Component, Input } from '@angular/core';
     template: require('./iconbar.html'),
     styles: [require('./iconbar.scss')]
 })
-export class Iconbar {
+export class Iconbar implements AfterViewInit {
     @Input() vertical: boolean;
     @Input() primary: boolean;
 
     selectedItem: any;
 
-    items: any[] = [];
+    items: any[] = [{title:""}];
 
     onItemClicked(item: any) {
         this.selectedItem = item;
+    }
+
+    ngAfterViewInit() {
+        
     }
 
     constructor() {

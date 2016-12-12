@@ -4,6 +4,7 @@ import Palette from "./palette/palette";
 import Dataview from "./data/dataview";
 import {Inspector} from "./inspector/inspector";
 import {Explorer} from "./explorer/explorer";
+import {Issues} from "./issues/issues";
 import PropertySheet from './inspector/propertysheet/propertysheet';
 
 /**
@@ -20,14 +21,16 @@ import PropertySheet from './inspector/propertysheet/propertysheet';
         Inspector,
         Palette,
         Dataview,
-        Explorer
+        Explorer,
+        Issues
     ],
     declarations: [
         PropertySheet,
         Inspector,
         Palette,
         Dataview,
-        Explorer
+        Explorer,
+        Issues
     ],
     providers: [],
 })

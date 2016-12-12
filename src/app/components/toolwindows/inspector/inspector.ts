@@ -21,15 +21,18 @@ export class Inspector implements SelectionObserver<ViewVertex>, ToolWindow {
     overlayMessage = 'No selection';
     title = "Inspector";
     
-    selection = {
-        empty: false
+    selection: Selection<ViewVertex>;
+
+    initialize(diagram: Diagram) {
+        this.selection = diagram.selection;
+        this.selection.subscribe(this);
     }
 
-    public onSelectionBegin(selection: Selection<ViewVertex>) {
+    onSelectionBegin(selection: Selection<ViewVertex>) {
         this.overlayMessage = "Beginning selection";
     }
 
-    public onSelectionUpdate(selection: Selection<ViewVertex>) {
+    onSelectionUpdate(selection: Selection<ViewVertex>) {
         this.overlayMessage = selection.empty ? "Nothing selected" : `Selected ${selection.items.length} items`;
     }
 

@@ -1,8 +1,7 @@
 import {Component, ViewChild, Inject, AfterViewInit} from "@angular/core";
 import {Diagram} from '../../common/layer';
 import {Iconbar} from './toolbars/iconbar';
-import {Explorer} from '../toolwindows/explorer/explorer';
-import {Inspector} from '../toolwindows/inspector/inspector';
+import {ToolWindow} from '../toolwindows/toolwindow';
 import {Sidebar} from './sidebar/sidebar';
 
 /**
@@ -21,20 +20,38 @@ export default class Workspace implements AfterViewInit {
     @ViewChild('toolsRight') toolsRight: Iconbar;
     @ViewChild('toolsBottom') toolsBottom: Iconbar;
 
-    @ViewChild('left') left: Sidebar;
-    @ViewChild('right') right: Sidebar;
-    @ViewChild('bottom') bottom: Sidebar;
+    @ViewChild('leftBar') left: Sidebar;
+    @ViewChild('rightBar') right: Sidebar;
+    @ViewChild('bottomBar') bottom: Sidebar;
 
-    @ViewChild('explorer') explorer: Explorer;
-    @ViewChild('inspector') inspector: Inspector;
-    @ViewChild('palette') palette: Inspector;
+    @ViewChild('explorer') explorer: ToolWindow;
+    @ViewChild('inspector') inspector: ToolWindow;
+    @ViewChild('palette') palette: ToolWindow;
+    @ViewChild('dataview') dataview: ToolWindow;
+    @ViewChild('issues') issues: ToolWindow;
+
+    @ViewChild('diagram') diagram: Diagram;
+
     slimLayout = true;
 
     ngAfterViewInit() {
         setTimeout(() => {
+            this.toolsLeft.selectedItem = this.explorer;
+            this.toolsRight.selectedItem = this.inspector;
             this.toolsRight.items = [this.inspector, this.palette]; 
-            this.toolsLeft.items = [this.explorer];
-            this.toolsBottom.items = [];
+            this.toolsLeft.items = [this.explorer, this.issues];
+
+            if (this.dataview) {
+                this.toolsBottom.selectedItem = this.dataview;
+                this.toolsBottom.items = [this.dataview];
+            }
         })
+
+        if (this.diagram) {
+            this.explorer.initialize(this.diagram);
+            this.inspector.initialize(this.diagram);
+            this.palette.initialize(this.diagram);
+            this.issues.initialize(this.diagram);
+        }
     }
 }

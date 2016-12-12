@@ -1,41 +1,25 @@
-
 <navigation></navigation>
-
-<iconbar #toolsLeft vertical="true" primary="true"></iconbar>
-<iconbar #toolsRight vertical="true" primary="false"></iconbar>
-
-<triple-split *ngIf="slimLayout" class="content">
-    <sidebar left title="Project" isPrimary="true">
-      <explorer explorer></explorer>
+<div class="workspace">
+  <iconbar #toolsLeft vertical="true" primary="true"></iconbar>
+  <iconbar #toolsRight vertical="true" primary="false"></iconbar>
+  <triple-split *ngIf="slimLayout" class="content" [class.active-bottom]="toolsBottom">
+    <sidebar left #leftBar [title]="toolsLeft.selectedItem?.title" isPrimary="true">
+      <explorer #explorer class="tool" [class.active]="toolsLeft.selectedItem === explorer"></explorer>
+      <issues #issues class="tool" [class.active]="toolsLeft.selectedItem === issues"></issues>
     </sidebar>
+    <!--
     <double-split center horizontal="true">
-      <diagram left></diagram>
-      <sidebar right title="Simulation">
-        <dataview></dataview>
+      <diagram left #diagram></diagram>
+      <sidebar right #bottomBar [title]="toolsBottom.selectedItem?.title">
+        <dataview #dataview></dataview>
       </sidebar>
-    </double-split>
-    <sidebar right [title]="toolsRight.selectedItem.title" isPrimary="false">
-      <inspector inspector *ngIf="toolsRight.selectedItem === inspector"></inspector>
-      <palette palette *ngIf="toolsRight.selectedItem === palette"></palette>
-    </sidebar>
-</triple-split> 
-
-<iconbar #toolsBottom vertical="false"></iconbar>
-
-<!--
-<playbar></playbar>
-<diagram></diagram>
-<double-split *ngIf="slimLayout" horizontal="true">
-  <triple-split left>
-    <sidebar left title="Project" isPrimary="true" (visibility)="togglePrimary($event)">
-      <explorer></explorer>
-    </sidebar>
-    <diagram center></diagram>
-    <sidebar right title="Inspector" isPrimary="false" (visibility)="toggleSecondary($event)">
-      <inspector></inspector>
+    </double-split> 
+    -->
+    <diagram center #diagram></diagram>
+    <sidebar right #rightBar [title]="toolsRight.selectedItem?.title" isPrimary="false">
+      <inspector #inspector class="tool" [class.active]="toolsRight.selectedItem === inspector"></inspector>
+      <palette #palette class="tool" [class.active]="toolsRight.selectedItem === palette"></palette>
     </sidebar>
   </triple-split>
-  <sidebar right title="Simulation" (visibility)="toggleTernary($event)">
-    <dataview></dataview>
-  </sidebar>
-</double-split> -->
+  <iconbar #toolsBottom vertical="false" *ngIf="toolsBottom"></iconbar>
+</div>

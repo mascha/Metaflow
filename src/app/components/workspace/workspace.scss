@@ -1,7 +1,30 @@
+@import "../../../style/variables";
+
+.workspace {
+    position: absolute;
+    top: $navigation-height;
+    left: 0; right: 0; bottom: 0;
+}
+
 .content {
     position: absolute;
     top: 0;
     left: 22px;
-    bottom: 22px;
+    bottom: 0px;
     right: 22px;
+
+    &.active-bottom {
+        bottom: 22px;
+    }
+}
+
+.tool {
+    visibility: hidden;
+    opacity: 0.0;
+    transition: visibility linear 200ms, opacity ease-in 200ms;
+
+    &.active {
+        visibility: visible;
+        opacity: 1.0;
+    }
 }

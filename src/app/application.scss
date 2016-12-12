@@ -13,12 +13,7 @@
   right:0;
   left:0;
   bottom: 0;
-
-  @if $show-navigation-border {
-    top: ($navigation-height + 1) /* + $toolbar-height */;
-  } @else {
-    top: ($navigation-height);
-  }
+  top:0;
 }
 
 .fullscreen {

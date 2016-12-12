@@ -4,8 +4,8 @@
   <span #notes class="inspector-category right" [class.active]="categoryIndex == 3" (click)="onSelect(3)">Notes</span>
 </section>
 <section class="inspector-content">
-  <div class="inspector-overlay" *ngIf="selection.empty">
+  <div class="inspector-overlay" *ngIf="selection?.empty">
     <h3>{{overlayMessage}}</h3>
   </div>
-  <property-sheet *ngIf="categoryIndex == 1 && !selection.empty"></property-sheet>
+  <property-sheet *ngIf="categoryIndex == 1 && !selection?.empty"></property-sheet>
 </section>

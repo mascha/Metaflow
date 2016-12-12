@@ -5,18 +5,18 @@ import {ToolWindow} from "../toolwindow"
 import ModelService from "../../../services/models";
 
 /**
- * A project navigator/explorer.
+ * A problem viewer.
  * 
  * @author Martin Schade
  * @since 1.0.0
  */
 @Component({
-    selector: 'explorer',
-    template: require('./explorer.html'),
-    styles: [require('./explorer.scss')]
+    selector: 'issues',
+    template: require('./issues.html'),
+    styles: [require('./issues.scss')]
 })
-export class Explorer implements ToolWindow {
-    title = "Explorer";
+export class Issues implements ToolWindow {
+    title = "Issues";
     contents = [];
     scope: ViewGroup;
     isLocked = false;

@@ -2,6 +2,7 @@ import {Component, ViewChild, ElementRef, Renderer, HostListener} from '@angular
 import PaletteRegistry from "../../../services/palettes";
 import HTMLUtil from "../../../common/utility";
 import {ToolWindow} from "../toolwindow";
+import {Diagram} from '../../../common/layer';
 
 /**
  * A component palette.
@@ -24,6 +25,10 @@ export default class Palette implements ToolWindow {
     @ViewChild('icons') icons: ElementRef;
     @ViewChild('select') select: ElementRef;
     @ViewChild('overlay') overlay: ElementRef;
+
+    initialize(diagram: Diagram) {
+
+    }
 
     private onIconsMove() {
         this.reset();
