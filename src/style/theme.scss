@@ -1,24 +1,35 @@
+/* Base colors */
+
+$text-base: #A9A9A9;
+$text-hover: white;
+
+$base-fill: #2A303D;
+$base-fill-light: #383F4E;
+$base-fill-selected: #0C2C53;
+$base-border: #1D222C;
+
+
 /* Icons and glyphs */
 $icon-hover: #212637 !default;
 $icon-color: #A9A9A9 !default;
 $icon-color-dark: #0e2231 !default;
 
 /* Tool sidebar design */
-$sidebar-header: #2A303D !default;
-$sidebar-header-title: #A9A9A9 !default;
-$sidebar-main: #383F4E !default;
+$sidebar-header: $base-fill !default;
+$sidebar-header-title: $text-base !default;
+$sidebar-main: $base-fill-light !default;
 $sidebar-cards: false !default;
 $sidebar-header-icons: $icon-color !default;
 $sidebar-header-icons-hover: $icon-hover !default;
-$sidebar-border: #1D222C;
+$sidebar-border: $base-border;
 
 /* Splitpane design */
-$splitpane-divider: #1D222C !default;
-$splitpane-divider-hover: #999999 !default;
+$splitpane-divider:$base-border !default;
+$splitpane-divider-hover: $text-hover !default;
 $splitpane-content: $sidebar-main !default;
-$splitpane-divider-handle: #aaaaaa !default;
+$splitpane-divider-handle: $text-base !default;
 $splitpane-divider-handle-hover: #3165AE !default;
-$splitpane-divider-handle-color: white !default;
+$splitpane-divider-handle-color: $text-base !default;
 
 /* Menu bar */
 $menu-font: 13px Arial,sans-serif !default;
@@ -59,5 +70,5 @@ $presenter-body: $sidebar-main !default;
 $presenter-shadow: none !default; // 0 2px 4px rgba(0,0,0,0.2),0 -1px 0px rgba(0,0,0,0.02);
 $presenter-radius: none !default;
 
-$diagram-background: #2A303D;
+$diagram-background: $base-fill;
 

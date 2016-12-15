@@ -1,4 +1,4 @@
-import {Style} from './styling';
+import {Style, EdgeStyle} from './styling';
 import {Layout} from './layout';
 import {Camera} from './camera';
 
@@ -15,12 +15,19 @@ export abstract class ViewVertex {
     visual: any;
     labels: any;
     style: Style; 
+
+    edges: ViewEdge<any>[];
+
+    addLink(edge: ViewEdge<any>) {
+        this.edges = this.edges || [];
+        this.edges.push(edge);
+    }
     
-    public isLeaf(): boolean {
+    isLeaf(): boolean {
         return true;
     }
 
-    public isProxy(): boolean {
+    isProxy(): boolean {
         return false;
     }
 
@@ -83,9 +90,11 @@ export class ViewGroup extends ViewVertex {
      * @param vertex
      */
     public addContent(vertex: ViewVertex) {
+        if (!vertex) return;
         vertex.parent = this;
         this.contents = this.contents || [];
         this.contents.push(vertex);
+        this.emit(ModelChange.CHILD_ADD, vertex);
     }
 
     /**
@@ -103,7 +112,7 @@ export class ViewGroup extends ViewVertex {
             if (contents.length < 1) {
                 this.contents = undefined;
             }
-            this.emit(ModelChange.CHILD_ADD, vertex);
+            this.emit(ModelChange.CHILD_REMOVE, vertex);
             return true;
         }
         return false;
@@ -114,7 +123,7 @@ export class ViewGroup extends ViewVertex {
     }
 
     private emit(change: ModelChange, item) {
-        // console.log(change);
+
     }
 
     constructor(name: string, x: number, y: number, w: number, h: number, public scale: number) {
@@ -130,10 +139,14 @@ export class ViewGroup extends ViewVertex {
  * @author Martin Schade
  */
 export class ViewEdge<T> {
-    source: ViewVertex;
-    target: ViewVertex;
-    style: Style;
+    
     cache: T;
+
+    constructor(
+        public source: ViewVertex,
+        public target: ViewVertex,
+        public style: EdgeStyle,
+    ) {}
 }
 
 /**

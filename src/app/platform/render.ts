@@ -33,31 +33,31 @@ export class Mapper {
   }
 
   private renderLabel(label: Label, item: ViewVertex, scale: number): XText {
-      let text = this.renderText(item, label);
+    let text = this.renderText(item, label);
 
-      label.cache = label.cache || {
-        fill: label.color || 0x3d3834,
-        // stroke: label.haloColor || 'white',
-        // strokeThickness: 4,
-        // lineJoin: 'round'
-      };
+    label.cache = label.cache || {
+      fill: label.color || 0x3d3834,
+      // stroke: label.haloColor || 'white',
+      // strokeThickness: 4,
+      // lineJoin: 'round'
+    };
 
-      let mapped = new XText(text, label.cache, 0.1);
-      mapped.baseScale = label.baseScale;
-      mapped.lowerScale = label.lowerScale;
-      mapped.upperScale = label.upperScale;
-      item.labels = mapped;
+    let mapped = new XText(text, label.cache, 0.1);
+    mapped.baseScale = label.baseScale;
+    mapped.lowerScale = label.lowerScale;
+    mapped.upperScale = label.upperScale;
+    item.labels = mapped;
 
-      let x = item.left + 0.5 * (1 + label.horizontal) * item.width,
-        y = item.top + 0.5 * (1 + label.vertical) * item.height,
-        pX = 0.5 * (1 - label.horizontal * label.placement),
-        pY = 0.5 * (1 - label.vertical * label.placement);
+    let x = item.left + 0.5 * (1 + label.horizontal) * item.width,
+      y = item.top + 0.5 * (1 + label.vertical) * item.height,
+      pX = 0.5 * (1 - label.horizontal * label.placement),
+      pY = 0.5 * (1 - label.vertical * label.placement);
 
-      mapped.scale.set(label.baseScale, label.baseScale);
-      mapped.position.set(x * scale, y * scale);
-      mapped.anchor.set(pX, pY);
-      
-      return mapped;
+    mapped.scale.set(label.baseScale, label.baseScale);
+    mapped.position.set(x * scale, y * scale);
+    mapped.anchor.set(pX, pY);
+
+    return mapped;
   }
 
   public renderLabels(item: ViewVertex): any {
@@ -87,9 +87,19 @@ export class Mapper {
     const l = item.left, t = item.top,
       w = item.width, h = item.height;
 
+      if (item.edges && item.edges.length > 0) {
+      ctx.lineStyle(4, 0x6495ed)
+      item.edges.forEach(it => {
+        ctx.moveTo(l + w / 2, t + h / 2);
+        ctx.lineTo(it.target.centerX, it.target.centerY);
+      });
+    }
+
+    ctx.lineStyle();
+
     switch (style.shape.type) {
-      case ShapeType.SQUARE, 
-           ShapeType.RECTANGLE:
+      case ShapeType.SQUARE,
+        ShapeType.RECTANGLE:
         ctx.drawRect(l, t, w, h);
         break;
 
@@ -213,18 +223,18 @@ export class Mapper {
     style.cachedURL = canvas.toDataURL();
   }
 
-  public renderItem(item: ViewItem, visual: any): any {
+  renderItem(item: ViewItem, visual: any): any {
     if (item.visual) {
       return;
     } else {
       // let visual = new PIXI.Graphics();
       let style = item.style;
-      this.renderShape(style, visual, item)
+      this.renderShape(style, visual, item);
       item.visual = visual;
     }
   }
 
-  public renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): any {
+  renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): any {
     if (group.visual) return;
 
     let root = new XContainer();
@@ -324,10 +334,10 @@ const Colors = {
  * originating label definition.
  */
 export class XText extends PIXI.Text {
-    lowerScale: number;
-    baseScale: number;
-    upperScale: number;
-    origin: Label;
+  lowerScale: number;
+  baseScale: number;
+  upperScale: number;
+  origin: Label;
 }
 
 /**
@@ -335,7 +345,7 @@ export class XText extends PIXI.Text {
  * originating group node.
  */
 export class XContainer extends PIXI.Container {
-    origin: ViewGroup;
-    shape: PIXI.Graphics;
-    content: PIXI.Container; 
+  origin: ViewGroup;
+  shape: PIXI.Graphics;
+  content: PIXI.Container;
 }

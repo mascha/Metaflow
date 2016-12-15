@@ -1,0 +1,55 @@
+
+:host {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+.workflow {
+    
+    padding: 35px 25px;
+
+    .series {
+        position: relative;
+        margin: 0 auto;
+    }
+
+    .distribute-inline {
+        position: relative;
+        display: inline-block;
+        margin: 0 auto;
+        padding: 10px 40px 60px;
+
+        .item {
+            display: inline-block;
+            margin: 0 6px;
+            padding: 0;
+            max-width: 400px;
+
+            .link {
+                position: relative;
+                padding: 16px;
+                border: 2px solid #CFCFCF;
+                background: #FFF;
+                font-size: 13px;
+                color: #333;
+                font-weight: 600;
+                text-decoration: none;
+                -webkit-border-radius: 5px;
+                -moz-border-radius: 5px;
+                border-radius: 5px;
+                z-index: 5;
+            }
+        }
+    }
+
+    .start-title {
+        padding: 23px 0 0;
+        font-size: 17px;
+        color: #555;
+        text-align: center;
+        font-weight: 100;
+    }
+}

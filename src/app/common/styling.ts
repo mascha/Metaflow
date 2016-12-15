@@ -94,6 +94,57 @@ export class Style {
 }
 
 /**
+ * A style describing an edge between 
+ * a source and a target node.
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+export class EdgeStyle extends Style {
+
+    /**
+     * The type of the edge.
+     */
+    edgeType: EdgeType;
+
+    /**
+     * Check wether the control points are derived automatically.
+     */
+    automaticRouting: boolean;
+}
+
+/**
+ * The type of the edge.
+ * 
+ * @author Martin Schade    
+ * @since 1.0.0
+ */
+export const enum EdgeType {
+
+    /**
+     * A line directly connecting source and target.
+     * Represents the euclidean path between both points.
+     */
+    STRAIGHT,
+
+    /**
+     * A line which connects source and target by horizontal
+     * and vertical line segments.
+     */
+    ORTHOGONAL,
+
+    /**
+     * A curve using a single control point.
+     */
+    QUADRATIC,
+
+    /**
+     * A curce using two control points.
+     */
+    CUBIC
+}
+
+/**
  * A GroupStyle acts as an extension to the 
  * simple styling behavior, encoding common
  * properties for groups and portals.

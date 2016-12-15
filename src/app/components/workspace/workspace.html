@@ -1,3 +1,5 @@
+<workflow></workflow>
+<!--
 <navigation></navigation>
 <div class="workspace">
   <iconbar #toolsLeft vertical="true" primary="true"></iconbar>
@@ -7,14 +9,7 @@
       <explorer #explorer class="tool" [class.active]="toolsLeft.selectedItem === explorer"></explorer>
       <issues #issues class="tool" [class.active]="toolsLeft.selectedItem === issues"></issues>
     </sidebar>
-    <!--
-    <double-split center horizontal="true">
-      <diagram left #diagram></diagram>
-      <sidebar right #bottomBar [title]="toolsBottom.selectedItem?.title">
-        <dataview #dataview></dataview>
-      </sidebar>
-    </double-split> 
-    -->
+
     <diagram center #diagram></diagram>
     <sidebar right #rightBar [title]="toolsRight.selectedItem?.title" isPrimary="false">
       <inspector #inspector class="tool" [class.active]="toolsRight.selectedItem === inspector"></inspector>
@@ -23,3 +18,13 @@
   </triple-split>
   <iconbar #toolsBottom vertical="false" *ngIf="toolsBottom"></iconbar>
 </div>
+-->
+
+    <!--
+    <double-split center horizontal="true">
+      <diagram left #diagram></diagram>
+      <sidebar right #bottomBar [title]="toolsBottom.selectedItem?.title">
+        <dataview #dataview></dataview>
+      </sidebar>
+    </double-split> 
+    -->

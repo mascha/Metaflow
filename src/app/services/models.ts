@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
-import {ViewGroup, ViewItem, Model, ViewVertex} from "../common/viewmodel";
-import {Style, GroupStyle, Label} from '../common/styling';
+import {ViewGroup, ViewItem, ViewEdge, Model, ViewVertex} from "../common/viewmodel";
+import {Style, GroupStyle, EdgeStyle, Label} from '../common/styling';
 import {Shape, ShapeType} from '../common/shapes';
 import {Vertical, Horizontal, Locality} from '../common/layout';
 import {Mapper} from '../platform/render';
@@ -40,6 +40,7 @@ const NAMES = [
     private model: Model;
     private empty: ViewGroup;
 
+    private edgeStyle: EdgeStyle;
     private variableStyle: Style;
     private rateStyle: Style;
     private stockStyle: Style;
@@ -129,8 +130,10 @@ const NAMES = [
 
                 group.addContent(item);
 
-                let neighbor = this.findConnection(item, group.contents, 4000);
-                //console.log((item ? item.name : "NULL") + ' -> ' + (neighbor ? neighbor.name: "NULL"));
+                let neighbor = this.findConnection(item, group.contents, 2000);
+                if (neighbor) {
+                    item.addLink(new ViewEdge(item, neighbor, this.edgeStyle));
+                }
 
                 entity--;
             }
@@ -152,7 +155,7 @@ const NAMES = [
         for (let sibling of siblings) {
             let dX = item.centerX - sibling.centerX;
             let dY = item.centerY - sibling.centerY;
-            if (Math.sqrt(dX*dX + dX*dY) <= distance && sibling !== item) {
+            if (Math.sqrt(dX*dX + dY*dY) <= distance && sibling !== item) {
                 return sibling;   
             }
         }
@@ -196,6 +199,10 @@ const NAMES = [
         this.rateStyle.labels.placement = Locality.OUTSIDE;
         this.rateStyle.labels.setScaling(.1, .6, .8);
         this.rateStyle.labels.color = 'goldenrod';
+
+        this.edgeStyle = new EdgeStyle();
+        this.edgeStyle.stroke = 'cornflowerblue';
+
 
         let render = new Mapper();
         render.cacheShape(this.moduleStyle);

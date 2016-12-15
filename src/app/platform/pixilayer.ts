@@ -10,14 +10,14 @@ import { XText, Mapper } from './render';
  * @since 1.0.0
  */
 export class PixiLayer implements RenderLayer, CameraObserver {
-    
+
     readonly camera: Camera;
 
     /**
      * The full scene to be drawn.
      */
     private scene: PIXI.Container;
-    
+
     /**
      * All node shapes.
      */
@@ -68,11 +68,25 @@ export class PixiLayer implements RenderLayer, CameraObserver {
     isActive() {
         return true;
     }
-    
+
     hitTest(worldX: number, worldY: number): Array<ViewVertex> {
         let hits = [];
 
         return hits;
+    }
+
+    private renderGroup(group) {
+        /*
+   let subleafs = new PIXI.Graphics();
+   itm.contents.forEach(it => {
+       if (!it.isLeaf()) {
+           mapper.renderGroup(it as ViewGroup, false, true);
+       } else if (it.isLeaf()) {
+           mapper.renderItem(it as ViewItem, subleafs);
+       }
+       mapper.attach(it, itm);
+   });
+   */
     }
 
     private update(level: ViewGroup) {
@@ -95,17 +109,6 @@ export class PixiLayer implements RenderLayer, CameraObserver {
                 this.cachedGroups.push(itm);
                 if (itm.contents && itm.contents.length > 0) {
                     mapper.renderGroup(itm, false, true);
-                    /*
-                    let subleafs = new PIXI.Graphics();
-                    itm.contents.forEach(it => {
-                        if (!it.isLeaf()) {
-                            mapper.renderGroup(it as ViewGroup, false, true);
-                        } else if (it.isLeaf()) {
-                            mapper.renderItem(it as ViewItem, subleafs);
-                        }
-                        mapper.attach(it, itm);
-                    });
-                    */
                 } else {
                     mapper.renderGroup(itm, false, true);
                 }
@@ -230,7 +233,7 @@ export class PixiCamera extends Camera {
             if (v) {
                 let m = (s - label.lowerScale) / (label.upperScale - label.lowerScale);
                 // m = m < 0 ? 0 : m > 1 ? 1 : 0;
-                label.alpha = Math.E * Math.exp(-1/(1 - m * m));
+                label.alpha = Math.E * Math.exp(-1 / (1 - m * m));
                 label.scale.set(s, s);
             }
             label.visible = v;

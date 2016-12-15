@@ -80,7 +80,7 @@ export default class Border implements CameraObserver {
     private draw() {
         if (this.active && this.proxies) {
             this.clearProxies();
-            this.drawBorder(0.1);
+            this.drawBorder(0.2);
             this.drawProxies();
         }
     }
@@ -93,8 +93,9 @@ export default class Border implements CameraObserver {
         const b = this.border;
         brush.globalAlpha = alpha;
         brush.fillStyle = 'black';
-        brush.strokeStyle = 'blue';
+        brush.strokeStyle = 'black';
         brush.fillRect(0, 0, w, h);
+        brush.globalAlpha = alpha * 2;
         brush.strokeRect(b, b, w - 2*b, h - 2*b);
         brush.clearRect(b, b, w - 2*b, h - 2*b);
     }

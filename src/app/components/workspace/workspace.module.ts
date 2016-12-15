@@ -14,6 +14,7 @@ import Workspace from "./workspace";
 import {Dialog} from '../dialog/dialog';
 import {Playbar} from './playbar/playbar';
 import {Iconbar} from './toolbars/iconbar';
+import {Workflows} from '../workflows/workflows'
 
 /**
  * Workspace module.
@@ -40,7 +41,8 @@ import {Iconbar} from './toolbars/iconbar';
         TripleSplit,
         Navigation,
         Workspace, 
-        Iconbar
+        Iconbar, 
+        Workflows
     ],
     providers: [
     ]
