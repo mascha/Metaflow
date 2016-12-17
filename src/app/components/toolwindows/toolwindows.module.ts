@@ -6,6 +6,7 @@ import {Inspector} from "./inspector/inspector";
 import {Explorer} from "./explorer/explorer";
 import {Issues} from "./issues/issues";
 import PropertySheet from './inspector/propertysheet/propertysheet';
+import {VsFor} from 'ng2-vs-for';
 
 /**
  * Toolwindow module
@@ -30,8 +31,9 @@ import PropertySheet from './inspector/propertysheet/propertysheet';
         Palette,
         Dataview,
         Explorer,
-        Issues
+        Issues,
+        VsFor
     ],
-    providers: [],
+    providers: []
 })
 export class ToolWindowModule { }

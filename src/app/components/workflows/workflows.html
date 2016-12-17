@@ -1,13 +1,34 @@
 <section class="workflow">
     <div class="series">
         <div class="start-title">{{title}}</div>
-        <ul class="distribute-inline">
-            <li class="item">
-                <a class="link">Option A</a>
-            </li>
-            <li class="item">
-                <a class="link">Option B</a>
+        <ul class="input-block">
+            <li class="item" *ngFor="let item of inputItems">
+                <a class="link">{{item}}</a>
             </li>
         </ul>
+        <div class="insert-block">
+            <span class="insert-icon"><i>+</i></span>
+        </div>
+        <div class="action-block">
+            <div class="action-content">
+                <span class="item">Action block</span>
+            </div>
+        </div>
+        <div class="insert-block">
+            <span class="insert-icon"><i>+</i></span>
+        </div>
+        <div class="action-block">
+            <div class="action-content">
+                <span class="item">Action block</span>
+            </div>
+        </div>
+        <div class="insert-block">
+            <span class="insert-icon"><i>+</i></span>
+        </div>
+        <div class="exit-block">
+            <div class="action-content">
+                <span class="item">This action terminated the current workflow</span>
+            </div>
+        </div>
     </div>
 </section>

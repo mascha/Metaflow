@@ -1,4 +1,6 @@
 
+$port-color: #555;
+
 :host {
     position: absolute;
     top: 0;
@@ -14,12 +16,118 @@
     .series {
         position: relative;
         margin: 0 auto;
+        text-align: center;
     }
 
-    .distribute-inline {
+    .insert-block {
+        padding: 0;
+        min-height: 30px;
+        min-width: 150px;
+
+        .insert-icon {
+            position: relative;
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            border-radius: 50%;
+            font-size: 18px;
+            color: white;
+            text-align: center;
+            background: lightsalmon;
+            border: 2px dashed darkorange;
+            cursor: pointer;  
+        }
+    }
+
+    .action-block {
+        margin: 20px 0 !important;
+        position: relative;
+
+        &:before {
+            position: absolute;
+            left: 50%;
+            top: -8px;
+            content: "";
+            width: 16px;
+            height: 16px;
+            transform: translateX(-50%);
+            background-color: $port-color;
+        }
+
+        &:after {
+            position: absolute;
+            left: 50%;
+            top: 100%;
+            content: "";
+            width: 16px;
+            height: 16px;
+            transform: translate(-50%, -25%);
+            background-color: $port-color;
+        }
+
+        .action-content {
+            display: block;
+            padding: 15px 15px 14px 15px;
+            width: auto;
+            line-height: 19px;
+
+            .item {
+                position: relative;
+                padding: 16px;
+                border: 2px solid green;
+                background: lighten(palegreen, 12);
+                font-size: 13px;
+                color: green;
+                font-weight: 600;
+                text-decoration: none;
+                border-radius: 5px;
+                z-index: 5;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .exit-block {
+        margin: 20px 0 !important;
+        position: relative;
+
+        &:before {
+            position: absolute;
+            left: 50%;
+            top: -8px;
+            content: "";
+            width: 16px;
+            height: 16px;
+            transform: translateX(-50%);
+            background-color: $port-color;
+        }
+
+        .action-content {
+            display: block;
+            padding: 15px 15px 14px 15px;
+            width: auto;
+            line-height: 19px;
+
+            .item {
+                position: relative;
+                padding: 16px;
+                border: 2px solid darkred;
+                background: lighten(palevioletred, 12);
+                font-size: 13px;
+                color: darkred;
+                font-weight: 600;
+                text-decoration: none;
+                border-radius: 5px;
+                z-index: 5;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .input-block {
         position: relative;
         display: inline-block;
-        margin: 0 auto;
         padding: 10px 40px 60px;
 
         .item {
@@ -28,19 +136,30 @@
             padding: 0;
             max-width: 400px;
 
+            &:after {
+                position: absolute;
+                top: 50%;
+                content: "";
+                width: 16px;
+                height: 16px;
+                transform: translate(-50%, -8px);
+                background-color: $port-color;
+            }
+
             .link {
                 position: relative;
                 padding: 16px;
-                border: 2px solid #CFCFCF;
-                background: #FFF;
+                border: 2px solid darkblue;
+                background: lighten(lightskyblue, 12);
                 font-size: 13px;
-                color: #333;
+                color: darkblue;
                 font-weight: 600;
                 text-decoration: none;
                 -webkit-border-radius: 5px;
                 -moz-border-radius: 5px;
                 border-radius: 5px;
                 z-index: 5;
+                cursor: pointer;
             }
         }
     }
@@ -48,8 +167,8 @@
     .start-title {
         padding: 23px 0 0;
         font-size: 17px;
-        color: #555;
         text-align: center;
         font-weight: 100;
+        color: white; // #555;
     }
 }

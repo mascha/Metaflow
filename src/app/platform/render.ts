@@ -21,17 +21,27 @@ export class Mapper {
     return Colors[color] || 0x000000;
   }
 
+  private matchWords = new RegExp(/\b\w/g);
+
+  /**
+   * Render the string which is to be displayed
+   * by applying the labelling functon (if present)
+   * and transforming the result again.
+   */
   private renderText(item: ViewVertex, label: Label): string {
+    // item['labelling'] ? item['labelling'](item) : item.name;
     let text = item.name;
-    let regex = /\b\w/g;
     switch (label.transform) {
       case TextTransform.LOWERCASE: text = text.toLowerCase(); break;
       case TextTransform.UPPERCASE: text = text.toUpperCase(); break;
-      case TextTransform.CAPITALIZE: text = text.toLowerCase().replace(regex, l => l.toUpperCase()); break;
+      case TextTransform.CAPITALIZE: text = text.toLowerCase().replace(this.matchWords, l => l.toUpperCase()); break;
     }
     return text;
   }
 
+  /** 
+   * Render a single label using the pixijs platform.
+   */
   private renderLabel(label: Label, item: ViewVertex, scale: number): XText {
     let text = this.renderText(item, label);
 
@@ -42,7 +52,7 @@ export class Mapper {
       // lineJoin: 'round'
     };
 
-    let mapped = new XText(text, label.cache, 0.1);
+    let mapped = new XText(text, label.cache, 0.2);
     mapped.baseScale = label.baseScale;
     mapped.lowerScale = label.lowerScale;
     mapped.upperScale = label.upperScale;
@@ -50,8 +60,8 @@ export class Mapper {
 
     let x = item.left + 0.5 * (1 + label.horizontal) * item.width,
       y = item.top + 0.5 * (1 + label.vertical) * item.height,
-      pX = 0.5 * (1 - label.horizontal * label.placement),
-      pY = 0.5 * (1 - label.vertical * label.placement);
+      pX = 0.5 * (1 - 1.1 * label.horizontal * label.placement),
+      pY = 0.5 * (1 - 1.1 * label.vertical * label.placement);
 
     mapped.scale.set(label.baseScale, label.baseScale);
     mapped.position.set(x * scale, y * scale);
@@ -60,7 +70,10 @@ export class Mapper {
     return mapped;
   }
 
-  public renderLabels(item: ViewVertex): any {
+  /**
+   * (Re)render all of the label definitions.
+   */
+  renderLabels(item: ViewVertex): any {
     let style = item.style;
     if (!style) return; // no style
     let labels: any = style.labels;
@@ -77,17 +90,14 @@ export class Mapper {
     }
   }
 
-  public renderShape(style: Style, ctx: PIXI.Graphics, item: ViewVertex) {
+  renderShape(style: Style, ctx: PIXI.Graphics, item: ViewVertex) {
     let fill = this.getColor(style.fill);
     let stroke = this.getColor(style.stroke);
-
-    if (fill) ctx.beginFill(fill);
-    if (stroke) ctx.lineColor = stroke;
 
     const l = item.left, t = item.top,
       w = item.width, h = item.height;
 
-      if (item.edges && item.edges.length > 0) {
+    if (item.edges && item.edges.length > 0) {
       ctx.lineStyle(4, 0x6495ed)
       item.edges.forEach(it => {
         ctx.moveTo(l + w / 2, t + h / 2);
@@ -95,7 +105,12 @@ export class Mapper {
       });
     }
 
-    ctx.lineStyle();
+    ctx.lineStyle(1, 0xf);
+    ctx.drawRect(l, t, w, h);
+    ctx.lineStyle()
+
+    if (fill) ctx.beginFill(fill);
+    if (stroke) ctx.lineColor = stroke;
 
     switch (style.shape.type) {
       case ShapeType.SQUARE,
@@ -127,16 +142,16 @@ export class Mapper {
         break;
 
       case ShapeType.HOURGLASS:
-        let f = 0.5;
-        ctx.moveTo(l, t);
-        ctx.lineTo(l + w, t);
-        ctx.lineTo(l + w / (1.8), t + h / 2);
-        ctx.lineTo(l + w / (2.2), t + h / 2);
+        let thin = .2, f = .12;
+        ctx.moveTo(l + f * w, t);
+        ctx.lineTo(l + w * (1 - f), t);
+        ctx.lineTo(l + w / (2 - thin), t + h / 2);
+        ctx.lineTo(l + w / (2 + thin), t + h / 2);
         ctx.endFill().beginFill(fill);
-        ctx.moveTo(l, t + h);
-        ctx.lineTo(l + w / (2.2), t + h / 2);
-        ctx.lineTo(l + w / (1.8), t + h / 2);
-        ctx.lineTo(l + w, t + h);
+        ctx.moveTo(l + f * w, t + h);
+        ctx.lineTo(l + w / (2 + thin), t + h / 2);
+        ctx.lineTo(l + w / (2 - thin), t + h / 2);
+        ctx.lineTo(l + w * (1 - f), t + h);
         break;
 
       default: console.warn('Tried to render unknown shape class (' + style.shape.type + ')')
@@ -146,7 +161,7 @@ export class Mapper {
     if (fill) ctx.endFill();
   }
 
-  public cacheShape(style: Style) {
+  cacheShape(style: Style) {
     if (style.cachedImage) return;
     let canvas = document.createElement('canvas') as any;
     canvas.width = 16;

@@ -225,10 +225,11 @@ export class PixiCamera extends Camera {
         this.worldScale.set(zoom, zoom);
         this.overlayScale.set(zoom, zoom);
 
+        let z = Math.pow(zoom, 0.75);
         let lbs = this.overlay.children as XText[];
         for (let i = 0, len = lbs.length; i < len; i++) {
             let label = lbs[i];
-            let s = label.baseScale / zoom;
+            let s = label.baseScale / z;
             let v = s < label.upperScale;
             if (v) {
                 let m = (s - label.lowerScale) / (label.upperScale - label.lowerScale);

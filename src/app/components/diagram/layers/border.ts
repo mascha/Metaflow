@@ -101,6 +101,7 @@ export default class Border implements CameraObserver {
     }
 
     private drawProxies() {
+        let hits = 0;
         const cam = this.camera;
         const scale = this.scale;
         const cenX = cam.centerX;
@@ -140,7 +141,7 @@ export default class Border implements CameraObserver {
             x -= cenX;
             y -= cenY;
 
-            const distance = x * x + y * y
+            const distance = x*x + y*y
             if (distance > 1000000) {
                 continue; // ignore items which are too far away
             }
@@ -174,7 +175,11 @@ export default class Border implements CameraObserver {
             proxy.image = proxy.image || proxy.origin.style.cachedImage;
 
             c.drawImage(proxy.image, drawX, drawY);
+            hits++;
+            // c.fillText(proxy.origin.name, drawX, drawY);
         }
+
+        // console.log(`${(hits / proxies.length * 100).toFixed(0)}%  hits`)
     }
 
     private clearProxies() {

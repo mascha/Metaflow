@@ -3,6 +3,7 @@ import {ViewGroup} from "../../../common/viewmodel";
 import {Diagram} from "../../../common/layer";
 import {ToolWindow} from "../toolwindow"
 import ModelService from "../../../services/models";
+import {VsFor} from 'ng2-vs-for';
 
 /**
  * A project navigator/explorer.
@@ -13,7 +14,7 @@ import ModelService from "../../../services/models";
 @Component({
     selector: 'explorer',
     template: require('./explorer.html'),
-    styles: [require('./explorer.scss')]
+    styles: [require('./explorer.scss')],
 })
 export class Explorer implements ToolWindow {
     title = "Explorer";
@@ -22,6 +23,10 @@ export class Explorer implements ToolWindow {
     isLocked = false;
     isDisabled = false;
     levelName: string;
+
+    getSize() {
+        return 21;
+    }
 
     initialize(diagram: Diagram) {
         diagram.scope.subscribe(it => this.updateLevel(it));
