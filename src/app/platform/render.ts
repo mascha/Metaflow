@@ -12,16 +12,17 @@ import { ViewVertex, ViewGroup, ViewItem } from '../common/viewmodel';
  */
 export class Mapper {
 
-  private images = Object.create(null);
-  private urls = Object.create(null);
+  private matchWords = new RegExp(/\b\w/g);
 
+  /**
+   * Retrieve the color number from a string or color array;
+   */
   private getColor(color: any): number {
     if (!color) return null;
     if (!color.length) return color;
     return Colors[color] || 0x000000;
   }
 
-  private matchWords = new RegExp(/\b\w/g);
 
   /**
    * Render the string which is to be displayed
@@ -94,8 +95,7 @@ export class Mapper {
     let fill = this.getColor(style.fill);
     let stroke = this.getColor(style.stroke);
 
-    const l = item.left, t = item.top,
-      w = item.width, h = item.height;
+    const l = item.left, t = item.top, w = item.width, h = item.height;
 
     if (item.edges && item.edges.length > 0) {
       ctx.lineStyle(4, 0x6495ed)
@@ -105,9 +105,13 @@ export class Mapper {
       });
     }
 
+    ctx.lineStyle();
+
+    /* debugging
     ctx.lineStyle(1, 0xf);
     ctx.drawRect(l, t, w, h);
     ctx.lineStyle()
+    */
 
     if (fill) ctx.beginFill(fill);
     if (stroke) ctx.lineColor = stroke;

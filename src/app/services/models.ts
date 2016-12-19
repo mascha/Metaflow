@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {ViewGroup, ViewItem, ViewEdge, Model, ViewVertex} from "../common/viewmodel";
+import {ViewGroup, ViewItem, ViewEdge, ViewModel, ViewVertex} from "../common/viewmodel";
 import {Style, GroupStyle, EdgeStyle, Label} from '../common/styling';
 import {Shape, ShapeType} from '../common/shapes';
 import {Vertical, Horizontal, Locality} from '../common/layout';
@@ -37,7 +37,7 @@ const NAMES = [
  */
 @Injectable() export default class ModelService {
     
-    private model: Model;
+    private model: ViewModel;
     private empty: ViewGroup;
 
     private edgeStyle: EdgeStyle;
@@ -46,8 +46,8 @@ const NAMES = [
     private stockStyle: Style;
     private moduleStyle: GroupStyle;
 
-    getModel(): Promise<Model> {
-        this.model = this.model || new Model("Debug Model", this.createDebugModel());
+    getModel(): Promise<ViewModel> {
+        this.model = this.model || new ViewModel("Debug Model", this.createDebugModel());
         return new Promise(promise => setTimeout(promise, 500)).then(() => this.model)
     }
 
@@ -114,7 +114,7 @@ const NAMES = [
             let group = new ViewGroup(`Level #${MAX - level}`, 2000, 2000, 2000, 2000, 0.1);
             group.style = this.moduleStyle;
 
-            let entity = 180;
+            let entity = 1000;
             while (entity) {
                 let rnd = Math.random();
                 let item;

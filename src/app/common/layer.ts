@@ -1,4 +1,4 @@
-import {ViewGroup, ViewItem, ViewVertex, Model} from './viewmodel';
+import {ViewGroup, ViewItem, ViewVertex, ViewModel} from './viewmodel';
 import {Selection} from './selection';
 import {Camera} from './camera';
 import {Observable} from "rxjs/Rx";
@@ -16,7 +16,7 @@ export interface Diagram {
      * The currently active model, if any.
      * Setting a new model will reset the diagram.
      */
-    readonly model: Observable<Model>;
+    readonly model: Observable<ViewModel>;
 
     /**
      * The currently active scope of the diagran. Always a 

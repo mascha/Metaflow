@@ -101,19 +101,18 @@ export default class Border implements CameraObserver {
     }
 
     private drawProxies() {
-        let hits = 0;
         const cam = this.camera;
         const scale = this.scale;
         const cenX = cam.centerX;
         const cenY = cam.centerY;
         const minX = cam.worldX;
         const minY = cam.worldY;
-        const miX = minX - 200;
-        const miY = minY - 200;
         const wmX = minX + cam.projWidth;
         const wmY = minY + cam.projHeight;
-        const maX = wmX + 200;
-        const maY = wmY + 200;
+        const aoiLeft = minX - 200 / scale;
+        const aoiTop = minY - 200 / scale;
+        const aoiRight = wmX + 200 / scale;
+        const aoiLow = wmY + 200 / scale;
         const a = this.halfW - this.middle;
         const b = this.halfH - this.middle;
         const c = this.brush;  
@@ -130,12 +129,10 @@ export default class Border implements CameraObserver {
             let x = proxy.x * scale;
             let y = proxy.y * scale;
 
-            if (x > minX && x < wmX && y > minY && y < wmY) {
-                proxy.pX = -1000; proxy.pY = -1000;
-                continue; // ignore items within viewport
-            } else if (x < miX || x > maX || y < miY || y > maY) {
-                proxy.pX = -1000; proxy.pY = -1000;
-                continue; // ignore items outside of interest
+            if (x < aoiLeft || x > aoiRight || y < aoiTop || y > aoiLow) {
+                continue; // ignore items outside of area
+            } else if (x > minX && x < wmX && y > minY && y < wmY)  {
+                continue; // ignore items inside viewport
             }
 
             x -= cenX;
@@ -175,7 +172,6 @@ export default class Border implements CameraObserver {
             proxy.image = proxy.image || proxy.origin.style.cachedImage;
 
             c.drawImage(proxy.image, drawX, drawY);
-            hits++;
             // c.fillText(proxy.origin.name, drawX, drawY);
         }
 

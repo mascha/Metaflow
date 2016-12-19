@@ -550,8 +550,20 @@ class Panning extends BaseState {
  * Animation parameter interface.
  */
 export interface AnimationParams {
+
+    /**
+     * Animation cannot be canceled.
+     */
     forced: boolean;
+    
+    /**
+     * The animation to play.
+     */
     interpolator: Animation;
+
+    /**
+     * The easing applied to the animation.
+     */
     easing: (number) => number;
 }
 

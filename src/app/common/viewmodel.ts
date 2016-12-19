@@ -209,7 +209,7 @@ export interface DiagramLayer {
  * @author Martin Schade
  * @since 1.0.0
  */
-export class Model {
+export class ViewModel {
     
     readonly statistics: ModelStatistics;
 

@@ -3,7 +3,6 @@ import {ViewGroup} from "../../../common/viewmodel";
 import {Diagram} from "../../../common/layer";
 import {ToolWindow} from "../toolwindow"
 import ModelService from "../../../services/models";
-import {VsFor} from 'ng2-vs-for';
 
 /**
  * A project navigator/explorer.

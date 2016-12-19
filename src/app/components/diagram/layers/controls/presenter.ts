@@ -15,8 +15,11 @@ import {Camera} from "../../../../common/camera";
 })
 export default class Presenter implements Layer {
     private showControls = true;
+
+    diagram : Diagram;
     
     initialize(diagram: Diagram) {
+        this.diagram = diagram;
         diagram.model.subscribe(it => {
             this.showControls = (it && it.root) ? true : false;
         });
@@ -31,7 +34,11 @@ export default class Presenter implements Layer {
     }
 
     private onZoomIn(event: MouseEvent) {
-        
+        let c = this.diagram.camera;
+        let x = c.centerX;
+        let y = c.centerY;
+        let s = c.scale;
+        c.zoomAndMoveTo(1.05 * s, x / s, y / s);
     }
 
     private onZoomOut(event: MouseEvent) {

@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild, HostListener, Renderer } from '@angular/core';
-import { ViewVertex, Model } from "../../common/viewmodel";
+import { ViewVertex, ViewModel } from "../../common/viewmodel";
 import { Layer, RenderLayer, Diagram, Scope } from '../../common/layer';
 import { Camera } from "../../common/camera";
 import { Selection} from '../../common/selection';
@@ -51,7 +51,7 @@ export default class DiagramImpl implements Diagram {
     private _zoomPan = 1.99;
     private _velocity = .9;
     private _diagram: HTMLElement;
-    private _model = new Subject<Model>();
+    private _model = new Subject<ViewModel>();
     private _platform: RenderLayer;
 
     animatedZoom = false;
@@ -92,7 +92,7 @@ export default class DiagramImpl implements Diagram {
         this._zoomPan = minimax(.01, value, 2);
     }
 
-    get model(): Observable<Model> {
+    get model(): Observable<ViewModel> {
         return this._model;
     }
 

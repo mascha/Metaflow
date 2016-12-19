@@ -2,8 +2,8 @@
   <div (click)="goUpwards()" class="upwards"></div>
   <span class="project-reference">{{scope ? scope.name : 'Empty'}}</span>
 </section>
-<section class="project-entities fade-in" *vsFor="contents; size: getSize; let items = vsCollection">
-  <div *ngFor="let item of items" class="entity-cell">
+<section class="project-entities fade-in" *vsFor="contents; let _items = vsCollection">
+  <div *ngFor="let item of _items" class="entity-cell">
     <img src="{{item.style.cachedURL}}" class="entity-icon"><span>{{item.name}}</span>
   </div>
 </section>

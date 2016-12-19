@@ -1,5 +1,5 @@
 import {Component, Input, Renderer} from '@angular/core';
-import {ViewGroup, ViewVertex, Model} from "../../../../common/viewmodel";
+import {ViewGroup, ViewVertex, ViewModel} from "../../../../common/viewmodel";
 import {Style} from "../../../../common/styling";
 import {Diagram, Layer} from "../../../../common/layer";
 import ModelService from "../../../../services/models";
@@ -17,7 +17,7 @@ import ModelService from "../../../../services/models";
 })
 export default class Breadcrumbs implements Layer {
     private segments: Array<ViewGroup> = [];
-    private model: Model;
+    private model: ViewModel;
     private placeholder: ViewGroup;
     private maximumSegments = 4;
     private rootPath = "/users/${id}/${model-id}/@x@y@z1.5434"

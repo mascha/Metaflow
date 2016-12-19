@@ -1,5 +1,5 @@
-<section class="project-entities fade-in">
-  <div *ngFor="let node of contents" class="{{(node.name == 'Stock' || node.name == 'Price') ? 'error' : 'warning'}} entity-cell">
+<section class="project-entities fade-in" *vsFor="contents; let _items = vsCollection">
+  <div *ngFor="let node of _items" class="{{(node.name == 'Stock' || node.name == 'Price') ? 'error' : 'warning'}} entity-cell">
     <span>{{node.name}}</span>
   </div>
 </section>
