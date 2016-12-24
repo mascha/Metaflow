@@ -1,7 +1,8 @@
-import {ViewGroup, ViewItem, ViewVertex, ViewModel} from './viewmodel';
+import {ViewGroup, ViewItem, ViewNode, ViewModel} from './viewmodel';
 import {Selection} from './selection';
 import {Camera} from './camera';
-import {Observable} from "rxjs/Rx";
+import {Observable} from "rxjs/Observable";
+import {SpatialStructure} from './spatial';
 
 /**
  * Diagram interface definition.
@@ -10,6 +11,10 @@ import {Observable} from "rxjs/Rx";
  * @since 1.0.0
  */
 export interface Diagram {
+
+    /**
+     * Interactive camera instance.
+     */
     readonly camera: Camera;
 
     /**
@@ -23,7 +28,16 @@ export interface Diagram {
      * subset of the current model. Null if model is null.
      */
     readonly scope: Scope;
-    readonly selection: Selection<ViewVertex>;
+
+    /**
+     * The currently active selection.
+     */
+    readonly selection: Selection<ViewNode>;
+
+    /**
+     * Spatial information accelerator structure. May be null if not availiable.
+     */
+    readonly spatial: SpatialStructure<ViewNode>;
 } 
 
 /**
@@ -109,7 +123,7 @@ export interface ViewModelRenderer<I, G> {
     /**
      * Attach node to scene.
      */
-    attach(node: ViewVertex, group: ViewGroup)
+    attach(node: ViewNode, group: ViewGroup)
 }
 
 /**

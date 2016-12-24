@@ -1,5 +1,5 @@
 import { RenderLayer, ViewModelRenderer, Quality, Diagram } from "../common/layer";
-import { ViewGroup, ViewItem, ViewVertex } from "../common/viewmodel";
+import { ViewGroup, ViewItem, ViewNode } from "../common/viewmodel";
 import { Camera, CameraObserver } from "../common/camera";
 import { XText, Mapper } from './render';
 
@@ -69,7 +69,7 @@ export class PixiLayer implements RenderLayer, CameraObserver {
         return true;
     }
 
-    hitTest(worldX: number, worldY: number): Array<ViewVertex> {
+    hitTest(worldX: number, worldY: number): Array<ViewNode> {
         let hits = [];
 
         return hits;

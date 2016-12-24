@@ -1,7 +1,7 @@
 import { Style, Label, TextTransform } from '../common/styling';
 import { Shape, ShapeType } from '../common/shapes';
 import { Locality, Horizontal, Vertical } from '../common/layout';
-import { ViewVertex, ViewGroup, ViewItem } from '../common/viewmodel';
+import { ViewNode, ViewGroup, ViewItem } from '../common/viewmodel';
 
 /**
  * Class responsible for rendering style shapes
@@ -29,7 +29,7 @@ export class Mapper {
    * by applying the labelling functon (if present)
    * and transforming the result again.
    */
-  private renderText(item: ViewVertex, label: Label): string {
+  private renderText(item: ViewNode, label: Label): string {
     // item['labelling'] ? item['labelling'](item) : item.name;
     let text = item.name;
     switch (label.transform) {
@@ -43,7 +43,7 @@ export class Mapper {
   /** 
    * Render a single label using the pixijs platform.
    */
-  private renderLabel(label: Label, item: ViewVertex, scale: number): XText {
+  private renderLabel(label: Label, item: ViewNode, scale: number): XText {
     let text = this.renderText(item, label);
 
     label.cache = label.cache || {
@@ -74,7 +74,7 @@ export class Mapper {
   /**
    * (Re)render all of the label definitions.
    */
-  renderLabels(item: ViewVertex): any {
+  renderLabels(item: ViewNode): any {
     let style = item.style;
     if (!style) return; // no style
     let labels: any = style.labels;
@@ -91,7 +91,7 @@ export class Mapper {
     }
   }
 
-  renderShape(style: Style, ctx: PIXI.Graphics, item: ViewVertex) {
+  renderShape(style: Style, ctx: PIXI.Graphics, item: ViewNode) {
     let fill = this.getColor(style.fill);
     let stroke = this.getColor(style.stroke);
 
@@ -290,7 +290,7 @@ export class Mapper {
     group.visual = root;
   }
 
-  attach(node: ViewVertex, group: ViewGroup) {
+  attach(node: ViewNode, group: ViewGroup) {
     let child = node.visual;
     if (!child) {
       throw new Error('Node has no rendered visual');

@@ -1,5 +1,5 @@
 import {Camera} from './camera';
-import {ViewVertex} from './viewmodel';
+import {ViewNode} from './viewmodel';
 
 const NAVIGATION_FACTOR = 1000;
 
@@ -77,7 +77,7 @@ export class Animation {
         }, duration || 300, EASE_OUT);
     }
 
-    static navigateToItem(cam: Camera, zoomPanPreference: number, navigationVelocity: number, vertex: ViewVertex): Animation {
+    static navigateToItem(cam: Camera, zoomPanPreference: number, navigationVelocity: number, vertex: ViewNode): Animation {
         let parent = vertex.parent;
         let scale = parent ? parent.scale : 1;
         let adjust = parent ? 16 : 2;

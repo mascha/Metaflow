@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {ViewGroup, ViewItem, ViewEdge, ViewModel, ViewVertex} from "../common/viewmodel";
+import {ViewGroup, ViewItem, ViewEdge, ViewModel, ViewNode} from "../common/viewmodel";
 import {Style, GroupStyle, EdgeStyle, Label} from '../common/styling';
 import {Shape, ShapeType} from '../common/shapes';
 import {Vertical, Horizontal, Locality} from '../common/layout';
@@ -151,7 +151,7 @@ const NAMES = [
         return Math.sqrt(Math.random() * Math.random());
     }
 
-    private findConnection(item: ViewVertex, siblings: ViewVertex[], distance: number): ViewVertex {
+    private findConnection(item: ViewNode, siblings: ViewNode[], distance: number): ViewNode {
         for (let sibling of siblings) {
             let dX = item.centerX - sibling.centerX;
             let dY = item.centerY - sibling.centerY;

@@ -1,6 +1,6 @@
 import {Component, ElementRef, ViewChild, Inject} from '@angular/core';
 import {Selection, SelectionObserver} from "../../../common/selection";
-import {ViewVertex} from "../../../common/viewmodel";
+import {ViewNode} from "../../../common/viewmodel";
 import {Diagram} from "../../../common/layer";
 import {ToolWindow} from "../toolwindow";
 
@@ -16,23 +16,23 @@ import {ToolWindow} from "../toolwindow";
     template: require('./inspector.html'),
     styles: [require('./inspector.scss')]
 })
-export class Inspector implements SelectionObserver<ViewVertex>, ToolWindow {
+export class Inspector implements SelectionObserver<ViewNode>, ToolWindow {
     categoryIndex = 1;
     overlayMessage = 'No selection';
     title = "Inspector";
     
-    selection: Selection<ViewVertex>;
+    selection: Selection<ViewNode>;
 
     initialize(diagram: Diagram) {
         this.selection = diagram.selection;
         this.selection.subscribe(this);
     }
 
-    onSelectionBegin(selection: Selection<ViewVertex>) {
+    onSelectionBegin(selection: Selection<ViewNode>) {
         this.overlayMessage = "Beginning selection";
     }
 
-    onSelectionUpdate(selection: Selection<ViewVertex>) {
+    onSelectionUpdate(selection: Selection<ViewNode>) {
         this.overlayMessage = selection.empty ? "Nothing selected" : `Selected ${selection.items.length} items`;
     }
 

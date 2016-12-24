@@ -1,6 +1,6 @@
 
 import {CameraObserver, Camera} from '../../../common/camera';
-import {ViewVertex, ViewGroup, ViewEdge} from "../../../common/viewmodel";
+import {ViewNode, ViewGroup, ViewEdge} from "../../../common/viewmodel";
 
 /**
  * Interactive region border region. This class is responsible for projection
@@ -34,6 +34,21 @@ export default class Border implements CameraObserver {
     private middle = this.border * 0.5;
     active = true;
     private proxies: Array<Proxy>;
+    
+    private top: Array<Proxy>; 
+    private bot: Array<Proxy>;
+    private left: Array<Proxy>;
+    private right: Array<Proxy>;
+    
+    private tops: Array<number>;
+    private rights: Array<number>;
+    private lefts: Array<number>;
+    private bots: Array<number>;
+    private counts: Array<number>;
+
+    private clusterSize = 4; // 3+
+    private granularity = 16; // each 16px 
+
     private scale = 1;
 
     get borderWidth(): number { return this.border; }
@@ -61,10 +76,10 @@ export default class Border implements CameraObserver {
         }
     }
 
-    showPreview(x: number, y: number): Array<ViewVertex> {
+    showPreview(x: number, y: number): Array<ViewNode> {
         const ps = this.proxies;
         if (ps && ps.length > 0) {
-            const tol = 6;
+            const tol = 36;
             const result = [];
             let hit : Proxy = null;
             for (let i = 0, l = ps.length; i < l; i++) {
@@ -145,34 +160,40 @@ export default class Border implements CameraObserver {
 
             const A = a * y;
             const B = b * x;
-            
-            let pX = 0, pY = 0;
+
+            let pX = 0, pY = 0, dir = Direction.NONE, id = 0;
+
             if (Math.abs(A) <= Math.abs(B)) {
                 if (x < 0) {
                     pY = -A / x;
                     pX = -a;
+                    dir = Direction.LEFT; 
                 } else if (x > 0) {
                     pY = A / x;
                     pX = a;
+                    dir = Direction.RIGHT;
                 }
             } else {
                 if (y < 0) {
                     pX = -B / y;
                     pY = -b;
+                    dir = Direction.TOP;
                 } else if (y > 0) {
                     pX = B / y;
                     pY = b;
+                    dir = Direction.BOTTOM;
                 }
             }
 
-            let drawX = Math.floor(halfW + pX - 8.0);
-            let drawY = Math.floor(halfH + pY - 8.0);
+            let drawX = (halfW + pX - 8) | 0;
+            let drawY = (halfH + pY - 8) | 0;
+
             proxy.pX = drawX;
             proxy.pY = drawY;
             proxy.image = proxy.image || proxy.origin.style.cachedImage;
 
             c.drawImage(proxy.image, drawX, drawY);
-            // c.fillText(proxy.origin.name, drawX, drawY);
+            // c.fillText(i.toFixed(), drawX, drawY);
         }
 
         // console.log(`${(hits / proxies.length * 100).toFixed(0)}%  hits`)
@@ -184,6 +205,9 @@ export default class Border implements CameraObserver {
     }
 
     private updateCache() {
+
+        // border variable cache 
+
         this.width  = Math.ceil(this.camera.visualWidth);
         this.height = Math.ceil(this.camera.visualHeight);
         this.halfW  = this.width * .5;
@@ -193,11 +217,32 @@ export default class Border implements CameraObserver {
         this.maxH   = this.height - this.middle;
         this.region.width = this.width;
         this.region.height = this.height;
+
+        // cluster caches
+
+        const cWidth = Math.floor(this.width / this.granularity);
+        const cHeight = Math.floor(this.height / this.granularity);
+        this.tops = new Array<number>(this.clusterSize * cWidth);
+        this.bots = new Array<number>(this.clusterSize * cWidth);
+        this.rights = new Array<number>(this.clusterSize * cHeight);
+        this.lefts = new Array<number>(this.clusterSize * cHeight);
+        this.counts = new Array<number>(this.clusterSize * 2 * (cWidth + cHeight))
     }
 
     constructor(private camera: Camera, private region: HTMLCanvasElement) {
         this.brush = region.getContext('2d');
     }
+}
+
+/**
+ * Direction indication
+ */
+const enum Direction {
+    NONE = 0,
+    TOP = 1,
+    LEFT = 2,
+    RIGHT = 3,
+    BOTTOM = 4
 }
 
 /**
@@ -214,17 +259,18 @@ class Proxy {
     pY: number;
     image: HTMLCanvasElement;
     cluster: number;
-    origin: ViewVertex;
+    origin: ViewNode;
     links: ViewEdge<any>[];
+    direction: Direction;
 
-    public reuse(item: ViewVertex) {
+    public reuse(item: ViewNode) {
         this.origin = item;
         this.x = item.centerX
         this.y = item.centerY
         this.image = item.style.cachedImage;
     }
 
-    constructor(item: ViewVertex) {
+    constructor(item: ViewNode) {
         this.reuse(item);
     }
 }

@@ -1,5 +1,5 @@
 import {Component, Input, Renderer} from '@angular/core';
-import {ViewGroup, ViewVertex, ViewModel} from "../../../../common/viewmodel";
+import {ViewGroup, ViewNode, ViewModel} from "../../../../common/viewmodel";
 import {Style} from "../../../../common/styling";
 import {Diagram, Layer} from "../../../../common/layer";
 import ModelService from "../../../../services/models";

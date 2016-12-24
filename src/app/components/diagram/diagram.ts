@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild, HostListener, Renderer } from '@angular/core';
-import { ViewVertex, ViewModel } from "../../common/viewmodel";
+import { ViewNode, ViewModel } from "../../common/viewmodel";
 import { Layer, RenderLayer, Diagram, Scope } from '../../common/layer';
 import { Camera } from "../../common/camera";
 import { Selection} from '../../common/selection';
@@ -66,7 +66,9 @@ export default class DiagramImpl implements Diagram {
     
     showClickEffect = true;
 
-    readonly selection = new Selection<ViewVertex>();
+    readonly selection = new Selection<ViewNode>();
+
+    readonly spatial = null;
 
     get scope(): Scope {
         return this._scope;

@@ -1,4 +1,4 @@
-import {ViewGroup, ViewVertex} from './viewmodel';
+import {ViewGroup, ViewNode} from './viewmodel';
 
 /**
  * General placement options.

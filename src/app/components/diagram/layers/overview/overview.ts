@@ -1,5 +1,5 @@
 import {Component, ElementRef, ViewChild, AfterViewInit} from '@angular/core';
-import {ViewGroup, ViewVertex} from '../../../../common/viewmodel';
+import {ViewGroup, ViewNode} from '../../../../common/viewmodel';
 import {Camera, CameraObserver} from '../../../../common/camera';
 import {Layer, Diagram} from '../../../../common/layer';
 
@@ -82,7 +82,7 @@ export default class Overview implements Layer, CameraObserver, AfterViewInit {
         let p = this.group;
         let c = p ? p.contents : null;
         let l = c ? c.length : 0;
-        let x = 0, y = 0, w = 0, h = 0, i : ViewVertex = null,
+        let x = 0, y = 0, w = 0, h = 0, i : ViewNode = null,
             s = p.scale, mW = p.width, mH = p.height, DIM = 128;
         while (l--) {
             i = c[l];

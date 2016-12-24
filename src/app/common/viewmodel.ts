@@ -10,7 +10,7 @@ import {Camera} from './camera';
  * @author Martin Schade
  * @since 1.0.0
  */
-export abstract class ViewVertex {
+export abstract class ViewNode {
     parent?: ViewGroup;
     visual: any;
     labels: any;
@@ -50,7 +50,7 @@ export abstract class ViewVertex {
  * @author Martin Schade
  * @since 1.0.0
  */
-export class ViewItem extends ViewVertex {
+export class ViewItem extends ViewNode {
     
 }
 
@@ -60,7 +60,7 @@ export class ViewItem extends ViewVertex {
  * @author Martin Schade
  * @since 1.0.0
  */
-export class ViewProxy extends ViewVertex {
+export class ViewProxy extends ViewNode {
 
     request: string;
     level: number;
@@ -80,16 +80,16 @@ export class ViewProxy extends ViewVertex {
  * @author Martin Schade
  * @since 1.0.0
  */
-export class ViewGroup extends ViewVertex {
+export class ViewGroup extends ViewNode {
 
-    contents: Array<ViewVertex>;
+    contents: Array<ViewNode>;
     layout: Layout;
 
     /**
      * Add a vertex to the group's contents.
      * @param vertex
      */
-    public addContent(vertex: ViewVertex) {
+    public addContent(vertex: ViewNode) {
         if (!vertex) return;
         vertex.parent = this;
         this.contents = this.contents || [];
@@ -102,7 +102,7 @@ export class ViewGroup extends ViewVertex {
      * @param vertex
      * @returns {boolean}
      */
-    public remove(vertex: ViewVertex): boolean {
+    public remove(vertex: ViewNode): boolean {
         let contents = this.contents;
         if (!contents) return false; 
 
@@ -143,8 +143,8 @@ export class ViewEdge<T> {
     cache: T;
 
     constructor(
-        public source: ViewVertex,
-        public target: ViewVertex,
+        public source: ViewNode,
+        public target: ViewNode,
         public style: EdgeStyle,
     ) {}
 }

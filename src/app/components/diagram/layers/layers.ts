@@ -1,5 +1,5 @@
 import {Component, ElementRef, ViewChild, HostListener, Input} from '@angular/core';
-import {ViewGroup, ViewItem, ViewVertex} from "../../../common/viewmodel";
+import {ViewGroup, ViewItem, ViewNode} from "../../../common/viewmodel";
 import {Camera, CameraObserver} from "../../../common/camera";
 import {RenderLayer, Layer, Quality, Diagram} from '../../../common/layer';
 import Grid from './grid';
