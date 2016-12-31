@@ -1,4 +1,4 @@
-import {Style} from './styling';
+import { Style } from './styling';
 
 /**
  * Represents a modelling language.
@@ -7,33 +7,35 @@ import {Style} from './styling';
  * @since 1.0.0
  */
 export class Language {
-    readonly name: string;
-    readonly concreteSyntax: ConcreteSyntax;
-    readonly abstractSyntax: any;
-    readonly mappings: Mapping[];
+    constructor(
+        readonly name: string,
+        readonly syntax: ConcreteSyntax,
+        readonly mapping: Mapping) 
+    { }
 }
 
 /**
- * Concrete synatx class.
+ * Concrete syntax class.
  * 
  * @author Martin Schade
  * @since 1.0.0
  */
 export class ConcreteSyntax {
-    readonly name;
-    readonly styles: Style[];
+    constructor(readonly styles: Array<Style>) { }
 }
 
 /**
- * A mapping from a source to the visual space.
+ * A mapping from the abstract to the concrete syntax.
  * 
  * @author Martin Schade
  * @since 1.0.0
  */
 export class Mapping {
-    readonly rule: Rule;
-    readonly style: Style;
-    readonly type: MapType;
+    constructor(
+        readonly namespace: string,
+        readonly rules: Array<Rule>
+    )
+    { }
 }
 
 /**
@@ -72,8 +74,12 @@ export const enum MapType {
  * @since 1.0.0
  */
 export class Rule {
-    readonly matcher: string;
-    readonly query: string;
+    constructor(
+        readonly matcher: string,
+        readonly style: string,
+        readonly type: MapType
+    )
+    { }
 }
 
 
@@ -87,5 +93,5 @@ export class Category {
     constructor(
         readonly name: string,
         readonly components: Array<any>
-    ) {}
+    ) { }
 }

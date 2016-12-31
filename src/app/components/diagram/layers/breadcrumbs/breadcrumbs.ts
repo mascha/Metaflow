@@ -2,7 +2,7 @@ import {Component, Input, Renderer} from '@angular/core';
 import {ViewGroup, ViewNode, ViewModel} from "../../../../common/viewmodel";
 import {Style} from "../../../../common/styling";
 import {Diagram, Layer} from "../../../../common/layer";
-import ModelService from "../../../../services/models";
+import DebugModelService from "../../../../services/models";
 
 /**
  * A breadcrumbs bar.

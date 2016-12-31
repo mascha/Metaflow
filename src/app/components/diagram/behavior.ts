@@ -1,5 +1,5 @@
 import {Camera} from '../../common/camera';
-import {ViewGroup, ViewVertex} from '../../common/viewmodel';
+import {ViewGroup, ViewNode} from '../../common/viewmodel';
 import {Animation} from '../../common/animations';
 import Kinetics from '../../common/kinetics';
 import DiagramImpl from './diagram';
@@ -15,7 +15,7 @@ export interface DiagramEvents {
     /**
      * Handle a target event.
      */
-    handleNavigation(vertex: ViewVertex);
+    handleNavigation(vertex: ViewNode);
 
     /**
      * Handle a single/double click.
@@ -146,7 +146,7 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
         return ['idle', 'panning', 'animating'];
     }
 
-    handleNavigation(vertex: ViewVertex) {
+    handleNavigation(vertex: ViewNode) {
         this.current.handleNavigation(vertex);
     }
 
@@ -239,7 +239,7 @@ abstract class BaseState implements DiagramState {
 
     leaveState() { /* ignore*/ }
 
-    handleNavigation(vertex: ViewVertex) { /* ignore */ }
+    handleNavigation(vertex: ViewNode) { /* ignore */ }
 
     handleClick(x: number, y: number, double: boolean) { /* ignore*/ }
 
@@ -288,7 +288,7 @@ class Idle extends BaseState {
         this.behavior.goto('panning', { x: x, y: y });
     }
 
-    handleNavigation(vertex: ViewVertex) {
+    handleNavigation(vertex: ViewNode) {
         this.behavior.goto('animating', { 
             interpolator: Animation.navigateToItem(
                 this.camera, 

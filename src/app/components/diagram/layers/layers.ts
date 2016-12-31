@@ -48,14 +48,14 @@ export class GridLayer implements Layer {
     styles: [require('./effects.scss')]
 })
 export class EffectLayer implements Layer {
-    @ViewChild('effects') private surface: ElementRef;
-    @ViewChild('misc') private misc: ElementRef;
+    @ViewChild('effects') surface: ElementRef;
+    @ViewChild('misc') misc: ElementRef;
 
     private canvas: HTMLCanvasElement;
     private brush: CanvasRenderingContext2D;
 
     setActive(active: boolean) {
-
+        // NOP
     }
 
     isActive(): boolean {
@@ -65,7 +65,7 @@ export class EffectLayer implements Layer {
     /**
      * Draws an panning overlay effect.
      */
-    public drawLimits(left: number, top: number, right: number, bottom: number) {
+    drawLimits(left: number, top: number, right: number, bottom: number) {
         let brush = this.brush;
         let height = this.canvas.height, width = this.canvas.width;
         brush.fillRect(0, 0, height, width);
@@ -76,7 +76,7 @@ export class EffectLayer implements Layer {
      * Adds an expanding dot to the given position. 
      * Add an grow animation to your css file.
      */
-    public playClickEffect(position: any, color?: string) {
+    playClickEffect(position: any, color?: string) {
         let element = this.misc.nativeElement;
         if (!element) return;
 
@@ -84,7 +84,7 @@ export class EffectLayer implements Layer {
         container.style.top = position.y + "px";
         container.style.left = position.x + "px";
         container.style.position = "absolute";
-        let object = document.createElement('div')as any;
+        let object = document.createElement('div') as any;
         object.style.width = "5px";
         object.style.height = "5px";
         object.style.backgroundColor = color || 'rgba(0, 0, 0, 0.2)';
@@ -96,7 +96,8 @@ export class EffectLayer implements Layer {
         setTimeout(() => container.remove(), 1000);
     }
 
-    public initialize(diagram: Diagram) {
+    initialize(diagram: Diagram) {
+        if (!this.surface || !this.surface.nativeElement) return;
         let canvas = this.surface.nativeElement as HTMLCanvasElement;
         let brush = canvas.getContext("2d");
         brush.fillStyle = "black";
@@ -140,7 +141,7 @@ export class BorderLayer implements Layer {
         }
     }
 
-    public initialize(diagram: Diagram) {
+    initialize(diagram: Diagram) {
         let element = this.element.nativeElement;
         this.border = new Border(diagram.camera, element);
         diagram.camera.subscribe(this.border);

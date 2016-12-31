@@ -25,7 +25,7 @@ export class Style {
     /**
      * Width of the border stroke.
      */
-    borderWidth: number;
+    strokeWidth: number;
 
     /**
      * How visible the shape is.
@@ -252,10 +252,14 @@ export class Label {
     /**
      * 
      */
-    setScaling(lower: number, base: number, upper: number) {
+    adjustment: number = 0.1;
+
+    /**
+     * Adjust the scale visibility limits.
+     */
+    limits(lower: number, upper: number) {
         this.lowerScale = lower;
         this.upperScale = upper;
-        this.baseScale = base;
     }
 }
 

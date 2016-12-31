@@ -1,21 +1,12 @@
 <navigation></navigation>
-<div class="workspace">
+<div class="workspace" *ngIf="slimLayout">
   <iconbar #toolsLeft vertical="true" primary="true"></iconbar>
   <iconbar #toolsRight vertical="true" primary="false"></iconbar>
-  <triple-split *ngIf="slimLayout" class="content" [class.active-bottom]="toolsBottom">
+  <triple-split class="content" [class.active-bottom]="toolsBottom">
     <sidebar left #leftBar [title]="toolsLeft.selectedItem?.title" isPrimary="true">
       <explorer #explorer class="tool" [class.active]="toolsLeft.selectedItem === explorer"></explorer>
       <issues #issues class="tool" [class.active]="toolsLeft.selectedItem === issues"></issues>
     </sidebar>
-
-    <diagram center #diagram></diagram>
-    <sidebar right #rightBar [title]="toolsRight.selectedItem?.title" isPrimary="false">
-      <inspector #inspector class="tool" [class.active]="toolsRight.selectedItem === inspector"></inspector>
-      <palette #palette class="tool" [class.active]="toolsRight.selectedItem === palette"></palette>
-    </sidebar>
-  </triple-split>
-  <iconbar #toolsBottom vertical="false" *ngIf="toolsBottom"></iconbar>
-</div>
     <!--
     <double-split center horizontal="true">
       <diagram left #diagram></diagram>
@@ -24,3 +15,11 @@
       </sidebar>
     </double-split> 
     -->
+    <diagram center #diagram></diagram>
+    <sidebar right #rightBar [title]="toolsRight.selectedItem?.title" isPrimary="false">
+      <inspector #inspector class="tool" [class.active]="toolsRight.selectedItem === inspector"></inspector>
+      <palette #palette class="tool" [class.active]="toolsRight.selectedItem === palette"></palette>
+    </sidebar>
+  </triple-split>
+  <iconbar #toolsBottom vertical="false" *ngIf="toolsBottom"></iconbar>
+</div>

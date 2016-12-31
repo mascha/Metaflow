@@ -14,19 +14,19 @@ export class Shape {
     y: number;
     a: number;
     b: number;
-    type: ShapeType;
+    type: Shapes;
     
-    constructor(type?: ShapeType) {
-        this.type = type || ShapeType.NONE;
+    constructor(type?: Shapes) {
+        this.type = type || Shapes.NONE;
     }
 
-    static RECTANGLE = new Shape(ShapeType.RECTANGLE);
-    static TRIANGLE = new Shape(ShapeType.TRIANGLE);
-    static HOURGLASS = new Shape(ShapeType.HOURGLASS);
-    static EMPTY = new Shape(ShapeType.NONE);
-    static CIRCLE = new Shape(ShapeType.CIRCLE);
-    static ROUNDED = new Shape(ShapeType.ROUNDED);
-    static RING = new Shape(ShapeType.RING);
+    static RECTANGLE = new Shape(Shapes.RECTANGLE);
+    static TRIANGLE = new Shape(Shapes.TRIANGLE);
+    static HOURGLASS = new Shape(Shapes.HOURGLASS);
+    static EMPTY = new Shape(Shapes.NONE);
+    static CIRCLE = new Shape(Shapes.CIRCLE);
+    static ROUNDED = new Shape(Shapes.ROUNDED);
+    static RING = new Shape(Shapes.RING);
 }
 
 /**
@@ -39,7 +39,7 @@ export class CompositeShape extends Shape {
     shapes : Array<Shape>
 
     constructor() {
-        super(ShapeType.COMPOSITE);
+        super(Shapes.COMPOSITE);
     }
 }
 
@@ -49,7 +49,7 @@ export class CompositeShape extends Shape {
  * @author Martin Schade
  * @since 1.0.0
  */
-export const enum ShapeType {
+export const enum Shapes {
     NONE,        // No shape (none)
     CUSTOM,      // Defined by user, svg or whatever
     COMPOSITE,   // Consits of several shapes, Unused

@@ -1,15 +1,14 @@
 <section class="palette-components">
-  <div *ngFor="let c of components" class="palette-component">
-    <span>{{c}}</span>
+  <div *ngFor="let component of components" class="palette-component">
+    <span>{{component}}</span>
   </div>
 </section>
 <div #select class="palette-selected" [class.dimmed]="dimmed" *ngIf="categories?.length > 0">
   <span></span>
   <span></span>
 </div>
-<section #icons class="palette-icons" (click)="onSelect($event)"  (mouseenter)="onIconsEnter()"
-         (mouseleave)="onIconsLeave()" (mousemove)="onIconsMove()">
-  <div *ngFor="let c of categories" class="palette-icon circle">
+<section #icons class="palette-icons" (mouseenter)="onIconsEnter()" (mouseleave)="onIconsLeave()" (mousemove)="onIconsMove()">
+  <div *ngFor="let category of categories" class="palette-icon circle" (click)="onSelect($category)">
   </div>
 </section>
 <section class="palette-labels" [class.dimmed]="dimmed" (click)="onSelect($event)">

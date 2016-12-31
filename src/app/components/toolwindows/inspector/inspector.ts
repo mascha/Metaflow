@@ -16,12 +16,11 @@ import {ToolWindow} from "../toolwindow";
     template: require('./inspector.html'),
     styles: [require('./inspector.scss')]
 })
-export class Inspector implements SelectionObserver<ViewNode>, ToolWindow {
+export class Inspector implements SelectionObserver<ViewNode>, ToolWindow<Diagram> {
     categoryIndex = 1;
     overlayMessage = 'No selection';
     title = "Inspector";
-    
-    selection: Selection<ViewNode>;
+    selection: Selection<ViewNode> = new Selection();
 
     initialize(diagram: Diagram) {
         this.selection = diagram.selection;

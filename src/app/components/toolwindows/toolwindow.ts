@@ -6,8 +6,8 @@ import {Diagram} from '../../common/layer'
  * @author Martin Schade
  * @since 1.0.0
  */
-export interface ToolWindow {
+export interface ToolWindow<T> {
     readonly title: string;
 
-    initialize(diagram: Diagram) 
+    initialize(diagram: T) 
 }

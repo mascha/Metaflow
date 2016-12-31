@@ -18,7 +18,7 @@ import Presenter from './layers/controls/presenter';
 import BreadCrumbs from './layers/breadcrumbs/breadcrumbs';
 
 /* Services */
-import ModelService from "../../services/models";
+import DebugModelService from "../../services/models";
 import PlatformService from "../../services/platforms";
 
 /* reactives */
@@ -187,7 +187,7 @@ export default class DiagramImpl implements Diagram {
 
     constructor(
         private _platforms: PlatformService,
-        private _models: ModelService,
+        private _models: DebugModelService,
         private _surface: ElementRef,
         private renderer: Renderer) {}
 }

@@ -1,5 +1,5 @@
 import { Style, Label, TextTransform } from '../common/styling';
-import { Shape, ShapeType } from '../common/shapes';
+import { Shape, Shapes } from '../common/shapes';
 import { Locality, Horizontal, Vertical } from '../common/layout';
 import { ViewNode, ViewGroup, ViewItem } from '../common/viewmodel';
 
@@ -16,11 +16,11 @@ export class Mapper {
 
   /**
    * Retrieve the color number from a string or color array;
+   * TODO move to color renderer 
    */
   private getColor(color: any): number {
     if (!color) return null;
-    if (!color.length) return color;
-    return Colors[color] || 0x000000;
+    return Colors[color];
   }
 
 
@@ -40,34 +40,37 @@ export class Mapper {
     return text;
   }
 
+  private createDefaultLabel(label: Label) {
+    return label.cache || {
+      fill: label.color || Colors.maroon,
+      stroke: Colors.lightblack, // label.haloColor || Colors.black,
+      strokeThickness: 5,
+      lineJoin: 'round'
+    };
+  }
+
   /** 
    * Render a single label using the pixijs platform.
    */
   private renderLabel(label: Label, item: ViewNode, scale: number): XText {
     let text = this.renderText(item, label);
 
-    label.cache = label.cache || {
-      fill: label.color || 0x3d3834,
-      // stroke: label.haloColor || 'white',
-      // strokeThickness: 4,
-      // lineJoin: 'round'
-    };
+    label.cache = this.createDefaultLabel(label);
 
-    let mapped = new XText(text, label.cache, 0.2);
-    mapped.baseScale = label.baseScale;
-    mapped.lowerScale = label.lowerScale;
-    mapped.upperScale = label.upperScale;
-    item.labels = mapped;
+    let mapped = new XText(text, label);
 
-    let x = item.left + 0.5 * (1 + label.horizontal) * item.width,
-      y = item.top + 0.5 * (1 + label.vertical) * item.height,
-      pX = 0.5 * (1 - 1.1 * label.horizontal * label.placement),
-      pY = 0.5 * (1 - 1.1 * label.vertical * label.placement);
+    let x = item.left + 0.5 * (1 + label.horizontal) * item.width;
+    let y = item.top + 0.5 * (1 + label.vertical) * item.height;
+
+    let adjust = 0.2; 
+    let pX = 0.5 * (1 - (1 + adjust) * label.horizontal * label.placement);
+    let pY = 0.5 * (1 - (1 + adjust) * label.vertical * label.placement);
 
     mapped.scale.set(label.baseScale, label.baseScale);
     mapped.position.set(x * scale, y * scale);
     mapped.anchor.set(pX, pY);
 
+    item.labels = mapped;
     return mapped;
   }
 
@@ -84,10 +87,10 @@ export class Mapper {
 
     if (labels.length) {
       labels = labels as Label[];
-
+      for (let l of labels)
+        this.renderLabel(l, item, scale);
     } else {
-      let label = labels as Label;
-      item.labels = this.renderLabel(label, item, scale);
+      this.renderLabel(labels as Label, item, scale);
     }
   }
 
@@ -98,14 +101,12 @@ export class Mapper {
     const l = item.left, t = item.top, w = item.width, h = item.height;
 
     if (item.edges && item.edges.length > 0) {
-      ctx.lineStyle(4, 0x6495ed)
+      ctx.lineStyle(4, Colors.blue)
       item.edges.forEach(it => {
         ctx.moveTo(l + w / 2, t + h / 2);
         ctx.lineTo(it.target.centerX, it.target.centerY);
       });
     }
-
-    ctx.lineStyle();
 
     /* debugging
     ctx.lineStyle(1, 0xf);
@@ -113,39 +114,46 @@ export class Mapper {
     ctx.lineStyle()
     */
 
+    /*
+    if (stroke) {
+      ctx.lineStyle(4, 0xf);
+    } else {
+      ctx.lineStyle();
+    }
+    */
+    ctx.lineStyle(4, 0x2222222);
     if (fill) ctx.beginFill(fill);
-    if (stroke) ctx.lineColor = stroke;
 
     switch (style.shape.type) {
-      case ShapeType.SQUARE,
-        ShapeType.RECTANGLE:
+      case Shapes.SQUARE,
+        Shapes.RECTANGLE:
         ctx.drawRect(l, t, w, h);
         break;
 
-      case ShapeType.CIRCLE:
+      case Shapes.CIRCLE:
         let radius = w / 2;
         ctx.drawCircle(l + radius, t + radius, w / 2);
         break;
 
-      case ShapeType.DIAMOND:
+      case Shapes.DIAMOND:
         ctx.moveTo(l + w / 2, t);
         ctx.lineTo(l + w, t + h / 2);
         ctx.lineTo(l + w / 2, t + h);
         ctx.lineTo(l, t + h / 2);
         break;
 
-      case ShapeType.TRIANGLE:
+      case Shapes.TRIANGLE:
         ctx.moveTo(l + w / 2, t);
         ctx.lineTo(l, t + h);
         ctx.lineTo(l + w, t + h);
         break;
 
-      case ShapeType.ROUNDED:
+      case Shapes.ROUNDED:
         let a = style.shape.a || 12;
         ctx.drawRoundedRect(l, t, w, h, a);
         break;
 
-      case ShapeType.HOURGLASS:
+      case Shapes.HOURGLASS:
         let thin = .2, f = .12;
         ctx.moveTo(l + f * w, t);
         ctx.lineTo(l + w * (1 - f), t);
@@ -176,11 +184,11 @@ export class Mapper {
     ctx.fillStyle = style.fill;
 
     switch (style.shape.type) {
-      case ShapeType.SQUARE, ShapeType.RECTANGLE:
+      case Shapes.SQUARE, Shapes.RECTANGLE:
         ctx.fillRect(0, 0, 16, 16);
         break;
 
-      case ShapeType.TRIANGLE:
+      case Shapes.TRIANGLE:
         ctx.beginPath();
         ctx.moveTo(0, 16);
         ctx.lineTo(8, 0);
@@ -189,14 +197,14 @@ export class Mapper {
         ctx.fill();
         break;
 
-      case ShapeType.CIRCLE:
+      case Shapes.CIRCLE:
         ctx.beginPath();
         ctx.arc(8, 8, 8, 0, 2 * Math.PI);
         ctx.closePath();
         ctx.fill();
         break;
 
-      case ShapeType.ROUNDED:
+      case Shapes.ROUNDED:
         let r = 2;
         ctx.beginPath();
         ctx.moveTo(r, 0);
@@ -212,7 +220,7 @@ export class Mapper {
         ctx.fill();
         break;
 
-      case ShapeType.HOURGLASS:
+      case Shapes.HOURGLASS:
         ctx.beginPath();
         ctx.moveTo(2, 0);
         ctx.lineTo(14, 0);
@@ -224,7 +232,7 @@ export class Mapper {
         ctx.fill();
         break;
 
-      case ShapeType.DIAMOND:
+      case Shapes.DIAMOND:
         ctx.beginPath();
         ctx.moveTo(8, 0);
         ctx.lineTo(16, 8);
@@ -256,9 +264,7 @@ export class Mapper {
   renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): any {
     if (group.visual) return;
 
-    let root = new XContainer();
-    root.width = group.width;
-    root.height = group.height;
+    let root = new XContainer(group);
 
     if (!topLevel) {
       root.position.set(group.left, group.top);
@@ -268,11 +274,11 @@ export class Mapper {
     root.shape = shape;
 
     if (oblique) {
-      shape.beginFill(0xeeeeee);
+      shape.beginFill(Colors.grey);
       shape.drawRoundedRect(0, 0, group.width, group.height, 12);
       shape.endFill();
     } else if (!topLevel) {
-      shape.lineStyle(16, 0xeeeeee);
+      shape.lineStyle(16, Colors.grey);
       shape.drawRoundedRect(0, 0, group.width, group.height, 12);
     }
 
@@ -338,14 +344,29 @@ const Colors = {
   'cornflowerblue': 0x6495ED,
   'mediumseagreen': 0x3CB371,
   'salmon': 0xFFA07A,
-  'red': 0xFF0000,
   'goldenrod': 0xDAA520,
   'darkgrey': 0xA9A9A9,
   'darkgray': 0xA9A9A9,
+  'gray': 0xAAAAAA,
+  'grey': 0xAAAAAA,
   'lightgray': 0xD3D3D3,
   'lightgrey': 0xD3D3D3,
-  'black': 0x000000,
-  'white': 0xffffff
+  'black': 0x111111,
+  'lightblack': 0x222222,
+  'white': 0xffffff,
+  'blue': 0x0074D9,
+  'navy': 0x001f3f,
+  'aqua': 0x7FDBFF,
+  'teal': 0x39CCCC,
+  'green': 0x2ECC40,
+  'lime': 0x01FF70,
+  'yellow': 0xFFDC00,
+  'orange': 0xFF851B,
+  'red': 0xFF4136,
+  'maroon': 0x85144b,
+  'fuchsia': 0xF012BE,
+  'purple': 0xB10DC9,
+  'silver': 0xDDDDDD
 }
 
 /**
@@ -357,6 +378,13 @@ export class XText extends PIXI.Text {
   baseScale: number;
   upperScale: number;
   origin: Label;
+
+  constructor(text: string, definition: Label) {
+    super(text, definition.cache, 0.2);
+    this.baseScale = definition.baseScale;
+    this.lowerScale = definition.lowerScale;
+    this.upperScale = definition.upperScale;
+  }
 }
 
 /**
@@ -367,4 +395,11 @@ export class XContainer extends PIXI.Container {
   origin: ViewGroup;
   shape: PIXI.Graphics;
   content: PIXI.Container;
+
+  constructor(group: ViewGroup) {
+    super();
+    this.width = group.width;
+    this.height = group.height;
+    this.origin = group;
+  }
 }

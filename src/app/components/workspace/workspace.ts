@@ -24,11 +24,11 @@ export default class Workspace implements AfterViewInit {
     @ViewChild('rightBar') right: Sidebar;
     @ViewChild('bottomBar') bottom: Sidebar;
 
-    @ViewChild('explorer') explorer: ToolWindow;
-    @ViewChild('inspector') inspector: ToolWindow;
-    @ViewChild('palette') palette: ToolWindow;
-    @ViewChild('dataview') dataview: ToolWindow;
-    @ViewChild('issues') issues: ToolWindow;
+    @ViewChild('explorer') explorer: ToolWindow<Diagram>;
+    @ViewChild('inspector') inspector: ToolWindow<Diagram>;
+    @ViewChild('palette') palette: ToolWindow<Diagram>;
+    @ViewChild('dataview') dataview: ToolWindow<Diagram>;
+    @ViewChild('issues') issues: ToolWindow<Diagram>;
 
     @ViewChild('diagram') diagram: Diagram;
 

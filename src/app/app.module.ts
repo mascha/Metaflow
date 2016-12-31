@@ -9,7 +9,7 @@ import Application  from './application';
 
 /* Services */
 import PlatformService from "./services/platforms";
-import ModelService from "./services/models";
+import DebugModelService from "./services/models";
 import PaletteRegistry from "./services/palettes";
 import ProjectService from "./services/projects";
 
@@ -31,7 +31,7 @@ import {Settings} from './settings';
   ],
   providers: [
     PlatformService, 
-    ModelService,
+    DebugModelService,
     PaletteRegistry,
     ProjectService,
     Settings

@@ -14,7 +14,7 @@ import {Diagram} from "../../../common/layer";
     styles: [require('./dataview.scss')],
     template: `<div id="plot" class="plot"></div>`
 })
-export default class Dataview implements ToolWindow {
+export default class Dataview implements ToolWindow<Diagram> {
 
     readonly title = "Analytics";
 

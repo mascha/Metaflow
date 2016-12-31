@@ -2,7 +2,7 @@ import {Component, Inject} from '@angular/core';
 import {ViewGroup} from "../../../common/viewmodel";
 import {Diagram} from "../../../common/layer";
 import {ToolWindow} from "../toolwindow"
-import ModelService from "../../../services/models";
+import DebugModelService from "../../../services/models";
 
 /**
  * A problem viewer.
@@ -15,7 +15,7 @@ import ModelService from "../../../services/models";
     template: require('./issues.html'),
     styles: [require('./issues.scss')]
 })
-export class Issues implements ToolWindow {
+export class Issues implements ToolWindow<Diagram> {
     title = "Issues";
     contents = [];
     scope: ViewGroup;

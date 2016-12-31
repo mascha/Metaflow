@@ -1,8 +1,8 @@
-import {Component, ViewChild, ElementRef, Renderer, HostListener} from '@angular/core';
+import { Component, ViewChild, ElementRef, Renderer, HostListener } from '@angular/core';
 import PaletteRegistry from "../../../services/palettes";
 import HTMLUtil from "../../../common/utility";
-import {ToolWindow} from "../toolwindow";
-import {Diagram} from '../../../common/layer';
+import { ToolWindow } from "../toolwindow";
+import { Diagram } from '../../../common/layer';
 
 /**
  * A component palette.
@@ -14,7 +14,7 @@ import {Diagram} from '../../../common/layer';
     template: require('./palette.html'),
     styles: [require('./palette.scss')],
 })
-export default class Palette implements ToolWindow {
+export default class Palette implements ToolWindow<Diagram> {
     title = "Palette";
     categories: Array<any>;
     components: Array<any>;
@@ -41,13 +41,26 @@ export default class Palette implements ToolWindow {
     private onIconsLeave() {
         this.reset();
     }
-    
-    private onSelect(event: MouseEvent) {
+
+    private onSelect(category: any) {
+        if (!category) return;
+        this.components = category.components;
+        this.selected = category.name;
+        /*
+        let element = this.select.nativeElement;
+        if (element) {
+            let value = `translateY(${index * 32}px)`;
+            this.renderer.setElementStyle(
+                element, 'transform', value
+            );
+        }
+        
         let index = this.eventIndex(event);
         if (this.isValidIndex(index)) {
             this.selectItem(index);
             this.reset();
         }
+        */
     }
 
     private onOverlayClick(event: MouseEvent) {
@@ -58,16 +71,16 @@ export default class Palette implements ToolWindow {
         this.reset();
     }
 
-    @HostListener('mouseleave') 
+    @HostListener('mouseleave')
     private onHostLeave() {
         this.reset();
         return false;
     }
-    
+
     private startTimer() {
-        this.timer = setTimeout(() => { this.dimmed = true;}, 1200);
+        this.timer = setTimeout(() => { this.dimmed = true; }, 1200);
     }
-    
+
     private resetTimer() {
         clearTimeout(this.timer);
         this.timer = null;
@@ -110,9 +123,9 @@ export default class Palette implements ToolWindow {
     private getIndex(y: number) {
         return Math.floor(y / 32);
     }
-    
+
     constructor(private registry: PaletteRegistry,
-                private renderer: Renderer) {
+        private renderer: Renderer) {
         this.categories = registry.getCategories();
         this.components = this.categories[0].components;
     }

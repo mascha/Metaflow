@@ -2,7 +2,7 @@ import {Component, Inject} from '@angular/core';
 import {ViewGroup} from "../../../common/viewmodel";
 import {Diagram} from "../../../common/layer";
 import {ToolWindow} from "../toolwindow"
-import ModelService from "../../../services/models";
+import DebugModelService from "../../../services/models";
 
 /**
  * A project navigator/explorer.
@@ -15,7 +15,7 @@ import ModelService from "../../../services/models";
     template: require('./explorer.html'),
     styles: [require('./explorer.scss')],
 })
-export class Explorer implements ToolWindow {
+export class Explorer implements ToolWindow<Diagram> {
     title = "Explorer";
     contents = [];
     scope: ViewGroup;
