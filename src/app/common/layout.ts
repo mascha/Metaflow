@@ -92,19 +92,6 @@ export const enum Freedom {
 }
 
 /**
- * Describes all possible text orientations
- * 
- * @author Martin Schade
- * @since 1.0.0
- */
-export const enum TextAlignment {
-    FLOAT_LEFT,
-    FLOAT_RIGHT,
-    CENTER,
-    JUSTIFIED
-}
-
-/**
  * Layout algorithm.
  * 
  * @author Martin Schade.

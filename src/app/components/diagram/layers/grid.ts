@@ -47,7 +47,7 @@ export default class Grid implements CameraObserver {
         const scale = Math.log(space) / - Math.log(this.base);
         const min = Math.floor(scale) + 1;
         const max = min + this._depthLevel;
-
+        const context = this._context;
         const vW = this._camera.visualWidth;
         const vH = this._camera.visualHeight;
         const cx = this._camera.cameraX;
@@ -56,7 +56,6 @@ export default class Grid implements CameraObserver {
         const b = this.base;
         
         for (let level = min; level <= max; level++) {
-            const context = this._context;
             const period = Math.pow(b, -level);
             const amplit = Math.pow(b, -level + scale);
             const normal = Math.atan(this._brightness * amplit) / Math.PI;
@@ -87,13 +86,14 @@ export default class Grid implements CameraObserver {
 
     private redraw() {
         if (!this._active) return;
-        this._context.clearRect(0,0,this._canvas.width,this._canvas.height);
-        this._context.strokeStyle = 'cornflowerblue';
-        this._context.lineWidth = 1.0;
-        const x = this._camera.worldX;
-        const y = this._camera.worldY;
-        const w = this._camera.projWidth;
-        const h = this._camera.projHeight;
+        const ca = this._camera, ctx = this._context, cn = this._canvas;
+        ctx.clearRect(0 , 0, cn.width, cn.height);
+        ctx.strokeStyle = 'cornflowerblue';
+        ctx.lineWidth = 1.0;
+        const x = ca.worldX;
+        const y = ca.worldY;
+        const w = ca.projWidth;
+        const h = ca.projHeight;
         this.drawGrid(x, y, w, h);
     }
 

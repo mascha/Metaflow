@@ -94,7 +94,7 @@ export class PixiLayer implements RenderLayer, CameraObserver {
         this.labels.removeChildren();
         let leafs = new PIXI.Graphics();
 
-        // first level
+        /* render root */
         let mapper = this.mapper;
         mapper.renderGroup(level, true, false);
 
@@ -102,8 +102,23 @@ export class PixiLayer implements RenderLayer, CameraObserver {
         this.cachedGroups = [];
         let contents = level.contents;
         let length = contents.length;
+        let item = null;
+
+        /* render edges */
         for (let i = 0; i < length; i++) {
-            let item = contents[i];
+            item = contents[i];
+            if (item.edges && item.edges.length > 0) {
+                leafs.lineStyle(4, 0x0074D9)
+                item.edges.forEach(it => {
+                    leafs.moveTo(item.centerX, item.centerY);
+                    leafs.lineTo(it.target.centerX, it.target.centerY);
+                });
+            }
+        }
+
+        /* render nodes */
+        for (let i = 0; i < length; i++) {
+            item = contents[i];
             if (!item.isLeaf()) {
                 let itm = item as ViewGroup;
                 this.cachedGroups.push(itm);

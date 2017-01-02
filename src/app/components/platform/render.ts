@@ -40,12 +40,13 @@ export class Mapper {
     return text;
   }
 
-  private createDefaultLabel(label: Label) {
+  private createDefaultLabel(label: Label): PIXI.TextStyle {
     return label.cache || {
       fill: label.color || Colors.maroon,
       stroke: Colors.lightblack, // label.haloColor || Colors.black,
       strokeThickness: 5,
-      lineJoin: 'round'
+      lineJoin: 'round',
+      align: label.alignment || 'left'
     };
   }
 
@@ -100,20 +101,6 @@ export class Mapper {
 
     const l = item.left, t = item.top, w = item.width, h = item.height;
 
-    if (item.edges && item.edges.length > 0) {
-      ctx.lineStyle(4, Colors.blue)
-      item.edges.forEach(it => {
-        ctx.moveTo(l + w / 2, t + h / 2);
-        ctx.lineTo(it.target.centerX, it.target.centerY);
-      });
-    }
-
-    /* debugging
-    ctx.lineStyle(1, 0xf);
-    ctx.drawRect(l, t, w, h);
-    ctx.lineStyle()
-    */
-
     /*
     if (stroke) {
       ctx.lineStyle(4, 0xf);
@@ -121,7 +108,8 @@ export class Mapper {
       ctx.lineStyle();
     }
     */
-    ctx.lineStyle(4, 0x2222222);
+
+    ctx.lineStyle(3, 0x2222222);
     if (fill) ctx.beginFill(fill);
 
     switch (style.shape.type) {
@@ -158,12 +146,10 @@ export class Mapper {
         ctx.moveTo(l + f * w, t);
         ctx.lineTo(l + w * (1 - f), t);
         ctx.lineTo(l + w / (2 - thin), t + h / 2);
-        ctx.lineTo(l + w / (2 + thin), t + h / 2);
-        ctx.endFill().beginFill(fill);
-        ctx.moveTo(l + f * w, t + h);
-        ctx.lineTo(l + w / (2 + thin), t + h / 2);
-        ctx.lineTo(l + w / (2 - thin), t + h / 2);
         ctx.lineTo(l + w * (1 - f), t + h);
+        ctx.lineTo(l + f * w, t + h);
+        ctx.lineTo(l + w / (2 + thin), t + h / 2);
+        ctx.lineTo(l + f * w, t);
         break;
 
       default: console.warn('Tried to render unknown shape class (' + style.shape.type + ')')

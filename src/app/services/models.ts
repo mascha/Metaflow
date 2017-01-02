@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ViewGroup, ViewItem, ViewEdge, ViewModel, ViewNode, ViewProxy } from "../common/viewmodel";
 import { Language, ConcreteSyntax, Mapping, Rule, MapType } from "../common/language";
-import { Style, GroupStyle, EdgeStyle, Label } from '../common/styling';
+import { Style, GroupStyle, EdgeStyle, Label, TextAlignment } from '../common/styling';
 import { Shape, Shapes } from '../common/shapes';
 import { Vertical, Horizontal, Locality } from '../common/layout';
 import { Mapper } from '../platform/render';
@@ -243,13 +243,15 @@ const NAMES = [
     constructor() {
         
         /* STYLES */
+
         this.moduleStyle = new GroupStyle();
         this.moduleStyle.actsAsPortal = true;
         this.moduleStyle.shape = new Shape(Shapes.ROUNDED);
         this.moduleStyle.shape.a = 6;
         this.moduleStyle.fill = 'silver';
         this.moduleStyle.labels = new Label();
-        this.moduleStyle.labels.baseScale = 0.7
+        this.moduleStyle.labels.baseScale = 0.7;
+        this.moduleStyle.labels.alignment = TextAlignment.CENTER;
         this.moduleStyle.labels.limits(.2, 1.6);
         this.moduleStyle.labels.color = 'cornflowerblue';
 

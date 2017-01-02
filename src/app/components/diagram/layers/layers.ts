@@ -44,7 +44,7 @@ export class GridLayer implements Layer {
  */
 @Component({
     selector: 'effect-layer',
-    template: require('./effects.html'),
+    template: '<canvas #effects class="layer"></canvas><div #misc class="layer"></div>',
     styles: [require('./effects.scss')]
 })
 export class EffectLayer implements Layer {
