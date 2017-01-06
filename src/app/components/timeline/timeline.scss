@@ -149,6 +149,16 @@ $item-icon-width: 32px;
                 }
             }
         }
+
+        .closed-banner {
+            position: relative;
+            height: 19px;
+            margin: 15px 0 -15px;
+            overflow: visible;
+            background: #f3f3f3;
+            border-bottom: 15px solid #fff;
+            border-radius: 0;
+        }
         
         .item {
             position: relative;
@@ -191,6 +201,7 @@ $item-icon-width: 32px;
                             line-height: $item-icon-width;
                         }
                     }
+
                 }
             }
         }

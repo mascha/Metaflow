@@ -17,7 +17,7 @@ export default class Timeline {
     titleExtra = "#94";
 
     comments = [
-        {title: "TITLE"},
-        {title: "TITLE"},
+        { title: "TITLE" },
+        { title: "TITLE" },
     ]
 }

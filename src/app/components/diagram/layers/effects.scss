@@ -23,3 +23,48 @@
         opacity: 0;
     }
 }
+
+.bubble {
+    background: #5B9FEF;
+    background: linear-gradient(0deg, #3C80CF 0%, #5B9FEF 100%) no-repeat;
+    border-radius: 50%;
+    cursor: pointer;
+    height: 20px;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.21, 1.26);
+    width: 20px;
+
+    &:before, &:after {
+        border: 2px solid #4A90E2;
+        border-radius: 50%;
+        content: '';
+        display: block;
+        height: 28px;
+        left: -4px;
+        position: absolute;
+        top: -4px;
+        transition: 0.1s;
+        width: 28px;
+    }
+}
+
+@keyframes bubble {
+    0% {
+        border-width: 2px;
+        opacity: 1;
+        -webkit-transform: scale(1);
+        transform: scale(1)
+    }
+
+    100% {
+        opacity: 0;
+        -webkit-transform: scale(2);
+        transform: scale(2)
+    }
+}
+
+.bubble:before {
+    animation: bubble 2s infinite;
+}
+
