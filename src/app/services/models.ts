@@ -7,6 +7,16 @@ import { Vertical, Horizontal, Locality } from '../common/layout';
 import { Mapper } from '../platform/render';
 import { Observable } from "rxjs/Observable";
 
+const DISTRIBUTION = 0;
+
+const ENTITIES_PER_LEVEL = 250;
+
+const MAX_LEVELS = 4;
+
+const ROOT_SCALE = 0.1;
+const ROOT_WIDTH = 2000;
+const SPACE = ROOT_WIDTH / ROOT_SCALE;
+
 const NAMES = [
     'Population',
     'Market Size',
@@ -69,7 +79,7 @@ const NAMES = [
         return {
             name: "System Dynamics",
             alias: "sysdyn",
-            path: "lang.metaflow.sysdyn",
+            path: "metaflow/formalism/sysdyn",
             syntax: {
                 viewpoint: {
                     name: "Stock and Flow Diagram",
@@ -106,13 +116,11 @@ const NAMES = [
                 },
                 textual: {
                     name: "Module Language",
-                    type: "hybrid",
-                    visual: "Stock and Flow Diagram",
-
+                    type: "hybrid"
                 }
             },
             abstract: {
-                base: "lang://metaflow.io/base?version=1.0.0",
+                base: "formalism://metaflow/base",
                 version: "1.0.0",
                 type: "emf",
                 entities: {
@@ -130,8 +138,8 @@ const NAMES = [
     private createStock() {
         let item = new ViewItem(
             this.randomName(),
-            this.random() * 20000,
-            this.random() * 20000,
+            this.random() * SPACE,
+            this.random() * SPACE,
             192,
             108
         );
@@ -142,8 +150,8 @@ const NAMES = [
     private createVariable() {
         let variable = new ViewItem(
             this.randomName(),
-            this.random() * 20000,
-            this.random() * 20000,
+            this.random() * SPACE,
+            this.random() * SPACE,
             32,
             32
         );
@@ -154,8 +162,8 @@ const NAMES = [
     private createRate() {
         let variable = new ViewItem(
             this.randomName(),
-            this.random() * 20000,
-            this.random() * 20000,
+            this.random() * SPACE,
+            this.random() * SPACE,
             64,
             64
         );
@@ -166,8 +174,8 @@ const NAMES = [
     private createModule() {
         let module = new ViewGroup(
             this.randomName(),
-            this.random() * 20000,
-            this.random() * 20000,
+            this.random() * SPACE,
+            this.random() * SPACE,
             300,
             260,
             1
@@ -182,15 +190,14 @@ const NAMES = [
     }
 
     private createDebugModel(): ViewGroup {
-        let MAX = 3;
-        let level = MAX;
         let o: ViewGroup = null;
         let root: ViewGroup = null;
+        let level = MAX_LEVELS;
         while (level--) {
-            let group = new ViewGroup(`Level #${MAX - level}`, 2000, 2000, 2000, 2000, 0.1);
+            let group = new ViewGroup(`Level #${MAX_LEVELS - level}`, 2000, 2000, 2000, 2000, 0.1);
             group.style = this.moduleStyle;
 
-            let entity = 180;
+            let entity = ENTITIES_PER_LEVEL;
             while (entity) {
                 let rnd = Math.random();
                 let item;
@@ -224,7 +231,9 @@ const NAMES = [
     }
 
     private random(): number {
-        return Math.cbrt(Math.random() * Math.random() * Math.random());
+        if (DISTRIBUTION == 0) return Math.random(); 
+        else if (DISTRIBUTION == 1) return Math.sqrt(Math.random() * Math.random());
+        else return Math.cbrt(Math.random() * Math.random() * Math.random());
     }
 
     private findConnection(item: ViewNode, siblings: ViewNode[], distance: number): ViewNode {
@@ -236,7 +245,6 @@ const NAMES = [
                 return sibling;
             }
         }
-
         return null;
     }
 

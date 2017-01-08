@@ -111,7 +111,7 @@ export class PixiLayer implements RenderLayer, CameraObserver {
                 leafs.lineStyle(4, 0x0074D9)
                 item.edges.forEach(it => {
                     leafs.moveTo(item.centerX, item.centerY);
-                    leafs.lineTo(it.target.centerX, it.target.centerY);
+                    leafs.lineTo(it.target.centerX, it.target.centerY)
                 });
             }
         }
@@ -171,7 +171,7 @@ export class PixiLayer implements RenderLayer, CameraObserver {
         diagram.scope.subscribe(it => this.update(it));
     }
 
-    private attachNode(level: ViewGroup) {
+     private attachNode(level: ViewGroup) {
         this.nodes.addChild(level.visual);
     }
 
