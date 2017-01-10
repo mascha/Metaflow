@@ -5,7 +5,8 @@ import Dataview from "./data/dataview";
 import {Inspector} from "./inspector/inspector";
 import {Explorer} from "./explorer/explorer";
 import {Issues} from "./issues/issues";
-import PropertySheet from './inspector/propertysheet/propertysheet';
+import {PropertySheet} from './inspector/propertysheet/propertysheet';
+import {StyleSheet} from './inspector/stylesheet/stylesheet';
 import {VsFor} from 'ng2-vs-for';
 
 /**
@@ -27,6 +28,7 @@ import {VsFor} from 'ng2-vs-for';
     ],
     declarations: [
         PropertySheet,
+        StyleSheet,
         Inspector,
         Palette,
         Dataview,

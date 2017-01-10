@@ -15,24 +15,9 @@ import DiagramImpl from './diagram';
  * @since 1.0.0
  */
 @NgModule({
-    imports: [ 
-        CommonModule, 
-        LoaderModule
-    ],
-    exports: [ 
-        DiagramImpl
-    ],
-    declarations: [
-        Breadcrumbs, 
-        Presenter, 
-        Overview, 
-        EffectLayer, 
-        BorderLayer,
-        GridLayer,
-        DiagramImpl
-    ],
-    providers: [
-        { provide: 'diagram', useClass: DiagramImpl }
-    ]
+    imports:      [ CommonModule, LoaderModule ],
+    exports:      [ DiagramImpl ],
+    declarations: [ Breadcrumbs, Presenter, Overview, EffectLayer, BorderLayer, GridLayer, DiagramImpl ],
+    providers:    [ {provide: 'diagram', useClass: DiagramImpl }]
 })
 export class DiagramModule { }

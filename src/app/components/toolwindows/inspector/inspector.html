@@ -4,8 +4,22 @@
   <span #notes class="inspector-category right" [class.active]="categoryIndex == 3" (click)="onSelect(3)">Notes</span>
 </section>
 <section class="inspector-content">
-  <div class="inspector-overlay" *ngIf="selection?.empty">
-    <h3>{{overlayMessage}}</h3>
+  <div [ngSwitch]="categoryIndex">
+    <div *ngSwitchCase="1">
+      <div *ngIf="selection.empty" class="inspector-overlay">
+        <h3>{{overlayMessage}}</h3>
+      </div>
+      <property-sheet *ngIf="!selection.empty">
+      </property-sheet>
+    </div>
+    <stylesheet *ngSwitchCase="2" [item]="activeStyle">
+    </stylesheet>
+    <div *ngSwitchCase="3">
+    </div>
+    <div *ngSwitchDefault class="inspector-overlay">
+      <h3>No tab selected</h3>
+    </div>
   </div>
-  <property-sheet *ngIf="categoryIndex == 1 && !selection?.empty"></property-sheet>
+  <div>
+  </div>
 </section>

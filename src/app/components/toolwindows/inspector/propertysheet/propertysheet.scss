@@ -5,6 +5,10 @@ $text-color: #dddddd;
 $text-locked: #aaaaaa;
 $text-disabled: darken($text-locked, 24);
 
+.sheet-properties {
+  padding: 5px 8px; 
+}
+
 .sheet-property {
   height: 58px;
   margin-bottom: 6px;
@@ -16,8 +20,6 @@ $text-disabled: darken($text-locked, 24);
     font-weight: bold;
     display: block;
     line-height: 21px;
-    text-overflow: ellipsis;
-    overflow: hidden;
 
     &.locked {
       @include icon(after, '\f33E') {

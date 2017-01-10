@@ -5,15 +5,15 @@ import { NgModule } from '@angular/core';
 import { WorkspaceModule } from './components/workspace/workspace.module';
 
 /* Components */
-import Application  from './application';
+import Application from './application';
 
 /* Services */
 import PlatformService from "./services/platforms";
-import {ModelService} from "./services/models";
+import { ModelService } from "./services/models";
 import PaletteRegistry from "./services/palettes";
 import ProjectService from "./services/projects";
 
-import {Settings} from './settings';
+import { Settings } from './settings';
 
 /**
  * Main entrypoint for the application.
@@ -22,22 +22,9 @@ import {Settings} from './settings';
  * @since 1.0.0
  */
 @NgModule({
-  bootstrap: [
-    Application
-  ],
-  imports: [
-    WorkspaceModule,
-    BrowserModule
-  ],
-  providers: [
-    PlatformService, 
-    ModelService,
-    PaletteRegistry,
-    ProjectService,
-    Settings
-  ],
-  declarations: [
-    Application
-  ],
+  bootstrap:      [Application],
+  imports:        [WorkspaceModule, BrowserModule],
+  providers:      [PlatformService, ModelService, PaletteRegistry, ProjectService, Settings],
+  declarations:   [Application],
 })
-export default class AppModule {}
+export default class AppModule { }

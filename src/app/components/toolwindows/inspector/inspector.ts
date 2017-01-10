@@ -1,8 +1,10 @@
-import {Component, ElementRef, ViewChild, Inject} from '@angular/core';
+import {Component} from '@angular/core';
 import {Selection, SelectionObserver} from "../../../common/selection";
 import {ViewNode} from "../../../common/viewmodel";
+import {Style} from "../../../common/styling";
 import {Diagram} from "../../../common/layer";
 import {ToolWindow} from "../toolwindow";
+import {ModelService} from "../../../services/models";
 
 
 /**
@@ -20,11 +22,15 @@ export class Inspector implements SelectionObserver<ViewNode>, ToolWindow<Diagra
     categoryIndex = 1;
     overlayMessage = 'No selection';
     title = "Inspector";
-    selection: Selection<ViewNode> = new Selection();
+    selection = new Selection<ViewNode>();
+    activeStyles: Array<Style> = [];
+    activeStyle: Style;
 
     initialize(diagram: Diagram) {
-        this.selection = diagram.selection;
-        this.selection.subscribe(this);
+        setTimeout(() => {
+            this.selection = diagram.selection;
+            this.selection.subscribe(this);
+        });
     }
 
     onSelectionBegin(selection: Selection<ViewNode>) {
@@ -35,7 +41,16 @@ export class Inspector implements SelectionObserver<ViewNode>, ToolWindow<Diagra
         this.overlayMessage = selection.empty ? "Nothing selected" : `Selected ${selection.items.length} items`;
     }
 
-    private onSelect(index: number) {
+    onSelect(index: number) {
         this.categoryIndex = (index < 1) ? 1 : (index > 3) ? 3 : index;
+    }
+
+    constructor(models: ModelService) {
+        models.fetchFormalisms('*').subscribe(formalisms => {
+            formalisms.forEach(formalism => {
+                this.activeStyles = formalism.syntax.viewpoint.styles;
+            });
+            this.activeStyle = this.activeStyles[0] || null;
+        });
     }
 }

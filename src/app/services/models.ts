@@ -147,13 +147,18 @@ const NAMES = [
             },
             abstract: {
                 name: "StockAndFlow",
-                path: "metaflow.io",
+                uri: "metaflow.io",
                 prefix: "sysdyn",
                 version: "1.0.0",
                 type: "emf",
                 generateNamespace: function () {
-                    return `${this.type}://${this.path}/${this.prefix}/${this.name}${this.version ? `?v=${this.version}` : ''}`;
+                    return `${this.type}://${this.uri}/${this.prefix}/${this.name}${this.version ? `?v=${this.version}` : ''}`;
                 },
+                dependencies: [
+                    "emf://metaflow.io/math/Expression?v=0.8.1",
+                    "emf://metaflow.io/unit/Units?v=0.6.2",
+                    "emf://metaflow.io/base/Base?v=1.0.0"
+                ],
                 entities: [
                     {
                         name: "Variable",
@@ -201,8 +206,8 @@ const NAMES = [
     private createStock() {
         let item = new ViewItem(
             this.randomName(),
-            this.random() * SPACE,
-            this.random() * SPACE,
+            2000 * Math.floor(this.random() * 10),
+            2000 * Math.floor(this.random() * 10),
             192,
             108
         );

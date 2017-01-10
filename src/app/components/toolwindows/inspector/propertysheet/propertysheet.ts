@@ -10,7 +10,7 @@ import {Component} from "@angular/core";
     template: require('./propertysheet.html'),
     styles: [require('./propertysheet.scss')]
 })
-export default class PropertySheet {
+export class PropertySheet {
     items = [
         {field: 'Name', derived: false, value: 'Population', hint: 'Name of the element'},
         {field: 'Equation', derived: false, hint: '', value: '1 + alpha * sin(x + y)'},

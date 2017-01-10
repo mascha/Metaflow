@@ -377,7 +377,7 @@ export class XText extends PIXI.Text {
   origin: Label;
 
   constructor(text: string, definition: Label) {
-    super(text, definition.cache, 0.2);
+    super(text, definition.cache);
     this.baseScale = definition.baseScale;
     this.lowerScale = definition.lowerScale;
     this.upperScale = definition.upperScale;

@@ -75,7 +75,6 @@ $inspector-category-text-hover: white;
 
 .inspector-content {
   @include fillh(0, $inspector-categories-height, 0, 0);
-  padding: 5px 8px;
   background-color: $inspector-content-fill;
 }
 
@@ -83,7 +82,7 @@ $inspector-category-text-hover: white;
   @include fill();
 
   h3 {
-    color: lightgray;
+    color: rgba(white, 0.5);
     position: absolute;
     top: 50%;
     transform: translateY(-50%);

@@ -25,14 +25,14 @@ export interface SelectionObserver<T> {
  * @since 1.0.0
  */
 export class Selection<T> {
-    readonly items = [];
+    readonly items: Array<T>;
     private obs = new Array<SelectionObserver<T>>();
 
     get empty(): boolean {
         return (this.items && this.items.length > 0)
     }
 
-    public subscribe(observer: SelectionObserver<T>) {
+    subscribe(observer: SelectionObserver<T>) {
         if (!observer) return;
         this.obs.push(observer);
     }
