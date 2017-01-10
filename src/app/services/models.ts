@@ -4,15 +4,11 @@ import { Language, ConcreteSyntax, Mapping, Rule, MapType } from "../common/lang
 import { Style, GroupStyle, EdgeStyle, Label, TextAlignment } from '../common/styling';
 import { Shape, Shapes } from '../common/shapes';
 import { Vertical, Horizontal, Locality } from '../common/layout';
-import { Mapper } from '../platform/render';
 import { Observable } from "rxjs/Observable";
 
 const DISTRIBUTION = 0;
-
-const ENTITIES_PER_LEVEL = 250;
-
+const ENTITIES_PER_LEVEL = 500;
 const MAX_LEVELS = 4;
-
 const ROOT_SCALE = 0.1;
 const ROOT_WIDTH = 2000;
 const SPACE = ROOT_WIDTH / ROOT_SCALE;
@@ -38,7 +34,13 @@ const NAMES = [
     'Spare Parts',
     'Sales Volume',
     'Level',
-    'Persons'
+    'Persons',
+    'Clock Time',
+    'Trains',
+    'Summertime',
+    'Bleach',
+    'Market Price',
+    'Retail Growth'
 ]
 
 /**
@@ -47,7 +49,7 @@ const NAMES = [
  * @author Martin Schade
  * @since 1.0.0
  */
-@Injectable() export default class DebugModelService {
+@Injectable() export class ModelService {
 
     private model: ViewModel;
     private empty: ViewGroup;
@@ -59,33 +61,57 @@ const NAMES = [
     private stockStyle: Style;
     private moduleStyle: GroupStyle;
 
-    private baseUrl = "app.metaflow.io";
-
-    getModel(): Promise<ViewModel> {
-        this.model = this.model || new ViewModel("Debug Model", this.createDebugModel());
-        return new Promise(promise => setTimeout(promise, 500)).then(() => { this.fetchGroup('/Population Model/Price/Economy Growth'); return this.model; })
+    /**
+     * Retrieve all items within the current path
+     * 
+     * @endpoint /api/v1/projects/${id}/${path}
+     */
+    fetchLevel(project: string, path: string): Observable<ViewModel> {
+        this.model = this.model || new ViewModel(project, this.createDebugModel());
+        return Observable.create(obs => {
+            setTimeout(() => {
+                obs.next(this.model);
+                obs.complete();
+            })
+        });
     }
 
-    fetchGroup(path: string): Observable<ViewGroup> {
-        //return lazyFetch(`${this.baseUrl}/models/${this.model.name}?path=${path}`);
-        return null;
+    /**
+     * Retrieve all availiable projects.
+     * 
+     * @endpoint /api/v1/user/$id/projects/
+     */
+    fetchProjects(user: string): Observable<Array<string>> {
+        return Observable.of([
+            "",
+            "",
+            "",
+            ""
+        ]);
     }
 
-    resolveProxy(proxy: ViewProxy): Observable<ViewGroup> {
-        return this.fetchGroup(proxy.name);
-    }
-
-    fetchFormalism(name: string) {
-        return {
+    /**
+     * Retrieve all currenly availiable formalisms.
+     * 
+     * @endpoint /api/v1/projects/${id}/path
+     */
+    fetchFormalisms(project: string): Observable<Array<any>> {
+        return Observable.of([{
             name: "System Dynamics",
             alias: "sysdyn",
-            path: "metaflow/formalism/sysdyn",
+            version: "1.0.0",
             syntax: {
                 viewpoint: {
                     name: "Stock and Flow Diagram",
                     type: "visual", // "textual", "hybrid"
                     path: "query", // path below namespace
-                    styles: {
+                    styles: [
+                        this.rateStyle,
+                        this.stockStyle,
+                        this.variableStyle,
+                        this.moduleStyle
+                    ],
+                    styleMap: {
                         linkStyle: this.edgeStyle,
                         flowStyle: this.flowStyle,
                         rateStyle: this.rateStyle,
@@ -94,7 +120,7 @@ const NAMES = [
                         stockStyle: {
                             fill: 'salmon',
                             stroke: 'black',
-                            shape : new Shape(Shapes.RECTANGLE),
+                            shape: new Shape(Shapes.RECTANGLE),
                             labels: {
                                 horizontal: Horizontal.RIGHT,
                                 placement: Locality.OUTSIDE,
@@ -120,19 +146,56 @@ const NAMES = [
                 }
             },
             abstract: {
-                base: "formalism://metaflow/base",
+                name: "StockAndFlow",
+                path: "metaflow.io",
+                prefix: "sysdyn",
                 version: "1.0.0",
                 type: "emf",
-                entities: {
-                    stock: {
-
+                generateNamespace: function () {
+                    return `${this.type}://${this.path}/${this.prefix}/${this.name}${this.version ? `?v=${this.version}` : ''}`;
+                },
+                entities: [
+                    {
+                        name: "Variable",
+                        attributes: [
+                            {
+                                name: "formula",
+                                type: "string",
+                                upperBound: -1,
+                            }
+                        ],
+                        references: [
+                            {
+                                name: 'friends',
+                                upperBound: -1,
+                                containment: false,
+                            }
+                        ]
                     },
-                }
+                    {
+                        name: "Stock",
+                        attributes: [
+                            {
+                                name: "initial",
+                                info: "Formula describing the initial value of a stock",
+                                type: "string",
+                                upperBound: 1
+                            }
+                        ],
+                        references: [
+                            {
+                                name: 'friends',
+                                upperBound: -1,
+                                containment: false,
+                            }
+                        ]
+                    }
+                ]
             },
             transform: {
 
             }
-        }
+        }]);
     }
 
     private createStock() {
@@ -201,12 +264,15 @@ const NAMES = [
             while (entity) {
                 let rnd = Math.random();
                 let item;
+                let flow = false;
                 if (rnd < .25) {
                     item = this.createStock();
+                    flow = true;
                 } else if (rnd < .75) {
                     item = this.createVariable();
                 } else if (rnd < .90) {
                     item = this.createRate();
+                    flow = true;
                 } else {
                     item = this.createModule();
                 }
@@ -215,7 +281,7 @@ const NAMES = [
 
                 let neighbor = this.findConnection(item, group.contents, 2000);
                 if (neighbor) {
-                    item.addLink(new ViewEdge(item, neighbor, this.edgeStyle));
+                    item.addLink(new ViewEdge(item, neighbor, flow ? this.flowStyle : this.edgeStyle));
                 }
 
                 entity--;
@@ -231,7 +297,7 @@ const NAMES = [
     }
 
     private random(): number {
-        if (DISTRIBUTION == 0) return Math.random(); 
+        if (DISTRIBUTION == 0) return Math.random();
         else if (DISTRIBUTION == 1) return Math.sqrt(Math.random() * Math.random());
         else return Math.cbrt(Math.random() * Math.random() * Math.random());
     }
@@ -249,7 +315,7 @@ const NAMES = [
     }
 
     constructor() {
-        
+
         /* STYLES */
 
         this.moduleStyle = new GroupStyle();
@@ -277,6 +343,7 @@ const NAMES = [
         this.stockStyle = new Style();
         this.stockStyle.fill = 'salmon';
         this.stockStyle.shape = new Shape(Shapes.RECTANGLE);
+        this.stockStyle.strokeWidth = 3;
         this.stockStyle.labels = new Label();
         this.stockStyle.labels.vertical = Vertical.TOP;
         this.stockStyle.labels.placement = Locality.OUTSIDE;
@@ -287,6 +354,8 @@ const NAMES = [
         this.rateStyle = new Style();
         this.rateStyle.fill = 'goldenrod';
         this.rateStyle.shape = new Shape(Shapes.HOURGLASS);
+        this.rateStyle.stroke = "blue";
+        this.rateStyle.strokeWidth = 2;
         this.rateStyle.labels = new Label();
         this.rateStyle.labels.vertical = Vertical.TOP;
         this.rateStyle.labels.placement = Locality.OUTSIDE;
@@ -298,18 +367,11 @@ const NAMES = [
 
         this.edgeStyle = new EdgeStyle();
         this.edgeStyle.stroke = 'blue';
+        this.edgeStyle.strokeWidth = 4;
 
         this.flowStyle = new EdgeStyle();
-        this.flowStyle.stroke = 'black';
-        this.flowStyle.strokeWidth = 4;
-
-        /* RENDERING */
-
-        let render = new Mapper();
-        render.cacheShape(this.moduleStyle);
-        render.cacheShape(this.stockStyle);
-        render.cacheShape(this.variableStyle);
-        render.cacheShape(this.rateStyle);
+        this.flowStyle.stroke = 'yellow';
+        this.flowStyle.strokeWidth = 8;
     }
 }
 

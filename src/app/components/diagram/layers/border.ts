@@ -51,7 +51,9 @@ export default class Border implements CameraObserver {
 
     private scale = 1;
 
-    get borderWidth(): number { return this.border; }
+    get borderWidth() { 
+        return this.border; 
+    }
 
     onViewResized(): void {
         this.updateCache();
@@ -95,7 +97,7 @@ export default class Border implements CameraObserver {
     private draw() {
         if (this.active && this.proxies) {
             this.clearProxies();
-            this.drawBorder(0.2);
+            this.drawBorder(0.1);
             this.drawProxies();
         }
     }
@@ -193,10 +195,7 @@ export default class Border implements CameraObserver {
             proxy.image = proxy.image || proxy.origin.style.cachedImage;
 
             c.drawImage(proxy.image, drawX, drawY);
-            // c.fillText(i.toFixed(), drawX, drawY);
         }
-
-        // console.log(`${(hits / proxies.length * 100).toFixed(0)}%  hits`)
     }
 
     private clearProxies() {
@@ -205,9 +204,7 @@ export default class Border implements CameraObserver {
     }
 
     private updateCache() {
-
-        // border variable cache 
-
+        /* border variable cache */
         this.width  = Math.ceil(this.camera.visualWidth);
         this.height = Math.ceil(this.camera.visualHeight);
         this.halfW  = this.width * .5;
@@ -218,8 +215,7 @@ export default class Border implements CameraObserver {
         this.region.width = this.width;
         this.region.height = this.height;
 
-        // cluster caches
-
+        /* cluster caches */
         const cWidth = Math.floor(this.width / this.granularity);
         const cHeight = Math.floor(this.height / this.granularity);
         this.tops = new Array<number>(this.clusterSize * cWidth);
@@ -260,7 +256,7 @@ class Proxy {
     image: HTMLCanvasElement;
     cluster: number;
     origin: ViewNode;
-    links: ViewEdge<any>[];
+    links: ViewEdge[];
     direction: Direction;
 
     public reuse(item: ViewNode) {

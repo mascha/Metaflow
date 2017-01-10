@@ -2,7 +2,7 @@ import {Component, Inject} from '@angular/core';
 import {ViewGroup} from "../../../common/viewmodel";
 import {Diagram} from "../../../common/layer";
 import {ToolWindow} from "../toolwindow"
-import DebugModelService from "../../../services/models";
+import {ModelService} from "../../../services/models";
 
 /**
  * A project navigator/explorer.

@@ -1,7 +1,7 @@
 import { RenderLayer, ViewModelRenderer, Quality, Diagram } from "../common/layer";
 import { ViewGroup, ViewItem, ViewNode } from "../common/viewmodel";
 import { Camera, CameraObserver } from "../common/camera";
-import { XText, Mapper } from './render';
+import { XText, Mapper } from './pixirender';
 
 /**
  * Implements a pixi.js graph layer system.
@@ -75,20 +75,6 @@ export class PixiLayer implements RenderLayer, CameraObserver {
         return hits;
     }
 
-    private renderGroup(group) {
-        /*
-   let subleafs = new PIXI.Graphics();
-   itm.contents.forEach(it => {
-       if (!it.isLeaf()) {
-           mapper.renderGroup(it as ViewGroup, false, true);
-       } else if (it.isLeaf()) {
-           mapper.renderItem(it as ViewItem, subleafs);
-       }
-       mapper.attach(it, itm);
-   });
-   */
-    }
-
     private update(level: ViewGroup) {
         this.nodes.removeChildren();
         this.labels.removeChildren();
@@ -107,12 +93,8 @@ export class PixiLayer implements RenderLayer, CameraObserver {
         /* render edges */
         for (let i = 0; i < length; i++) {
             item = contents[i];
-            if (item.edges && item.edges.length > 0) {
-                leafs.lineStyle(4, 0x0074D9)
-                item.edges.forEach(it => {
-                    leafs.moveTo(item.centerX, item.centerY);
-                    leafs.lineTo(it.target.centerX, it.target.centerY)
-                });
+            if (item.hasEdges()) {
+                this.mapper.renderEdges(item.edges, leafs);
             }
         }
 
@@ -122,7 +104,7 @@ export class PixiLayer implements RenderLayer, CameraObserver {
             if (!item.isLeaf()) {
                 let itm = item as ViewGroup;
                 this.cachedGroups.push(itm);
-                if (itm.contents && itm.contents.length > 0) {
+                if (itm.hasContents()) {
                     mapper.renderGroup(itm, false, true);
                 } else {
                     mapper.renderGroup(itm, false, true);
@@ -133,8 +115,11 @@ export class PixiLayer implements RenderLayer, CameraObserver {
 
             mapper.renderLabels(item);
             if (item.labels) this.labels.addChild(item.labels);
+
             mapper.attach(item, level);
         }
+
+        // finally attach rendered level
         this.attachNode(level);
     }
 
@@ -171,16 +156,16 @@ export class PixiLayer implements RenderLayer, CameraObserver {
         diagram.scope.subscribe(it => this.update(it));
     }
 
-     private attachNode(level: ViewGroup) {
+    private attachNode(level: ViewGroup) {
         this.nodes.addChild(level.visual);
     }
 
-    constructor(element: HTMLCanvasElement) {
+    constructor(element: HTMLCanvasElement, models: any) {
         this.scene = new PIXI.Container();
 
         /* overlays */
         // this.overlay = new PIXI.Container();
-        this.labels = new PIXI.Container(); /*new PIXI.ParticleContainer(2000, {
+        this.labels = new PIXI.Container(); /* new PIXI.ParticleContainer(2000, {
             scale: true,
             position: true,
             rotation: false,
@@ -198,12 +183,20 @@ export class PixiLayer implements RenderLayer, CameraObserver {
         /* assemble in order of rendering */
         // this.overlay.addChild(this.labels);
         // this.world.addChild(this.nodes);
-        // this.world.addChild(this.edges);
+        // this.scene.addChild(this.edges);
         this.scene.addChild(this.world);
         this.scene.addChild(this.overlay);
 
         this.camera = new PixiCamera(this.world, this.overlay);
         this.mapper = new Mapper();
+
+        models.fetchFormalisms('systemdynamics').subscribe(formalisms => {
+            formalisms.forEach(it => {
+                it.syntax.viewpoint.styles.forEach(style => {
+                    this.mapper.cacheShape(style)
+                })
+            });
+        });
 
         this.renderer = new PIXI.WebGLRenderer(element.width, element.height, {
             antialias: true,
@@ -242,8 +235,9 @@ export class PixiCamera extends Camera {
 
         let z = Math.pow(zoom, 0.75);
         let lbs = this.overlay.children as XText[];
+        let label = null;
         for (let i = 0, len = lbs.length; i < len; i++) {
-            let label = lbs[i];
+            label = lbs[i];
             let s = label.baseScale / z;
             let v = s < label.upperScale;
             if (v) {

@@ -16,9 +16,9 @@ export abstract class ViewNode {
     labels: any;
     style: Style; 
 
-    edges: ViewEdge<any>[];
+    edges: ViewEdge[];
 
-    addLink(edge: ViewEdge<any>) {
+    addLink(edge: ViewEdge) {
         this.edges = this.edges || [];
         this.edges.push(edge);
     }
@@ -29,6 +29,14 @@ export abstract class ViewNode {
 
     isProxy(): boolean {
         return false;
+    }
+
+    hasContents() {
+        return false;
+    }
+
+    hasEdges() {
+        return (this.edges && this.edges.length > 0);
     }
 
     get centerX(): number { 
@@ -118,8 +126,12 @@ export class ViewGroup extends ViewNode {
         return false;
     }
 
-    public isLeaf() {
+    isLeaf() {
         return false;
+    }
+
+    hasContent() {
+        return (this.contents && this.contents.length > 0);
     }
 
     private emit(change: ModelChange, item) {
@@ -138,9 +150,9 @@ export class ViewGroup extends ViewNode {
  * @since 1.0.0
  * @author Martin Schade
  */
-export class ViewEdge<T> {
+export class ViewEdge {
     
-    cache: T;
+    cache: any;
 
     constructor(
         public source: ViewNode,

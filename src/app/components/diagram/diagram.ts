@@ -18,7 +18,7 @@ import Presenter from './layers/controls/presenter';
 import BreadCrumbs from './layers/breadcrumbs/breadcrumbs';
 
 /* Services */
-import DebugModelService from "../../services/models";
+import {ModelService} from "../../services/models";
 import PlatformService from "../../services/platforms";
 
 /* reactives */
@@ -176,7 +176,7 @@ export default class DiagramImpl implements Diagram {
             this._scope = new ScopeImpl(this);
             this._behavior = new DiagramBehavior(this);
             this._layers.forEach(it => it.initialize(this));
-            this._models.getModel().then(model => {
+            this._models.fetchLevel("Debug Model","#").subscribe(model => {
                 this._model.next(model);
                 setTimeout(() => this.onResize());
             });
@@ -187,7 +187,7 @@ export default class DiagramImpl implements Diagram {
 
     constructor(
         private _platforms: PlatformService,
-        private _models: DebugModelService,
+        private _models: ModelService,
         private _surface: ElementRef,
         private renderer: Renderer) {}
 }

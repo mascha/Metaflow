@@ -1,7 +1,42 @@
 import { Style, Label, TextTransform } from '../common/styling';
 import { Shape, Shapes } from '../common/shapes';
 import { Locality, Horizontal, Vertical } from '../common/layout';
-import { ViewNode, ViewGroup, ViewItem } from '../common/viewmodel';
+import { ViewNode, ViewGroup, ViewItem, ViewEdge } from '../common/viewmodel';
+
+/**
+ * Named color lookup dictionary
+ * 
+ * @author Martin Schade
+ * @since 1.0.0
+ */
+const Colors = {
+  'cornflowerblue': 0x6495ED,
+  'mediumseagreen': 0x3CB371,
+  'salmon': 0xFFA07A,
+  'goldenrod': 0xDAA520,
+  'darkgrey': 0xA9A9A9,
+  'darkgray': 0xA9A9A9,
+  'gray': 0xAAAAAA,
+  'grey': 0xAAAAAA,
+  'lightgray': 0xD3D3D3,
+  'lightgrey': 0xD3D3D3,
+  'black': 0x111111,
+  'lightblack': 0x222222,
+  'white': 0xffffff,
+  'blue': 0x0074D9,
+  'navy': 0x001f3f,
+  'aqua': 0x7FDBFF,
+  'teal': 0x39CCCC,
+  'green': 0x2ECC40,
+  'lime': 0x01FF70,
+  'yellow': 0xFFDC00,
+  'orange': 0xFF851B,
+  'red': 0xFF4136,
+  'maroon': 0x85144b,
+  'fuchsia': 0xF012BE,
+  'purple': 0xB10DC9,
+  'silver': 0xDDDDDD
+}
 
 /**
  * Class responsible for rendering style shapes
@@ -109,7 +144,7 @@ export class Mapper {
     }
     */
 
-    ctx.lineStyle(3, 0x2222222);
+    ctx.lineStyle(style.strokeWidth, 0x2222222);
     if (fill) ctx.beginFill(fill);
 
     switch (style.shape.type) {
@@ -236,6 +271,19 @@ export class Mapper {
     style.cachedURL = canvas.toDataURL();
   }
 
+  renderEdge(edge: ViewEdge, graphics: PIXI.Graphics) {
+    const source = edge.source, target = edge.target, style = edge.style;
+    let stroke = style.strokeWidth > 4 ? Colors.goldenrod : Colors.blue;
+    graphics.lineStyle(style.strokeWidth, stroke);
+    graphics.moveTo(source.centerX, source.centerY);
+    graphics.lineTo(target.centerX, target.centerY);
+    graphics.lineStyle();
+  }
+
+  renderEdges(edges: ViewEdge[], graphics: PIXI.Graphics) {
+    edges.forEach(edge => this.renderEdge(edge, graphics))
+  }
+
   renderItem(item: ViewItem, visual: any): any {
     if (item.visual) {
       return;
@@ -271,7 +319,6 @@ export class Mapper {
     let inner = group.scale;
     root.content = new PIXI.Container();
     root.content.scale.set(inner, inner);
-
     root.addChild(root.shape);
     root.addChild(root.content);
 
@@ -317,42 +364,6 @@ export class LabelRenderer {
 
 export class ShapeRenderer {
 
-}
-
-
-/**
- * Named color lookup dictionary
- * 
- * @author Martin Schade
- * @since 1.0.0
- */
-const Colors = {
-  'cornflowerblue': 0x6495ED,
-  'mediumseagreen': 0x3CB371,
-  'salmon': 0xFFA07A,
-  'goldenrod': 0xDAA520,
-  'darkgrey': 0xA9A9A9,
-  'darkgray': 0xA9A9A9,
-  'gray': 0xAAAAAA,
-  'grey': 0xAAAAAA,
-  'lightgray': 0xD3D3D3,
-  'lightgrey': 0xD3D3D3,
-  'black': 0x111111,
-  'lightblack': 0x222222,
-  'white': 0xffffff,
-  'blue': 0x0074D9,
-  'navy': 0x001f3f,
-  'aqua': 0x7FDBFF,
-  'teal': 0x39CCCC,
-  'green': 0x2ECC40,
-  'lime': 0x01FF70,
-  'yellow': 0xFFDC00,
-  'orange': 0xFF851B,
-  'red': 0xFF4136,
-  'maroon': 0x85144b,
-  'fuchsia': 0xF012BE,
-  'purple': 0xB10DC9,
-  'silver': 0xDDDDDD
 }
 
 /**

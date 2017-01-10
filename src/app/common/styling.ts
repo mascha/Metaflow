@@ -25,7 +25,7 @@ export class Style {
     /**
      * Width of the border stroke.
      */
-    strokeWidth: number;
+    strokeWidth: number = 1;
 
     /**
      * How visible the shape is.
