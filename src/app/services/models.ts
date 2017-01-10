@@ -206,8 +206,8 @@ const NAMES = [
     private createStock() {
         let item = new ViewItem(
             this.randomName(),
-            2000 * Math.floor(this.random() * 10),
-            2000 * Math.floor(this.random() * 10),
+            2000 * Math.floor(this.random() * 10) * (1 + this.random() / 8),
+            2000 * Math.floor(this.random() * 10) * (1 + this.random() / 8),
             192,
             108
         );
