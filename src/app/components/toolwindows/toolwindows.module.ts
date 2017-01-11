@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import Palette from "./palette/palette";
 import Dataview from "./data/dataview";
 import {Inspector} from "./inspector/inspector";
+import {Formalism} from "./formalism/formalism";
 import {Explorer} from "./explorer/explorer";
 import {Issues} from "./issues/issues";
 import {PropertySheet} from './inspector/propertysheet/propertysheet';
@@ -24,11 +25,13 @@ import {VsFor} from 'ng2-vs-for';
         Palette,
         Dataview,
         Explorer,
-        Issues
+        Issues,
+        Formalism
     ],
     declarations: [
         PropertySheet,
         StyleSheet,
+        Formalism,
         Inspector,
         Palette,
         Dataview,
@@ -38,4 +41,6 @@ import {VsFor} from 'ng2-vs-for';
     ],
     providers: []
 })
-export class ToolWindowModule { }
+export class ToolWindowModule { 
+    
+}

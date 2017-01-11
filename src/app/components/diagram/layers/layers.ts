@@ -14,7 +14,7 @@ import HTML from '../../../common/utility';
  */
 @Component({
     selector: 'grid-layer',
-    template: `<canvas #gridLayer class="layer"></canvas>`
+    template: `<canvas #gridLayer class="layer"></canvas>`,
 })
 export class GridLayer implements Layer {
     @ViewChild('gridLayer') 

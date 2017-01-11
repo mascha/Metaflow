@@ -46,11 +46,13 @@ export class Inspector implements SelectionObserver<ViewNode>, ToolWindow<Diagra
     }
 
     constructor(models: ModelService) {
+        /*
         models.fetchFormalisms('*').subscribe(formalisms => {
             formalisms.forEach(formalism => {
-                this.activeStyles = formalism.syntax.viewpoint.styles;
+                this.activeStyles = formalism.syntax[0].styles;
             });
-            this.activeStyle = this.activeStyles[0] || null;
+            this.activeStyle = this.activeStyles[1] || null;
         });
+        */
     }
 }

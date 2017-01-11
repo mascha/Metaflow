@@ -29,6 +29,7 @@ export default class Workspace implements AfterViewInit {
     @ViewChild('palette') palette: ToolWindow<Diagram>;
     @ViewChild('dataview') dataview: ToolWindow<Diagram>;
     @ViewChild('issues') issues: ToolWindow<Diagram>;
+    @ViewChild('formalism') formalism: ToolWindow<Diagram>;
 
     @ViewChild('diagram') diagram: Diagram;
 
@@ -39,7 +40,7 @@ export default class Workspace implements AfterViewInit {
             this.toolsLeft.selectedItem = this.explorer;
             this.toolsRight.selectedItem = this.inspector;
             this.toolsRight.items = [this.inspector, this.palette]; 
-            this.toolsLeft.items = [this.explorer, this.issues];
+            this.toolsLeft.items = [this.explorer, this.issues, this.formalism];
 
             if (this.dataview) {
                 this.toolsBottom.selectedItem = this.dataview;
@@ -52,6 +53,7 @@ export default class Workspace implements AfterViewInit {
             this.inspector.initialize(this.diagram);
             this.palette.initialize(this.diagram);
             this.issues.initialize(this.diagram);
+            this.formalism.initialize(this.diagram);
         }
     }
 }

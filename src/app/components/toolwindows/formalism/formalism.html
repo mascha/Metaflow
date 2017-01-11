@@ -1,0 +1,20 @@
+<div *ngFor="let formalism of formalisms" class="formalism">
+    <span class="title">
+        {{formalism.name}}<br>
+        <span class="subtitle">{{formalism.version}}</span>
+    </span>
+
+    <span class="title">Viewpoints</span>
+    <div *ngFor="let syntax of formalism.syntax" class="language">
+        {{syntax.name}}
+    </div>
+    <div>
+        <span class="title">Metamodel
+            <br>
+            <span class="subtitle">{{formalism.abstract.name}}</span>
+        </span>
+        <div *ngFor="let entity of formalism.abstract.entities">
+            <span class="entity">{{entity.name}}: {{entity.parent ? entity.parent: 'none'}}</span>
+        </div>
+    </div>
+</div>

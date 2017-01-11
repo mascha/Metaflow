@@ -65,8 +65,7 @@ export class Mapper {
    * and transforming the result again.
    */
   private renderText(item: ViewNode, label: Label): string {
-    // item['labelling'] ? item['labelling'](item) : item.name;
-    let text = item.name;
+    let text = label.labelling ? label.labelling(item) : item.name;
     switch (label.transform) {
       case TextTransform.LOWERCASE: text = text.toLowerCase(); break;
       case TextTransform.UPPERCASE: text = text.toUpperCase(); break;
@@ -98,7 +97,7 @@ export class Mapper {
     let x = item.left + 0.5 * (1 + label.horizontal) * item.width;
     let y = item.top + 0.5 * (1 + label.vertical) * item.height;
 
-    let adjust = 0.2; 
+    let adjust = label.adjustment || 0.2; 
     let pX = 0.5 * (1 - (1 + adjust) * label.horizontal * label.placement);
     let pY = 0.5 * (1 - (1 + adjust) * label.vertical * label.placement);
 
@@ -113,7 +112,7 @@ export class Mapper {
   /**
    * (Re)render all of the label definitions.
    */
-  renderLabels(item: ViewNode): any {
+  renderLabels(item: ViewNode, overlay: PIXI.Container): any {
     let style = item.style;
     if (!style) return; // no style
     let labels: any = style.labels;
@@ -121,12 +120,9 @@ export class Mapper {
 
     let scale = item.parent ? item.parent.scale : 1;
 
-    if (labels.length) {
-      labels = labels as Label[];
-      for (let l of labels)
-        this.renderLabel(l, item, scale);
-    } else {
-      this.renderLabel(labels as Label, item, scale);
+    for (let l of labels) {
+      let mapped = this.renderLabel(l, item, scale);
+      if (mapped) overlay.addChild(mapped);
     }
   }
 

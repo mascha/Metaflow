@@ -6,10 +6,7 @@
     padding: 4px 10px;
     font-weight: bold;
     font-size: 0.8rem;
-
-    &.first {
-        border-top: rgba(black, 0.3) solid 1px;
-    }
+    border-top: rgba(black, 0.3) solid 1px;
 }
 
 .style-entry {
@@ -29,9 +26,19 @@
   list-style: none;
   padding: 0 10px;
 }
+
 .style-item {
   display: block;
   font-size: 0.8rem;
+}
+
+.style-item-label {
+  display: block;
+  font-size: 0.8rem;
+  background: rgba(black, 0.1);
+  border-radius: 3px;
+  padding: 4px 8px;
+  margin-bottom: 8px;
 }
 
 .style-item-value {

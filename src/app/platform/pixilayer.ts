@@ -113,9 +113,7 @@ export class PixiLayer implements RenderLayer, CameraObserver {
                 mapper.renderItem(item as ViewItem, leafs);
             }
 
-            mapper.renderLabels(item);
-            if (item.labels) this.labels.addChild(item.labels);
-
+            mapper.renderLabels(item, this.labels);
             mapper.attach(item, level);
         }
 
@@ -191,10 +189,15 @@ export class PixiLayer implements RenderLayer, CameraObserver {
         this.mapper = new Mapper();
 
         models.fetchFormalisms('systemdynamics').subscribe(formalisms => {
-            formalisms.forEach(it => {
-                it.syntax.viewpoint.styles.forEach(style => {
-                    this.mapper.cacheShape(style)
-                })
+            formalisms.forEach(formalism => {
+                console.log(formalism);
+                formalism.syntax.forEach(syntax => {
+                    console.log(syntax)
+                    syntax.styles.forEach(style => {
+                        console.log(style)
+                        this.mapper.cacheShape(style)
+                    });
+                });
             });
         });
 

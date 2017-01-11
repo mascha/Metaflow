@@ -23,28 +23,11 @@ import {Workflows} from '../workflows/workflows'
  * @since 1.0.0
  */
 @NgModule({
-    imports: [
-        CommonModule,
-        ToolWindowModule,
-        DiagramModule
-    ],
-    exports: [
-        Workspace
-    ],
-    declarations: [
-        Playbar,
-        Dialog,
-        Sidebar, 
-        MenuBar, 
-        Workspace,
-        DoubleSplit,
-        TripleSplit,
-        Navigation,
-        Workspace, 
-        Iconbar, 
-        Workflows
-    ],
-    providers: [
-    ]
+    imports:      [ CommonModule, ToolWindowModule, DiagramModule ],
+    exports:      [ Workspace],
+    declarations: [ Playbar, Dialog, Sidebar, MenuBar, Workspace, DoubleSplit, TripleSplit, Navigation, Workspace, Iconbar, Workflows ],
+    providers:    [ ]
 })
-export class WorkspaceModule { }
+export class WorkspaceModule {
+    
+ }

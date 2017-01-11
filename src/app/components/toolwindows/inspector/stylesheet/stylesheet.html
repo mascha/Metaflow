@@ -5,14 +5,21 @@
 <section class="style-header first">Styling</section>
 <ul class="style-list">
     <li class="style-item">fill<span class="style-item-value">{{item.fill}}</span></li>
-    <li class="style-item">stroke<span class="style-item-value">{{item.stroke}}</span></li> 
-    <li class="style-item">strength<span class="style-item-value">{{item.strokeWidth}}</span></li> 
-    <li class="style-item">opacity<span class="style-item-value">{{item.opacity}}</span></li> 
+    <li class="style-item">stroke<span class="style-item-value">{{item.stroke}}</span></li>
+    <li class="style-item">strength<span class="style-item-value">{{item.strokeWidth}}</span></li>
+    <li class="style-item">opacity<span class="style-item-value">{{item.opacity * 100}}</span></li>
 </ul>
 <section class="style-header">Labels</section>
 <ul class="style-list">
-    <li class="style-item">
-    </li>
+    <div class="style-item-label" *ngFor="let label of item.labels; let i = index">
+        <li class="style-item">color<span class="style-item-value">{{label.color}}</span></li>
+        <li class="style-item">halo<span class="style-item-value">{{label.haloColor}}</span></li>
+        <li class="style-item">placement<span class="style-item-value">{{placementToText(label.placement)}}</span></li>
+        <li class="style-item">alignment<span class="style-item-value">{{alignmentToText(label.alignment)}}</span></li>
+        <li class="style-item">horizontal<span class="style-item-value">{{horizontalToText(label.horizontal)}}</span></li>
+        <li class="style-item">vertical<span class="style-item-value">{{verticalToText(label.vertical)}}</span></li>
+        <li class="style-item">transform<span class="style-item-value">{{transformToText(label.transform)}}</span></li>
+    </div>
 </ul>
 <section class="style-header">Layout</section>
 <section class="style-header">Interaction</section>

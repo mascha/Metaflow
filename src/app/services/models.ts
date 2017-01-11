@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { ViewGroup, ViewItem, ViewEdge, ViewModel, ViewNode, ViewProxy } from "../common/viewmodel";
-import { Language, ConcreteSyntax, Mapping, Rule, MapType } from "../common/language";
-import { Style, GroupStyle, EdgeStyle, Label, TextAlignment } from '../common/styling';
+import { ViewGroup, ViewItem, ViewEdge, ViewModel, ViewNode } from "../common/viewmodel";
+import { MapType } from "../common/language";
+import { Style, GroupStyle, EdgeStyle, Label, TextAlignment, TextTransform } from '../common/styling';
 import { Shape, Shapes } from '../common/shapes';
 import { Vertical, Horizontal, Locality } from '../common/layout';
 import { Observable } from "rxjs/Observable";
@@ -61,6 +61,9 @@ const NAMES = [
     private stockStyle: Style;
     private moduleStyle: GroupStyle;
 
+    private SystemDynamics: any;
+    private ECore: any;
+
     /**
      * Retrieve all items within the current path
      * 
@@ -91,123 +94,31 @@ const NAMES = [
     }
 
     /**
+     * Retrieve all issues present in the current project.
+     * 
+     * @endpoint /api/v1/project/$id/issues/
+     */
+    fetchIssues(project: string): Observable<Array<String>> {
+        return Observable.of(NAMES);
+    }
+
+    /**
      * Retrieve all currenly availiable formalisms.
      * 
      * @endpoint /api/v1/projects/${id}/path
      */
     fetchFormalisms(project: string): Observable<Array<any>> {
-        return Observable.of([{
-            name: "System Dynamics",
-            alias: "sysdyn",
-            version: "1.0.0",
-            syntax: {
-                viewpoint: {
-                    name: "Stock and Flow Diagram",
-                    type: "visual", // "textual", "hybrid"
-                    path: "query", // path below namespace
-                    styles: [
-                        this.rateStyle,
-                        this.stockStyle,
-                        this.variableStyle,
-                        this.moduleStyle
-                    ],
-                    styleMap: {
-                        linkStyle: this.edgeStyle,
-                        flowStyle: this.flowStyle,
-                        rateStyle: this.rateStyle,
-                        moduleStyle: this.moduleStyle,
-                        variableStyle: this.variableStyle,
-                        stockStyle: {
-                            fill: 'salmon',
-                            stroke: 'black',
-                            shape: new Shape(Shapes.RECTANGLE),
-                            labels: {
-                                horizontal: Horizontal.RIGHT,
-                                placement: Locality.OUTSIDE,
-                                baseScale: 0.6,
-                                lower: 0.05,
-                                upper: 0.6,
-                                color: 'salmon'
-                            }
-                        }
-                    },
-                    rules: [
-                        { query: "StockMatch", style: "stockStyle", type: MapType.NODE },
-                        { query: "ModuleMatch", style: "moduleStyle", type: MapType.NODE },
-                        { query: "VariableMatch", style: "variableStyle", type: MapType.NODE },
-                        { query: "RateQuery", style: "rateStyle", type: MapType.NODE },
-                        { query: "ParentModule", style: "emptyStyle", type: MapType.HIERARCHY },
-                        { query: "EdgeMatch", style: "edgeStyle", type: MapType.LINK }
-                    ]
-                },
-                textual: {
-                    name: "Module Language",
-                    type: "hybrid"
-                }
-            },
-            abstract: {
-                name: "StockAndFlow",
-                uri: "metaflow.io",
-                prefix: "sysdyn",
-                version: "1.0.0",
-                type: "emf",
-                generateNamespace: function () {
-                    return `${this.type}://${this.uri}/${this.prefix}/${this.name}${this.version ? `?v=${this.version}` : ''}`;
-                },
-                dependencies: [
-                    "emf://metaflow.io/math/Expression?v=0.8.1",
-                    "emf://metaflow.io/unit/Units?v=0.6.2",
-                    "emf://metaflow.io/base/Base?v=1.0.0"
-                ],
-                entities: [
-                    {
-                        name: "Variable",
-                        attributes: [
-                            {
-                                name: "formula",
-                                type: "string",
-                                upperBound: -1,
-                            }
-                        ],
-                        references: [
-                            {
-                                name: 'friends',
-                                upperBound: -1,
-                                containment: false,
-                            }
-                        ]
-                    },
-                    {
-                        name: "Stock",
-                        attributes: [
-                            {
-                                name: "initial",
-                                info: "Formula describing the initial value of a stock",
-                                type: "string",
-                                upperBound: 1
-                            }
-                        ],
-                        references: [
-                            {
-                                name: 'friends',
-                                upperBound: -1,
-                                containment: false,
-                            }
-                        ]
-                    }
-                ]
-            },
-            transform: {
-
-            }
-        }]);
+        return Observable.of([
+            this.SystemDynamics,
+            this.ECore
+        ]);
     }
 
     private createStock() {
         let item = new ViewItem(
             this.randomName(),
-            2000 * Math.floor(this.random() * 10) * (1 + this.random() / 8),
-            2000 * Math.floor(this.random() * 10) * (1 + this.random() / 8),
+            2000 * Math.floor(this.random() * 10) * (1 + this.random() / 8) | 0,
+            2000 * Math.floor(this.random() * 10) * (1 + this.random() / 8) | 0,
             192,
             108
         );
@@ -218,8 +129,8 @@ const NAMES = [
     private createVariable() {
         let variable = new ViewItem(
             this.randomName(),
-            this.random() * SPACE,
-            this.random() * SPACE,
+            this.random() * SPACE | 0,
+            this.random() * SPACE | 0,
             32,
             32
         );
@@ -230,8 +141,8 @@ const NAMES = [
     private createRate() {
         let variable = new ViewItem(
             this.randomName(),
-            this.random() * SPACE,
-            this.random() * SPACE,
+            this.random() * SPACE | 0,
+            this.random() * SPACE | 0,
             64,
             64
         );
@@ -242,8 +153,8 @@ const NAMES = [
     private createModule() {
         let module = new ViewGroup(
             this.randomName(),
-            this.random() * SPACE,
-            this.random() * SPACE,
+            this.random() * SPACE | 0,
+            this.random() * SPACE | 0,
             300,
             260,
             1
@@ -322,51 +233,65 @@ const NAMES = [
     constructor() {
 
         /* STYLES */
-
         this.moduleStyle = new GroupStyle();
         this.moduleStyle.actsAsPortal = true;
         this.moduleStyle.shape = new Shape(Shapes.ROUNDED);
         this.moduleStyle.shape.a = 6;
         this.moduleStyle.fill = 'silver';
-        this.moduleStyle.labels = new Label();
-        this.moduleStyle.labels.baseScale = 0.7;
-        this.moduleStyle.labels.alignment = TextAlignment.CENTER;
-        this.moduleStyle.labels.limits(.2, 1.6);
-        this.moduleStyle.labels.color = 'cornflowerblue';
+        this.moduleStyle.labels = [new Label()];
+        this.moduleStyle.labels[0].baseScale = 0.7;
+        this.moduleStyle.labels[0].alignment = TextAlignment.CENTER;
+        this.moduleStyle.labels[0].limits(.2, 1.6);
+        this.moduleStyle.labels[0].color = 'cornflowerblue';
 
         this.variableStyle = new Style();
         this.variableStyle.fill = 'mediumseagreen';
         this.variableStyle.stroke = 'black';
         this.variableStyle.shape = new Shape(Shapes.CIRCLE);
-        this.variableStyle.labels = new Label();
-        this.variableStyle.labels.horizontal = Horizontal.RIGHT;
-        this.variableStyle.labels.placement = Locality.OUTSIDE;
-        this.variableStyle.labels.baseScale = 0.6;
-        this.variableStyle.labels.limits(.05, .6);
-        this.variableStyle.labels.color = 'mediumseagreen';
+        this.variableStyle.labels = [new Label(), new Label()];
+        this.variableStyle.labels[0].horizontal = Horizontal.RIGHT;
+        this.variableStyle.labels[0].placement = Locality.OUTSIDE;
+        this.variableStyle.labels[0].baseScale = 0.6;
+        this.variableStyle.labels[0].limits(.05, .6);
+        this.variableStyle.labels[0].color = 'mediumseagreen';
+        this.variableStyle.labels[1].horizontal = Horizontal.LEFT;
+        this.variableStyle.labels[1].vertical = Vertical.MIDDLE;
+        this.variableStyle.labels[1].placement = Locality.OUTSIDE;
+        this.variableStyle.labels[1].baseScale = 0.3;
+        this.variableStyle.labels[1].labelling = (i) => { return `${i.centerX} / ${i.centerY}` }
+        this.variableStyle.labels[1].limits(.05, .6);
+        this.variableStyle.labels[1].color = 'grey';
 
         this.stockStyle = new Style();
         this.stockStyle.fill = 'salmon';
         this.stockStyle.shape = new Shape(Shapes.RECTANGLE);
         this.stockStyle.strokeWidth = 3;
-        this.stockStyle.labels = new Label();
-        this.stockStyle.labels.vertical = Vertical.TOP;
-        this.stockStyle.labels.placement = Locality.OUTSIDE;
-        this.stockStyle.labels.baseScale = 0.6;
-        this.stockStyle.labels.limits(.1, 1);
-        this.stockStyle.labels.color = 'salmon';
+        this.stockStyle.labels = [new Label(), new Label()];
+        this.stockStyle.labels[0].vertical = Vertical.TOP;
+        this.stockStyle.labels[0].placement = Locality.OUTSIDE;
+        this.stockStyle.labels[0].baseScale = 0.6;
+        this.stockStyle.labels[0].limits(.1, 1);
+        this.stockStyle.labels[0].color = 'salmon';
+        this.stockStyle.labels[1].vertical = Vertical.MIDDLE;
+        this.stockStyle.labels[1].placement = Locality.INSIDE;
+        this.stockStyle.labels[1].labelling = (i) => { return (Math.random() * 100).toFixed(0) + "%" };
+        this.stockStyle.labels[1].baseScale = 0.45;
+        this.stockStyle.labels[1].limits(.1, .8);
+        this.stockStyle.labels[1].color = 'white';
+
 
         this.rateStyle = new Style();
         this.rateStyle.fill = 'goldenrod';
         this.rateStyle.shape = new Shape(Shapes.HOURGLASS);
         this.rateStyle.stroke = "blue";
         this.rateStyle.strokeWidth = 2;
-        this.rateStyle.labels = new Label();
-        this.rateStyle.labels.vertical = Vertical.TOP;
-        this.rateStyle.labels.placement = Locality.OUTSIDE;
-        this.rateStyle.labels.baseScale = 0.6;
-        this.rateStyle.labels.limits(.1, .8);
-        this.rateStyle.labels.color = 'goldenrod';
+        this.rateStyle.labels = [new Label()];
+        this.rateStyle.labels[0].vertical = Vertical.TOP;
+        this.rateStyle.labels[0].placement = Locality.OUTSIDE;
+        this.rateStyle.labels[0].baseScale = 0.6;
+        this.rateStyle.labels[0].limits(.1, .8);
+        this.rateStyle.labels[0].color = 'goldenrod';
+
 
         /* EDGES */
 
@@ -377,25 +302,247 @@ const NAMES = [
         this.flowStyle = new EdgeStyle();
         this.flowStyle.stroke = 'yellow';
         this.flowStyle.strokeWidth = 8;
-    }
-}
 
-declare var fetch;
-
-function lazyFetch(url, options?) {
-    return new Observable(observer => {
-        let cancelToken = false;
-        fetch(url, options)
-            .then(res => {
-                if (!cancelToken) {
-                    return res.json().then(data => {
-                        observer.next(data);
-                        observer.complete();
-                    });
+        this.SystemDynamics = {
+            name: "System Dynamics",
+            alias: "sysdyn",
+            version: "1.0.0",
+            syntax: [
+                {
+                    name: "Stock and Flow Diagram",
+                    type: "visual",
+                    styles: [
+                        this.rateStyle,
+                        this.stockStyle,
+                        this.variableStyle,
+                        this.moduleStyle
+                    ],
+                    mapping: {
+                        namespace: "io.metaflow.query.sysdyn.query",
+                        queryLanguage: "ViatraQuery",
+                        ruleSet: [
+                            { query: "StockMatch", style: "stockStyle", type: MapType.NODE },
+                            { query: "ModuleMatch", style: "moduleStyle", type: MapType.NODE },
+                            { query: "VariableMatch", style: "variableStyle", type: MapType.NODE },
+                            { query: "RateQuery", style: "rateStyle", type: MapType.NODE },
+                            { query: "ParentModule", style: "emptyStyle", type: MapType.HIERARCHY },
+                            { query: "EdgeMatch", style: "edgeStyle", type: MapType.LINK }
+                        ]
+                    }
+                },
+                {
+                    name: "SystemScript",
+                    type: "textual",
+                    styles: []
                 }
-            }).catch(err => observer.error(err));
-        return () => {
-            cancelToken = true;
+            ],
+            abstract: {
+                name: "StockAndFlow",
+                domain: "www.metaflow.io/lang",
+                alias: "sysdyn",
+                version: "1.0.0",
+                type: "emf",
+                dependencies: [
+                    "www.metaflow.io/lang?name=Arithmetics&prefix=math&v=0.8.1&type=emf",
+                    "www.metaflow.io/lang?name=Units&prefix=units&v=0.6.2&type=emf",
+                ],
+                entities: [
+                    {
+                        name: "Variable",
+                        parent: "ecore|EClass",
+                        attributes: [
+                            {
+                                name: "formula",
+                                type: "math|Expression",
+                                range: "*"
+                            }
+                        ],
+                        references: [
+                            {
+                                name: 'friends',
+                                type: 'ecore|EClass',
+                                range: "0..*"
+                            }
+                        ]
+                    },
+                    {
+                        name: "Stock",
+                        parent: "ecore|EClass",
+                        attributes: [],
+                        references: [
+                            {
+                                name: 'initial',
+                                type: 'math|Expression',
+                                range: "1"
+                            }
+                        ]
+                    }
+                ]
+            },
+            transform: {
+
+            }
         };
-    });
+
+        this.ECore = {
+            name: "EMF Modelling Language",
+            alias: "ecore",
+            version: "2.11.0",
+            syntax: [
+                {
+                    name: "Visual EMF",
+                    type: "visual",
+                    styles: [
+                        /*
+                        {
+                            name: "classStyle",
+                            fill: "lightgrey",
+                            stroke: "black",
+                            shape: Shape.ROUNDED,
+                            strokeWidth: 2
+                        },
+                        {
+                            name: "packageStyle",
+                            stroke: "lightgrey",
+                            strokeWidth: 4,
+                            shape: Shape.ROUNDED,
+                            labels: [{
+                                lowerScale: .1,
+                                upperScale: .6,
+                                baseScale: .5,
+                                priority: 1,
+                                defaultText: "CLASS",
+                                color: 1,
+                                haloColor: 0,
+                                bold: false,
+                                placement: Locality.OUTSIDE,
+                                vertical: Vertical.TOP,
+                                horizontal: Horizontal.CENTER,
+                                transform: TextTransform.NONE,
+                                alignment: TextAlignment.CENTER,
+                            }]
+                        },
+                        {
+                            name: "attributeStyle",
+                        },
+                        {
+                            name: "referenceStyle",
+                        },
+                        */
+                    ],
+                    mapping: {
+                        namespace: "io.metaflow.query.ecore.query",
+                        queryLanguage: "ViatraQuery",
+                        ruleSet: [
+                            { query: "ClassMatch", style: "classStyle", type: MapType.NODE },
+                            { query: "PackageMatch", style: "packageStyle", type: MapType.GROUP },
+                            { query: "ReferenceMatch", style: "referenceStyle", type: MapType.LINK },
+                            { query: "AttributeMatch", style: "attributeStyle", type: MapType.DECORATION },
+                            { query: "ContainmentMatch", style: null, type: MapType.HIERARCHY },
+                        ]
+                    }
+                },
+                {
+                    name: "XCore",
+                    type: "textual",
+                    styles: []
+                }
+            ],
+            abstract: {
+                name: "Ecore",
+                domain: "http://www.eclipse.org/emf/2002/Ecore",
+                alias: "ecore",
+                version: "1.0.0",
+                type: "emf",
+                dependencies: [
+                    "http://www.eclipse.org/emf/2002/Ecore?name=Ecore&prefix=ecore&v=0.8.1&type=emf",
+                ],
+                entities: [
+                    {
+                        name: "EObject"
+                    },
+                    {
+                        name: "EClassifier",
+                        parent: "ecore|EObject"
+                    },
+                    {
+                        name: "ENameable",
+                        parent: "ecore|EObject",
+                        attributes: {
+                            name: "name",
+                            type: "string"
+                        }
+                    },
+                    {
+                        name: "ETypeable",
+                        parent: "ecore|EObject",
+                        attributes: {
+                            name: "type",
+                            type: "ecore|EObject"
+                        }
+                    },
+                    {
+                        name: "EClass",
+                        parent: "ecore|ENameable",
+                        attributes: [
+                            {
+                                name: "name",
+                                type: "string"
+                            }
+                        ],
+                        references: [
+                            {
+                                name: "eAttributes",
+                                type: "ecore|EAttribute",
+                                range: "0..*"
+                            },
+                            {
+                                name: "eReferences",
+                                type: "ecore|EReference",
+                                range: "0..*"
+                            }
+                        ]
+                    },
+                    {
+                        name: "EStructuralFeature",
+                        parent: "ecore|ENameable",
+                    },
+                    {
+                        name: "EAttribute",
+                        parent: "ecore|EStructuralFeature",
+                        attributes: [
+                            {
+                                name: "type",
+                                type: "ecore|EClass"
+                            }
+                        ],
+                    },
+                    {
+                        name: "EReference",
+                        parent: "ecore|EStructuralFeature",
+                        attributes: [
+                            {
+                                name: "containment",
+                                type: "boolean"
+                            },
+                            {
+                                name: "range",
+                                type: "string"
+                            }
+                        ],
+                        references: [
+                            {
+                                name: "eReferenceType",
+                                type: "ecore|EClass",
+                                range: "1"
+                            }
+                        ]
+                    }
+                ]
+            },
+            transform: {
+                /* TBD */
+            }
+        };
+    }
 }

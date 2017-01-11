@@ -126,10 +126,10 @@ export default class Border implements CameraObserver {
         const minY = cam.worldY;
         const wmX = minX + cam.projWidth;
         const wmY = minY + cam.projHeight;
-        const aoiLeft = minX - 200 / scale;
-        const aoiTop = minY - 200 / scale;
-        const aoiRight = wmX + 200 / scale;
-        const aoiLow = wmY + 200 / scale;
+        const aoiLeft = minX - 2000 * scale;
+        const aoiTop = minY - 2000 * scale;
+        const aoiRight = wmX + 2000 * scale;
+        const aoiLow = wmY + 2000 * scale;
         const a = this.halfW - this.middle;
         const b = this.halfH - this.middle;
         const c = this.brush;  
@@ -140,11 +140,11 @@ export default class Border implements CameraObserver {
         c.globalAlpha = 1.0;
 
         let proxies = this.proxies;
-        let proxy = null;
+        let proxy = null, x, y;
         for (let i = 0, l = proxies.length; i < l; i++) {
             proxy = proxies[i];
-            let x = proxy.x * scale;
-            let y = proxy.y * scale;
+            x = proxy.x * scale;
+            y = proxy.y * scale;
 
             if (x < aoiLeft || x > aoiRight || y < aoiTop || y > aoiLow) {
                 continue; // ignore items outside of area

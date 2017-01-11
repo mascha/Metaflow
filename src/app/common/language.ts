@@ -52,6 +52,16 @@ export const enum MapType {
     NODE,
 
     /**
+     * Map matched elements as a group entity.
+     */
+    GROUP,
+
+    /**
+     * Map matched elements as a decorator.
+     */
+    DECORATION,
+
+    /**
      * Map matched elements as a node link.
      */
     LINK,
@@ -60,11 +70,6 @@ export const enum MapType {
      * Map matched elements as a containment.
      */
     HIERARCHY,
-
-    /**
-     * Map matched elements as a decorator.
-     */
-    DECORATION
 }
 
 /**

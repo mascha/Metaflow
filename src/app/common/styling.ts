@@ -1,5 +1,6 @@
 import {Locality, Horizontal, Vertical} from './layout';
 import {Shape} from './shapes';
+import {ViewNode} from './viewmodel';
 
 /**
  * Style descriptor.
@@ -30,7 +31,7 @@ export class Style {
     /**
      * How visible the shape is.
      */
-    opacity: number;
+    opacity: number = 1;
 
     /**
      * Specifies the distance from the border
@@ -41,7 +42,7 @@ export class Style {
     /**
      * Label definitions.
      */
-    labels: Label | Label[];
+    labels: Label[];
 
     /**
      * Shape descriptor.
@@ -250,9 +251,16 @@ export class Label {
     cache: any;
 
     /**
-     * 
+     * Determines how much the label will be moved relative to the
+     * size of the node in direction of the placement property. 
      */
     adjustment: number = 0.1;
+
+    /**
+     * If set, this function will be called to render the
+     * label text from 
+     */
+    labelling: (item: ViewNode) => string;
 
     /**
      * Adjust the scale visibility limits.
