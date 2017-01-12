@@ -294,35 +294,29 @@ export class Mapper {
   renderGroup(group: ViewGroup, topLevel: boolean, oblique: boolean): any {
     if (group.visual) return;
 
-    let root = new XContainer(group);
-
-    if (!topLevel) {
-      root.position.set(group.left, group.top);
-    }
-
-    let shape = new PIXI.Graphics();
-    root.shape = shape;
+    /* create group shape */
+    let groupShape = new PIXI.Graphics();
 
     if (oblique) {
-      shape.beginFill(Colors.grey);
-      shape.drawRoundedRect(0, 0, group.width, group.height, 12);
-      shape.endFill();
+      groupShape.beginFill(Colors.grey);
+      groupShape.drawRoundedRect(0, 0, group.width, group.height, 12);
+      groupShape.endFill();
     } else if (!topLevel) {
-      shape.lineStyle(16, Colors.grey);
-      shape.drawRoundedRect(0, 0, group.width, group.height, 12);
+      groupShape.lineStyle(16, Colors.grey);
+      groupShape.drawRoundedRect(0, 0, group.width, group.height, 12);
     }
 
-    let inner = group.scale;
-    root.content = new PIXI.Container();
-    root.content.scale.set(inner, inner);
-    root.addChild(root.shape);
-    root.addChild(root.content);
+    /* create container object */
+    let groupContainer = new XContainer(group, groupShape);
 
-    if (!topLevel && !oblique) {
-      root.cacheAsBitmap = true;
+    if (!topLevel) {
+      groupContainer.position.set(group.left, group.top);
+      if (!oblique) {
+        groupContainer.cacheAsBitmap = true;
+      }
     }
 
-    group.visual = root;
+    group.visual = groupContainer;
   }
 
   attach(node: ViewNode, group: ViewGroup) {
@@ -389,10 +383,15 @@ export class XContainer extends PIXI.Container {
   shape: PIXI.Graphics;
   content: PIXI.Container;
 
-  constructor(group: ViewGroup) {
+  constructor(group: ViewGroup, shape: PIXI.Graphics) {
     super();
     this.width = group.width;
     this.height = group.height;
     this.origin = group;
+    this.shape = shape;
+    this.content = new PIXI.Container();
+    this.content.scale.set(group.scale, group.scale);
+    this.content.addChild(this.shape);
+    this.content.addChild(this.content);
   }
 }

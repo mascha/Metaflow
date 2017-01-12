@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpModule } from '@angular/http';
 import { NgModule } from '@angular/core';
 
 /* Modules */
@@ -11,8 +12,6 @@ import Application from './application';
 import PlatformService from "./services/platforms";
 import { ModelService } from "./services/models";
 import PaletteRegistry from "./services/palettes";
-import ProjectService from "./services/projects";
-
 import { Settings } from './settings';
 
 /**
@@ -22,9 +21,13 @@ import { Settings } from './settings';
  * @since 1.0.0
  */
 @NgModule({
-  bootstrap:      [Application],
-  imports:        [WorkspaceModule, BrowserModule],
-  providers:      [PlatformService, ModelService, PaletteRegistry, ProjectService, Settings],
-  declarations:   [Application],
+  bootstrap:      [ Application ],
+  declarations:   [ Application ],
+  imports:        [ WorkspaceModule, BrowserModule, HttpModule ],
+  providers:      [ PlatformService, ModelService, PaletteRegistry, Settings, 
+                  { provide: 'apiURL', useValue: 'http://localhost:9000/api/v1' },
+                  { provide: 'apiVER', useValue: '2017-1-1'} ],
 })
-export default class AppModule { }
+export default class AppModule { 
+
+}

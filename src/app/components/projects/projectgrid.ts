@@ -1,5 +1,4 @@
 import {Component} from "@angular/core";
-import ProjectService from "../../services/projects";
 
 /**
  * A project dashboard.
@@ -15,8 +14,4 @@ import ProjectService from "../../services/projects";
 export default class ProjectPage {
 
     private projects: Array<string>;
-    
-    constructor(private service : ProjectService) {
-        service.getProjects().then(it => this.projects = it);
-    }
 }

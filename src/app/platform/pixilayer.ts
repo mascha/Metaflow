@@ -3,6 +3,9 @@ import { ViewGroup, ViewItem, ViewNode } from "../common/viewmodel";
 import { Camera, CameraObserver } from "../common/camera";
 import { XText, Mapper } from './pixirender';
 
+const IS_OBLIQUE = true;
+const IS_TOPLEVEL = true;
+
 /**
  * Implements a pixi.js graph layer system.
  *
@@ -76,13 +79,15 @@ export class PixiLayer implements RenderLayer, CameraObserver {
     }
 
     private update(level: ViewGroup) {
+        let mapper = this.mapper;
+
         this.nodes.removeChildren();
         this.labels.removeChildren();
         let leafs = new PIXI.Graphics();
+        leafs.scale.set(level.scale, level.scale);
 
         /* render root */
-        let mapper = this.mapper;
-        mapper.renderGroup(level, true, false);
+        mapper.renderGroup(level, IS_TOPLEVEL, !IS_OBLIQUE);
 
         // second levels
         this.cachedGroups = [];
@@ -105,9 +110,9 @@ export class PixiLayer implements RenderLayer, CameraObserver {
                 let itm = item as ViewGroup;
                 this.cachedGroups.push(itm);
                 if (itm.hasContents()) {
-                    mapper.renderGroup(itm, false, true);
+                    mapper.renderGroup(itm, !IS_TOPLEVEL, !IS_OBLIQUE);
                 } else {
-                    mapper.renderGroup(itm, false, true);
+                    mapper.renderGroup(itm, !IS_TOPLEVEL, IS_OBLIQUE);
                 }
             } else {
                 mapper.renderItem(item as ViewItem, leafs);
@@ -118,7 +123,7 @@ export class PixiLayer implements RenderLayer, CameraObserver {
         }
 
         // finally attach rendered level
-        this.attachNode(level);
+        this.world.addChild(leafs);
     }
 
     /** 

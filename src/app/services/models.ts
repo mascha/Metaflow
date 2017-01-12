@@ -1,4 +1,5 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Inject } from "@angular/core";
+import { Http, URLSearchParams } from '@angular/http';
 import { ViewGroup, ViewItem, ViewEdge, ViewModel, ViewNode } from "../common/viewmodel";
 import { MapType } from "../common/language";
 import { Style, GroupStyle, EdgeStyle, Label, TextAlignment, TextTransform } from '../common/styling';
@@ -6,8 +7,8 @@ import { Shape, Shapes } from '../common/shapes';
 import { Vertical, Horizontal, Locality } from '../common/layout';
 import { Observable } from "rxjs/Observable";
 
-const DISTRIBUTION = 0;
-const ENTITIES_PER_LEVEL = 500;
+const DISTRIBUTION = 1;
+const ENTITIES_PER_LEVEL = 150;
 const MAX_LEVELS = 4;
 const ROOT_SCALE = 0.1;
 const ROOT_WIDTH = 2000;
@@ -43,6 +44,14 @@ const NAMES = [
     'Retail Growth'
 ]
 
+export interface User {
+
+}
+
+export interface Project {
+
+}
+
 /**
  * Model provider service.
  *
@@ -61,13 +70,15 @@ const NAMES = [
     private stockStyle: Style;
     private moduleStyle: GroupStyle;
 
-    private SystemDynamics: any;
+    private SDyn: any;
     private ECore: any;
+
+
 
     /**
      * Retrieve all items within the current path
      * 
-     * @endpoint /api/v1/projects/${id}/${path}
+     * @endpoint /projects/${id}/${path}
      */
     fetchLevel(project: string, path: string): Observable<ViewModel> {
         this.model = this.model || new ViewModel(project, this.createDebugModel());
@@ -80,38 +91,40 @@ const NAMES = [
     }
 
     /**
-     * Retrieve all availiable projects.
+     * Retrieve all availiable projects for the given user.
      * 
-     * @endpoint /api/v1/user/$id/projects/
+     * @endpoint /projects?user=$user
      */
     fetchProjects(user: string): Observable<Array<string>> {
-        return Observable.of([
-            "",
-            "",
-            "",
-            ""
-        ]);
+        const body = new URLSearchParams().append('user', user);
+        return this.http.get(`${this.api}/projects`).map(res => res.json())
     }
 
     /**
-     * Retrieve all issues present in the current project.
+     * Retrieve all availiable projects for the given user.
      * 
-     * @endpoint /api/v1/project/$id/issues/
+     * @endpoint /projects/$id
      */
-    fetchIssues(project: string): Observable<Array<String>> {
-        return Observable.of(NAMES);
+    fetchProject(id: string): Observable<Project> {
+        return this.http.get(`${this.api}/projects/${id}`).map(res => res.json())
     }
 
     /**
      * Retrieve all currenly availiable formalisms.
      * 
-     * @endpoint /api/v1/projects/${id}/path
+     * @endpoint /formalisms/$id
      */
-    fetchFormalisms(project: string): Observable<Array<any>> {
-        return Observable.of([
-            this.SystemDynamics,
-            this.ECore
-        ]);
+    fetchFormalisms(id: string): Observable<Array<any>> {
+        return Observable.of([this.SDyn, this.ECore]);
+    }
+
+    /**
+     * Retrieve information about a specific user
+     * 
+     * @endpoint /users/$id
+     */
+    fetchUser(id: string): Observable<User> {
+        return this.http.get(`${this.api}/users/${id}`).map(res => res.json())
     }
 
     private createStock() {
@@ -213,9 +226,7 @@ const NAMES = [
     }
 
     private random(): number {
-        if (DISTRIBUTION == 0) return Math.random();
-        else if (DISTRIBUTION == 1) return Math.sqrt(Math.random() * Math.random());
-        else return Math.cbrt(Math.random() * Math.random() * Math.random());
+        return Math.sqrt(Math.random() * Math.random());
     }
 
     private findConnection(item: ViewNode, siblings: ViewNode[], distance: number): ViewNode {
@@ -230,7 +241,10 @@ const NAMES = [
         return null;
     }
 
-    constructor() {
+    constructor(
+        @Inject('apiURL') private api: string,
+        @Inject('apiVER') private version: string,
+        private http: Http) {
 
         /* STYLES */
         this.moduleStyle = new GroupStyle();
@@ -303,7 +317,7 @@ const NAMES = [
         this.flowStyle.stroke = 'yellow';
         this.flowStyle.strokeWidth = 8;
 
-        this.SystemDynamics = {
+        this.SDyn = {
             name: "System Dynamics",
             alias: "sysdyn",
             version: "1.0.0",
@@ -459,7 +473,8 @@ const NAMES = [
                 ],
                 entities: [
                     {
-                        name: "EObject"
+                        name: "EObject",
+                        parent: "ecore|EObject"
                     },
                     {
                         name: "EClassifier",
@@ -505,7 +520,7 @@ const NAMES = [
                     },
                     {
                         name: "EStructuralFeature",
-                        parent: "ecore|ENameable",
+                        parent: "ecore|ENameable"
                     },
                     {
                         name: "EAttribute",
@@ -515,7 +530,7 @@ const NAMES = [
                                 name: "type",
                                 type: "ecore|EClass"
                             }
-                        ],
+                        ]
                     },
                     {
                         name: "EReference",
