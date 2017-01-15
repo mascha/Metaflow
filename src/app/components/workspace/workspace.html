@@ -1,5 +1,5 @@
 <navigation></navigation>
-<div class="workspace" *ngIf="slimLayout">
+<div class="workspace" *ngIf="threeColumLayout">
   <iconbar #toolsLeft vertical="true" primary="true"></iconbar>
   <iconbar #toolsRight vertical="true" primary="false"></iconbar>
   <triple-split class="content" [class.active-bottom]="toolsBottom">
@@ -23,4 +23,7 @@
     </sidebar>
   </triple-split>
   <iconbar #toolsBottom vertical="false" *ngIf="toolsBottom"></iconbar>
+</div>
+<div class="workspace" *ngIf="!threeColumLayout">
+  
 </div>

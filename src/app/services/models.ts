@@ -73,8 +73,6 @@ export interface Project {
     private SDyn: any;
     private ECore: any;
 
-
-
     /**
      * Retrieve all items within the current path
      * 
@@ -95,9 +93,10 @@ export interface Project {
      * 
      * @endpoint /projects?user=$user
      */
-    fetchProjects(user: string): Observable<Array<string>> {
-        const body = new URLSearchParams().append('user', user);
-        return this.http.get(`${this.api}/projects`).map(res => res.json())
+    fetchProjects(user: string): Observable<Array<any>> {
+        const params = new URLSearchParams();
+        params.set('user', user);
+        return this.http.get(`${this.api}/projects`, { search: params }).map(res => res.json())
     }
 
     /**

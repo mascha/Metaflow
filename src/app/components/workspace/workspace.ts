@@ -33,7 +33,8 @@ export default class Workspace implements AfterViewInit {
 
     @ViewChild('diagram') diagram: Diagram;
 
-    slimLayout = true;
+    threeColumLayout = true;
+    slimColumns = true;
 
     ngAfterViewInit() {
         setTimeout(() => {
