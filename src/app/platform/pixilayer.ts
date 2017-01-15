@@ -80,14 +80,17 @@ export class PixiLayer implements RenderLayer, CameraObserver {
 
     private update(level: ViewGroup) {
         let mapper = this.mapper;
+        this.world.removeChildren();
 
-        this.nodes.removeChildren();
-        this.labels.removeChildren();
+        // this.nodes.removeChildren();
+        // this.labels.removeChildren();
+        
         let leafs = new PIXI.Graphics();
         leafs.scale.set(level.scale, level.scale);
 
         /* render root */
         mapper.renderGroup(level, IS_TOPLEVEL, !IS_OBLIQUE);
+        this.world.addChild(level.visual);
 
         // second levels
         this.cachedGroups = [];
@@ -193,13 +196,10 @@ export class PixiLayer implements RenderLayer, CameraObserver {
         this.camera = new PixiCamera(this.world, this.overlay);
         this.mapper = new Mapper();
 
-        models.fetchFormalisms('systemdynamics').subscribe(formalisms => {
+        models.fetchFormalisms('*').subscribe(formalisms => {
             formalisms.forEach(formalism => {
-                console.log(formalism);
                 formalism.syntax.forEach(syntax => {
-                    console.log(syntax)
                     syntax.styles.forEach(style => {
-                        console.log(style)
                         this.mapper.cacheShape(style)
                     });
                 });
