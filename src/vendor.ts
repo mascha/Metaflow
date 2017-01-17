@@ -8,4 +8,5 @@ import '@angular/http';
 // Other
 import 'pixi.js';
 import 'springy';
-// import 'rxjs/Rx';
+import "rxjs/Subject";
+import "rxjs/Observable";

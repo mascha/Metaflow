@@ -15,7 +15,7 @@ import {ModelService} from "../../../../services/models";
     styles: [require('./breadcrumbs.scss')],
     template: require('./breadcrumbs.html'),
 })
-export default class Breadcrumbs implements Layer {
+export class Breadcrumbs implements Layer {
     private segments: Array<ViewGroup> = [];
     private model: ViewModel;
     private placeholder: ViewGroup;

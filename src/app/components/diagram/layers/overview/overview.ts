@@ -14,7 +14,7 @@ import {Layer, Diagram} from '../../../../common/layer';
     template: require('./overview.html'),
     styles: [require('./overview.scss')]
 })
-export default class Overview implements Layer, CameraObserver, AfterViewInit {
+export class Overview implements Layer, CameraObserver, AfterViewInit {
     @ViewChild('camera') private camCanvas: ElementRef;
     @ViewChild('nodes') private nodeCanvas: ElementRef;
     private nodes: CanvasRenderingContext2D;

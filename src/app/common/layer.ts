@@ -38,6 +38,11 @@ export interface Diagram {
      * Spatial information accelerator structure. May be null if not availiable.
      */
     readonly spatial: SpatialStructure<ViewNode>;
+
+    /**
+     * Returns all layers in this diagram.
+     */
+    readonly layers: Array<Layer>;
 } 
 
 /**

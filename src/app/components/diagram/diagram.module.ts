@@ -2,9 +2,9 @@ import {NgModule, ElementRef} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {LoaderModule} from '../loader/loader.module';
 import {GridLayer, BorderLayer, EffectLayer} from './layers/layers';
-import Overview from "./layers/overview/overview";
-import Presenter from "./layers/controls/presenter";
-import Breadcrumbs from './layers/breadcrumbs/breadcrumbs';
+import {Overview} from "./layers/overview/overview";
+import {Presenter} from "./layers/controls/presenter";
+import {Breadcrumbs} from './layers/breadcrumbs/breadcrumbs';
 import DiagramImpl from './diagram';
 
 

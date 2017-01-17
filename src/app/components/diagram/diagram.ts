@@ -13,16 +13,17 @@ import ScopeImpl from './reference';
 /* Components */
 import Loader from '../loader/loader';
 import { BorderLayer, GridLayer } from './layers/layers';
-import Overview from './layers/overview/overview';
-import Presenter from './layers/controls/presenter';
-import BreadCrumbs from './layers/breadcrumbs/breadcrumbs';
+import {Overview} from './layers/overview/overview';
+import {Presenter} from './layers/controls/presenter';
+import {Breadcrumbs} from './layers/breadcrumbs/breadcrumbs';
 
 /* Services */
 import {ModelService} from "../../services/models";
 import PlatformService from "../../services/platforms";
 
 /* reactives */
-import { Observable, Subject } from "rxjs/Rx";
+import { Subject } from "rxjs/Subject";
+import { Observable } from "rxjs/Observable";
 
 /**
  * The diagram view component.
@@ -36,12 +37,13 @@ import { Observable, Subject } from "rxjs/Rx";
     styles: [require('./diagram.scss')],
 })
 export default class DiagramImpl implements Diagram {
-    @ViewChild('NodeLayer') private _nodeLayer: ElementRef;
-    @ViewChild(BreadCrumbs) private _breadcrumbs: BreadCrumbs;
-    @ViewChild(Overview) private _overview: Overview;
-    @ViewChild(Presenter) private _controls: Presenter;
-    @ViewChild(BorderLayer) private _border: BorderLayer;
-    @ViewChild(GridLayer) private _grid: GridLayer;
+    
+    @ViewChild('NodeLayer') renderCanvas: ElementRef;
+    @ViewChild(Breadcrumbs) breadcrumbs: Breadcrumbs;
+    @ViewChild(Overview) overview: Overview;
+    @ViewChild(Presenter) controls: Presenter;
+    @ViewChild(BorderLayer) border: BorderLayer;
+    @ViewChild(GridLayer) grid: GridLayer;
 
     private _scope: Scope;
     private _layers: Layer[];
@@ -52,23 +54,22 @@ export default class DiagramImpl implements Diagram {
     private _velocity = .9;
     private _diagram: HTMLElement;
     private _model = new Subject<ViewModel>();
-    private _platform: RenderLayer;
+    private platform: RenderLayer;
 
     animatedZoom = false;
-
     animatedNavigation = true;
-    
     rubberBanding = false;
-    
     respectLimits = false;
-    
     useKinetics = true;
-    
     showClickEffect = true;
 
     readonly selection = new Selection<ViewNode>();
 
     readonly spatial = null;
+
+    get layers(): Array<Layer> {
+        return this.layers;
+    }
 
     get scope(): Scope {
         return this._scope;
@@ -158,25 +159,25 @@ export default class DiagramImpl implements Diagram {
     }
 
     private ngAfterViewInit() {
-        this._diagram = this._surface.nativeElement;
+        this._diagram = this.surface.nativeElement;
 
         if (this._diagram) {
-            this._platform = this._platforms.initializeRenderer(
-                this._nodeLayer.nativeElement
+            this.platform = this.platformService.initializeRenderer(
+                this.renderCanvas.nativeElement
             );
             this._layers = [
-                this._grid,
-                this._platform,
-                this._border,
-                this._controls,
-                this._breadcrumbs,
-                this._overview
+                this.grid,
+                this.platform,
+                this.border,
+                this.controls,
+                this.breadcrumbs,
+                this.overview
             ];
-            this._camera = this._platform.getCamera();
+            this._camera = this.platform.getCamera();
             this._scope = new ScopeImpl(this);
             this._behavior = new DiagramBehavior(this);
             this._layers.forEach(it => it.initialize(this));
-            this._models.fetchLevel("Debug Model","#").subscribe(model => {
+            this.modelService.fetchLevel("Debug Model","#").subscribe(model => {
                 this._model.next(model);
                 setTimeout(() => this.onResize());
             });
@@ -186,9 +187,9 @@ export default class DiagramImpl implements Diagram {
     }
 
     constructor(
-        private _platforms: PlatformService,
-        private _models: ModelService,
-        private _surface: ElementRef,
+        private platformService: PlatformService,
+        private modelService: ModelService,
+        private surface: ElementRef,
         private renderer: Renderer) {}
 }
 

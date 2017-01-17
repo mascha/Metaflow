@@ -13,24 +13,38 @@ import {Camera} from "../../../../common/camera";
     styles: [require('./presenter.scss')],
     template: require('./presenter.html'),
 })
-export default class Presenter implements Layer {
-    private showControls = true;
-
+export class Presenter implements Layer {
+    showControls = true;
+    active = true
     diagram : Diagram;
+
+    layers = [
+        { name: "Nodes" },
+        { name: "Edges" },
+        { name: "Labels" }
+    ]
+
+    users = [
+        { name: "Martin", status: "control" },
+        { name: "Stefan", status: "away" },
+        { name: "Renata", status: "idle" },
+        { name: "Felix", status: "online" }
+    ]
     
     initialize(diagram: Diagram) {
         this.diagram = diagram;
+        //this.layers = diagram.layers;
         diagram.model.subscribe(it => {
             this.showControls = (it && it.root) ? true : false;
         });
     }
 
     setActive(active: boolean) {
-
+        this.active = active;
     }
 
     isActive() {
-        return true;
+        return this.active;
     }
 
     private onZoomIn(event: MouseEvent) {
