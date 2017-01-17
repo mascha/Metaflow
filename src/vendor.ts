@@ -10,3 +10,5 @@ import 'pixi.js';
 import 'springy';
 import "rxjs/Subject";
 import "rxjs/Observable";
+import "rxjs/add/operator/map";
+import 'rxjs/add/observable/of';

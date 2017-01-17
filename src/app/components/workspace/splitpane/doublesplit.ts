@@ -13,11 +13,11 @@ import HTML from "../../../common/utility";
     styles: [require('./splitpane.scss')],
 })
 export default class DoubleSplit {
-    @ViewChild('left') private left: ElementRef;
-    @ViewChild('divider') private div: ElementRef;
-    @ViewChild('right') private right: ElementRef;
-    
-    @Input() private horizontal = false;
+    @ViewChild('left') left: ElementRef;
+    @ViewChild('divider') div: ElementRef;
+    @ViewChild('right') right: ElementRef;
+
+    @Input() horizontal = false;
 
     private vertical = true;
     private visible = true;

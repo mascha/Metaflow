@@ -1,7 +1,7 @@
 import {Camera} from '../../common/camera';
 import {ViewGroup} from '../../common/viewmodel';
 import {Diagram, Scope} from '../../common/layer';
-import {Subject} from "rxjs/Rx";
+import {Subject} from "rxjs/Subject";
 
 /**
  * Diagram scope implementation.

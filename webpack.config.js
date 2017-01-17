@@ -47,7 +47,6 @@ module.exports = function makeWebpackConfig() {
   config.entry = isTest ? {} : {
     'polyfills': [
       'es6-shim/es6-shim.js',
-      'rxjs/Rx.js',
       'zone.js/dist/zone.js',
       'reflect-metadata/Reflect.js'
     ],

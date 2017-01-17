@@ -74,14 +74,10 @@ export default class TripleSplit {
         let right = (r < 0) ? 0 : (r > 100) ? 100 : r;
         let adjLeft = Math.min(left, right);
         let adjRight = Math.max(left, right);
-        let doLeft = true;
-        let doRight = true;
-        if (doLeft) { this.setLeft(adjLeft); }
-        if (doRight) { this.setRight(adjRight); }
-        if (doRight || doLeft) {
-            let diff = Math.max(0, adjRight-adjLeft);
-            this.setMiddle(diff);
-        }
+        let diff = Math.max(0, adjRight-adjLeft);
+        this.setLeft(adjLeft);
+        this.setRight(adjRight); 
+        this.setMiddle(diff);
         HTML.dispatchResizeEvent();
     }
 

@@ -1,13 +1,13 @@
-<div #leftContent class="splitpane-content left" *ngIf="leftVisible == true" [style.width.%]="leftPos">
+<div #leftContent class="splitpane-content left" *ngIf="leftVisible" [style.width.%]="leftPos">
   <ng-content select="[left]"></ng-content>
 </div>
-<div #leftDivider class="splitpane-divider left vertical" [style.left.%]="leftPos" (mousedown)="onMouseDown($event, true)" *ngIf="leftVisible == true">
+<div #leftDivider class="splitpane-divider left vertical" [style.left.%]="leftPos" (mousedown)="onMouseDown($event, true)" *ngIf="leftVisible">
 </div>
 <div #centerContent [style.width.%]="centerWidth" [style.left.%]="leftPos" class="splitpane-content center">
   <ng-content select="[center]"></ng-content>
 </div>
-<div #rightDivider class="splitpane-divider right vertical" [style.left.%]="rightPos" (mousedown)="onMouseDown($event, false)" *ngIf="rightVisible == true">
+<div #rightDivider class="splitpane-divider right vertical" [style.left.%]="rightPos" (mousedown)="onMouseDown($event, false)" *ngIf="rightVisible">
 </div>
-<div #rightContent class="splitpane-content right" *ngIf="rightVisible == true" [style.left.%]="rightPos">
+<div #rightContent class="splitpane-content right" *ngIf="rightVisible" [style.left.%]="rightPos">
   <ng-content select="[right]"></ng-content>
 </div>

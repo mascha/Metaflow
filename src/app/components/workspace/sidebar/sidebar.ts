@@ -15,14 +15,10 @@ export class Sidebar {
     @Input() title = "TITLE";
     @Input() isPrimary: string;
     @Input() visible = true;
-    @Output('visibility') visibility = new EventEmitter<any>();
-
-    isLoading: boolean = false;
+    
+    isLoading = false;
 
     toggle() {
         this.visible = !this.visible;
-        this.visibility.emit({
-            pane: this, visible: this.visible
-        });
     }
 }
