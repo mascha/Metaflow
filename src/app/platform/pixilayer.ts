@@ -12,7 +12,7 @@ const IS_TOPLEVEL = true;
  * @author Martin Schade
  * @since 1.0.0
  */
-export class PixiLayer implements RenderLayer, CameraObserver {
+export class PixiLayer implements RenderLayer<Diagram>, CameraObserver {
 
     readonly camera: Camera;
 

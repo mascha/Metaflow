@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {RenderLayer} from "../common/layer";
+import {RenderLayer, Diagram} from "../common/layer";
 import {PixiLayer} from "../platform/pixilayer";
 import {ModelService} from './models';
 
@@ -18,9 +18,11 @@ export default class PlatformService {
      * @param element A html canvas element. Currently only canvas is supported.
      * @returns {PlatformLayer}
      */
-    initializeRenderer(element: HTMLCanvasElement): RenderLayer {
+    initializeRenderer(element: HTMLCanvasElement): RenderLayer<Diagram> {
         return new PixiLayer(element, this.models);
     }
 
-    constructor(private models: ModelService) {}
+    constructor(private models: ModelService) {
+        
+    }
 }

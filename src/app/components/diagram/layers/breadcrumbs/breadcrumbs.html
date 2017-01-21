@@ -1,6 +1,6 @@
-<ol class="navigation">
+<ol class="navigation" [class.active]="active">
   <li *ngFor="let segment of segments">
-    <img [src]="segment.style.cachedURL">
+    <img [src]="segment.icon">
     <a href="#">
       {{segment.name}}
     </a>

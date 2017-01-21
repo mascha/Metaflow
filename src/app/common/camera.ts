@@ -84,6 +84,15 @@ export abstract class Camera {
         return this.viewH;
     }
 
+    get visualCenter(): {x, y} {
+        return {
+            x: this.viewX + this.viewW / 2,
+            y: this.viewY + this.viewH / 2
+        }
+    }
+
+    
+
     get scale(): number {
         return this.zoom;
     }
@@ -140,6 +149,17 @@ export abstract class Camera {
      */
     inverseRayY(worldY: number) {
         return this.camY + this.zoom * worldY;
+    }
+
+    /**
+     * 
+     */
+    zoomAroundCenter(factor: number) {
+        this.zoomToAbout(
+             Math.pow(1.002, factor) * this.scale,
+            this.castRayX(this.viewX + this.viewW / 2),
+            this.castRayY(this.viewY + this.viewH / 2)
+        )
     }
 
     /**

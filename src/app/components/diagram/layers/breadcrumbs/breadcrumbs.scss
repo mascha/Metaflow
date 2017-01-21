@@ -12,6 +12,7 @@ $breadcrumbs-text-selected: white;
   left: $diagram-control-offset;
   box-shadow: $presenter-shadow;
   border: 1px solid darken($presenter-body, 12);
+  transition: width 200ms linear;
 }
 
 .navigation {

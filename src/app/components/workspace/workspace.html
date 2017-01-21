@@ -8,14 +8,6 @@
       <issues #issues class="tool" [class.active]="toolsLeft.selectedItem === issues"></issues>
       <formalism #formalism class="tool" [class.active]="toolsLeft.selectedItem === formalism"></formalism>
     </sidebar>
-    <!--
-    <double-split center horizontal="true">
-      <diagram left #diagram></diagram>
-      <sidebar right #bottomBar [title]="toolsBottom.selectedItem?.title">
-        <dataview #dataview></dataview>
-      </sidebar>
-    </double-split> 
-    -->
     <diagram center #diagram></diagram>
     <sidebar right #rightBar [title]="toolsRight.selectedItem?.title" isPrimary="false">
       <inspector #inspector class="tool" [class.active]="toolsRight.selectedItem === inspector"></inspector>
@@ -25,5 +17,12 @@
   <iconbar #toolsBottom vertical="false" *ngIf="toolsBottom"></iconbar>
 </div>
 <div class="workspace" *ngIf="!threeColumLayout">
-  
+      <!--
+    <double-split center horizontal="true">
+      <diagram left #diagram></diagram>
+      <sidebar right #bottomBar [title]="toolsBottom.selectedItem?.title">
+        <dataview #dataview></dataview>
+      </sidebar>
+    </double-split> 
+    -->
 </div>

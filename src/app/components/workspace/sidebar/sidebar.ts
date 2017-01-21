@@ -14,8 +14,8 @@ import {Component, Input, EventEmitter, Output} from '@angular/core';
 export class Sidebar {
     @Input() title = "TITLE";
     @Input() isPrimary: string;
-    @Input() visible = true;
     
+    visible = false;
     isLoading = false;
 
     toggle() {

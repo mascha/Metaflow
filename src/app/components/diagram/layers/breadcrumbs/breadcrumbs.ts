@@ -15,31 +15,33 @@ import {ModelService} from "../../../../services/models";
     styles: [require('./breadcrumbs.scss')],
     template: require('./breadcrumbs.html'),
 })
-export class Breadcrumbs implements Layer {
-    private segments: Array<ViewGroup> = [];
-    private model: ViewModel;
-    private placeholder: ViewGroup;
-    private maximumSegments = 4;
-    private rootPath = "/users/${id}/${model-id}/@x@y@z1.5434"
+export class Breadcrumbs implements Layer<Diagram> {
+    segments: Array<any> = [];
+    name = "Breadcrumbs";
+    active = true;
 
     initialize(diagram: Diagram) {
         diagram.scope.subscribe(it => this.updateSegments(it));
     }
 
     setActive(active: boolean) {
-
+        this.active = active;
     }
 
     isActive(): boolean {
-        return true;
+        return this.active;
     }
 
     private updateSegments(level?: ViewGroup) {
         this.segments = [];
-
-        while (level) {
-            this.segments.push(level);
+        let i = 1;
+        while (level && i < 11) {
+            this.segments.push({ 
+                name: level.name, 
+                icon: level.style.cachedURL || null 
+            });
             level = level.parent;
+            i++;
         }
     }
 }

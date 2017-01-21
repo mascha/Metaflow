@@ -42,7 +42,14 @@ export interface Diagram {
     /**
      * Returns all layers in this diagram.
      */
-    readonly layers: Array<Layer>;
+    readonly layers: Array<Layer<Diagram>>;
+
+    /**
+     * Issue the event to the canvas.
+     * 
+     * @param {any} event
+     */
+    dispatchEvent(event: string, payload?: any);
 } 
 
 /**
@@ -51,7 +58,7 @@ export interface Diagram {
  * @author Martin Schade
  * @since 1.0.0
  */
-export interface RenderLayer extends Layer {
+export interface RenderLayer<T> extends Layer<T> {
     setQuality(quality: Quality);
     readonly camera: Camera;
 }
@@ -73,28 +80,17 @@ export const enum Quality {
 }
 
 /**
- * Platform layer
- * 
- * @author Martin Schade
- * @since 1.0.0
- */
-export interface RenderLayer extends Layer {
-    setQuality(quality: Quality); 
-    getCamera(): Camera;
-}
-
-/**
  * A diagram layer.
  * 
  * @author Martin Schade
  * @since 1.0.0
  */
-export interface Layer {
+export interface Layer<T> {
 
     /**
      * A callback for registering observables after the diagram has been created.
      */
-    initialize(diagram: Diagram);
+    initialize(init: T);
 
     /**
      * Make layer active or not.

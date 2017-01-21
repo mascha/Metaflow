@@ -1,13 +1,14 @@
 import { Injectable, Inject } from "@angular/core";
 import { Http, URLSearchParams } from '@angular/http';
-import { ViewGroup, ViewItem, ViewEdge, ViewModel, ViewNode } from "../common/viewmodel";
-import { MapType } from "../common/language";
-import { Style, GroupStyle, EdgeStyle, Label, TextAlignment, TextTransform } from '../common/styling';
-import { Shape, Shapes } from '../common/shapes';
 import { Vertical, Horizontal, Locality } from '../common/layout';
+import { ViewGroup, ViewItem, ViewEdge, ViewModel, ViewNode } from "../common/viewmodel";
+import { Style, GroupStyle, EdgeStyle, Label, TextAlignment } from '../common/styling';
+import { Constraint, Violation } from '../common/validation';
+import { MapType } from "../common/language";
+import { Shape, Shapes } from '../common/shapes';
+
 import { Observable } from "rxjs/Observable";
 
-const DISTRIBUTION = 1;
 const ENTITIES_PER_LEVEL = 150;
 const MAX_LEVELS = 4;
 const ROOT_SCALE = 0.1;
@@ -45,7 +46,8 @@ const NAMES = [
 ]
 
 export interface User {
-
+    firstName: string;
+    userName: string;
 }
 
 export interface Project {
@@ -61,7 +63,6 @@ export interface Project {
 @Injectable() export class ModelService {
 
     private model: ViewModel;
-    private empty: ViewGroup;
 
     private edgeStyle: EdgeStyle;
     private flowStyle: EdgeStyle;
@@ -72,6 +73,26 @@ export interface Project {
 
     private SDyn: any;
     private ECore: any;
+
+    /**
+     * 
+     */
+    watchIssues(): Observable<Array<Constraint>> {
+        return Observable.of(
+            NAMES.map(it => {
+                return { 
+                    name: 'Constraint',
+                    type: Math.random() <= 0.25 ? 'error' : 'warning',
+                    violations: NAMES.map(name => {
+                        return { 
+                            item: name, 
+                            message: `Expected ${name}, found ${NAMES[0]}` 
+                        } as Violation;
+                    })
+                } as Constraint;
+            })
+        );
+    }
 
     /**
      * Retrieve all items within the current path

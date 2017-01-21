@@ -51,19 +51,6 @@ export default class DoubleSplit {
         this.readjust(this.visible ? 69 : 100);
     }
 
-    @HostListener('visibility', ['$event'])
-    toggleVisibility(event: any) {
-        if (this.removeMove) this.removeMove();
-        if (this.removeUp) this.removeUp();
-        this.visible = !this.visible;
-        if (this.visible) {
-            this.readjust(this.saved || 69);
-        } else {
-            this.saved = this.last;
-            this.readjust(100);
-        }
-    }
-
     private onMouseDown(event: MouseEvent) {
         let r = this.renderer;
         this.removeMove = r.listenGlobal('document', 'mousemove', this.moveHandler);

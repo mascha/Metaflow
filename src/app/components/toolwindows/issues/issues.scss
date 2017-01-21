@@ -2,8 +2,8 @@
 @import "../../../../style/theme";
 @import "../../../../style/mixins";
 
-$project-cell-height: 21px;
-$project-header-height: 28px;
+$issue-cell-height: 21px;
+$issue-header-height: 28px;
 $project-header-fill: lighten($sidebar-header, 3);
 $project-upwards-fill: $sidebar-header;
 $project-content-fill: $sidebar-main;
@@ -14,9 +14,32 @@ $project-content-fill: $sidebar-main;
   user-select: none;
 }
 
-.project-entities {
+.issue-header {
+  top: 0; left: 0; right: 0;
+  height: $issue-header-height;
   position: absolute;
-  top: 0;
+  background-color: $project-header-fill;
+
+  div {
+    display: inline-block;
+    line-height: $issue-header-height;
+    height: $issue-header-height;
+    width: 30%;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: $sidebar-header-title;
+    cursor: pointer;
+
+    &:hover {
+      background-color: lighten($project-header-fill, 6);
+    }
+  }
+}
+
+.issues {
+  position: absolute;
+  top: $issue-header-height;
   bottom: 0;
   left:0;
   right: -17px;
@@ -34,19 +57,36 @@ $project-content-fill: $sidebar-main;
   }
 }
 
-.entity-cell {
-  padding-left: 6px;
+.issue-cell {
+  padding-left: 8px;
   width: 100%;
-  height: $project-cell-height;
-  line-height: $project-cell-height;
+  height: $issue-cell-height;
+  line-height: $issue-cell-height;
   display: inline-block;
   cursor: pointer;
   font-size: 0.8rem;
   color: #dddddd;
-  // transition: color ease-in 2000ms;
+}
 
-  &:hover span {
-    color: cornflowerblue;
+.violation-cell {
+  padding-left: 22px;
+  width: 100%;
+  height: $issue-cell-height;
+  line-height: $issue-cell-height;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: #dddddd;
+
+  span {
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &:hover {
+      color: cornflowerblue;
+    }
   }
 }
 

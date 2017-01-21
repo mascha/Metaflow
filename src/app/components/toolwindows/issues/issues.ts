@@ -1,7 +1,8 @@
-import {Component, Inject} from '@angular/core';
+import {Component} from '@angular/core';
+import {Constraint} from "../../../common/validation";
 import {ViewGroup} from "../../../common/viewmodel";
 import {Diagram} from "../../../common/layer";
-import {ToolWindow} from "../toolwindow"
+import {ToolWindow} from "../toolwindow";
 import {ModelService} from "../../../services/models";
 
 /**
@@ -17,32 +18,23 @@ import {ModelService} from "../../../services/models";
 })
 export class Issues implements ToolWindow<Diagram> {
     title = "Issues";
-    contents = [];
+    constraints: Array<{active: boolean, constraint: Constraint}> = [];
     scope: ViewGroup;
-    isLocked = false;
-    isDisabled = false;
-    levelName: string;
 
     initialize(diagram: Diagram) {
         diagram.scope.subscribe(it => this.updateLevel(it));
     }
 
-    private goUpwards() {
-        if (this.canGoUpwards()) {
-            let parent = this.scope.parent;
-            if (parent && !this.isLocked) {
-                this.updateLevel(parent);
-            }
-        }
-    }
-
-    private canGoUpwards() {
-        return (this.scope && this.scope.parent);
-    }
-
     private updateLevel(level: ViewGroup) {
-        this.scope = level;
-        this.levelName = level? level.name : '';
-        this.contents = level? level.contents : [];
+        /* api.fetchIssues(level) */
+    }
+
+    constructor(api: ModelService) {
+        api.watchIssues().subscribe(cs => {
+            this.constraints = cs.map((c,i) => {
+                return { active: i > 0 ? false : true, constraint: c } ;
+            });
+        });
+        console.log(this.constraints);
     }
 }

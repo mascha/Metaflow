@@ -1,5 +1,15 @@
-<section class="project-entities fade-in" *vsFor="contents; let _items = vsCollection">
-  <div *ngFor="let node of _items" class="{{(node.name == 'Stock' || node.name == 'Price') ? 'error' : 'warning'}} entity-cell">
-    <span>{{node.name}}</span>
+<div class="issue-header">
+  <div>Warning</div>
+  <div>Errors</div>
+  <div>Infos</div>
+</div>
+<section class="issues">
+  <div class="issue-cell {{wrapper.constraint.type}}" *ngFor="let wrapper of constraints">
+    <span>{{wrapper.constraint.name}}</span>
+    <section class="violation-list" *ngIf="wrapper.active">
+      <div class="violation-cell" *ngFor="let violation of wrapper.constraint.violations">
+        <span>{{violation.message}}</span>
+      </div>
+    </section>
   </div>
 </section>

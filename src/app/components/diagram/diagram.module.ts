@@ -4,6 +4,7 @@ import {LoaderModule} from '../loader/loader.module';
 import {GridLayer, BorderLayer, EffectLayer} from './layers/layers';
 import {Overview} from "./layers/overview/overview";
 import {Presenter} from "./layers/controls/presenter";
+import {Broadcast} from "./layers/controls/broadcast/broadcast";
 import {Breadcrumbs} from './layers/breadcrumbs/breadcrumbs';
 import DiagramImpl from './diagram';
 
@@ -17,7 +18,7 @@ import DiagramImpl from './diagram';
 @NgModule({
     imports:      [ CommonModule, LoaderModule ],
     exports:      [ DiagramImpl ],
-    declarations: [ Breadcrumbs, Presenter, Overview, EffectLayer, BorderLayer, GridLayer, DiagramImpl ],
+    declarations: [ Breadcrumbs, Presenter, Overview, EffectLayer, BorderLayer, GridLayer, DiagramImpl, Broadcast ],
     providers:    [ {provide: 'diagram', useClass: DiagramImpl }]
 })
 export class DiagramModule { }

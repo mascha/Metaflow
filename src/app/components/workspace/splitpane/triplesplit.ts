@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild, Renderer} from "@angular/core";
+import {Component, ElementRef, Renderer, Input} from "@angular/core";
 import HTML from "../../../common/utility";
 
 /**
@@ -16,8 +16,8 @@ export default class TripleSplit {
     leftPos = 16;
     rightPos = 84;
     centerWidth = 84 - 16;
-    leftVisible = true;
-    rightVisible = true;
+    @Input() leftVisible = true;
+    @Input() rightVisible = true;
 
     private primaryDrag: boolean;
     private removeMove: Function;
@@ -93,6 +93,5 @@ export default class TripleSplit {
         this.centerWidth = width;
     }
 
-    constructor(private renderer: Renderer,
-                private root: ElementRef) {}
+    constructor(private renderer: Renderer, private root: ElementRef) {}
 }

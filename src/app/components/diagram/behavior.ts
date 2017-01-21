@@ -1,6 +1,6 @@
-import {Camera} from '../../common/camera';
-import {ViewGroup, ViewNode} from '../../common/viewmodel';
-import {Animation} from '../../common/animations';
+import { Camera } from '../../common/camera';
+import { ViewGroup, ViewNode } from '../../common/viewmodel';
+import { Animation } from '../../common/animations';
 import Kinetics from '../../common/kinetics';
 import DiagramImpl from './diagram';
 
@@ -11,6 +11,11 @@ import DiagramImpl from './diagram';
  * @since 1.0.0
  */
 export interface DiagramEvents {
+
+    /**
+     * 
+     */
+    handleEvent(event: string, payload: any);
 
     /**
      * Handle a target event.
@@ -74,7 +79,7 @@ export interface DiagramState extends DiagramEvents {
      * @param params Optional initialization parameters.
      */
     enterState(params?: any);
- 
+
     /**
      * Exit the current state and perform cleanup.
      */
@@ -87,7 +92,7 @@ export interface DiagramState extends DiagramEvents {
  * @author Martin Schade
  * @since 1.0.0
  */
-export interface StateMachine {
+export interface StateMachine extends DiagramEvents {
 
     /**
      * Execute a state transition.
@@ -126,13 +131,14 @@ export interface StateMachine {
  * @author Martin Schade
  * @since 1.0.0
  */
-export default class DiagramBehavior implements StateMachine, DiagramEvents {
-    
+export default class DiagramBehavior implements StateMachine {
+
     private current: DiagramState;
     private last: DiagramState;
     private states: Array<DiagramState>;
     private lookup: any;
-    private debug = false;
+
+    name = "";
 
     currentState(): string {
         return this.current.name;
@@ -144,6 +150,10 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
 
     supportedStates(): Array<string> {
         return ['idle', 'panning', 'animating'];
+    }
+
+    handleEvent(event: string, payload?: any) {
+        this.current.handleEvent(event, payload);
     }
 
     handleNavigation(vertex: ViewNode) {
@@ -191,7 +201,7 @@ export default class DiagramBehavior implements StateMachine, DiagramEvents {
             this.last = this.current;
             this.current = newState;
             newState.enterState(params);
-        } 
+        }
     }
 
     reenter(params?: any) {
@@ -233,6 +243,10 @@ abstract class BaseState implements DiagramState {
 
     protected becomeIdle() {
         this.behavior.goto('idle');
+    }
+
+    handleEvent(event: string, payload: any) {
+        /* ignore */
     }
 
     enterState(params?: any) { /* ignore*/ }
@@ -281,6 +295,33 @@ class Idle extends BaseState {
 
     private maxZoom = 10;
 
+    handleEvent(event: string, payload: any) {
+        switch (event) {
+            case 'fitView':
+                let level = this.diagram.scope.current;
+                if (!level) return;
+
+                let fx = (level.left + level.width) / this.camera.projWidth;
+                let fy = (level.top + level.height) / this.camera.projHeight;
+                let s = Math.max(fx, fy) / this.camera.scale;
+            
+                break;
+
+            case 'zoomIn':
+                let zoomIn = Animation.zoomIn(this.camera, .25, 300);
+                this.behavior.goto('animating', { interpolator: zoomIn });
+                break;
+
+            case 'zoomOut':
+                let zoomOut = Animation.zoomIn(this.camera, -.25, 300);
+                this.behavior.goto('animating', { interpolator: zoomOut });
+                break;
+
+            default:
+                break;
+        }
+    }
+
     /**
      * TODO detect (drag | pan | draw | select)
      */
@@ -289,13 +330,14 @@ class Idle extends BaseState {
     }
 
     handleNavigation(vertex: ViewNode) {
-        this.behavior.goto('animating', { 
+        this.behavior.goto('animating', {
             interpolator: Animation.navigateToItem(
-                this.camera, 
-                this.diagram.zoomPanPreference, 
-                this.diagram.navigationVelocity, 
+                this.camera,
+                this.diagram.zoomPanPreference,
+                this.diagram.navigationVelocity,
                 vertex
-            )});
+            )
+        });
     }
 
     handleClick(x: number, y: number, double: boolean) {
@@ -310,11 +352,11 @@ class Idle extends BaseState {
                     camera: this.camera
                 })
             });
-        } else if (this.diagram.scope.current) {       
+        } else if (this.diagram.scope.current) {
             this.behavior.goto('animating', {
                 interpolator: Animation.navigateToItem(
-                    this.diagram.camera, 
-                    this.diagram.zoomPanPreference, 
+                    this.diagram.camera,
+                    this.diagram.zoomPanPreference,
                     this.diagram.navigationVelocity,
                     this.diagram.scope.current)
             });
@@ -372,7 +414,7 @@ class Panning extends BaseState {
     protected kinetics: Kinetics;
 
     private left = false;
-   	private right = false;
+    private right = false;
     private bottom = false;
     private top = false;
 
@@ -495,16 +537,16 @@ class Panning extends BaseState {
 
     private updateBanding(horizontal: boolean, lower: boolean, value: boolean) {
         if (horizontal) {
-            if (lower) { 
-                this.left = value; 
-            } else { 
+            if (lower) {
+                this.left = value;
+            } else {
                 this.right = value;
             }
         } else {
-            if (lower) { 
-                this.top = value; 
-            } else { 
-                this.bottom = value; 
+            if (lower) {
+                this.top = value;
+            } else {
+                this.bottom = value;
             }
         }
     }
@@ -555,7 +597,7 @@ export interface AnimationParams {
      * Animation cannot be canceled.
      */
     forced: boolean;
-    
+
     /**
      * The animation to play.
      */

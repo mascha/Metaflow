@@ -16,7 +16,7 @@ import HTML from '../../../common/utility';
     selector: 'grid-layer',
     template: `<canvas #gridLayer class="layer"></canvas>`,
 })
-export class GridLayer implements Layer {
+export class GridLayer implements Layer<Diagram> {
     @ViewChild('gridLayer') 
     private canvas: ElementRef;
     private grid: Grid;
@@ -47,7 +47,7 @@ export class GridLayer implements Layer {
     template: '<canvas #effects class="layer"></canvas><div #misc class="layer"></div>',
     styles: [require('./effects.scss')]
 })
-export class EffectLayer implements Layer {
+export class EffectLayer implements Layer<Diagram> {
     @ViewChild('effects') surface: ElementRef;
     @ViewChild('misc') misc: ElementRef;
 
@@ -116,7 +116,7 @@ export class EffectLayer implements Layer {
     selector: 'border-layer',
     template: '<canvas #borderLayer class="layer"></canvas>'
 })
-export class BorderLayer implements Layer {
+export class BorderLayer implements Layer<Diagram> {
     @ViewChild('borderLayer') 
     private element: ElementRef;
     private border: Border;

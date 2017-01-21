@@ -1,7 +1,6 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Layer, Diagram} from "../../../../common/layer";
-import {ViewGroup} from "../../../../common/viewmodel";
-import {Camera} from "../../../../common/camera";
+
 /**
  * Diagramming overlay controls. 
  * 
@@ -13,23 +12,12 @@ import {Camera} from "../../../../common/camera";
     styles: [require('./presenter.scss')],
     template: require('./presenter.html'),
 })
-export class Presenter implements Layer {
-    showControls = true;
-    active = true
-    diagram : Diagram;
+export class Presenter implements Layer<Diagram> {
+    
+    @Input() showControls = true;
+    @Input() active = true;
 
-    layers = [
-        { name: "Nodes" },
-        { name: "Edges" },
-        { name: "Labels" }
-    ]
-
-    users = [
-        { name: "Martin", status: "control" },
-        { name: "Stefan", status: "away" },
-        { name: "Renata", status: "idle" },
-        { name: "Felix", status: "online" }
-    ]
+    private diagram : Diagram;
     
     initialize(diagram: Diagram) {
         this.diagram = diagram;
@@ -47,19 +35,15 @@ export class Presenter implements Layer {
         return this.active;
     }
 
-    private onZoomIn(event: MouseEvent) {
-        let c = this.diagram.camera;
-        let x = c.centerX;
-        let y = c.centerY;
-        let s = c.scale;
-        c.zoomAndMoveTo(1.05 * s, x / s, y / s);
+    onZoomIn(event: MouseEvent) {
+        this.diagram.dispatchEvent('zoomIn');
     }
 
-    private onZoomOut(event: MouseEvent) {
-
+    onZoomOut(event: MouseEvent) {
+        this.diagram.dispatchEvent('zoomOut');
     }
 
-    private onFitIn(event: MouseEvent) {
-
+    onFitView(event: MouseEvent) {
+        // 
     }
 }

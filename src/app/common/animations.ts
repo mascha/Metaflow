@@ -55,13 +55,15 @@ export class Animation {
         );
     }
 
-    static zoomIn(camera: Camera, factor: number, duration: number) {
-        if (factor <= 0 || duration <= 0) return;
+    static zoomIn(camera: Camera, factor: number, duration?: number) {
+        const time = duration ? (duration < 0 ? 0 : duration) : 300;
         const start = camera.scale;
-        const end = start * factor;
+        const diff = start * (1 + factor) - start;
         const wX = camera.centerX;
         const wY = camera.centerY;
-        return new Animation(f => camera.zoomToAbout(start + end * f, wX, wY), duration || 300, EASE_IN_OUT);
+        return new Animation(f => 
+            camera.zoomToAbout(start + diff * f, wX, wY), time, EASE_IN_OUT
+        );
     }
 
     static throwCamera(camera: Camera, speed: number, angle: number, duration: number): Animation {
