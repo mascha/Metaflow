@@ -45,6 +45,16 @@ const NAMES = [
     'Retail Growth'
 ]
 
+const CONSTRAINTS = [
+    'Invalid name',
+    'Missing name',
+    'Missing formula',
+    'Ambigous name',
+    'Parent not found',
+    'Too many connections',
+    'Username malformed'
+];
+
 export interface User {
     firstName: string;
     userName: string;
@@ -60,7 +70,7 @@ export interface Project {
  * @author Martin Schade
  * @since 1.0.0
  */
-@Injectable() export class ModelService {
+@Injectable() export class API {
 
     private model: ViewModel;
 
@@ -79,14 +89,14 @@ export interface Project {
      */
     watchIssues(): Observable<Array<Constraint>> {
         return Observable.of(
-            NAMES.map(it => {
+            CONSTRAINTS.map(it => {
                 return { 
-                    name: 'Constraint',
+                    name: it,
                     type: Math.random() <= 0.25 ? 'error' : 'warning',
                     violations: NAMES.map(name => {
                         return { 
                             item: name, 
-                            message: `Expected ${name}, found ${NAMES[0]}` 
+                            message: NAMES[0]
                         } as Violation;
                     })
                 } as Constraint;

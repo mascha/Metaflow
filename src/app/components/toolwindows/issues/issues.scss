@@ -6,7 +6,8 @@ $issue-cell-height: 21px;
 $issue-header-height: 28px;
 $project-header-fill: lighten($sidebar-header, 3);
 $project-upwards-fill: $sidebar-header;
-$project-content-fill: $sidebar-main;
+$issue-content-fill: $sidebar-main;
+$issue-text-color: #dddddd;
 
 :host {
   @include fill;
@@ -45,7 +46,7 @@ $project-content-fill: $sidebar-main;
   right: -17px;
   padding: 4px 0; 
   overflow-x: hidden;
-  background-color: $project-content-fill;
+  background-color: $issue-content-fill;
 
   .entity-icon {
     padding: 2.5px 4px 0 4px;
@@ -57,7 +58,7 @@ $project-content-fill: $sidebar-main;
   }
 }
 
-.issue-cell {
+.constraint-cell {
   padding-left: 8px;
   width: 100%;
   height: $issue-cell-height;
@@ -65,21 +66,39 @@ $project-content-fill: $sidebar-main;
   display: inline-block;
   cursor: pointer;
   font-size: 0.8rem;
-  color: #dddddd;
+  white-space: nowrap;
+  color: $issue-text-color;
+}
+
+.constraint-count {
+  color: rgba($issue-text-color, 0.6);
+  position: absolute;
+  right: 22px;
+  padding: 0 2px;
+  font-size: 0.7rem;
+  background-color: $issue-content-fill;
+}
+
+.violation-list {
+    padding-left: 8px;
+
+    &.loading {
+      color: rgba($issue-text-color, 0.5);
+      font-size: 0.7rem;
+      padding-bottom: 4px;
+    }
 }
 
 .violation-cell {
-  padding-left: 22px;
   width: 100%;
   height: $issue-cell-height;
   line-height: $issue-cell-height;
-  display: inline-block;
+  white-space: nowrap;
   cursor: pointer;
   font-size: 0.8rem;
   color: #dddddd;
 
   span {
-
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

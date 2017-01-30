@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {RenderLayer, Diagram} from "../common/layer";
 import {PixiLayer} from "../platform/pixilayer";
-import {ModelService} from './models';
+import {API} from './models';
 
 /**
  * Service which provides the underlying rendering platform.
@@ -22,7 +22,7 @@ export default class PlatformService {
         return new PixiLayer(element, this.models);
     }
 
-    constructor(private models: ModelService) {
+    constructor(private models: API) {
         
     }
 }

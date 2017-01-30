@@ -2,7 +2,7 @@ import {Component, Inject} from '@angular/core';
 import {ViewGroup} from "../../../common/viewmodel";
 import {Diagram} from "../../../common/layer";
 import {ToolWindow} from "../toolwindow"
-import {ModelService} from "../../../services/models";
+import {API} from "../../../services/models";
 
 /**
  * A project navigator/explorer.
@@ -24,7 +24,7 @@ export class Formalism implements ToolWindow<Diagram> {
         /* NOP */
     }
 
-    constructor(private models: ModelService) {
+    constructor(private models: API) {
         models.fetchFormalisms("*").subscribe(f => this.formalisms = f);
     }
 }

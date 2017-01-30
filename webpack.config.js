@@ -51,7 +51,7 @@ module.exports = function makeWebpackConfig() {
       'reflect-metadata/Reflect.js'
     ],
     'vendor': './src/vendor.ts',
-    'app': './src/bootstrap.ts' // our angular app
+    'app': './src/bootstrap.ts'
   };
 
   /**

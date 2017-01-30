@@ -4,7 +4,7 @@ import {ViewNode} from "../../../common/viewmodel";
 import {Style} from "../../../common/styling";
 import {Diagram} from "../../../common/layer";
 import {ToolWindow} from "../toolwindow";
-import {ModelService} from "../../../services/models";
+import {API} from "../../../services/models";
 
 
 /**
@@ -45,7 +45,7 @@ export class Inspector implements SelectionObserver<ViewNode>, ToolWindow<Diagra
         this.categoryIndex = (index < 1) ? 1 : (index > 3) ? 3 : index;
     }
 
-    constructor(models: ModelService) {
+    constructor(models: API) {
         /*
         models.fetchFormalisms('*').subscribe(formalisms => {
             formalisms.forEach(formalism => {

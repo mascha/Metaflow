@@ -4,12 +4,19 @@
   <div>Infos</div>
 </div>
 <section class="issues">
-  <div class="issue-cell {{wrapper.constraint.type}}" *ngFor="let wrapper of constraints">
+  <div class="constraint-cell {{wrapper.constraint.type}}" *ngFor="let wrapper of constraints" (click)="onConstraintSelected(wrapper)">
     <span>{{wrapper.constraint.name}}</span>
-    <section class="violation-list" *ngIf="wrapper.active">
+    <span class="constraint-count">{{wrapper.count}}</span>
+    <section class="violation-list" *ngIf="wrapper.state == 'active'">
       <div class="violation-cell" *ngFor="let violation of wrapper.constraint.violations">
+        <svg width="16" height="16">
+          <circle cx="8" cy="8" r="4" style="fill: goldenrod"></circle>
+        </svg>
         <span>{{violation.message}}</span>
       </div>
+    </section>
+    <section class="violation-list loading" *ngIf="wrapper.state == 'fetching'">
+      Loading ...
     </section>
   </div>
 </section>
