@@ -1,7 +1,5 @@
-import {Component, ElementRef, ViewChild, HostListener, Input} from '@angular/core';
-import {ViewGroup, ViewItem, ViewNode} from "../../../common/viewmodel";
-import {Camera, CameraObserver} from "../../../common/camera";
-import {RenderLayer, Layer, Quality, Diagram} from '../../../common/layer';
+import {Component, ElementRef, ViewChild, HostListener} from '@angular/core';
+import {Layer, Diagram} from '../../../common/layer';
 import Grid from './grid';
 import Border from './border';
 import HTML from '../../../common/utility';
@@ -17,6 +15,7 @@ import HTML from '../../../common/utility';
     template: `<canvas #gridLayer class="layer"></canvas>`,
 })
 export class GridLayer implements Layer<Diagram> {
+
     @ViewChild('gridLayer') 
     private canvas: ElementRef;
     private grid: Grid;
@@ -117,6 +116,7 @@ export class EffectLayer implements Layer<Diagram> {
     template: '<canvas #borderLayer class="layer"></canvas>'
 })
 export class BorderLayer implements Layer<Diagram> {
+    
     @ViewChild('borderLayer') 
     private element: ElementRef;
     private border: Border;

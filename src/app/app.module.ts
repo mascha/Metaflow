@@ -29,5 +29,4 @@ import { Settings } from './settings';
                   { provide: 'apiVER', useValue: '2017-1-1'} ],
 })
 export default class AppModule { 
-
 }

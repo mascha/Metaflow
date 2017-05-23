@@ -1,8 +1,6 @@
-import {Component, Input, Renderer} from '@angular/core';
-import {ViewGroup, ViewNode, ViewModel} from "../../../../common/viewmodel";
-import {Style} from "../../../../common/styling";
+import {Component} from '@angular/core';
+import {ViewGroup} from "../../../../common/viewmodel";
 import {Diagram, Layer} from "../../../../common/layer";
-import {API} from "../../../../services/models";
 
 /**
  * A breadcrumbs bar.
@@ -16,9 +14,10 @@ import {API} from "../../../../services/models";
     template: require('./breadcrumbs.html'),
 })
 export class Breadcrumbs implements Layer<Diagram> {
+    
     segments: Array<any> = [];
     name = "Breadcrumbs";
-    active = true;
+    private active = true;
 
     initialize(diagram: Diagram) {
         diagram.scope.subscribe(it => this.updateSegments(it));

@@ -6,7 +6,7 @@ import { Selection} from '../../common/selection';
 import HTML from "../../common/utility";
 
 /* Controller */
-import {StateMachine } from "./behavior";
+import { StateMachine } from "./behavior";
 import DiagramBehavior from './behavior';
 import ScopeImpl from './reference';
 
@@ -37,12 +37,16 @@ import { Observable } from "rxjs/Observable";
 })
 export default class DiagramImpl implements Diagram {
     
+    /* ANGULAR 2 */
+
     @ViewChild('NodeLayer') renderCanvas: ElementRef;
     @ViewChild(Breadcrumbs) breadcrumbs: Breadcrumbs;
     @ViewChild(Overview) overview: Overview;
     @ViewChild(Presenter) controls: Presenter;
     @ViewChild(BorderLayer) border: BorderLayer;
     @ViewChild(GridLayer) grid: GridLayer;
+
+    /* COMPONENT */
 
     private _scope: Scope;
     private _layers: Layer<Diagram>[];

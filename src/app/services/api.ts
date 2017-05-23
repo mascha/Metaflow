@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Observable } from "rxjs/Observable";
-import { User } from '';
 
 
 /**
@@ -15,22 +14,22 @@ export class API {
     /**
      * 
      */
-    fetchUsers(): Observable<Array<User>> {
-
+    fetchUsers(): Observable<Array<any>> {
+        return Observable.of([]);
     }
 
     /**
      * 
      */
-    fetchProjects() {
-
+    fetchProjects(): Observable<Array<any>> {
+        return Observable.of([]);
     }
 
     /**
      * 
      */
-    fetchProjectsFor(user: User) {
-
+    fetchProjectsFor(user: any):  Observable<Array<any>> {
+         return Observable.of([]);
     }
 
 }
@@ -101,7 +100,7 @@ export class Session {
         return null;
     }
 
-    watchViewers(): Observable<User> {
+    watchViewers(): Observable<any> {
         return null;
     }
 
