@@ -11,10 +11,8 @@ import MenuBar from "./menubar/menubar";
 import Navigation from "./navigation/navigation";
 import Workspace from "./workspace";
 
-import {Dialog} from '../dialog/dialog';
 import {Playbar} from './playbar/playbar';
 import {Iconbar} from './toolbars/iconbar';
-import {Workflows} from '../workflows/workflows'
 
 /**
  * Workspace module.
@@ -25,9 +23,9 @@ import {Workflows} from '../workflows/workflows'
 @NgModule({
     imports:      [ CommonModule, ToolWindowModule, DiagramModule ],
     exports:      [ Workspace],
-    declarations: [ Playbar, Dialog, Sidebar, MenuBar, Workspace, DoubleSplit, TripleSplit, Navigation, Workspace, Iconbar, Workflows ],
+    declarations: [ Playbar, Sidebar, MenuBar, Workspace, DoubleSplit, TripleSplit, Navigation, Workspace, Iconbar ],
     providers:    [ ]
 })
 export class WorkspaceModule {
     
- }
+}

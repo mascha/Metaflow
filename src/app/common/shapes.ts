@@ -19,14 +19,6 @@ export class Shape {
     constructor(type?: Shapes) {
         this.type = type || Shapes.NONE;
     }
-
-    static RECTANGLE = new Shape(Shapes.RECTANGLE);
-    static TRIANGLE = new Shape(Shapes.TRIANGLE);
-    static HOURGLASS = new Shape(Shapes.HOURGLASS);
-    static EMPTY = new Shape(Shapes.NONE);
-    static CIRCLE = new Shape(Shapes.CIRCLE);
-    static ROUNDED = new Shape(Shapes.ROUNDED);
-    static RING = new Shape(Shapes.RING);
 }
 
 /**
